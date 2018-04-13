@@ -37,37 +37,78 @@ export const constantRouterMap = [
   {
     path: '/example',
     component: Layout,
-    redirect: '/example/table',
-    name: 'Example',
-    meta: { title: 'Example', icon: 'example' },
+    // redirect: '/example/table',
+    // name: 'Example',
+    // meta: { title: 'Example', icon: 'example' },
     children: [
       {
         path: 'table',
         name: 'Table',
         component: _import('table/index'),
-        meta: { title: 'Table', icon: 'table' }
+        meta: { title: '列表', icon: 'table' }
+      }
+      // ,
+      // {
+      //   path: 'tree',
+      //   name: 'Tree',
+      //   component: _import('tree/index'),
+      //   meta: { title: 'Tree', icon: 'tree' }
+      // }
+    ]
+  },
+  {
+    path: '/feedbackQuestion',
+    component: Layout,
+    redirect: '/feedbackQuestion/schoolH5',
+    name: '反馈问题',
+    meta: { title: '反馈问题', icon: 'example' },
+    children: [
+      {
+        path: 'schoolH5',
+        name: '整校h5',
+        component: _import('feedbackQuestion/schoolH5'),
+        meta: { title: '整校h5', icon: 'form' }
       },
       {
-        path: 'tree',
-        name: 'Tree',
-        component: _import('tree/index'),
-        meta: { title: 'Tree', icon: 'tree' }
+        path: 'schoolPC',
+        name: '整校pc',
+        component: _import('form/index'),
+        meta: { title: '整校pc', icon: 'form' },
+        hidden: true
       }
     ]
   },
-
   {
-    path: '/form',
+    path: '/eventManagement',
     component: Layout,
     children: [
       {
-        path: 'index',
-        name: 'Form',
-        component: _import('form/index'),
-        meta: { title: 'Form', icon: 'form' }
+        path: 'worksManagement',
+        name: 'worksManagement',
+        component: _import('eventManagement/worksManagement'),
+        meta: { title: '作品管理', icon: 'table' }
       }
+      // ,
+      // {
+      //   path: 'tree',
+      //   name: 'Tree',
+      //   component: _import('tree/index'),
+      //   meta: { title: 'Tree', icon: 'tree' }
+      // }
     ]
   },
+  // {
+  //   path: '/form',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       name: 'Form',
+  //       component: _import('form/index'),
+  //       meta: { title: 'Form', icon: 'form' }
+  //     }
+  //   ]
+  // },
 
   { path: '*', redirect: '/404', hidden: true }
 ]
