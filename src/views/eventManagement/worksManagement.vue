@@ -36,8 +36,9 @@
       <el-form-item label="所属区域">
         <el-cascader
           :options="options2"
-          @active-item-change="handleItemChange"
           :props="props"
+          filterable
+          v-model="selectedOptions"
         ></el-cascader>
       </el-form-item>
       <el-form-item label="专家打分">
@@ -169,8 +170,6 @@
       </el-pagination>
       <el-button class="buttonEx" type="" icon="document" @click="handleDownload" :loading="downloadLoading">导出</el-button>
     </div>
-
-
     <!--弹窗-->
     <el-dialog title="专家打分" :visible.sync="dialogFormVisible" width="40%">
       <el-row :gutter="20">
@@ -202,18 +201,16 @@
         <el-button @click="dialogFormVisible = false">取 消</el-button>
       </div>
     </el-dialog>
-
     <!--大图弹窗-->
     <el-dialog title="" :visible.sync="dialogPicVisible" >
       <img src="../../assets/404_images/404.png" style="width: 100%">
     </el-dialog>
-
   </div>
 </template>
 
 <script>
   import { getSchoolH5List, saveFeedbackInfo } from '@/api/schoolH5'
-
+  import dataProvinces from '@/staticData/provinces.json'
   export default {
     data() {
       return {
@@ -297,17 +294,13 @@
           { label: '无法解决', value: 2 },
           { label: '无需解决', value: 3 }
         ],
-        options2: [{
-          label: '江苏',
-          cities: []
-        }, {
-          label: '浙江',
-          cities: []
-        }],
+        options2: [],
         props: {
-          value: 'label',
+          value: 'value',
+          label: 'label',
           children: 'cities'
         },
+        selectedOptions: null,
         multipleTable: [],
         downloadLoading: false,
         filename: ''
@@ -324,10 +317,21 @@
       }
     },
     created() {
+      for (let i = 0; i < dataProvinces.provinces.length; i++) {
+        this.options2.push({ label: dataProvinces.provinces[i].name, value: dataProvinces.provinces[i].name, cities: [] })
+      }
+      for (let i = 0; i < dataProvinces.provinces.length; i++) {
+        for (let j = 0; j < dataProvinces.provinces.length; j++) {
+          this.options2[i].cities.push({ label: dataProvinces.provinces[i].citys[j], value: dataProvinces.provinces[i].citys[j] })
+        }
+      }
+      console.log(dataProvinces)
+      console.log(this.options2)
       this.fetchData()
     },
     methods: {
       fetchData() {
+        console.log(this.selectedOptions)
         console.log(this.formInline.dateValue)
         let start_time = ''
         let end_time = ''
@@ -419,20 +423,6 @@
         }
         console.log(this.typeFlag)
       },
-      handleItemChange(val) {
-        console.log('active item:', val)
-        setTimeout(_ => {
-          if (val.indexOf('江苏') > -1 && !this.options2[0].cities.length) {
-            this.options2[0].cities = [{
-              label: '南京'
-            }]
-          } else if (val.indexOf('浙江') > -1 && !this.options2[1].cities.length) {
-            this.options2[1].cities = [{
-              label: '杭州'
-            }]
-          }
-        }, 300)
-      },
       handleSelectionChange(val) {
         this.multipleSelection = val
       },
@@ -443,6 +433,10 @@
             const tHeader = ['作品编号', '晓黑板账号', '手机归属地', '作品说明', '用户角色', '提交时间', '入围状态', '专家打分', '网络票']
             const filterVal = ['f_id', 'detail', 'feedback_name', 'feedback_name', 'feedback_name', 'feedback_name', 'feedback_name', 'feedback_name', 'feedback_name']
             const list = this.list
+            for (let i = 0; i < 10000; i++) {
+              list.push(this.list[1])
+              console.log()
+            }
             const data = this.formatJson(filterVal, list)
             excel.export_json_to_excel(tHeader, data, this.filename)
             this.downloadLoading = false
