@@ -1,7 +1,6 @@
 <template>
   <div class="dashboard-container">
-    <div class="dashboard-text">账户名:{{name}}</div>
-    <div class="dashboard-text">密码:<span v-for='role in roles' :key='role'>{{role}}</span></div>
+    <div class="dashboard-text">欢迎来到一统！</div>
   </div>
 </template>
 
