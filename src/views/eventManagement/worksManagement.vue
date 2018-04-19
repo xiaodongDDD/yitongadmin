@@ -68,13 +68,11 @@
       </el-form-item>
     </el-form>
     <!--列表//-->
-    <div class="infoHeadTable">已为您搜索到<span>{{this.total}}</span>条作品</div>
+    <div class="infoHeadTable">已为您搜索到<span>{{this.total}}</span>条作品  当前测试版本号: v0.1.1</div>
     <el-table v-loading.body="listLoading"
-              ref="multipleTable"
               :data="list"
-              tooltip-effect="dark"
               @selection-change="handleSelectionChange"
-              element-loading-text="加载中..." border fit highlight-current-row>
+              element-loading-text="加载中..." border fit highlight-current-row >
       <el-table-column
         type="selection"
         width="40">
@@ -96,15 +94,17 @@
           <span>{{scope.row.activity.province}}{{scope.row.activity.city}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="作品展示"  align="center">
+      <el-table-column label="作品展示"  align="center" width="240">
         <template slot-scope="scope">
-          <img :src="scope.row.extraContent.images[0].thumbnail" style="width: 160px;height: 100px" @click="bigPic(scope.row)">
+          <div style="width: 200px;height: 200px;text-align: center;line-height:200px;">
+            <img :src="scope.row.imageSrc"  @click="bigPic(scope.row)" v-if="scope.row.imageSrc" style=" width:auto;height:auto;max-width:100%;max-height:100%;display: inline-block; vertical-align: middle;">
+          </div>
         </template>
       </el-table-column>
-      <el-table-column label="作品说明"  align="center" width="170">
+      <el-table-column label="作品说明"  align="center" >
         <template slot-scope="scope">
           <span v-popover:popover3 style="width: 10px;height: 10px">
-            <span class="point">{{scope.row.activity.content}}</span>
+            <span class="point">{{scope.row.activity.content | contentFilter}}</span>
             <el-popover
               ref="popover3"
               placement="top-start"
@@ -143,7 +143,7 @@
           {{scope.row.activity.webScore}}
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="180" align="center">
+      <el-table-column label="操作" align="center" width="180">
         <template slot-scope="scope">
           <el-button type="" size="mini" @click="operating(scope.row,1)" v-if="scope.row.activity.status !== 3">入围</el-button>
           <el-button type="" size="mini" @click="operating(scope.row,2)" v-if="scope.row.activity.status === 3">取消</el-button>
@@ -215,8 +215,8 @@
           status: 0,
           timeSort: 'desc',
           selectedOptions: null,
-          expertScore: 'asc',
-          webScore: 'asc',
+          expertScore: 'desc',
+          webScore: 'desc',
           dateValue: ''
         },
         list: null,
@@ -295,13 +295,13 @@
         ],
         optionsStatus3: [
           { label: '请选择', value: 0 },
-          { label: '由低到高', value: 'desc' },
-          { label: '由高到低', value: 'asc' }
+          { label: '由低到高', value: 'asc' },
+          { label: '由高到低', value: 'desc' }
         ],
         optionsStatus4: [
           { label: '请选择', value: 0 },
-          { label: '由低到高', value: 'desc' },
-          { label: '由高到低', value: 'asc' }
+          { label: '由低到高', value: 'asc' },
+          { label: '由高到低', value: 'desc' }
         ],
         options2: [],
         props: {
@@ -309,7 +309,6 @@
           label: 'label',
           children: 'cities'
         },
-        multipleTable: [],
         multipleSelection: [],
         downloadLoading: false,
         filename: '',
@@ -317,6 +316,13 @@
       }
     },
     filters: {
+      contentFilter(content) {
+        if (content.length > 7) {
+          return content.substr(0, 7) + '...'
+        } else {
+          return content
+        }
+      },
       statusFilter(status) {
         const statusMap = {
           1: '待处理',
@@ -368,11 +374,10 @@
           status: this.formInline.status,
           province: province,
           city: city,
-          timeSort: this.formInline.timeSort,
-          expertScore: this.formInline.expertScore,
-          webScore: this.formInline.webScore,
-          pageNum: this.currentPage,
-          size: this.pagesize
+          page: {
+            pageNum: this.currentPage,
+            size: this.pagesize
+          }
         }
         if (this.formInline.dateValue === '' || this.formInline.dateValue === null) {
           console.log()
@@ -389,7 +394,7 @@
         if (this.formInline.webScore !== 0) {
           obj.webScore = this.formInline.webScore
         }
-        if (this.formInline.webScore === 0 && this.formInline.webScore === 0 && this.formInline.webScore === 0) {
+        if (this.formInline.timeSort === 0 && this.formInline.expertScore === 0 && this.formInline.webScore === 0) {
           this.$message({
             type: 'warning',
             message: '请选择排序方式'
@@ -398,7 +403,7 @@
           return
         }
         if (item === 'all') {
-          obj.size = this.total
+          obj.page.size = this.total
         }
         getWorkManagementList(obj).then(response => {
           if (response.response.info[0].status !== '1') {
@@ -416,7 +421,34 @@
                 message: response.response.info[0].msg
               })
               this.total = response.response.info[0].data.pageInfo.totalNum
-              this.list = response.response.info[0].data.activities
+              if (response.response.info[0].data.hasOwnProperty('activities')) {
+                this.list = response.response.info[0].data.activities
+              } else {
+                this.list = []
+              }
+              for (let i = 0; i < this.list.length; i++) {
+                if (!this.list[i].hasOwnProperty('extraContent')) {
+                  this.list[i].imageSrc = ''
+                  this.list[i].imageSrco = ''
+                  this.list[i].imageSrcp = ''
+                } else {
+                  if (!this.list[i].extraContent.hasOwnProperty('images')) {
+                    this.list[i].imageSrc = ''
+                    this.list[i].imageSrco = ''
+                    this.list[i].imageSrcp = ''
+                  } else {
+                    if (this.list[i].extraContent.images.length > 0) {
+                      this.list[i].imageSrco = this.list[i].extraContent.images[0].original
+                      this.list[i].imageSrc = this.list[i].extraContent.images[0].thumbnail
+                      this.list[i].imageSrcp = this.list[i].extraContent.images[0].thumbnail
+                    } else {
+                      this.list[i].imageSrc = ''
+                      this.list[i].imageSrco = ''
+                      this.list[i].imageSrcp = ''
+                    }
+                  }
+                }
+              }
             }
           }
           this.listLoading = false
@@ -426,7 +458,7 @@
       goMark(item) {
         console.log(item)
         this.form = JSON.parse(JSON.stringify(item))
-        this.form.imgSrc = item.extraContent.images[0].thumbnail
+        this.form.imgSrc = item.imageSrcp
         this.form.content = item.activity.content
         this.formExpertScore = item.activity.expertScore
         this.dialogFormVisible = true
@@ -485,7 +517,7 @@
             list.push(
               {
                 'recordId': this.listAll[i].activity.recordId,
-                'mobile': this.listAll[i].activity.recordId,
+                'mobile': this.listAll[i].activity.mobile,
                 'province': this.listAll[i].activity.province + this.listAll[i].activity.city,
                 'content': this.listAll[i].activity.content,
                 'role': role,
@@ -515,7 +547,7 @@
         return jsonData.map(v => filterVal.map(j => v[j]))
       },
       bigPic(item) {
-        this.bigImgInfo = item.extraContent.images[0].original
+        this.bigImgInfo = item.imageSrco
         this.dialogPicVisible = true
       },
       operating(item, flag) {

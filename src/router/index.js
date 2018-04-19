@@ -47,13 +47,6 @@ export const constantRouterMap = [
         component: _import('table/index'),
         meta: { title: '列表', icon: 'table' }
       }
-      // ,
-      // {
-      //   path: 'tree',
-      //   name: 'Tree',
-      //   component: _import('tree/index'),
-      //   meta: { title: 'Tree', icon: 'tree' }
-      // }
     ]
   },
   {
@@ -88,28 +81,8 @@ export const constantRouterMap = [
         component: _import('eventManagement/worksManagement'),
         meta: { title: '作品管理', icon: 'table' }
       }
-      // ,
-      // {
-      //   path: 'tree',
-      //   name: 'Tree',
-      //   component: _import('tree/index'),
-      //   meta: { title: 'Tree', icon: 'tree' }
-      // }
     ]
   },
-  // {
-  //   path: '/form',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       name: 'Form',
-  //       component: _import('form/index'),
-  //       meta: { title: 'Form', icon: 'form' }
-  //     }
-  //   ]
-  // },
-
   { path: '*', redirect: '/404', hidden: true }
 ]
 
