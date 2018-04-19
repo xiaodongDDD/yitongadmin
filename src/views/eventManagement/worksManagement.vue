@@ -194,8 +194,8 @@
         </el-col>
       </el-row>
       <div slot="footer" class="dialog-footer text-center el-dialog-top">
-        <el-button type="primary" @click="submitForm('ruleForm')">保 存</el-button>
         <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="submitForm('ruleForm')">保 存</el-button>
       </div>
     </el-dialog>
     <!--大图弹窗-->
