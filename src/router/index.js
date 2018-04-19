@@ -6,9 +6,6 @@ const _import = require('./_import_' + process.env.NODE_ENV)
 
 Vue.use(Router)
 
-/* Layout */
-import Layout from '../views/layout/Layout'
-
 /**
 * hidden: true                   if `hidden:true` will not show in the sidebar(default is false)
 * redirect: noredirect           if `redirect:noredirect` will no redirct in the breadcrumb
@@ -24,91 +21,111 @@ export const constantRouterMap = [
 
   {
     path: '/',
-    component: Layout,
-    redirect: '/dashboard',
-    name: 'Dashboard',
-    hidden: true,
-    children: [{
-      path: 'dashboard',
-      component: _import('dashboard/index')
-    }]
-  },
-
-  {
-    path: '/example',
-    component: Layout,
-    // redirect: '/example/table',
-    // name: 'Example',
-    // meta: { title: 'Example', icon: 'example' },
+    redirect: '/userList',
+    name: 'Index',
+    component: _import('index'),
     children: [
       {
-        path: 'table',
-        name: 'Table',
-        component: _import('table/index'),
-        meta: { title: '列表', icon: 'table' }
-      }
-      // ,
-      // {
-      //   path: 'tree',
-      //   name: 'Tree',
-      //   component: _import('tree/index'),
-      //   meta: { title: 'Tree', icon: 'tree' }
-      // }
-    ]
-  },
-  {
-    path: '/feedbackQuestion',
-    component: Layout,
-    redirect: '/feedbackQuestion/schoolH5',
-    name: '反馈问题',
-    meta: { title: '反馈问题', icon: 'example' },
-    children: [
-      {
-        path: 'schoolH5',
-        name: '整校h5',
-        component: _import('feedbackQuestion/schoolH5'),
-        meta: { title: '整校h5', icon: 'form' }
+        path: 'userList',
+        component: _import('userManagement/userList')
       },
       {
-        path: 'schoolPC',
-        name: '整校pc',
-        component: _import('form/index'),
-        meta: { title: '整校pc', icon: 'form' },
-        hidden: true
-      }
-    ]
-  },
-  {
-    path: '/eventManagement',
-    component: Layout,
-    children: [
+        path: 'userEdit',
+        component: _import('userManagement/userEdit')
+      },
       {
-        path: 'worksManagement',
-        name: 'worksManagement',
-        component: _import('eventManagement/worksManagement'),
-        meta: { title: '作品管理', icon: 'table' }
-      }
-      // ,
-      // {
-      //   path: 'tree',
-      //   name: 'Tree',
-      //   component: _import('tree/index'),
-      //   meta: { title: 'Tree', icon: 'tree' }
-      // }
-    ]
+        path: 'userAdd',
+        component: _import('userManagement/userAdd')
+      },
+      {
+        path: 'accountList',
+        component: _import('accountManagement/accountList')
+      },
+      {
+        path: 'accountEdit',
+        component: _import('accountManagement/accountEdit')
+      },
+      {
+        path: 'accountAdd',
+        component: _import('accountManagement/accountAdd')
+      },
+      {
+        path: 'powerList',
+        component: _import('powerManagement/powerList')
+      },
+      {
+        path: 'powerEdit',
+        component: _import('powerManagement/powerEdit')
+      },
+      {
+        path: 'itemList',
+        component: _import('itemManagement/item/itemList')
+      },
+      {
+        path: 'itemEdit',
+        component: _import('itemManagement/item/itemEdit')
+      },
+      {
+        path: 'itemAdd',
+        component: _import('itemManagement/item/itemAdd')
+      },
+      {
+        path: 'officialList',
+        component: _import('itemManagement/official/officialList')
+      },
+      {
+        path: 'officialEdit',
+        component: _import('itemManagement/official/officialEdit')
+      },
+      {
+        path: 'officialAdd',
+        component: _import('itemManagement/official/officialAdd')
+      },
+      {
+        path: 'transactorList',
+        component: _import('itemManagement/transactor/transactorList')
+      },
+      {
+        path: 'transactorEdit',
+        component: _import('itemManagement/transactor/transactorEdit')
+      },
+      {
+        path: 'objectList',
+        component: _import('itemManagement/object/objectList')
+      },
+      {
+        path: 'objectAdd',
+        component: _import('itemManagement/object/objectAdd')
+      },
+      {
+        path: 'templateList',
+        component: _import('templateManagement/templateList')
+      },
+      {
+        path: 'templateEdit',
+        component: _import('templateManagement/templateEdit')
+      },
+      {
+        path: 'templateAdd',
+        component: _import('templateManagement/templateAdd')
+      },
+      {
+        path: 'gainList',
+        component: _import('gainManagement/gainList')
+      },
+      {
+        path: 'gainSchoolList',
+        component: _import('gainManagement/gainSchoolList')
+      },
+      {
+        path: 'gainDetails',
+        component: _import('gainManagement/gainDetails')
+      },
+      {
+        path: 'logList',
+        component: _import('operationLog/logList')
+      }]
   },
-  // {
-  //   path: '/form',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       name: 'Form',
-  //       component: _import('form/index'),
-  //       meta: { title: 'Form', icon: 'form' }
-  //     }
-  //   ]
-  // },
 
   { path: '*', redirect: '/404', hidden: true }
 ]
