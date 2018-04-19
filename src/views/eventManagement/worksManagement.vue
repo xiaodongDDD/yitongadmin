@@ -69,88 +69,90 @@
     </el-form>
     <!--列表//-->
     <div class="infoHeadTable">已为您搜索到<span>{{this.total}}</span>条作品  当前测试版本号: v0.1.1</div>
-    <el-table v-loading.body="listLoading"
-              :data="list"
-              @selection-change="handleSelectionChange"
-              element-loading-text="加载中..." border fit highlight-current-row >
-      <el-table-column
-        type="selection"
-        width="40">
-      </el-table-column>
-      <el-table-column align="center" label='作品编号' width="95">
-        <template slot-scope="scope">
-          {{scope.row.activity.recordId}}
-        </template>
-      </el-table-column>
-      <el-table-column label="晓黑板账号" width="110" align="center">
-        <template slot-scope="scope">
-          <span>
-            {{scope.row.activity.mobile}}
-          </span>
-        </template>
-      </el-table-column>
-      <el-table-column label="手机号归属地" width="110" align="center">
-        <template slot-scope="scope">
-          <span>{{scope.row.activity.province}}{{scope.row.activity.city}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="作品展示"  align="center" width="240">
-        <template slot-scope="scope">
-          <div style="width: 200px;height: 200px;text-align: center;line-height:200px;">
-            <img :src="scope.row.imageSrc"  @click="bigPic(scope.row)" v-if="scope.row.imageSrc" style=" width:auto;height:auto;max-width:100%;max-height:100%;display: inline-block; vertical-align: middle;">
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column label="作品说明"  align="center" >
-        <template slot-scope="scope">
-          <span v-popover:popover3 style="width: 10px;height: 10px">
-            <span class="point">{{scope.row.activity.content | contentFilter}}</span>
-            <el-popover
-              ref="popover3"
-              placement="top-start"
-              width="300"
-              trigger="hover">
-              <div>
-                {{scope.row.activity.content}}
-              </div>
-            </el-popover>
-          </span>
-        </template>
-      </el-table-column>
-      <el-table-column label="用户角色" width="110" align="center">
-        <template slot-scope="scope">
-          {{scope.row.activity.role | roleFilter}}
-        </template>
-      </el-table-column>
-      <el-table-column label="提交时间" width="170" align="center">
-        <template slot-scope="scope">
-          <i class="el-icon-time"></i>
-          {{scope.row.activity.createTime | timeFilter}}
-        </template>
-      </el-table-column>
-      <el-table-column label="入围状态" width="110" align="center">
-        <template slot-scope="scope">
-          <span>{{scope.row.activity.status | statusFilter}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" prop="created_at" label="专家打分" width="110">
-        <template slot-scope="scope">
-          {{scope.row.activity.expertScore}}
-        </template>
-      </el-table-column>
-      <el-table-column align="center" prop="created_at" label="网络票" width="110">
-        <template slot-scope="scope">
-          {{scope.row.activity.webScore}}
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" align="center" width="180">
-        <template slot-scope="scope">
-          <el-button type="" size="mini" @click="operating(scope.row,1)" v-if="scope.row.activity.status !== 3">入围</el-button>
-          <el-button type="" size="mini" @click="operating(scope.row,2)" v-if="scope.row.activity.status === 3">取消</el-button>
-          <el-button type="" size="mini" @click="goMark(scope.row)" v-if="scope.row.activity.status === 3">专家打分</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+    <div style="margin: 0 30px">
+      <el-table v-loading.body="listLoading"
+                :data="list"
+                @selection-change="handleSelectionChange"
+                element-loading-text="加载中..." border fit highlight-current-row >
+        <el-table-column
+          type="selection"
+          width="40">
+        </el-table-column>
+        <el-table-column align="center" label='作品编号' width="95">
+          <template slot-scope="scope">
+            {{scope.row.activity.recordId}}
+          </template>
+        </el-table-column>
+        <el-table-column label="晓黑板账号" width="110" align="center">
+          <template slot-scope="scope">
+            <span>
+              {{scope.row.activity.mobile}}
+            </span>
+          </template>
+        </el-table-column>
+        <el-table-column label="手机号归属地" width="110" align="center">
+          <template slot-scope="scope">
+            <span>{{scope.row.activity.province}}{{scope.row.activity.city}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="作品展示"  align="center" width="110">
+          <template slot-scope="scope">
+            <div style="width: 90px;height: 50px;text-align: center;line-height:50px;">
+              <img :src="scope.row.imageSrc"  @click="bigPic(scope.row)" v-if="scope.row.imageSrc" style=" width:auto;height:auto;max-width:100%;max-height:100%;display: inline-block; vertical-align: middle;">
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column label="作品说明"  align="center" >
+          <template slot-scope="scope">
+            <span v-popover:popover3 style="width: 10px;height: 10px">
+              <span class="point">{{scope.row.activity.content | contentFilter}}</span>
+              <el-popover
+                ref="popover3"
+                placement="top-start"
+                width="300"
+                trigger="hover">
+                <div>
+                  {{scope.row.activity.content}}
+                </div>
+              </el-popover>
+            </span>
+          </template>
+        </el-table-column>
+        <el-table-column label="用户角色" width="110" align="center">
+          <template slot-scope="scope">
+            {{scope.row.activity.role | roleFilter}}
+          </template>
+        </el-table-column>
+        <el-table-column label="提交时间" width="170" align="center">
+          <template slot-scope="scope">
+            <i class="el-icon-time"></i>
+            {{scope.row.activity.createTime | timeFilter}}
+          </template>
+        </el-table-column>
+        <el-table-column label="入围状态" width="110" align="center">
+          <template slot-scope="scope">
+            <span>{{scope.row.activity.status | statusFilter}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" prop="created_at" label="专家打分" width="110">
+          <template slot-scope="scope">
+            {{scope.row.activity.expertScore}}
+          </template>
+        </el-table-column>
+        <el-table-column align="center" prop="created_at" label="网络票" width="110">
+          <template slot-scope="scope">
+            {{scope.row.activity.webScore}}
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" align="center" width="180">
+          <template slot-scope="scope">
+            <el-button type="" size="mini" @click="operating(scope.row,1)" v-if="scope.row.activity.status !== 3">入围</el-button>
+            <el-button type="" size="mini" @click="operating(scope.row,2)" v-if="scope.row.activity.status === 3">取消</el-button>
+            <el-button type="" size="mini" @click="goMark(scope.row)" v-if="scope.row.activity.status === 3">专家打分</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
     <!--分页-->
     <div class="block" v-if="page">
       <el-button class="buttonSelect" type="" icon="document" @click="operating('',3)" >批量入围</el-button>
@@ -172,7 +174,9 @@
       <el-row :gutter="20" class="rowMargin">
         <el-col :span="6">作品展示</el-col>
         <el-col :span="18">
-          <img :src="form.imgSrc" style="width: 100%">
+          <div style="width: 200px;height: 200px;text-align: center;line-height:200px;">
+            <img :src="form.imgSrc"   style=" width:auto;height:auto;max-width:100%;max-height:100%;display: inline-block; vertical-align: middle;">
+          </div>
         </el-col>
       </el-row>
       <el-row :gutter="20" class="rowMargin">
