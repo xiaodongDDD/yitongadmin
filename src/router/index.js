@@ -23,107 +23,107 @@ export const constantRouterMap = [
     path: '/',
     redirect: '/userList',
     name: 'Index',
-    component: _import('index'),
+    component: _import('atriskLearners/index'),
     children: [
       {
         path: 'userList',
-        component: _import('userManagement/userList')
+        component: _import('atriskLearners/userManagement/userList')
       },
       {
         path: 'userEdit',
-        component: _import('userManagement/userEdit')
+        component: _import('atriskLearners/userManagement/userEdit')
       },
       {
         path: 'userAdd',
-        component: _import('userManagement/userAdd')
+        component: _import('atriskLearners/userManagement/userAdd')
       },
       {
         path: 'accountList',
-        component: _import('accountManagement/accountList')
+        component: _import('atriskLearners/accountManagement/accountList')
       },
       {
         path: 'accountEdit',
-        component: _import('accountManagement/accountEdit')
+        component: _import('atriskLearners/accountManagement/accountEdit')
       },
       {
         path: 'accountAdd',
-        component: _import('accountManagement/accountAdd')
+        component: _import('atriskLearners/accountManagement/accountAdd')
       },
       {
         path: 'powerList',
-        component: _import('powerManagement/powerList')
+        component: _import('atriskLearners/powerManagement/powerList')
       },
       {
         path: 'powerEdit',
-        component: _import('powerManagement/powerEdit')
+        component: _import('atriskLearners/powerManagement/powerEdit')
       },
       {
         path: 'itemList',
-        component: _import('itemManagement/item/itemList')
+        component: _import('atriskLearners/itemManagement/item/itemList')
       },
       {
         path: 'itemEdit',
-        component: _import('itemManagement/item/itemEdit')
+        component: _import('atriskLearners/itemManagement/item/itemEdit')
       },
       {
         path: 'itemAdd',
-        component: _import('itemManagement/item/itemAdd')
+        component: _import('atriskLearners/itemManagement/item/itemAdd')
       },
       {
         path: 'officialList',
-        component: _import('itemManagement/official/officialList')
+        component: _import('atriskLearners/itemManagement/official/officialList')
       },
       {
         path: 'officialEdit',
-        component: _import('itemManagement/official/officialEdit')
+        component: _import('atriskLearners/itemManagement/official/officialEdit')
       },
       {
         path: 'officialAdd',
-        component: _import('itemManagement/official/officialAdd')
+        component: _import('atriskLearners/itemManagement/official/officialAdd')
       },
       {
         path: 'transactorList',
-        component: _import('itemManagement/transactor/transactorList')
+        component: _import('atriskLearners/itemManagement/transactor/transactorList')
       },
       {
         path: 'transactorEdit',
-        component: _import('itemManagement/transactor/transactorEdit')
+        component: _import('atriskLearners/itemManagement/transactor/transactorEdit')
       },
       {
         path: 'objectList',
-        component: _import('itemManagement/object/objectList')
+        component: _import('atriskLearners/itemManagement/object/objectList')
       },
       {
         path: 'objectAdd',
-        component: _import('itemManagement/object/objectAdd')
+        component: _import('atriskLearners/itemManagement/object/objectAdd')
       },
       {
         path: 'templateList',
-        component: _import('templateManagement/templateList')
+        component: _import('atriskLearners/templateManagement/templateList')
       },
       {
         path: 'templateEdit',
-        component: _import('templateManagement/templateEdit')
+        component: _import('atriskLearners/templateManagement/templateEdit')
       },
       {
         path: 'templateAdd',
-        component: _import('templateManagement/templateAdd')
+        component: _import('atriskLearners/templateManagement/templateAdd')
       },
       {
         path: 'gainList',
-        component: _import('gainManagement/gainList')
+        component: _import('atriskLearners/gainManagement/gainList')
       },
       {
         path: 'gainSchoolList',
-        component: _import('gainManagement/gainSchoolList')
+        component: _import('atriskLearners/gainManagement/gainSchoolList')
       },
       {
         path: 'gainDetails',
-        component: _import('gainManagement/gainDetails')
+        component: _import('atriskLearners/gainManagement/gainDetails')
       },
       {
         path: 'logList',
-        component: _import('operationLog/logList')
+        component: _import('atriskLearners/operationLog/logList')
       }]
   },
 
