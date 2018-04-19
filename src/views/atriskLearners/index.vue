@@ -88,10 +88,11 @@
   }
 
   .main-content{
-    padding: 20px;
+    padding: 20px 30px;
 
     .edit-form{
       margin-top: 30px;
+      width: 50%;
 
       span{
         color: #606266;
@@ -125,5 +126,12 @@
 
   .el-form-item__label, .el-menu-item-group__title{
     padding: 0;
+  }
+  .dialogContent{
+    text-align: center;
+  }
+  .el-checkbox+.el-checkbox{
+    display: block;
+    margin-left: 0;
   }
 </style>
