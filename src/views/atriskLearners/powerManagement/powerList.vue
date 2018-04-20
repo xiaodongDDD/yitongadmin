@@ -33,7 +33,7 @@
         </el-table-column>
 
         <el-table-column
-          align="center" label="操作" width="">
+          align="center" label="操作" width="120">
           <template slot-scope="scope">
             <el-button
               size="mini"

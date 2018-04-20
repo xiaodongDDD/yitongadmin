@@ -15,23 +15,29 @@ Vue.use(Router)
     icon: 'svg-name'             the icon show in the sidebar,
   }
 **/
+// 懒加载路由
+const Login = r => require.ensure([], () => r(require('../views/login/index')), 'Login')
+const Error = r => require.ensure([], () => r(require('../views/404')), 'Error')
+const Index = r => require.ensure([], () => r(require('../views/atriskLearners/index')), 'Index')
+const UserList = r => require.ensure([], () => r(require('../views/atriskLearners/userManagement/userList')), 'UserList')
+const UserEdit = r => require.ensure([], () => r(require('../views/atriskLearners/userManagement/UserEdit')), 'UserEdit')
 export const constantRouterMap = [
-  { path: '/login', component: _import('login/index'), hidden: true },
-  { path: '/404', component: _import('404'), hidden: true },
+  { path: '/login', component: Login, hidden: true },
+  { path: '/404', component: Error, hidden: true },
 
   {
     path: '/',
     redirect: '/userList',
     name: 'Index',
-    component: _import('atriskLearners/index'),
+    component: Index,
     children: [
       {
         path: 'userList',
-        component: _import('atriskLearners/userManagement/userList')
+        component: UserList
       },
       {
         path: 'userEdit',
-        component: _import('atriskLearners/userManagement/userEdit')
+        component: UserEdit
       },
       {
         path: 'userAdd',

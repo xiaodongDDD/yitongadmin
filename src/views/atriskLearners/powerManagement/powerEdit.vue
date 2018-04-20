@@ -23,7 +23,13 @@
             <el-checkbox label="学校用户管理" name="powerlist"></el-checkbox>
             <el-checkbox label="账户管理" name="powerlist"></el-checkbox>
             <el-checkbox label="权限管理" name="powerlist"></el-checkbox>
-            <el-checkbox label="评价项目管理" name="powerlist"></el-checkbox>
+
+            <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">评价项目管理</el-checkbox>
+            <div style="margin: 15px 0;"></div>
+            <el-checkbox-group class="checkbox-menu" v-model="checkedCities" @change="handleCheckedCitiesChange">
+              <el-checkbox v-for="city in cities" :label="city" :key="city">{{city}}</el-checkbox>
+            </el-checkbox-group>
+
             <el-checkbox label="评价模板管理" name="powerlist"></el-checkbox>
             <el-checkbox label="评价成果" name="powerlist"></el-checkbox>
             <el-checkbox label="操作日志" name="powerlist"></el-checkbox>
@@ -51,17 +57,32 @@
           status: 'on',
           telephone: '13535790897',
           powerlist: ['学校用户管理']
-        }
+        },
+        checkAll: false,
+        checkedCities: ['负责人管理', '评价对象管理'],
+        cities: ['负责人管理', '执行人管理', '评价对象管理'],
+        isIndeterminate: true
       }
     },
     methods: {
       saveUser() {
-        this.$router.push({ path: '/userList' })
+        this.$router.push({ path: '/powerList' })
+      },
+      handleCheckAllChange(val) {
+        this.checkedCities = val ? this.cities : []
+        this.isIndeterminate = false
+      },
+      handleCheckedCitiesChange(value) {
+        const checkedCount = value.length
+        this.checkAll = checkedCount === this.cities.length
+        this.isIndeterminate = checkedCount > 0 && checkedCount < this.cities.length
       }
     }
   }
 </script>
 
 <style scoped>
-
+  .checkbox-menu{
+    margin-left: 20px;
+  }
 </style>
