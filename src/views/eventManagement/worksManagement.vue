@@ -23,6 +23,15 @@
           align="right">
         </el-date-picker>
       </el-form-item>
+      <el-form-item label="所属区域">
+        <el-cascader
+          :options="options2"
+          :props="props"
+          clearable
+          filterable
+          v-model="formInline.selectedOptions"
+        ></el-cascader>
+      </el-form-item>
       <el-form-item label="时间排序">
         <el-select v-model="formInline.timeSort" placeholder="">
           <el-option
@@ -32,15 +41,6 @@
             :value="item.value">
           </el-option>
         </el-select>
-      </el-form-item>
-      <el-form-item label="所属区域">
-        <el-cascader
-          :options="options2"
-          :props="props"
-          clearable
-          filterable
-          v-model="formInline.selectedOptions"
-        ></el-cascader>
       </el-form-item>
       <el-form-item label="专家打分">
         <el-select v-model="formInline.expertScore" placeholder="">
@@ -111,7 +111,7 @@
                 placement="top-start"
                 width="300"
                 trigger="hover">
-                <div>
+                <div style="max-height: 300px;overflow-y: scroll">
                   {{scope.row.activity.content}}
                 </div>
               </el-popover>
@@ -170,23 +170,23 @@
       <el-button class="buttonEx" type="" icon="document" @click="fetchData('all')" :loading="downloadLoading">导出</el-button>
     </div>
     <!--弹窗-->
-    <el-dialog title="专家打分" :visible.sync="dialogFormVisible" width="40%">
+    <el-dialog title="专家打分" :visible.sync="dialogFormVisible" width="40%" style="min-width: 600px" center>
       <el-row :gutter="20" class="rowMargin">
-        <el-col :span="6">作品展示</el-col>
-        <el-col :span="18">
+        <el-col :span="4">作品展示</el-col>
+        <el-col :span="20">
           <div style="width: 200px;height: 200px;text-align: center;line-height:200px;">
             <img :src="form.imgSrc"   style=" width:auto;height:auto;max-width:100%;max-height:100%;display: inline-block; vertical-align: middle;">
           </div>
         </el-col>
       </el-row>
       <el-row :gutter="20" class="rowMargin">
-        <el-col :span="6">作品描述</el-col>
-        <el-col :span="18">{{form.content}}
+        <el-col :span="4">作品描述</el-col>
+        <el-col :span="20">{{form.content}}
           </el-col>
       </el-row>
       <el-row :gutter="20" class="rowMargin">
-        <el-col :span="6" class="headSelect">专家打分</el-col>
-        <el-col :span="18">
+        <el-col :span="4" class="headSelect">专家打分</el-col>
+        <el-col :span="20">
           <el-select v-model="formExpertScore" placeholder="请选择" class="select-width" @change="selectStatus(form)">
             <el-option
               v-for="item in expertOptions"
@@ -221,7 +221,7 @@
           selectedOptions: null,
           expertScore: 'desc',
           webScore: 'desc',
-          dateValue: ''
+          dateValue: []
         },
         list: null,
         listAll: null,
@@ -349,6 +349,8 @@
       }
     },
     created() {
+      const date = new Date()
+      this.formInline.dateValue = [new Date((date.getTime()) - 1000 * 60 * 60 * 24 * 7), date]
       for (let i = 0; i < dataProvinces.provinces.length; i++) {
         this.options2.push({ label: dataProvinces.provinces[i].name, value: dataProvinces.provinces[i].name, cities: [] })
       }
@@ -408,6 +410,7 @@
         }
         if (item === 'all') {
           obj.page.size = this.total
+          obj.page.pageNum = 1
         }
         getWorkManagementList(obj).then(response => {
           if (response.response.info[0].status !== '1') {
@@ -424,9 +427,13 @@
                 type: 'success',
                 message: response.response.info[0].msg
               })
-              this.total = response.response.info[0].data.pageInfo.totalNum
-              if (response.response.info[0].data.hasOwnProperty('activities')) {
-                this.list = response.response.info[0].data.activities
+              if (response.response.info[0].hasOwnProperty('data')) {
+                if (response.response.info[0].data.hasOwnProperty('activities')) {
+                  this.list = response.response.info[0].data.activities
+                  this.total = response.response.info[0].data.pageInfo.totalNum
+                } else {
+                  this.list = []
+                }
               } else {
                 this.list = []
               }
