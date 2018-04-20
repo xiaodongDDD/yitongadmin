@@ -476,6 +476,7 @@
       },
       handleSizeChange(val) {
         this.pagesize = val
+        this.currentPage = 1
         this.fetchData()
         console.log(`每页 ${val} 条`)
       },
@@ -494,6 +495,7 @@
               type: 'success'
             })
             this.dialogFormVisible = false
+            this.currentPage = 1
             this.fetchData()
           } else {
             this.$message({
@@ -509,6 +511,7 @@
         }
       },
       onSubmit() {
+        this.currentPage = 1
         this.fetchData()
       },
       selectStatus(item) {
@@ -622,6 +625,7 @@
                 message: successInfo
               })
               this.dialogFormVisible = false
+              this.currentPage = 1
               this.fetchData()
             } else {
               this.$message({
