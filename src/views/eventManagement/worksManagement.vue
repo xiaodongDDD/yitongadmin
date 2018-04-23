@@ -344,8 +344,14 @@
         return statusMap[role]
       },
       timeFilter(item) {
-        const time = new Date(item)
-        return time.getFullYear() + '/' + (time.getMonth() + 1) + '/' + time.getDate() + ' ' + time.getHours() + ':' + time.getMinutes() + ':' + time.getSeconds()
+        const date = new Date(item)
+        const Y = date.getFullYear() + '/'
+        const M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '/'
+        const D = (date.getDate() < 10 ? '0' + (date.getDate()) : date.getDate()) + ' '
+        const h = (date.getHours() < 10 ? '0' + (date.getHours()) : date.getHours()) + ':'
+        const m = (date.getMinutes() < 10 ? '0' + (date.getMinutes()) : date.getMinutes()) + ':'
+        const s = (date.getSeconds() < 10 ? '0' + (date.getSeconds()) : date.getSeconds())
+        return Y + M + D + h + m + s
       }
     },
     created() {
@@ -608,7 +614,7 @@
             arr.push(this.multipleSelection[i].activity.recordId)
             obj.requests.push({ 'recordId': this.multipleSelection[i].activity.recordId, 'status': 2, 'expertScore': 0 })
           }
-          info = '您已选择' + arr.join(',') + '号作品未入围作品'
+          info = '您已选择' + arr.join(',') + '号作品为未入围作品'
           successInfo = arr.join(',') + '号作品未入围，请重新选择'
           errorInfo = '操作已取消'
         }

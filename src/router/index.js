@@ -34,43 +34,43 @@ export const constantRouterMap = [
     }]
   },
 
-  {
-    path: '/example',
-    component: Layout,
-    // redirect: '/example/table',
-    // name: 'Example',
-    // meta: { title: 'Example', icon: 'example' },
-    children: [
-      {
-        path: 'table',
-        name: 'Table',
-        component: _import('table/index'),
-        meta: { title: '列表', icon: 'table' }
-      }
-    ]
-  },
-  {
-    path: '/feedbackQuestion',
-    component: Layout,
-    redirect: '/feedbackQuestion/schoolH5',
-    name: '反馈问题',
-    meta: { title: '反馈问题', icon: 'example' },
-    children: [
-      {
-        path: 'schoolH5',
-        name: '整校h5',
-        component: _import('feedbackQuestion/schoolH5'),
-        meta: { title: '整校h5', icon: 'form' }
-      },
-      {
-        path: 'schoolPC',
-        name: '整校pc',
-        component: _import('form/index'),
-        meta: { title: '整校pc', icon: 'form' },
-        hidden: true
-      }
-    ]
-  },
+  // {
+  //   path: '/example',
+  //   component: Layout,
+  //   // redirect: '/example/table',
+  //   // name: 'Example',
+  //   // meta: { title: 'Example', icon: 'example' },
+  //   children: [
+  //     {
+  //       path: 'table',
+  //       name: 'Table',
+  //       component: _import('table/index'),
+  //       meta: { title: '列表', icon: 'table' }
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/feedbackQuestion',
+  //   component: Layout,
+  //   redirect: '/feedbackQuestion/schoolH5',
+  //   name: '反馈问题',
+  //   meta: { title: '反馈问题', icon: 'example' },
+  //   children: [
+  //     {
+  //       path: 'schoolH5',
+  //       name: '整校h5',
+  //       component: _import('feedbackQuestion/schoolH5'),
+  //       meta: { title: '整校h5', icon: 'form' }
+  //     },
+  //     {
+  //       path: 'schoolPC',
+  //       name: '整校pc',
+  //       component: _import('form/index'),
+  //       meta: { title: '整校pc', icon: 'form' },
+  //       hidden: true
+  //     }
+  //   ]
+  // },
   {
     path: '/eventManagement',
     component: Layout,
