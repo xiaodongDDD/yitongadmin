@@ -1,14 +1,14 @@
 <template>
   <div class="myInfo">
-    <el-form ref="form" :model="form" label-width="100px" class="formMyInfo">
+    <el-form ref="form" :model="form" label-width="100px" class="formMyInfo" :rules="rules">
       <el-form-item label="姓名">
-        <el-input v-model="form.name"></el-input>
+        <el-input v-model="form.name" prop="name"></el-input>
       </el-form-item>
       <el-form-item label="英文名">
-        <el-input v-model="form.phone"></el-input>
+        <el-input v-model="form.phone" prop="name"></el-input>
       </el-form-item>
       <el-form-item label="性别">
-        <el-radio-group v-model="form.resource">
+        <el-radio-group v-model="form.resource" prop="name">
           <el-radio label="男"></el-radio>
           <el-radio label="女"></el-radio>
         </el-radio-group>
@@ -72,7 +72,8 @@
           type: [],
           resource: '',
           desc: ''
-        }
+        },
+        rules: []
       }
     },
     methods: {
