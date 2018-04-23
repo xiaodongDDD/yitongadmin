@@ -33,7 +33,6 @@ export const constantRouterMap = [
       component: _import('dashboard/index')
     }]
   },
-
   {
     path: '/example',
     component: Layout,

@@ -23,6 +23,15 @@
           align="right">
         </el-date-picker>
       </el-form-item>
+      <el-form-item label="所属区域">
+        <el-cascader
+          :options="options2"
+          :props="props"
+          clearable
+          filterable
+          v-model="formInline.selectedOptions"
+        ></el-cascader>
+      </el-form-item>
       <el-form-item label="时间排序">
         <el-select v-model="formInline.timeSort" placeholder="">
           <el-option
@@ -32,15 +41,6 @@
             :value="item.value">
           </el-option>
         </el-select>
-      </el-form-item>
-      <el-form-item label="所属区域">
-        <el-cascader
-          :options="options2"
-          :props="props"
-          clearable
-          filterable
-          v-model="formInline.selectedOptions"
-        ></el-cascader>
       </el-form-item>
       <el-form-item label="专家打分">
         <el-select v-model="formInline.expertScore" placeholder="">
@@ -68,89 +68,91 @@
       </el-form-item>
     </el-form>
     <!--列表//-->
-    <div class="infoHeadTable">已为您搜索到<span>{{this.total}}</span>条作品  当前测试版本号: v0.1.1</div>
-    <el-table v-loading.body="listLoading"
-              :data="list"
-              @selection-change="handleSelectionChange"
-              element-loading-text="加载中..." border fit highlight-current-row >
-      <el-table-column
-        type="selection"
-        width="40">
-      </el-table-column>
-      <el-table-column align="center" label='作品编号' width="95">
-        <template slot-scope="scope">
-          {{scope.row.activity.recordId}}
-        </template>
-      </el-table-column>
-      <el-table-column label="晓黑板账号" width="110" align="center">
-        <template slot-scope="scope">
-          <span>
-            {{scope.row.activity.mobile}}
-          </span>
-        </template>
-      </el-table-column>
-      <el-table-column label="手机号归属地" width="110" align="center">
-        <template slot-scope="scope">
-          <span>{{scope.row.activity.province}}{{scope.row.activity.city}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="作品展示"  align="center" width="240">
-        <template slot-scope="scope">
-          <div style="width: 200px;height: 200px;text-align: center;line-height:200px;">
-            <img :src="scope.row.imageSrc"  @click="bigPic(scope.row)" v-if="scope.row.imageSrc" style=" width:auto;height:auto;max-width:100%;max-height:100%;display: inline-block; vertical-align: middle;">
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column label="作品说明"  align="center" >
-        <template slot-scope="scope">
-          <span v-popover:popover3 style="width: 10px;height: 10px">
-            <span class="point">{{scope.row.activity.content | contentFilter}}</span>
-            <el-popover
-              ref="popover3"
-              placement="top-start"
-              width="300"
-              trigger="hover">
-              <div>
-                {{scope.row.activity.content}}
-              </div>
-            </el-popover>
-          </span>
-        </template>
-      </el-table-column>
-      <el-table-column label="用户角色" width="110" align="center">
-        <template slot-scope="scope">
-          {{scope.row.activity.role | roleFilter}}
-        </template>
-      </el-table-column>
-      <el-table-column label="提交时间" width="170" align="center">
-        <template slot-scope="scope">
-          <i class="el-icon-time"></i>
-          {{scope.row.activity.createTime | timeFilter}}
-        </template>
-      </el-table-column>
-      <el-table-column label="入围状态" width="110" align="center">
-        <template slot-scope="scope">
-          <span>{{scope.row.activity.status | statusFilter}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" prop="created_at" label="专家打分" width="110">
-        <template slot-scope="scope">
-          {{scope.row.activity.expertScore}}
-        </template>
-      </el-table-column>
-      <el-table-column align="center" prop="created_at" label="网络票" width="110">
-        <template slot-scope="scope">
-          {{scope.row.activity.webScore}}
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" align="center" width="180">
-        <template slot-scope="scope">
-          <el-button type="" size="mini" @click="operating(scope.row,1)" v-if="scope.row.activity.status !== 3">入围</el-button>
-          <el-button type="" size="mini" @click="operating(scope.row,2)" v-if="scope.row.activity.status === 3">取消</el-button>
-          <el-button type="" size="mini" @click="goMark(scope.row)" v-if="scope.row.activity.status === 3">专家打分</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+    <div class="infoHeadTable">已为您搜索到<span>{{this.total}}</span>条作品</div>
+    <div style="margin: 0 30px">
+      <el-table v-loading.body="listLoading"
+                :data="list"
+                @selection-change="handleSelectionChange"
+                element-loading-text="加载中..." border fit highlight-current-row >
+        <el-table-column
+          type="selection"
+          width="40">
+        </el-table-column>
+        <el-table-column align="center" label='作品编号' width="95">
+          <template slot-scope="scope">
+            {{scope.row.activity.recordId}}
+          </template>
+        </el-table-column>
+        <el-table-column label="晓黑板账号" width="110" align="center">
+          <template slot-scope="scope">
+            <span>
+              {{scope.row.activity.mobile}}
+            </span>
+          </template>
+        </el-table-column>
+        <el-table-column label="手机号归属地" width="110" align="center">
+          <template slot-scope="scope">
+            <span>{{scope.row.activity.province}}{{scope.row.activity.city}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="作品展示"  align="center" width="110">
+          <template slot-scope="scope">
+            <div style="width: 90px;height: 50px;text-align: center;line-height:50px;">
+              <img :src="scope.row.imageSrc"  @click="bigPic(scope.row)" v-if="scope.row.imageSrc" style=" width:auto;height:auto;max-width:100%;max-height:100%;display: inline-block; vertical-align: middle;">
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column label="作品说明"  align="center" >
+          <template slot-scope="scope">
+            <span v-popover:popover3 style="width: 10px;height: 10px">
+              <span class="point">{{scope.row.activity.content | contentFilter}}</span>
+              <el-popover
+                ref="popover3"
+                placement="top-start"
+                width="300"
+                trigger="hover">
+                <div style="max-height: 300px;overflow-y: scroll">
+                  {{scope.row.activity.content}}
+                </div>
+              </el-popover>
+            </span>
+          </template>
+        </el-table-column>
+        <el-table-column label="用户角色" width="110" align="center">
+          <template slot-scope="scope">
+            {{scope.row.activity.role | roleFilter}}
+          </template>
+        </el-table-column>
+        <el-table-column label="提交时间" width="170" align="center">
+          <template slot-scope="scope">
+            <i class="el-icon-time"></i>
+            {{scope.row.activity.createTime | timeFilter}}
+          </template>
+        </el-table-column>
+        <el-table-column label="入围状态" width="110" align="center">
+          <template slot-scope="scope">
+            <span>{{scope.row.activity.status | statusFilter}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" prop="created_at" label="专家打分" width="110">
+          <template slot-scope="scope">
+            {{scope.row.activity.expertScore}}
+          </template>
+        </el-table-column>
+        <el-table-column align="center" prop="created_at" label="网络票" width="110">
+          <template slot-scope="scope">
+            {{scope.row.activity.webScore}}
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" align="center" width="180">
+          <template slot-scope="scope">
+            <el-button type="" size="mini" @click="operating(scope.row,1)" v-if="scope.row.activity.status !== 3">入围</el-button>
+            <el-button type="" size="mini" @click="operating(scope.row,2)" v-if="scope.row.activity.status === 3">取消</el-button>
+            <el-button type="" size="mini" @click="goMark(scope.row)" v-if="scope.row.activity.status === 3">专家打分</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
     <!--分页-->
     <div class="block" v-if="page">
       <el-button class="buttonSelect" type="" icon="document" @click="operating('',3)" >批量入围</el-button>
@@ -168,21 +170,23 @@
       <el-button class="buttonEx" type="" icon="document" @click="fetchData('all')" :loading="downloadLoading">导出</el-button>
     </div>
     <!--弹窗-->
-    <el-dialog title="专家打分" :visible.sync="dialogFormVisible" width="40%">
+    <el-dialog title="专家打分" :visible.sync="dialogFormVisible" width="40%" style="min-width: 600px" center>
       <el-row :gutter="20" class="rowMargin">
-        <el-col :span="6">作品展示</el-col>
-        <el-col :span="18">
-          <img :src="form.imgSrc" style="width: 100%">
+        <el-col :span="4">作品展示</el-col>
+        <el-col :span="20">
+          <div style="width: 200px;height: 200px;text-align: center;line-height:200px;">
+            <img :src="form.imgSrc"   style=" width:auto;height:auto;max-width:100%;max-height:100%;display: inline-block; vertical-align: middle;">
+          </div>
         </el-col>
       </el-row>
       <el-row :gutter="20" class="rowMargin">
-        <el-col :span="6">作品描述</el-col>
-        <el-col :span="18">{{form.content}}
+        <el-col :span="4">作品描述</el-col>
+        <el-col :span="20">{{form.content}}
           </el-col>
       </el-row>
       <el-row :gutter="20" class="rowMargin">
-        <el-col :span="6" class="headSelect">专家打分</el-col>
-        <el-col :span="18">
+        <el-col :span="4" class="headSelect">专家打分</el-col>
+        <el-col :span="20">
           <el-select v-model="formExpertScore" placeholder="请选择" class="select-width" @change="selectStatus(form)">
             <el-option
               v-for="item in expertOptions"
@@ -217,7 +221,7 @@
           selectedOptions: null,
           expertScore: 'desc',
           webScore: 'desc',
-          dateValue: ''
+          dateValue: []
         },
         list: null,
         listAll: null,
@@ -340,11 +344,19 @@
         return statusMap[role]
       },
       timeFilter(item) {
-        const time = new Date(item)
-        return time.getFullYear() + '/' + (time.getMonth() + 1) + '/' + time.getDate() + '/' + time.getHours() + ':' + time.getMinutes() + ':' + time.getSeconds()
+        const date = new Date(item)
+        const Y = date.getFullYear() + '/'
+        const M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '/'
+        const D = (date.getDate() < 10 ? '0' + (date.getDate()) : date.getDate()) + ' '
+        const h = (date.getHours() < 10 ? '0' + (date.getHours()) : date.getHours()) + ':'
+        const m = (date.getMinutes() < 10 ? '0' + (date.getMinutes()) : date.getMinutes()) + ':'
+        const s = (date.getSeconds() < 10 ? '0' + (date.getSeconds()) : date.getSeconds())
+        return Y + M + D + h + m + s
       }
     },
     created() {
+      const date = new Date()
+      this.formInline.dateValue = [new Date((date.getTime()) - 1000 * 60 * 60 * 24 * 7), date]
       for (let i = 0; i < dataProvinces.provinces.length; i++) {
         this.options2.push({ label: dataProvinces.provinces[i].name, value: dataProvinces.provinces[i].name, cities: [] })
       }
@@ -404,6 +416,7 @@
         }
         if (item === 'all') {
           obj.page.size = this.total
+          obj.page.pageNum = 1
         }
         getWorkManagementList(obj).then(response => {
           if (response.response.info[0].status !== '1') {
@@ -420,9 +433,13 @@
                 type: 'success',
                 message: response.response.info[0].msg
               })
-              this.total = response.response.info[0].data.pageInfo.totalNum
-              if (response.response.info[0].data.hasOwnProperty('activities')) {
-                this.list = response.response.info[0].data.activities
+              if (response.response.info[0].hasOwnProperty('data')) {
+                if (response.response.info[0].data.hasOwnProperty('activities')) {
+                  this.list = response.response.info[0].data.activities
+                  this.total = response.response.info[0].data.pageInfo.totalNum
+                } else {
+                  this.list = []
+                }
               } else {
                 this.list = []
               }
@@ -465,6 +482,7 @@
       },
       handleSizeChange(val) {
         this.pagesize = val
+        this.currentPage = 1
         this.fetchData()
         console.log(`每页 ${val} 条`)
       },
@@ -474,6 +492,13 @@
         console.log(`当前页: ${val}`)
       },
       submitForm(formName) {
+        if (this.formExpertScore === 0) {
+          this.$message({
+            type: 'warning',
+            message: '请选择专家打分'
+          })
+          return
+        }
         const obj = { 'requests': [] }
         obj.requests.push({ 'recordId': this.form.activity.recordId, 'status': this.form.activity.status, 'expertScore': this.formExpertScore })
         updataWorkManagementInfo(obj).then(response => {
@@ -483,6 +508,7 @@
               type: 'success'
             })
             this.dialogFormVisible = false
+            this.currentPage = 1
             this.fetchData()
           } else {
             this.$message({
@@ -498,6 +524,7 @@
         }
       },
       onSubmit() {
+        this.currentPage = 1
         this.fetchData()
       },
       selectStatus(item) {
@@ -574,13 +601,25 @@
             return
           }
           const arr = []
+          const arrError = []
           for (let i = 0; i < this.multipleSelection.length; i++) {
             arr.push(this.multipleSelection[i].activity.recordId)
             obj.requests.push({ 'recordId': this.multipleSelection[i].activity.recordId, 'status': 3 })
+            if (this.multipleSelection[i].activity.status === 3) {
+              arrError.push(this.multipleSelection[i].activity.recordId)
+            }
           }
-          info = '您已选择' + arr.join(',') + '号作品为入围作品'
-          successInfo = arr.join(',') + '号作品已入围，请重新选择'
-          errorInfo = '操作已取消'
+          if (arrError.length > 0) {
+            this.$message({
+              message: arrError.join(',') + '号作品已入围，请重新选择',
+              type: 'warning'
+            })
+            return
+          } else {
+            info = '您已选择' + arr.join(',') + '号作品为入围作品'
+            successInfo = '操作成功'
+            errorInfo = '操作已取消'
+          }
         } else if (flag === 4) {
           if (this.multipleSelection.length < 1) {
             this.$message({
@@ -590,13 +629,26 @@
             return
           }
           const arr = []
+          const arrError = []
           for (let i = 0; i < this.multipleSelection.length; i++) {
             arr.push(this.multipleSelection[i].activity.recordId)
             obj.requests.push({ 'recordId': this.multipleSelection[i].activity.recordId, 'status': 2, 'expertScore': 0 })
+            if (this.multipleSelection[i].activity.status === 2) {
+              arrError.push(this.multipleSelection[i].activity.recordId)
+            }
           }
-          info = '您已选择' + arr.join(',') + '号作品未入围作品'
-          successInfo = arr.join(',') + '号作品未入围，请重新选择'
-          errorInfo = '操作已取消'
+          console.log(arrError)
+          if (arrError.length > 0) {
+            this.$message({
+              message: arrError.join(',') + '号作品未入围，请重新选择',
+              type: 'warning'
+            })
+            return
+          } else {
+            info = '您已选择' + arr.join(',') + '号作品为未入围作品'
+            successInfo = '操作成功'
+            errorInfo = '操作已取消'
+          }
         }
         this.$confirm(info, '操作确认', {
           confirmButtonText: '保存',
@@ -611,6 +663,7 @@
                 message: successInfo
               })
               this.dialogFormVisible = false
+              this.currentPage = 1
               this.fetchData()
             } else {
               this.$message({
