@@ -68,7 +68,7 @@
       </el-form-item>
     </el-form>
     <!--列表//-->
-    <div class="infoHeadTable">已为您搜索到<span>{{this.total}}</span>条作品  当前测试版本号: v0.1.1</div>
+    <div class="infoHeadTable">已为您搜索到<span>{{this.total}}</span>条作品</div>
     <div style="margin: 0 30px">
       <el-table v-loading.body="listLoading"
                 :data="list"
