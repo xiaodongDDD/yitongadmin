@@ -1,14 +1,14 @@
 <template>
   <div class="myInfo">
     <el-form ref="form" :model="form" label-width="100px" class="formMyInfo" :rules="rules">
-      <el-form-item label="姓名">
-        <el-input v-model="form.name" prop="name"></el-input>
+      <el-form-item label="姓名" prop="name">
+        <el-input v-model="form.name" ></el-input>
       </el-form-item>
-      <el-form-item label="英文名">
-        <el-input v-model="form.phone" prop="name"></el-input>
+      <el-form-item label="英文名" prop="nameEn">
+        <el-input v-model="form.phone" ></el-input>
       </el-form-item>
-      <el-form-item label="性别">
-        <el-radio-group v-model="form.resource" prop="name">
+      <el-form-item label="性别" prop="sex">
+        <el-radio-group v-model="form.sex" >
           <el-radio label="男"></el-radio>
           <el-radio label="女"></el-radio>
         </el-radio-group>
@@ -16,13 +16,16 @@
       <el-form-item label="员工编号">
         <span>12345</span>
       </el-form-item>
-      <el-form-item label="手机">
-        <el-input v-model="form.phone"></el-input>
+      <el-form-item label="手机"  prop="phone">
+        <div>
+          <el-input v-model="form.phoneNUm" style="width: 20%"></el-input>
+          <el-input v-model="form.phone" style="width: 79%"></el-input>
+        </div>
       </el-form-item>
-      <el-form-item label="座机">
+      <el-form-item label="座机"  prop="telphone">
         <el-input v-model="form.telphone"></el-input>
       </el-form-item>
-      <el-form-item label="邮箱">
+      <el-form-item label="邮箱"  prop="email">
         <el-input v-model="form.email"></el-input>
       </el-form-item>
       <el-form-item label="公司">
@@ -65,20 +68,48 @@
       return {
         form: {
           name: '',
-          region: '',
-          date1: '',
-          date2: '',
-          delivery: false,
-          type: [],
-          resource: '',
-          desc: ''
+          nameEn: '',
+          sex: '男',
+          phoneNUm: '+86',
+          phone: '',
+          telphone: '',
+          email: ''
         },
-        rules: []
+        rules: {
+          name: [
+            { required: true, message: '请输入姓名', trigger: 'blur' },
+            { max: 28, message: '姓名长度请在在 28 个字符之内', trigger: 'blur' }
+          ],
+          nameEn: [
+            { max: 55, message: '英文名长度在 55 个字符之内', trigger: 'blur' }
+          ],
+          sex: [
+            { required: true, message: '请选择性别', trigger: 'blur' }
+          ],
+          phone: [
+            { required: true, message: '请输入手机号', trigger: 'blur' },
+            { max: 11, message: '英文名长度在 11 个字符之内', trigger: 'blur' }
+          ],
+          telphone: [
+            { max: 20, message: '座机长度在 20 个字符之内', trigger: 'blur' }
+          ],
+          email: [
+            { max: 30, message: '英文名长度在 30 个字符之内', trigger: 'blur' },
+            { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
+          ]
+        }
       }
     },
     methods: {
       onSubmit() {
-        console.log('submit!')
+        this.$refs['form'].validate((valid) => {
+          if (valid) {
+            alert('submit!')
+          } else {
+            console.log('error submit!!')
+            return false
+          }
+        })
       }
     }
   }
