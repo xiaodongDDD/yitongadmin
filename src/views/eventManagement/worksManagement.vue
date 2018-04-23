@@ -492,6 +492,13 @@
         console.log(`当前页: ${val}`)
       },
       submitForm(formName) {
+        if (this.formExpertScore === 0) {
+          this.$message({
+            type: 'warning',
+            message: '请选择专家打分'
+          })
+          return
+        }
         const obj = { 'requests': [] }
         obj.requests.push({ 'recordId': this.form.activity.recordId, 'status': this.form.activity.status, 'expertScore': this.formExpertScore })
         updataWorkManagementInfo(obj).then(response => {
@@ -594,13 +601,25 @@
             return
           }
           const arr = []
+          const arrError = []
           for (let i = 0; i < this.multipleSelection.length; i++) {
             arr.push(this.multipleSelection[i].activity.recordId)
             obj.requests.push({ 'recordId': this.multipleSelection[i].activity.recordId, 'status': 3 })
+            if (this.multipleSelection[i].activity.status === 3) {
+              arrError.push(this.multipleSelection[i].activity.recordId)
+            }
           }
-          info = '您已选择' + arr.join(',') + '号作品为入围作品'
-          successInfo = arr.join(',') + '号作品已入围，请重新选择'
-          errorInfo = '操作已取消'
+          if (arrError.length > 0) {
+            this.$message({
+              message: arrError.join(',') + '号作品已入围，请重新选择',
+              type: 'warning'
+            })
+            return
+          } else {
+            info = '您已选择' + arr.join(',') + '号作品为入围作品'
+            successInfo = '操作成功'
+            errorInfo = '操作已取消'
+          }
         } else if (flag === 4) {
           if (this.multipleSelection.length < 1) {
             this.$message({
@@ -610,13 +629,26 @@
             return
           }
           const arr = []
+          const arrError = []
           for (let i = 0; i < this.multipleSelection.length; i++) {
             arr.push(this.multipleSelection[i].activity.recordId)
             obj.requests.push({ 'recordId': this.multipleSelection[i].activity.recordId, 'status': 2, 'expertScore': 0 })
+            if (this.multipleSelection[i].activity.status === 2) {
+              arrError.push(this.multipleSelection[i].activity.recordId)
+            }
           }
-          info = '您已选择' + arr.join(',') + '号作品为未入围作品'
-          successInfo = arr.join(',') + '号作品未入围，请重新选择'
-          errorInfo = '操作已取消'
+          console.log(arrError)
+          if (arrError.length > 0) {
+            this.$message({
+              message: arrError.join(',') + '号作品未入围，请重新选择',
+              type: 'warning'
+            })
+            return
+          } else {
+            info = '您已选择' + arr.join(',') + '号作品为未入围作品'
+            successInfo = '操作成功'
+            errorInfo = '操作已取消'
+          }
         }
         this.$confirm(info, '操作确认', {
           confirmButtonText: '保存',
