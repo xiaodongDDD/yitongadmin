@@ -30,7 +30,7 @@
         </el-form-item>
         <el-form-item>
           <router-link to="/accountList"><el-button>取消</el-button></router-link>
-          <el-button @click="saveUser">保存</el-button>
+          <el-button @click="saveUser">保存,去设置权限</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -55,7 +55,7 @@
     },
     methods: {
       saveUser() {
-        this.$router.push({ path: '/accountList' })
+        this.$router.push({ path: '/powerEdit' })
       }
     }
   }

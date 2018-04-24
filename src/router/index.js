@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-const _import = require('./_import_' + process.env.NODE_ENV)
+// const _import = require('./_import_' + process.env.NODE_ENV)
 // in development-env not use lazy-loading, because lazy-loading too many pages will cause webpack hot update too slow. so only in production use lazy-loading;
 // detail: https://panjiachen.github.io/vue-element-admin-site/#/lazy-loading
 
@@ -15,131 +15,165 @@ Vue.use(Router)
     icon: 'svg-name'             the icon show in the sidebar,
   }
 **/
+// 懒加载路由
+const Login = r => require.ensure([], () => r(require('../views/login/index')), 'Login')
+const Error = r => require.ensure([], () => r(require('../views/404')), 'Error')
+const Index = r => require.ensure([], () => r(require('../views/atriskLearners/index')), 'Index')
+const UserList = r => require.ensure([], () => r(require('../views/atriskLearners/userManagement/userList')), 'UserList')
+const UserEdit = r => require.ensure([], () => r(require('../views/atriskLearners/userManagement/userEdit')), 'UserEdit')
+const UserAdd = r => require.ensure([], () => r(require('../views/atriskLearners/userManagement/userAdd')), 'UserAdd')
+const AccountList = r => require.ensure([], () => r(require('../views/atriskLearners/accountManagement/accountList')), 'AccountList')
+const AccountAdd = r => require.ensure([], () => r(require('../views/atriskLearners/accountManagement/accountAdd')), 'AccountAdd')
+const AccountEdit = r => require.ensure([], () => r(require('../views/atriskLearners/accountManagement/accountEdit')), 'AccountEdit')
+const PowerList = r => require.ensure([], () => r(require('../views/atriskLearners/powerManagement/powerList')), 'PowerList')
+const PowerEdit = r => require.ensure([], () => r(require('../views/atriskLearners/powerManagement/powerEdit')), 'PowerEdit')
+const ItemList = r => require.ensure([], () => r(require('../views/atriskLearners/itemManagement/item/itemList')), 'ItemList')
+const ItemEdit = r => require.ensure([], () => r(require('../views/atriskLearners/itemManagement/item/itemEdit')), 'ItemEdit')
+const ItemAdd = r => require.ensure([], () => r(require('../views/atriskLearners/itemManagement/item/itemAdd')), 'ItemAdd')
+const OfficialList = r => require.ensure([], () => r(require('../views/atriskLearners/itemManagement/official/officialList')), 'OfficialList')
+const OfficialEdit = r => require.ensure([], () => r(require('../views/atriskLearners/itemManagement/official/officialEdit')), 'OfficialEdit')
+const OfficialAdd = r => require.ensure([], () => r(require('../views/atriskLearners/itemManagement/official/officialAdd')), 'OfficialAdd')
+const TransactorList = r => require.ensure([], () => r(require('../views/atriskLearners/itemManagement/transactor/transactorList')), 'TransactorList')
+const ExectorAdd = r => require.ensure([], () => r(require('../views/atriskLearners/itemManagement/transactor/exectorAdd')), 'ExectorAdd')
+const ExectorEdit = r => require.ensure([], () => r(require('../views/atriskLearners/itemManagement/transactor/ExectorEdit')), 'ExectorEdit')
+const PoorStudentEdit = r => require.ensure([], () => r(require('../views/atriskLearners/itemManagement/transactor/poorStudentEdit')), 'PoorStudentEdit')
+const TransactorEdit = r => require.ensure([], () => r(require('../views/atriskLearners/itemManagement/transactor/transactorEdit')), 'TransactorEdit')
+const ObjectList = r => require.ensure([], () => r(require('../views/atriskLearners/itemManagement/object/objectList')), 'ObjectList')
+const ObjectMan = r => require.ensure([], () => r(require('../views/atriskLearners/itemManagement/object/objectMan')), 'ObjectMan')
+const ObjectEdit = r => require.ensure([], () => r(require('../views/atriskLearners/itemManagement/object/objectEdit')), 'ObjectEdit')
+const TemplateList = r => require.ensure([], () => r(require('../views/atriskLearners/templateManagement/templateList')), 'TemplateList')
+const TemplateEdit = r => require.ensure([], () => r(require('../views/atriskLearners/templateManagement/templateEdit')), 'TemplateEdit')
+const TemplateAdd = r => require.ensure([], () => r(require('../views/atriskLearners/templateManagement/templateAdd')), 'TemplateAdd')
+const GainList = r => require.ensure([], () => r(require('../views/atriskLearners/gainManagement/gainList')), 'GainList')
+const GainSchoolList = r => require.ensure([], () => r(require('../views/atriskLearners/gainManagement/gainSchoolList')), 'GainSchoolList')
+const GainDetails = r => require.ensure([], () => r(require('../views/atriskLearners/gainManagement/gainDetails')), 'GainDetails')
+const LogList = r => require.ensure([], () => r(require('../views/atriskLearners/operationLog/logList')), 'LogList')
+
 export const constantRouterMap = [
-  { path: '/login', component: _import('login/index'), hidden: true },
-  { path: '/404', component: _import('404'), hidden: true },
+  { path: '/login', component: Login, hidden: true },
+  { path: '/404', component: Error, hidden: true },
 
   {
     path: '/',
     redirect: '/userList',
     name: 'Index',
-    component: _import('atriskLearners/index'),
+    component: Index,
     children: [
       {
         path: 'userList',
-        component: _import('atriskLearners/userManagement/userList')
+        component: UserList
       },
       {
         path: 'userEdit',
-        component: _import('atriskLearners/userManagement/userEdit')
+        component: UserEdit
       },
       {
         path: 'userAdd',
-        component: _import('atriskLearners/userManagement/userAdd')
+        component: UserAdd
       },
       {
         path: 'accountList',
-        component: _import('atriskLearners/accountManagement/accountList')
+        component: AccountList
       },
       {
         path: 'accountEdit',
-        component: _import('atriskLearners/accountManagement/accountEdit')
+        component: AccountEdit
       },
       {
         path: 'accountAdd',
-        component: _import('atriskLearners/accountManagement/accountAdd')
+        component: AccountAdd
       },
       {
         path: 'powerList',
-        component: _import('atriskLearners/powerManagement/powerList')
+        component: PowerList
       },
       {
         path: 'powerEdit',
-        component: _import('atriskLearners/powerManagement/powerEdit')
+        component: PowerEdit
       },
       {
         path: 'itemList',
-        component: _import('atriskLearners/itemManagement/item/itemList')
+        component: ItemList
       },
       {
         path: 'itemEdit',
-        component: _import('atriskLearners/itemManagement/item/itemEdit')
+        component: ItemEdit
       },
       {
         path: 'itemAdd',
-        component: _import('atriskLearners/itemManagement/item/itemAdd')
+        component: ItemAdd
       },
       {
         path: 'officialList',
-        component: _import('atriskLearners/itemManagement/official/officialList')
+        component: OfficialList
       },
       {
         path: 'officialEdit',
-        component: _import('atriskLearners/itemManagement/official/officialEdit')
+        component: OfficialEdit
       },
       {
         path: 'officialAdd',
-        component: _import('atriskLearners/itemManagement/official/officialAdd')
+        component: OfficialAdd
       },
       {
         path: 'transactorList',
-        component: _import('atriskLearners/itemManagement/transactor/transactorList')
+        component: TransactorList
       },
       {
         path: 'transactorEdit',
-        component: _import('atriskLearners/itemManagement/transactor/transactorEdit')
+        component: TransactorEdit
       },
       {
         path: 'exectorAdd',
-        component: _import('atriskLearners/itemManagement/transactor/exectorAdd')
+        component: ExectorAdd
       },
       {
         path: 'exectorEdit',
-        component: _import('atriskLearners/itemManagement/transactor/exectorEdit')
+        component: ExectorEdit
       },
       {
         path: 'poorStudentEdit',
-        component: _import('atriskLearners/itemManagement/transactor/poorStudentEdit')
+        component: PoorStudentEdit
       },
       {
         path: 'objectList',
-        component: _import('atriskLearners/itemManagement/object/objectList')
+        component: ObjectList
       },
       {
         path: 'objectMan',
-        component: _import('atriskLearners/itemManagement/object/objectMan')
+        component: ObjectMan
       },
       {
         path: 'objectEdit',
-        component: _import('atriskLearners/itemManagement/object/objectEdit')
+        component: ObjectEdit
       },
       {
         path: 'templateList',
-        component: _import('atriskLearners/templateManagement/templateList')
+        component: TemplateList
       },
       {
         path: 'templateEdit',
-        component: _import('atriskLearners/templateManagement/templateEdit')
+        component: TemplateEdit
       },
       {
         path: 'templateAdd',
-        component: _import('atriskLearners/templateManagement/templateAdd')
+        component: TemplateAdd
       },
       {
         path: 'gainList',
-        component: _import('atriskLearners/gainManagement/gainList')
+        component: GainList
       },
       {
         path: 'gainSchoolList',
-        component: _import('atriskLearners/gainManagement/gainSchoolList')
+        component: GainSchoolList
       },
       {
         path: 'gainDetails',
-        component: _import('atriskLearners/gainManagement/gainDetails')
+        component: GainDetails
       },
       {
         path: 'logList',
-        component: _import('atriskLearners/operationLog/logList')
+        component: LogList
       }]
   },
 

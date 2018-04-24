@@ -138,6 +138,7 @@
     .position{
       color: #333;
       text-indent: 18px;
+      margin-top: 0;
     }
   }
 

@@ -67,7 +67,6 @@
       <div class="dialogContent">
         <p>请确认是否要删除</p>
         <p>{{ userName }}账户</p>
-
         <p>删除后，该账户将无法登录</p>
       </div>
       <span slot="footer" class="dialog-footer">
@@ -83,7 +82,7 @@
   export default {
     name: 'objectList',
     data() {
-    	return {
+      return {
         centerDialogVisible: false,
         userName: '',
         form: {
