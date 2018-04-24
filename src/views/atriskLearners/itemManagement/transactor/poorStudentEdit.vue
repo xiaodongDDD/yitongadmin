@@ -1,6 +1,6 @@
 <template>
-  <div class="center-content official-list">
-  	<div class="title"><span class="officialMan">负责人管理</span><span class="goback">返回</span></div>
+  <div class="center-content student-list">
+      <div class="title"><span class="officialMan">负责人管理</span><span class="goback">返回</span></div>
     <div class="smallTitle">
       <span class='manName'>管理员{{}}</span>
       <span class="num">负责人{{}}</span>
@@ -13,42 +13,32 @@
         <el-table-column
           align="center"
           prop="onOff"
-          label="账户状态"
+          label="执行人"
           width="100">
         </el-table-column>
         <el-table-column
           align="center"
           prop="name"
-          label="姓名"
+          label="执行学科"
           width="100">
         </el-table-column>
         <el-table-column
           align="center"
           prop="userName"
-          label="用户名"
+          label="执行班级"
           width="100">
         </el-table-column>
         <el-table-column
           align="center"
           prop="type"
-          label="类型"
-          width="60">
-        </el-table-column>
-        <el-table-column
-          prop="schoolName"
-          label="学校名称">
+          label="评价项目"
+          width="200">
         </el-table-column>
         <el-table-column
           align="center"
-          prop="telephone"
-          label="手机号"
-          width="110">
+          label="评价对象"
+          prop="comment">
         </el-table-column>
-        <el-table-column
-          prop="email"
-          label="邮箱">
-        </el-table-column>
-
         <el-table-column
           align="center" label="操作" width="">
           <template slot-scope="scope">
@@ -65,7 +55,7 @@
     </div>
 
     <div class="list-add">
-      <router-link to="/officialAdd">
+      <router-link to="/exectorAdd">
         <el-button icon="el-icon-plus">新增</el-button>
       </router-link>
     </div>
@@ -76,9 +66,9 @@
       width="30%"
       center>
       <div class="dialogContent">
-        <span>请确认是否要删除</span>
-        <span>{{ userName }}账户</span>
-        <span>删除后，该账户将无法登录</span>
+        <p>请确认是否要删除</p>
+        <p>{{ userName }}执行人</p>
+        <p>删除后，该执行人及其执行范围讲彻底删除</p>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="centerDialogVisible = false">取 消</el-button>
@@ -91,9 +81,9 @@
 
 <script>
   export default {
-    name: 'officialList',
+    name: 'poorStudent',
     data() {
-    	return {
+    	 return {
         centerDialogVisible: false,
         userName: '',
         form: {
@@ -104,32 +94,25 @@
           name: '都龙族',
           userName: 'doulongzu',
           type: '学校',
-          schoolName: '武宁路育才',
-          email: '16783949@163.com',
-          telephone: '13533790697'
+          comment: '武宁路育才'
         }, {
           onOff: 1,
           name: '都龙族',
           userName: 'doulongzu',
           type: '运营',
-          schoolName: '',
-          email: '16783949@163.com',
-          telephone: '13533790697'
+          comment: ''
         }, {
           onOff: 0,
           name: '都龙族',
           userName: 'doulongzu',
-          type: '学校',
-          schoolName: '武宁路育才',
-          email: '16783949@163.com',
-          telephone: '13533790697'
+          type: '学校'
         }]
       }
     },
     methods: {
       handleEdit(index, row) {
         console.log(index, row)
-        this.$router.push({ path: '/officialEdit' })
+        this.$router.push({ path: '/exectorEdit' })
       },
       handleDelete(index, row) {
         console.log(index, row)
@@ -144,7 +127,7 @@
   width: 100%;
   height: 30px;
   overflow: hidden;
-  margin-bottom: 30px;
+  margin-bottom: 50px;
 }
 .officialMan {
    float: left;
@@ -166,8 +149,5 @@
 }
 .num {
     font-size: 14px;
-}
-.dialogContent span {
-  display:block;
 }
 </style>

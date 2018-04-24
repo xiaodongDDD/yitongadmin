@@ -6,14 +6,14 @@
       <el-breadcrumb-item :to="{ path: '/' }">学校用户管理</el-breadcrumb-item>
     </el-breadcrumb>
 
-    <el-dropdown class="avatar-container" trigger="click">
+    <el-dropdown @command="handleCommand" class="avatar-container" trigger="click">
       <div class="avatar-wrapper">
         <img class="user-avatar" src="../../../assets/images/64451924_p3.jpg">
         <i class="el-icon-caret-bottom"></i>
       </div>
       <el-dropdown-menu slot="dropdown" class="user-dropdown">
-        <el-dropdown-item>首页</el-dropdown-item>
-        <el-dropdown-item>退出</el-dropdown-item>
+        <el-dropdown-item command='a'>首页</el-dropdown-item>
+        <el-dropdown-item command='b'>退出</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
   </el-menu>
@@ -31,6 +31,10 @@
     methods: {
       handleSelect(key, keyPath) {
         console.log(key, keyPath)
+      },
+      handleCommand(command) {
+        console.log(1111)
+        console.log(command)
       }
     }
   }

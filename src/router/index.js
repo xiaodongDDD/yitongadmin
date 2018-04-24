@@ -90,12 +90,28 @@ export const constantRouterMap = [
         component: _import('atriskLearners/itemManagement/transactor/transactorEdit')
       },
       {
+        path: 'exectorAdd',
+        component: _import('atriskLearners/itemManagement/transactor/exectorAdd')
+      },
+      {
+        path: 'exectorEdit',
+        component: _import('atriskLearners/itemManagement/transactor/exectorEdit')
+      },
+      {
+        path: 'poorStudentEdit',
+        component: _import('atriskLearners/itemManagement/transactor/poorStudentEdit')
+      },
+      {
         path: 'objectList',
         component: _import('atriskLearners/itemManagement/object/objectList')
       },
       {
-        path: 'objectAdd',
-        component: _import('atriskLearners/itemManagement/object/objectAdd')
+        path: 'objectMan',
+        component: _import('atriskLearners/itemManagement/object/objectMan')
+      },
+      {
+        path: 'objectEdit',
+        component: _import('atriskLearners/itemManagement/object/objectEdit')
       },
       {
         path: 'templateList',

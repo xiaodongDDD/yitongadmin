@@ -1,14 +1,14 @@
 <template>
   <div class="center-content account-list">
-    <div class="search-contaier">
-      <el-form ref="form" :inline="true" :model="form" label-width="80px">
-        <el-form-item>
-          <el-input v-model="form.name" placeholder="请搜索姓名/学校名称"></el-input>
-          <i class="el-icon-search search-icon"></i>
-        </el-form-item>
-        <el-form-item label="清除搜索"></el-form-item>
-      </el-form>
-    </div>
+    <!--<div class="search-contaier">-->
+      <!--<el-form ref="form" :inline="true" :model="form" label-width="80px">-->
+        <!--<el-form-item>-->
+          <!--<el-input v-model="form.name" placeholder="请搜索姓名/学校名称"></el-input>-->
+          <!--<i class="el-icon-search search-icon"></i>-->
+        <!--</el-form-item>-->
+        <!--<el-form-item label="清除搜索"></el-form-item>-->
+      <!--</el-form>-->
+    <!--</div>-->
 
     <div class="list-table">
       <el-table
@@ -81,7 +81,7 @@
             <el-button
               size="mini"
               type="danger"
-              @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+              @click="handleDelete(scope.$index, userName = scope.row.name)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -89,7 +89,9 @@
 
 
     <div class="list-add">
-      <el-button icon="el-icon-plus">新增</el-button>
+      <router-link to="/accountAdd">
+        <el-button icon="el-icon-plus">新增</el-button>
+      </router-link>
     </div>
 
     <el-dialog
@@ -97,10 +99,15 @@
       :visible.sync="centerDialogVisible"
       width="30%"
       center>
-      <span>请确认是否要删除</span>
+      <div class="dialogContent">
+        <p>请确认是否要删除</p>
+        <p>{{ userName }}账户</p>
+
+        <p>删除后，该账户将无法登录</p>
+      </div>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
         <el-button @click="centerDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -112,6 +119,7 @@
     data() {
       return {
         centerDialogVisible: false,
+        userName: '',
         form: {
           name: ''
         },
@@ -145,6 +153,7 @@
     methods: {
       handleEdit(index, row) {
         console.log(index, row)
+        this.$router.push({ path: '/accountEdit' })
       },
       handleDelete(index, row) {
         console.log(index, row)

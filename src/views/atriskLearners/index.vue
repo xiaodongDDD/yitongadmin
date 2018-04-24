@@ -3,7 +3,8 @@
     <div class="sidebar-container">
 
       <el-menu
-        default-active="1"
+        :default-active="index"
+        @select= "changeindex"
         class="el-menu-vertical-demo"
         background-color="#304156"
         text-color="#fff"
@@ -63,7 +64,6 @@
 
     <div class="main-container">
       <my-header></my-header>
-
       <div class="main-content">
         <router-view></router-view>
       </div>
@@ -76,8 +76,25 @@
   import myHeader from './myHeader/myHeader'
   export default {
     name: 'index',
+    data() {
+      return {
+        index: ''
+      }
+    },
     components: {
       myHeader
+    },
+    mounted() {
+      let routerIndex = localStorage.getItem("routerIndex")
+      console.log(routerIndex)
+      this.index = routerIndex
+    },
+    methods: {
+      changeindex(index) {
+        console.log(index)
+        localStorage.removeItem("routerIndex")
+        localStorage.setItem("routerIndex", index)
+      }
     }
   }
 </script>
@@ -88,10 +105,11 @@
   }
 
   .main-content{
-    padding: 20px;
+    padding: 20px 30px;
 
     .edit-form{
       margin-top: 30px;
+      width: 50%;
 
       span{
         color: #606266;
@@ -125,5 +143,12 @@
 
   .el-form-item__label, .el-menu-item-group__title{
     padding: 0;
+  }
+  .dialogContent{
+    text-align: center;
+  }
+  .el-checkbox+.el-checkbox{
+    display: block;
+    margin-left: 0;
   }
 </style>

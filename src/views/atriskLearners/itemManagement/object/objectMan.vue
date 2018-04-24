@@ -1,6 +1,6 @@
 <template>
-  <div class="center-content official-list">
-  	<div class="title"><span class="officialMan">负责人管理</span><span class="goback">返回</span></div>
+  <div class="center-content object-man">
+      <div class="title"><span class="officialMan">负责人管理</span><span class="goback">返回</span></div>
     <div class="smallTitle">
       <span class='manName'>管理员{{}}</span>
       <span class="num">负责人{{}}</span>
@@ -13,61 +13,28 @@
         <el-table-column
           align="center"
           prop="onOff"
-          label="账户状态"
+          label="评价对象"
           width="100">
         </el-table-column>
         <el-table-column
           align="center"
           prop="name"
-          label="姓名"
+          label="所属学科"
           width="100">
         </el-table-column>
         <el-table-column
           align="center"
           prop="userName"
-          label="用户名"
+          label="所属班级"
           width="100">
         </el-table-column>
         <el-table-column
           align="center"
           prop="type"
-          label="类型"
-          width="60">
-        </el-table-column>
-        <el-table-column
-          prop="schoolName"
-          label="学校名称">
-        </el-table-column>
-        <el-table-column
-          align="center"
-          prop="telephone"
-          label="手机号"
-          width="110">
-        </el-table-column>
-        <el-table-column
-          prop="email"
-          label="邮箱">
-        </el-table-column>
-
-        <el-table-column
-          align="center" label="操作" width="">
-          <template slot-scope="scope">
-            <el-button
-              size="mini"
-              @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-            <el-button
-              size="mini"
-              type="danger"
-              @click="handleDelete(scope.$index, userName = scope.row.name)">删除</el-button>
-          </template>
+          label="评价模块"
+           >
         </el-table-column>
       </el-table>
-    </div>
-
-    <div class="list-add">
-      <router-link to="/officialAdd">
-        <el-button icon="el-icon-plus">新增</el-button>
-      </router-link>
     </div>
 
     <el-dialog
@@ -76,9 +43,9 @@
       width="30%"
       center>
       <div class="dialogContent">
-        <span>请确认是否要删除</span>
-        <span>{{ userName }}账户</span>
-        <span>删除后，该账户将无法登录</span>
+        <p>请确认是否要删除</p>
+        <p>{{ userName }}执行人</p>
+        <p>删除后，该执行人及其执行范围讲彻底删除</p>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="centerDialogVisible = false">取 消</el-button>
@@ -91,9 +58,9 @@
 
 <script>
   export default {
-    name: 'officialList',
+    name: 'objectMan',
     data() {
-    	return {
+    	 return {
         centerDialogVisible: false,
         userName: '',
         form: {
@@ -103,33 +70,24 @@
           onOff: 0,
           name: '都龙族',
           userName: 'doulongzu',
-          type: '学校',
-          schoolName: '武宁路育才',
-          email: '16783949@163.com',
-          telephone: '13533790697'
+          type: '学校'
         }, {
           onOff: 1,
           name: '都龙族',
           userName: 'doulongzu',
-          type: '运营',
-          schoolName: '',
-          email: '16783949@163.com',
-          telephone: '13533790697'
+          type: '运营'
         }, {
-          onOff: 0,
+          onOff: 2,
           name: '都龙族',
           userName: 'doulongzu',
-          type: '学校',
-          schoolName: '武宁路育才',
-          email: '16783949@163.com',
-          telephone: '13533790697'
+          type: '运营'
         }]
       }
     },
     methods: {
       handleEdit(index, row) {
         console.log(index, row)
-        this.$router.push({ path: '/officialEdit' })
+        this.$router.push({ path: '/exectorEdit' })
       },
       handleDelete(index, row) {
         console.log(index, row)
@@ -144,7 +102,7 @@
   width: 100%;
   height: 30px;
   overflow: hidden;
-  margin-bottom: 30px;
+  margin-bottom: 50px;
 }
 .officialMan {
    float: left;
@@ -166,8 +124,5 @@
 }
 .num {
     font-size: 14px;
-}
-.dialogContent span {
-  display:block;
 }
 </style>

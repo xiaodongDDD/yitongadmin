@@ -1,6 +1,6 @@
 <template>
   <div class="center-content transactor-edit">
-    <div class="title">编辑权限管理</div>
+    <p class="position">编辑权限管理</p>
 
     <div class="edit-form">
       <el-form ref="form" :model="form" label-width="100px">
@@ -11,13 +11,13 @@
           <span v-if="form.type == 0">学校</span>
           <span v-else>运营</span>
         </el-form-item>
-        <el-form-item label="负责人：">
+        <el-form-item label="执行人：">
           <span>{{form.schoolName}}</span>
         </el-form-item>
-        <el-form-item label="负责学科：">
+        <el-form-item label="执行学科：">
           <span>{{form.telephone}}</span>
         </el-form-item>
-        <el-form-item label="负责年级：">
+        <el-form-item label="执行班级：">
           <span>{{form.telephone}}</span>
         </el-form-item>
        <el-form-item label="项目评语：">
@@ -49,14 +49,12 @@
     },
     methods: {
       saveUser() {
-        this.$router.push({ path: '/userList' })
+        this.$router.push({ path: '/objectList' })
       }
     }
   }
 </script>
 
 <style scoped>
-.title {
-  margin-bottom: 30px;
-}
+
 </style>
