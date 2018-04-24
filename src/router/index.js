@@ -20,7 +20,11 @@ const Login = r => require.ensure([], () => r(require('../views/login/index')), 
 const Error = r => require.ensure([], () => r(require('../views/404')), 'Error')
 const Index = r => require.ensure([], () => r(require('../views/atriskLearners/index')), 'Index')
 const UserList = r => require.ensure([], () => r(require('../views/atriskLearners/userManagement/userList')), 'UserList')
-const UserEdit = r => require.ensure([], () => r(require('../views/atriskLearners/userManagement/UserEdit')), 'UserEdit')
+const UserEdit = r => require.ensure([], () => r(require('../views/atriskLearners/userManagement/userEdit')), 'UserEdit')
+const UserAdd = r => require.ensure([], () => r(require('../views/atriskLearners/userManagement/userAdd')), 'UserAdd')
+const AccountList = r => require.ensure([], () => r(require('../views/atriskLearners/accountManagement/accountList')), 'AccountList')
+const AccountAdd = r => require.ensure([], () => r(require('../views/atriskLearners/accountManagement/accountAdd')), 'AccountAdd')
+const AccountEdit = r => require.ensure([], () => r(require('../views/atriskLearners/accountManagement/accountEdit')), 'AccountEdit')
 export const constantRouterMap = [
   { path: '/login', component: Login, hidden: true },
   { path: '/404', component: Error, hidden: true },
@@ -41,19 +45,19 @@ export const constantRouterMap = [
       },
       {
         path: 'userAdd',
-        component: _import('atriskLearners/userManagement/userAdd')
+        component: UserAdd
       },
       {
         path: 'accountList',
-        component: _import('atriskLearners/accountManagement/accountList')
+        component: AccountList
       },
       {
         path: 'accountEdit',
-        component: _import('atriskLearners/accountManagement/accountEdit')
+        component: AccountEdit
       },
       {
         path: 'accountAdd',
-        component: _import('atriskLearners/accountManagement/accountAdd')
+        component: AccountAdd
       },
       {
         path: 'powerList',
