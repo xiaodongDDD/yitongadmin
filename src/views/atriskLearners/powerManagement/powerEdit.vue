@@ -1,6 +1,6 @@
 <template>
   <div class="center-content power=edit">
-    <p class="position">编辑权限管理</p>
+    <div  class="title">编辑权限管理</div>
 
     <div class="edit-form">
       <el-form ref="form" :model="form" label-width="100px">
@@ -66,6 +66,7 @@
     },
     methods: {
       saveUser() {
+        console.log(this.form.powerlist)
         this.$router.push({ path: '/powerList' })
       },
       handleCheckAllChange(val) {
@@ -82,6 +83,9 @@
 </script>
 
 <style scoped>
+.title {
+  margin-bottom: 30px;
+}
   .checkbox-menu{
     margin-left: 20px;
   }

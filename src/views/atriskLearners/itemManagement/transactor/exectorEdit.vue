@@ -1,12 +1,12 @@
 <template>
-  <div class="center-content official-Edit">
-    <div class="title">编辑负责人</div>
+  <div class="center-content exector-Edit">
+    编辑负责人
       <div class="edit-form">
       <el-form ref="form" :model="form" label-width="100px">
-        <el-form-item label="负责人姓名：">
+        <el-form-item label="执行人姓名：">
           <el-input v-model="form.name"></el-input>
         </el-form-item>
-        <el-form-item label="负责学科：">
+        <el-form-item label="执行学科：">
           <el-select
             v-model="value1"
             multiple
@@ -20,7 +20,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="负责年级：">
+        <el-form-item label="执行班级：">
           <el-select
             v-model="value2"
             multiple
@@ -28,6 +28,16 @@
             placeholder="请选择">
             <el-option
               v-for="item in options2"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="评价项目模版：">
+          <el-select v-model="value3" placeholder="请选择">
+            <el-option
+              v-for="item in options3"
               :key="item.value"
               :label="item.label"
               :value="item.value">
@@ -44,7 +54,7 @@
 </template>
 <script>
   export default {
-    name: 'officialEdit',
+    name: 'exectorEdit',
     data() {
       return {
         form: {
@@ -88,24 +98,38 @@
           value: '选项5',
           label: '北京烤鸭1'
         }],
+        options3: [{
+          value: '选项1',
+          label: '黄金糕'
+        }, {
+          value: '选项2',
+          label: '双皮奶'
+        }, {
+          value: '选项3',
+          label: '蚵仔煎'
+        }, {
+          value: '选项4',
+          label: '龙须面'
+        }, {
+          value: '选项5',
+          label: '北京烤鸭'
+        }],
+        value3: '',
         value2: [],
         value1: []
       }
     },
     methods: {
       saveUser() {
-        // this.$router.push({ path: '/officialList' })
-        console.log(this.value1)
-        console.log(this.value2)
+        // this.$router.push({ path: '/poorStudentEdit' })
+        console.log(this.value3, this.value2, this.value1)
       }
     }
   }
 </script>
 
 <style scoped>
-.title {
-  margin-bottom: 30px;
-}
+
 </style>
 
 

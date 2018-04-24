@@ -34,9 +34,13 @@ const OfficialList = r => require.ensure([], () => r(require('../views/atriskLea
 const OfficialEdit = r => require.ensure([], () => r(require('../views/atriskLearners/itemManagement/official/officialEdit')), 'OfficialEdit')
 const OfficialAdd = r => require.ensure([], () => r(require('../views/atriskLearners/itemManagement/official/officialAdd')), 'OfficialAdd')
 const TransactorList = r => require.ensure([], () => r(require('../views/atriskLearners/itemManagement/transactor/transactorList')), 'TransactorList')
+const ExectorAdd = r => require.ensure([], () => r(require('../views/atriskLearners/itemManagement/transactor/exectorAdd')), 'ExectorAdd')
+const ExectorEdit = r => require.ensure([], () => r(require('../views/atriskLearners/itemManagement/transactor/ExectorEdit')), 'ExectorEdit')
+const PoorStudentEdit = r => require.ensure([], () => r(require('../views/atriskLearners/itemManagement/transactor/poorStudentEdit')), 'PoorStudentEdit')
 const TransactorEdit = r => require.ensure([], () => r(require('../views/atriskLearners/itemManagement/transactor/transactorEdit')), 'TransactorEdit')
 const ObjectList = r => require.ensure([], () => r(require('../views/atriskLearners/itemManagement/object/objectList')), 'ObjectList')
-const ObjectAdd = r => require.ensure([], () => r(require('../views/atriskLearners/itemManagement/object/objectAdd')), 'ObjectAdd')
+const ObjectMan = r => require.ensure([], () => r(require('../views/atriskLearners/itemManagement/object/objectMan')), 'ObjectMan')
+const ObjectEdit = r => require.ensure([], () => r(require('../views/atriskLearners/itemManagement/object/objectEdit')), 'ObjectEdit')
 const TemplateList = r => require.ensure([], () => r(require('../views/atriskLearners/templateManagement/templateList')), 'TemplateList')
 const TemplateEdit = r => require.ensure([], () => r(require('../views/atriskLearners/templateManagement/templateEdit')), 'TemplateEdit')
 const TemplateAdd = r => require.ensure([], () => r(require('../views/atriskLearners/templateManagement/templateAdd')), 'TemplateAdd')
@@ -120,12 +124,28 @@ export const constantRouterMap = [
         component: TransactorEdit
       },
       {
+        path: 'exectorAdd',
+        component: ExectorAdd
+      },
+      {
+        path: 'exectorEdit',
+        component: ExectorEdit
+      },
+      {
+        path: 'poorStudentEdit',
+        component: PoorStudentEdit
+      },
+      {
         path: 'objectList',
         component: ObjectList
       },
       {
-        path: 'objectAdd',
-        component: ObjectAdd
+        path: 'objectMan',
+        component: ObjectMan
+      },
+      {
+        path: 'objectEdit',
+        component: ObjectEdit
       },
       {
         path: 'templateList',
