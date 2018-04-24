@@ -32,6 +32,11 @@
           sortable
           label="数值 3">
         </el-table-column>
+        <el-table-column
+          prop="amount4"
+          sortable
+          label="数值 4">
+        </el-table-column>
       </el-table>
     </div>
   </div>
@@ -45,44 +50,82 @@
         tableData6: [{
           id: '12987122',
           name: '王小虎',
+          crow: 2,
+          crowFrom: 1,
           amount1: '234',
           amount2: '3.2',
-          amount3: 10
+          amount3: 10,
+          amount4: 15
         }, {
           id: '12987123',
-          name: '王小虎',
+          name: '王小虎2',
           amount1: '165',
           amount2: '4.43',
-          amount3: 12
+          amount3: 12,
+          amount4: 15
         }, {
           id: '12987124',
-          name: '王小虎',
+          name: '王小虎3',
+          arow: 2,
+          arowFrom: 1,
           amount1: '324',
           amount2: '1.9',
-          amount3: 9
+          amount3: 9,
+          amount4: 15
         }, {
           id: '12987125',
-          name: '王小虎',
+          name: '王小虎4',
           amount1: '621',
           amount2: '2.2',
-          amount3: 17
+          amount3: 17,
+          amount4: 15
         }, {
           id: '12987126',
-          name: '王小虎',
+          name: '王小虎5',
           amount1: '539',
           amount2: '4.1',
-          amount3: 15
+          amount3: 15,
+          amount4: 15
         }]
       }
     },
     methods: {
       arraySpanMethod({ row, column, rowIndex, columnIndex }) {
-        console.log(row.name)
-        if (rowIndex % 2 === 0) {
-          if (columnIndex === 0) {
-            return [1, 2]
-          } else if (columnIndex === 1) {
-            return [0, 0]
+        // console.log(row.name + columnIndex)
+        // console.log(row.arowFrom)
+        if (row.hasOwnProperty('crow')) {
+          if (row.hasOwnProperty('crowFrom')) {
+            if (columnIndex === row.crowFrom) {
+              return [row.crowFrom, row.crow]
+            }
+          }
+        }
+
+        // if (columnIndex === 0) {
+        //   if (rowIndex % 2 === 0) {
+        //     return {
+        //       rowspan: 2,
+        //       colspan: 1
+        //     }
+        //   } else {
+        //     return {
+        //       rowspan: 0,
+        //       colspan: 0
+        //     }
+        //   }
+        // }
+        if (row.hasOwnProperty('arow')) {
+          console.log('ri' + rowIndex)
+          console.log('arow')
+          if (row.hasOwnProperty('arowFrom')) {
+            console.log('arowfrom')
+            if (rowIndex === row.arowFrom) {
+              console.log('rowindex')
+              return {
+                rowspan: row.arow,
+                colspan: row.arowFrom
+              }
+            }
           }
         }
       }
