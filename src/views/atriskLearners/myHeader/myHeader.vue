@@ -20,6 +20,7 @@
 </template>
 
 <script>
+  import Breadcrumb from '@/components/Breadcrumb'
   export default {
     name: 'myHeader',
     data() {
@@ -27,6 +28,9 @@
         activeIndex: '1',
         activeIndex2: '1'
       }
+    },
+    components: {
+      Breadcrumb
     },
     methods: {
       handleSelect(key, keyPath) {

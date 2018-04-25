@@ -86,6 +86,13 @@
           amount2: '4.1',
           amount3: 15,
           amount4: 15
+        }, {
+          id: '12987126',
+          name: '王小虎6',
+          amount1: '539',
+          amount2: '4.1',
+          amount3: 15,
+          amount4: 15
         }]
       }
     },
@@ -101,33 +108,29 @@
           }
         }
 
-        // if (columnIndex === 0) {
-        //   if (rowIndex % 2 === 0) {
-        //     return {
-        //       rowspan: 2,
-        //       colspan: 1
-        //     }
-        //   } else {
-        //     return {
-        //       rowspan: 0,
-        //       colspan: 0
-        //     }
-        //   }
-        // }
-        if (row.hasOwnProperty('arow')) {
-          console.log('ri' + rowIndex)
-          console.log('arow')
-          if (row.hasOwnProperty('arowFrom')) {
-            console.log('arowfrom')
-            if (rowIndex === row.arowFrom) {
-              console.log('rowindex')
-              return {
-                rowspan: row.arow,
-                colspan: row.arowFrom
-              }
+        if (columnIndex === 0) {
+          if (rowIndex % 2 === 0) {
+            return {
+              rowspan: 2,
+              colspan: 1
+            }
+          } else {
+            return {
+              rowspan: 0,
+              colspan: 0
             }
           }
         }
+        // if (row.hasOwnProperty('arow')) {
+        //   if (row.hasOwnProperty('arowFrom')) {
+        //     if (rowIndex === row.arowFrom) {
+        //       return {
+        //         rowspan: 2,
+        //         colspan: 1
+        //       }
+        //     }
+        //   }
+        // }
       }
     }
   }

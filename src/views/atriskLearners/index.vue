@@ -1,65 +1,65 @@
 <template>
   <div class="education-container">
     <div class="sidebar-container">
-
-      <el-menu
-        :default-active="index"
-        @select= "changeindex"
-        class="el-menu-vertical-demo"
-        background-color="#304156"
-        text-color="#fff"
-        active-text-color="#ffd04b">
-        <router-link to="/userList">
-          <el-menu-item index="1">
-            <i class="el-icon-menu"></i>
-            <span slot="title">学校用户管理</span>
-          </el-menu-item>
-        </router-link>
-        <router-link to="/accountList">
-          <el-menu-item index="2">
-            <i class="el-icon-menu"></i>
-            <span slot="title">账户管理</span>
-          </el-menu-item>
-        </router-link>
-        <router-link to="/powerList">
-          <el-menu-item index="3" disabled>
-            <i class="el-icon-menu"></i>
-            <span slot="title">权限管理</span>
-          </el-menu-item>
-        </router-link>
-        <router-link to="/itemList">
-          <el-submenu index="4">
-            <template slot="title">
+      <scroll-bar>
+        <el-menu
+          :default-active="index"
+          @select= "changeindex"
+          class="el-menu-vertical-demo"
+          background-color="#304156"
+          text-color="#fff"
+          active-text-color="#ffd04b">
+          <router-link to="/userList">
+            <el-menu-item index="1">
               <i class="el-icon-menu"></i>
-              <span>评价项目管理</span>
-            </template>
-            <el-menu-item-group>
-              <router-link to="/officialList"><el-menu-item index="4-1-1">负责人管理</el-menu-item></router-link>
-              <router-link to="/transactorList"><el-menu-item index="4-1-2">执行人管理</el-menu-item></router-link>
-              <router-link to="/objectList"><el-menu-item index="4-1-3">评价对象管理</el-menu-item></router-link>
-            </el-menu-item-group>
-          </el-submenu>
-        </router-link>
-        <router-link to="/templateList">
-          <el-menu-item index="5">
-            <i class="el-icon-menu"></i>
-            <span slot="title">评价模板管理</span>
-          </el-menu-item>
-        </router-link>
-        <router-link to="/gainList">
-          <el-menu-item index="6">
-            <i class="el-icon-menu"></i>
-            <span slot="title">评价成果</span>
-          </el-menu-item>
-        </router-link>
-        <router-link to="/logList">
-          <el-menu-item index="7">
-            <i class="el-icon-menu"></i>
-            <span slot="title">操作日志</span>
-          </el-menu-item>
-        </router-link>
-      </el-menu>
-
+              <span slot="title">学校用户管理</span>
+            </el-menu-item>
+          </router-link>
+          <router-link to="/accountList">
+            <el-menu-item index="2">
+              <i class="el-icon-menu"></i>
+              <span slot="title">账户管理</span>
+            </el-menu-item>
+          </router-link>
+          <router-link to="/powerList">
+            <el-menu-item index="3" disabled>
+              <i class="el-icon-menu"></i>
+              <span slot="title">权限管理</span>
+            </el-menu-item>
+          </router-link>
+          <router-link to="/itemList">
+            <el-submenu index="4">
+              <template slot="title">
+                <i class="el-icon-menu"></i>
+                <span>评价项目管理</span>
+              </template>
+              <el-menu-item-group>
+                <router-link to="/officialList"><el-menu-item index="4-1-1">负责人管理</el-menu-item></router-link>
+                <router-link to="/transactorList"><el-menu-item index="4-1-2">执行人管理</el-menu-item></router-link>
+                <router-link to="/objectList"><el-menu-item index="4-1-3">评价对象管理</el-menu-item></router-link>
+              </el-menu-item-group>
+            </el-submenu>
+          </router-link>
+          <router-link to="/templateList">
+            <el-menu-item index="5">
+              <i class="el-icon-menu"></i>
+              <span slot="title">评价模板管理</span>
+            </el-menu-item>
+          </router-link>
+          <router-link to="/gainList">
+            <el-menu-item index="6">
+              <i class="el-icon-menu"></i>
+              <span slot="title">评价成果</span>
+            </el-menu-item>
+          </router-link>
+          <router-link to="/logList">
+            <el-menu-item index="7">
+              <i class="el-icon-menu"></i>
+              <span slot="title">操作日志</span>
+            </el-menu-item>
+          </router-link>
+        </el-menu>
+      </scroll-bar>
     </div>
 
     <div class="main-container">
@@ -73,6 +73,7 @@
 </template>
 
 <script>
+  import ScrollBar from '@/components/ScrollBar'
   import myHeader from './myHeader/myHeader'
   export default {
     name: 'index',
@@ -82,7 +83,8 @@
       }
     },
     components: {
-      myHeader
+      myHeader,
+      ScrollBar
     },
     mounted() {
       let routerIndex = localStorage.getItem("routerIndex")
@@ -109,10 +111,14 @@
 
     .edit-form{
       margin-top: 30px;
-      width: 50%;
 
       span{
         color: #606266;
+        font-size: 14px;
+      }
+
+      .el-input{
+        width: 45%;
       }
     }
   }

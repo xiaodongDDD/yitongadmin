@@ -52,7 +52,6 @@ const LogList = r => require.ensure([], () => r(require('../views/atriskLearners
 export const constantRouterMap = [
   { path: '/login', component: Login, hidden: true },
   { path: '/404', component: Error, hidden: true },
-
   {
     path: '/',
     redirect: '/userList',
