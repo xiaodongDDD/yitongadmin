@@ -1,5 +1,6 @@
 <template>
   <div class="employeeMangement">
+    <!--搜索-->
     <el-form :inline="true" :model="formInline" class="demo-form-inline">
       <el-form-item label="">
         <el-input v-model="formInline.user" placeholder="搜索员工、部门、分公司"></el-input>
@@ -19,6 +20,7 @@
       </el-form-item>
     </el-form>
     <div style="margin-top: 1px">
+      <!--左侧树-->
       <div class="left">
         <div class="block">
           <el-tree
@@ -26,26 +28,27 @@
             node-key="id"
             default-expand-all
             :expand-on-click-node="false">
-      <span class="custom-tree-node" slot-scope="{ node, data }">
-        <span>{{ node.label }}</span>
-        <span>
-          <el-button
-            type="text"
-            size="mini"
-            @click="() => append(data)">
-            Append
-          </el-button>
-          <el-button
-            type="text"
-            size="mini"
-            @click="() => remove(node, data)">
-            Delete
-          </el-button>
-        </span>
-      </span>
+              <span class="custom-tree-node" slot-scope="{ node, data }">
+                <span>{{ node.label }}</span>
+                <span>
+                  <el-button
+                    type="text"
+                    size="mini"
+                    @click="() => append(data)">
+                    Append
+                  </el-button>
+                  <el-button
+                    type="text"
+                    size="mini"
+                    @click="() => remove(node, data)">
+                    Delete
+                  </el-button>
+                </span>
+              </span>
           </el-tree>
         </div>
       </div>
+      <!--右侧表-->
       <div class="right">
         <div></div>
         <el-table
@@ -111,6 +114,39 @@
             </template>
           </el-table-column>
         </el-table>
+        <div class="text-center">
+          <el-pagination
+            background
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-sizes="[10, 20, 50, 100]"
+            :page-size="pagesize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="total">
+          </el-pagination>
+        </div>
+        <el-row :gutter="20" class="buttonClass">
+          <el-col :span="12">
+            <el-upload
+              class="uploadClass"
+              action="https://jsonplaceholder.typicode.com/posts/"
+              :on-preview="handlePreview"
+              :on-remove="handleRemove"
+              :before-remove="beforeRemove"
+              multiple
+              :limit="1"
+              :on-exceed="handleExceed"
+              :file-list="fileList">
+              <el-button size="small" >点击上传</el-button>
+              <!--<div slot="tip" class="el-upload__tip">只能上传xlsx文件，且不超过500kb</div>-->
+            </el-upload>
+          </el-col>
+          <el-col :span="12">
+            <el-button size="small" style="float: left">下载导入模板</el-button>
+            <el-button size="small" style="float: left">批量导出</el-button>
+          </el-col>
+        </el-row>
       </div>
     </div>
 
@@ -119,12 +155,15 @@
 </template>
 
 <script>
-  let id = 1000
   export default {
     name: 'employeeMangement',
     computed: {},
     data() {
       return {
+        currentPage: 1,
+        pagesize: 10,
+        total: 0,
+        id: 1000,
         listLoading: false,
         formInline: {
           user: '',
@@ -138,16 +177,26 @@
         ],
         data5: [{
           id: 1,
-          label: '一级 1',
+          label: '晓信科技上海总公司 （300人）',
           children: [{
             id: 4,
-            label: '二级 1-1',
+            label: '北京分公司 （30人）',
             children: [{
               id: 9,
-              label: '三级 1-1-1'
+              label: '人事部 （230人）'
+            }, {
+              id: 11,
+              label: '培训部 （30人）'
+            }]
+          }, {
+            id: 5,
+            label: '深圳分公司 （12人）',
+            children: [{
+              id: 9,
+              label: '培训部 （39人）'
             }, {
               id: 10,
-              label: '三级 1-1-2'
+              label: '人事部 （88人）'
             }]
           }]
         }],
@@ -167,7 +216,8 @@
           date: '2016-05-03',
           name: '王小虎',
           address: '上海市普陀区金沙江路 1516 弄'
-        }]
+        }],
+        fileList: []
       }
     },
     methods: {
@@ -175,7 +225,7 @@
         console.log('submit!')
       },
       append(data) {
-        const newChild = { id: id++, label: 'testtest', children: [] }
+        const newChild = { id: this.id++, label: 'testtest', children: [] }
         if (!data.children) {
           this.$set(data, 'children', [])
         }
@@ -186,6 +236,31 @@
         const children = parent.data.children || parent.data
         const index = children.findIndex(d => d.id === data.id)
         children.splice(index, 1)
+      },
+      // 分页
+      handleSizeChange(val) {
+        this.pagesize = val
+        this.currentPage = 1
+        this.fetchData()
+        console.log(`每页 ${val} 条`)
+      },
+      handleCurrentChange(val) {
+        this.currentPage = val
+        this.fetchData()
+        console.log(`当前页: ${val}`)
+      },
+      // 选择文件导入
+      handleRemove(file, fileList) {
+        console.log(file, fileList)
+      },
+      handlePreview(file) {
+        console.log(file)
+      },
+      handleExceed(files, fileList) {
+        this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
+      },
+      beforeRemove(file, fileList) {
+        return this.$confirm(`确定移除 ${file.name} ？`)
       }
     },
     created() {
@@ -194,6 +269,10 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
+  .text-center{
+    text-align: center;
+    margin-top: 10px;
+  }
   .employeeMangement {
     margin: 20px 30px;
     .left {
@@ -206,6 +285,13 @@
     .right {
       margin-left: 400px;
       word-break: break-all;
+      .buttonClass{
+        margin-top: 10px;
+        text-align: center;
+      }
+      .uploadClass{
+        width: 50%;
+      }
     }
   }
 </style>

@@ -33,55 +33,55 @@ export const constantRouterMap = [
       component: _import('dashboard/index')
     }]
   },
-  {
-    path: '/example',
-    component: Layout,
-    // redirect: '/example/table',
-    // name: 'Example',
-    // meta: { title: 'Example', icon: 'example' },
-    children: [
-      {
-        path: 'table',
-        name: 'Table',
-        component: _import('table/index'),
-        meta: { title: '列表', icon: 'table' }
-      }
-    ]
-  },
-  {
-    path: '/feedbackQuestion',
-    component: Layout,
-    redirect: '/feedbackQuestion/schoolH5',
-    name: '反馈问题',
-    meta: { title: '反馈问题', icon: 'table' },
-    children: [
-      {
-        path: 'schoolH5',
-        name: '整校h5',
-        component: _import('feedbackQuestion/schoolH5'),
-        meta: { title: '整校h5', icon: 'table' }
-      },
-      {
-        path: 'schoolPC',
-        name: '整校pc',
-        component: _import('form/index'),
-        meta: { title: '整校pc', icon: 'table' },
-        hidden: true
-      }
-    ]
-  },
-  {
-    path: '/eventManagement',
-    component: Layout,
-    children: [
-      {
-        path: 'worksManagement',
-        name: 'worksManagement',
-        component: _import('eventManagement/worksManagement'),
-        meta: { title: '作品管理', icon: 'table' }
-      }
-    ]
-  },
+  // {
+  //   path: '/example',
+  //   component: Layout,
+  //   // redirect: '/example/table',
+  //   // name: 'Example',
+  //   // meta: { title: 'Example', icon: 'example' },
+  //   children: [
+  //     {
+  //       path: 'table',
+  //       name: 'Table',
+  //       component: _import('table/index'),
+  //       meta: { title: '列表', icon: 'table' }
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/feedbackQuestion',
+  //   component: Layout,
+  //   redirect: '/feedbackQuestion/schoolH5',
+  //   name: '反馈问题',
+  //   meta: { title: '反馈问题', icon: 'table' },
+  //   children: [
+  //     {
+  //       path: 'schoolH5',
+  //       name: '整校h5',
+  //       component: _import('feedbackQuestion/schoolH5'),
+  //       meta: { title: '整校h5', icon: 'table' }
+  //     },
+  //     {
+  //       path: 'schoolPC',
+  //       name: '整校pc',
+  //       component: _import('form/index'),
+  //       meta: { title: '整校pc', icon: 'table' },
+  //       hidden: true
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/eventManagement',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'worksManagement',
+  //       name: 'worksManagement',
+  //       component: _import('eventManagement/worksManagement'),
+  //       meta: { title: '作品管理', icon: 'table' }
+  //     }
+  //   ]
+  // },
   {
     path: '/organizationManagement',
     component: Layout,
@@ -105,7 +105,16 @@ export const constantRouterMap = [
         path: 'authorityMangement',
         name: '权限管理',
         component: _import('organizationManagement/organizationManagement/authorityMangement'),
-        meta: { title: '权限管理', icon: 'table' }
+        meta: { title: '权限管理', icon: 'table' },
+        children: [
+          {
+            path: 'authorityMangementSp',
+            name: '权限管理Sp',
+            component: _import('organizationManagement/organizationManagement/authorityMangement'),
+            meta: { title: '权限管理', icon: 'table' },
+            hidden: true
+          }
+        ]
       }
     ]
   },
