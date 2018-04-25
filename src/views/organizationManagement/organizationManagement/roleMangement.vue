@@ -42,8 +42,8 @@
         align="center"
         width="200">
         <template slot-scope="scope">
-          <el-button type="" size="mini" @click="update(scope.row,1)">修改</el-button>
-          <el-button type="" size="mini" @click="delete(scope.row)">删除</el-button>
+          <el-button type="" size="mini" @click="updateInfo(scope.row)">修改</el-button>
+          <el-button type="" size="mini" @click="deleteInfo(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -96,12 +96,40 @@
     created() {
     },
     methods: {
-      update: function() {
+      updateInfo: function() {
         console.log()
         this.$router.push('authorityMangementSp')
       },
-      delete: function() {
-        console.log()
+      deleteInfo: function() {
+        console.log('qwqwqw')
+        this.$confirm('确认要删除角色超级管理员吗?', '确认操作', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+          center: true
+        }).then(() => {
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
+      },
+      // 分页
+      handleSizeChange(val) {
+        this.pagesize = val
+        this.currentPage = 1
+        this.fetchData()
+        console.log(`每页 ${val} 条`)
+      },
+      handleCurrentChange(val) {
+        this.currentPage = val
+        this.fetchData()
+        console.log(`当前页: ${val}`)
       }
     }
   }

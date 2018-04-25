@@ -102,19 +102,17 @@ export const constantRouterMap = [
         meta: { title: '角色管理', icon: 'table' }
       },
       {
+        path: 'authorityMangementsp',
+        name: '角色管理',
+        component: _import('organizationManagement/organizationManagement/employeeUpdata'),
+        meta: { title: '角色管理', icon: 'table' },
+        hidden: true
+      },
+      {
         path: 'authorityMangement',
         name: '权限管理',
         component: _import('organizationManagement/organizationManagement/authorityMangement'),
-        meta: { title: '权限管理', icon: 'table' },
-        children: [
-          {
-            path: 'authorityMangementSp',
-            name: '权限管理Sp',
-            component: _import('organizationManagement/organizationManagement/authorityMangement'),
-            meta: { title: '权限管理', icon: 'table' },
-            hidden: true
-          }
-        ]
+        meta: { title: '权限管理', icon: 'table' }
       }
     ]
   },
