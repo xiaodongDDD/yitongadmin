@@ -21,22 +21,6 @@
             width="">
           </el-table-column>
 
-<<<<<<< HEAD
-          <el-table-column
-            align="center" label="操作" width="">
-            <template slot-scope="scope">
-              <el-button
-                size="mini"
-                @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-              <el-button
-                size="mini"
-                type="danger"
-                @click="handleDelete(scope.$index, tname = scope.row.name)">删除</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-      </div>
-=======
         <el-table-column
           align="center" label="操作" width="">
           <template slot-scope="scope">
@@ -56,7 +40,6 @@
         <el-button icon="el-icon-plus">新增</el-button>
       </router-link>
     </div>
->>>>>>> ba1cf0689e63229fe66f4bc91c5cc2bda5f4f94a
 
       <el-dialog
         title="提示"

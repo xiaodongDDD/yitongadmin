@@ -35,6 +35,7 @@
 </template>
 
 <script>
+  import myHeader from '../../myHeader/myHeader'
   export default {
     name: 'transactorEdit',
     data() {
