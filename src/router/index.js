@@ -34,21 +34,21 @@ export const constantRouterMap = [
     }]
   },
 
-  {
-    path: '/example',
-    component: Layout,
-    // redirect: '/example/table',
-    // name: 'Example',
-    // meta: { title: 'Example', icon: 'example' },
-    children: [
-      {
-        path: 'table',
-        name: 'Table',
-        component: _import('table/index'),
-        meta: { title: '列表', icon: 'table' }
-      }
-    ]
-  },
+  // {
+  //   path: '/example',
+  //   component: Layout,
+  //   // redirect: '/example/table',
+  //   // name: 'Example',
+  //   // meta: { title: 'Example', icon: 'example' },
+  //   children: [
+  //     {
+  //       path: 'table',
+  //       name: 'Table',
+  //       component: _import('table/index'),
+  //       meta: { title: '列表', icon: 'table' }
+  //     }
+  //   ]
+  // },
   {
     path: '/feedbackQuestion',
     component: Layout,
@@ -71,18 +71,18 @@ export const constantRouterMap = [
       }
     ]
   },
-  {
-    path: '/eventManagement',
-    component: Layout,
-    children: [
-      {
-        path: 'worksManagement',
-        name: 'worksManagement',
-        component: _import('eventManagement/worksManagement'),
-        meta: { title: '作品管理', icon: 'table' }
-      }
-    ]
-  },
+  // {
+  //   path: '/eventManagement',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'worksManagement',
+  //       name: 'worksManagement',
+  //       component: _import('eventManagement/worksManagement'),
+  //       meta: { title: '作品管理', icon: 'table' }
+  //     }
+  //   ]
+  // },
   { path: '*', redirect: '/404', hidden: true }
 ]
 
