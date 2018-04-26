@@ -277,13 +277,15 @@
     margin: 20px 30px;
     .left {
       float: left;
-      width: 400px;
+      width: 30%;
       .block {
         width: 85%;
       }
     }
     .right {
-      margin-left: 400px;
+      float: left;
+      /*margin-left: 400px;*/
+      width: 70%;
       word-break: break-all;
       .buttonClass{
         margin-top: 10px;
