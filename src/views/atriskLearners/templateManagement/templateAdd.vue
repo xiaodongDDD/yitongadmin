@@ -1,15 +1,159 @@
 <template>
   <div class="center-content template-add">
-    评价模板添加
+    <p class="position">新增评价模板</p>
+
+    <div class="edit-form">
+      <el-form ref="form" :model="form" label-width="100px">
+        <el-form-item label="模板名称：">
+          <el-input v-model="form.name"></el-input>
+        </el-form-item>
+        <el-form-item label="评价维度：">
+          <el-checkbox-group v-model="form.type">
+            <div class="item-list" v-for="(item, index) in form.signList">
+              <el-checkbox :label="item.type"></el-checkbox>
+              <i class="el-icon-circle-close-outline type-icon" @click.prevent="removeDomain(index)"></i>
+              <span class="ratetxt">占比</span>
+              <el-input class="rate" v-model="item.rate"></el-input>
+            </div>
+          </el-checkbox-group>
+          <div class="item-list">
+            <el-button class="item-plus" icon="el-icon-plus" v-show="!isAddSign" @click="isAddSign = true">新增</el-button>
+            <div class="add-item" v-show="isAddSign">
+              <el-input class="add-dimen" placeholder="请输入维度名" v-model="addSignType"></el-input>
+              <i class="el-icon-check" @click="addSignList"></i>
+              <i class="el-icon-close" @click="isAddSign = false"></i>
+            </div>
+          </div>
+        </el-form-item>
+
+        <div class="" v-for="(bItem, index1) in form.signList">
+          <el-form-item class="big-label" label-width="auto" :label="bItem.sign"></el-form-item>
+          <el-form-item label="指标名称：">
+            <div class="sign-list" v-for="(item,index2) in bItem.target">
+              <el-input placeholder="请输入指标名称" v-model="item.type"></el-input>
+              <i class="el-icon-circle-close-outline type-icon" @click="removeTarget(index1, index2)"></i>
+              <span class="ratetxt">占比</span>
+              <el-input class="right-in" placeholder="请输入占比（选填）" v-model="item.rate"></el-input>
+            </div>
+            <div class="sign-list">
+              <el-button class="item-plus" icon="el-icon-plus" @click="addItem1(index1)">新增</el-button>
+            </div>
+          </el-form-item>
+
+          <el-form-item label="评价等级：">
+            <div class="sign-list" v-for="(item,index2) in bItem.rank">
+              <el-input placeholder="请输入等级名称（中文、英文、数字不限）" v-model="item.type"></el-input>
+              <i class="el-icon-circle-close-outline type-icon" @click="removeRank(index1, index2)"></i>
+              <el-input class="right-in" placeholder="请输入等级说明（选填）" v-model="item.rate"></el-input>
+            </div>
+            <div class="sign-list">
+              <el-button class="item-plus" icon="el-icon-plus" @click="addItem2(index1)">新增</el-button>
+            </div>
+          </el-form-item>
+        </div>
+
+        <el-form-item>
+          <router-link to="/templateList"><el-button>取消</el-button></router-link>
+          <el-button @click="saveUser()">保存</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
   </div>
 </template>
 
 <script>
   export default {
-    name: 'templateAdd'
+    name: 'templateEdit',
+    data() {
+      return {
+        form: {
+          name: '',
+          type: ['成绩'],
+          signList: [{ sign: '成绩维度：', type: '成绩', rate: '', target: [{ type: '', rate: '' }], rank: [{ type: '', rate: '' }] }],
+          status: 0
+        },
+        isAddSign: false,
+        addSignType: ''
+      }
+    },
+    methods: {
+      saveUser() {
+        this.$router.push({ path: '/accountList' })
+      },
+      removeDomain(index) {
+        this.form.signList.splice(index, 1)
+      },
+      addSignList() {
+        const addSign = {
+          type: '',
+          sign: '',
+          rate: '',
+          target: [{ type: '', rate: '' }],
+          rank: [{ type: '', rate: '' }]
+        }
+        if (this.addSignType !== '' && this.addSignType.length <= 20) {
+          addSign.type = this.addSignType
+          addSign.sign = this.addSignType + '维度：'
+          this.form.signList.push(addSign)
+          this.isAddSign = false
+          this.addSignType = ''
+          this.form.type.push(addSign.type)
+        }
+      },
+      addItem1(index) {
+        const str = { type: '', rate: '' }
+        this.form.signList[index].target.push(str)
+      },
+      addItem2(index) {
+        const str = { type: '', rate: '' }
+        this.form.signList[index].rank.push(str)
+      },
+      removeTarget(index1, index2) {
+        this.form.signList[index1].target.splice(index2, 1)
+      },
+      removeRank(index1, index2) {
+        this.form.signList[index1].rank.splice(index2, 1)
+      }
+    }
   }
 </script>
 
-<style scoped>
+<style rel="stylesheet/scss" lang="scss" scoped>
+  .type-icon{
+    color: #606266;
+    margin-left: 5px;
+    font-size: 14px;
+  }
+  .ratetxt{
+    color: #606266;
+    margin-left: 15px;
+  }
+  .rate{
+    width: 60px!important;
+    margin-left: 5px;
+  }
+  .item-list{
+    margin-right: 30px;
+    margin-bottom: 15px;
+    float: left;
+  }
+  .item-plus{
+    border: none;
+  }
+  .sign-list{
+    margin-bottom: 15px;
+  }
+  .right-in{
+    margin-left: 10px;
+  }
+  .add-item{
+    float: left;
 
+    .add-dimen{
+      width: 120px;
+    }
+    i{
+      font-size: 16px;
+    }
+  }
 </style>

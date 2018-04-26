@@ -1,6 +1,7 @@
 <template>
   <div class="education-container">
     <div class="sidebar-container">
+     <scroll-bar>
       <el-menu
         :default-active="$route.name+$route.path"
         @select= "changeindex"
@@ -58,6 +59,7 @@
           </el-menu-item>
         </router-link>
       </el-menu>
+     </scroll-bar>  
     </div>
 
     <div class="main-container">
@@ -71,7 +73,9 @@
 </template>
 
 <script>
-  
+
+  import ScrollBar from '@/components/ScrollBar'
+  import myHeader from './myHeader/myHeader'
   export default {
     name: 'index',
     data() {
@@ -85,10 +89,15 @@
         flag: 0
       }
     },
+
     mounted() {
       console.log(this.$router.history.current.fullPath)
       this.index = this.$router.history.current.fullPath
       this.msg.title1 = this.$route.name
+     },
+    components: {
+      myHeader,
+      ScrollBar
     },
     methods: {
       changeindex(index,indexPath) {
@@ -110,6 +119,11 @@
       width: 50%;
       span{
         color: #606266;
+        font-size: 14px;
+      }
+
+      .el-input{
+        width: 43%;
       }
     }
     .content-detail{
@@ -151,5 +165,19 @@
   .el-checkbox+.el-checkbox{
     display: block;
     margin-left: 0;
+  }
+
+  .function-btns{
+    text-align: right;
+
+    .el-button--text{
+      color: #666;
+      margin-left: 15px;
+      font-size: 16px;
+    }
+  }
+  .big-label{
+    /*min-width: 100px;*/
+    text-indent: 30px;
   }
 </style>
