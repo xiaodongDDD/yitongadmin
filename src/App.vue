@@ -9,3 +9,10 @@ export default {
   name: 'app'
 }
 </script>
+
+<style>
+  #app{
+    min-width: 1024px;
+  }
+</style>
+

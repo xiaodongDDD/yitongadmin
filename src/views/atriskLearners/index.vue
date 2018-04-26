@@ -87,7 +87,7 @@
       ScrollBar
     },
     mounted() {
-      let routerIndex = localStorage.getItem("routerIndex")
+      const routerIndex = localStorage.getItem("routerIndex")
       console.log(routerIndex)
       this.index = routerIndex
     },
@@ -118,7 +118,7 @@
       }
 
       .el-input{
-        width: 45%;
+        width: 43%;
       }
     }
   }
@@ -167,5 +167,9 @@
       margin-left: 15px;
       font-size: 16px;
     }
+  }
+  .big-label{
+    /*min-width: 100px;*/
+    text-indent: 30px;
   }
 </style>
