@@ -7,7 +7,10 @@ const user = {
     token: getToken(),
     name: '',
     avatar: '',
-    roles: []
+    roles: [],
+    title1: '',
+    title2: '',
+    paths: ''
   },
 
   mutations: {
@@ -22,6 +25,15 @@ const user = {
     },
     SET_ROLES: (state, roles) => {
       state.roles = roles
+    },
+    SET_TITLE1: (state,title1) => {
+      state.title1 = title1
+    },
+    SET_TITLE2: (state,title2) => {
+      state.title2 = title2
+    },
+    SET_PATH: (state,paths) => {
+      state.paths = paths
     }
   },
 

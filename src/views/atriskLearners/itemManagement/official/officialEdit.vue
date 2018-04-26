@@ -1,48 +1,54 @@
 <template>
   <div class="center-content official-Edit">
-    <div class="title">编辑负责人</div>
-      <div class="edit-form">
-      <el-form ref="form" :model="form" label-width="100px">
-        <el-form-item label="负责人姓名：">
-          <el-input v-model="form.name"></el-input>
-        </el-form-item>
-        <el-form-item label="负责学科：">
-          <el-select
-            v-model="value1"
-            multiple
-            collapse-tags
-            placeholder="请选择">
-            <el-option
-              v-for="item in options1"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="负责年级：">
-          <el-select
-            v-model="value2"
-            multiple
-            collapse-tags
-            placeholder="请选择">
-            <el-option
-              v-for="item in options2"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item>
-          <router-link to="/itmeList"><el-button>取消</el-button></router-link>
-          <el-button @click="saveUser()">保存</el-button>
-        </el-form-item>
-      </el-form>
+      <my-header :msg='msg'></my-header>
+      <div class="content-detail">
+        <div class='content-detail'>
+        <p class="position">编辑负责人</p>
+        <div class="edit-form">
+        <el-form ref="form" :model="form" label-width="100px">
+          <el-form-item label="负责人姓名：">
+            <el-input v-model="form.name"></el-input>
+          </el-form-item>
+          <el-form-item label="负责学科：">
+            <el-select
+              v-model="value1"
+              multiple
+              collapse-tags
+              placeholder="请选择">
+              <el-option
+                v-for="item in options1"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="负责年级：">
+            <el-select
+              v-model="value2"
+              multiple
+              collapse-tags
+              placeholder="请选择">
+              <el-option
+                v-for="item in options2"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item>
+            <router-link to="/itmeList"><el-button>取消</el-button></router-link>
+            <el-button @click="saveUser()">保存</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+     </div>
     </div>
   </div>
 </template>
 <script>
+  import myHeader from '../../myHeader/myHeader'
   export default {
     name: 'officialEdit',
     data() {
@@ -55,6 +61,14 @@
           telephone: '13535790897',
           email: '134752398@348.cn',
           status: 0
+        },
+        msg: {
+          title1: '项目评价管理',
+          title2: '负责人管理',
+          title3: '编辑负责人管理',
+          flag: 2,
+          path1: '/itemList',
+          path2: '/officialList'
         },
         options1: [{
           value: '选项1',
@@ -92,11 +106,15 @@
         value1: []
       }
     },
+    components: {
+      myHeader
+    },  
     methods: {
       saveUser() {
         // this.$router.push({ path: '/officialList' })
         console.log(this.value1)
         console.log(this.value2)
+        console.log(this.$router)
       }
     }
   }

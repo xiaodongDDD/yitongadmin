@@ -9,111 +9,119 @@
         <!--<el-form-item label="清除搜索"></el-form-item>-->
       <!--</el-form>-->
     <!--</div>-->
+    <my-header :msg='msg'></my-header>
+    <div class="content-detail">
+      <p class="position">账户管理</p>
+      <div class="list-table">
+        <el-table
+          :data="tableData"
+          border
+          style="width: 100%">
+          <el-table-column
+            align="center"
+            prop="onOff"
+            label="账户状态"
+            width="100">
+            <template slot-scope="scope">
+              <el-dropdown v-if="scope.row.onOff === 0" trigger="click">
+                <el-button size="mini">
+                  启用<i class="el-icon-caret-bottom el-icon--right"></i>
+                </el-button>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item>停用</el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+              <el-dropdown v-else trigger="click">
+                <el-button size="mini">
+                  停用<i class="el-icon-caret-bottom el-icon--right"></i>
+                </el-button>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item>启用</el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </template>
+          </el-table-column>
+          <el-table-column
+            align="center"
+            prop="name"
+            label="姓名"
+            width="100">
+          </el-table-column>
+          <el-table-column
+            align="center"
+            prop="userName"
+            label="用户名"
+            width="100">
+          </el-table-column>
+          <el-table-column
+            align="center"
+            prop="type"
+            label="类型"
+            width="60">
+          </el-table-column>
+          <el-table-column
+            prop="schoolName"
+            label="学校名称">
+          </el-table-column>
+          <el-table-column
+            align="center"
+            prop="telephone"
+            label="手机号"
+            width="110">
+          </el-table-column>
+          <el-table-column
+            prop="email"
+            label="邮箱">
+          </el-table-column>
 
-    <div class="list-table">
-      <el-table
-        :data="tableData"
-        border
-        style="width: 100%">
-        <el-table-column
-          align="center"
-          prop="onOff"
-          label="账户状态"
-          width="100">
-          <template slot-scope="scope">
-            <el-dropdown v-if="scope.row.onOff === 0" trigger="click">
-              <el-button size="mini">
-                启用<i class="el-icon-caret-bottom el-icon--right"></i>
-              </el-button>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item>停用</el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
-            <el-dropdown v-else trigger="click">
-              <el-button size="mini">
-                停用<i class="el-icon-caret-bottom el-icon--right"></i>
-              </el-button>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item>启用</el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
-          </template>
-        </el-table-column>
-        <el-table-column
-          align="center"
-          prop="name"
-          label="姓名"
-          width="100">
-        </el-table-column>
-        <el-table-column
-          align="center"
-          prop="userName"
-          label="用户名"
-          width="100">
-        </el-table-column>
-        <el-table-column
-          align="center"
-          prop="type"
-          label="类型"
-          width="60">
-        </el-table-column>
-        <el-table-column
-          prop="schoolName"
-          label="学校名称">
-        </el-table-column>
-        <el-table-column
-          align="center"
-          prop="telephone"
-          label="手机号"
-          width="110">
-        </el-table-column>
-        <el-table-column
-          prop="email"
-          label="邮箱">
-        </el-table-column>
-
-        <el-table-column
-          align="center" label="操作" width="">
-          <template slot-scope="scope">
-            <el-button
-              size="mini"
-              @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-            <el-button
-              size="mini"
-              type="danger"
-              @click="handleDelete(scope.$index, userName = scope.row.name)">删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
-
-
-    <div class="list-add">
-      <router-link to="/accountAdd">
-        <el-button icon="el-icon-plus">新增</el-button>
-      </router-link>
-    </div>
-
-    <el-dialog
-      title="提示"
-      :visible.sync="centerDialogVisible"
-      width="30%"
-      center>
-      <div class="dialogContent">
-        <p>请确认是否要删除</p>
-        <p>{{ userName }}账户</p>
-
-        <p>删除后，该账户将无法登录</p>
+          <el-table-column
+            align="center" label="操作" width="">
+            <template slot-scope="scope">
+              <el-button
+                size="mini"
+                @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+              <el-button
+                size="mini"
+                type="danger"
+                @click="handleDelete(scope.$index, userName = scope.row.name)">删除</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
       </div>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="centerDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
-      </span>
-    </el-dialog>
+
+
+      <div class="list-add">
+        <router-link to="/accountAdd">
+          <el-button icon="el-icon-plus">新增</el-button>
+        </router-link>
+      </div>
+
+      <el-dialog
+        title="提示"
+        :visible.sync="centerDialogVisible"
+        width="30%"
+        center>
+        <div class="dialogContent">
+          <p>请确认是否要删除</p>
+          <p>{{ userName }}账户</p>
+
+          <p>删除后，该账户将无法登录</p>
+        </div>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="centerDialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
+        </span>
+      </el-dialog>
+
+      <div class="view">
+        <router-view></router-view>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+  import myHeader from '../myHeader/myHeader'
   export default {
     name: 'accountList',
     data() {
@@ -122,6 +130,12 @@
         userName: '',
         form: {
           name: ''
+        },
+        msg: {
+          title1: '账户管理',
+          title2: '',
+          flag: 0,
+          path: '/accountList'
         },
         tableData: [{
           onOff: 0,
@@ -150,6 +164,9 @@
         }]
       }
     },
+    components: {
+      myHeader
+    },  
     methods: {
       handleEdit(index, row) {
         console.log(index, row)

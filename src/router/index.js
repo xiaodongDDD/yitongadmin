@@ -34,10 +34,10 @@ const OfficialList = r => require.ensure([], () => r(require('../views/atriskLea
 const OfficialEdit = r => require.ensure([], () => r(require('../views/atriskLearners/itemManagement/official/officialEdit')), 'OfficialEdit')
 const OfficialAdd = r => require.ensure([], () => r(require('../views/atriskLearners/itemManagement/official/officialAdd')), 'OfficialAdd')
 const TransactorList = r => require.ensure([], () => r(require('../views/atriskLearners/itemManagement/transactor/transactorList')), 'TransactorList')
+const TransactorEdit = r => require.ensure([], () => r(require('../views/atriskLearners/itemManagement/transactor/transactorEdit')), 'TransactorEdit')
 const ExectorAdd = r => require.ensure([], () => r(require('../views/atriskLearners/itemManagement/transactor/exectorAdd')), 'ExectorAdd')
 const ExectorEdit = r => require.ensure([], () => r(require('../views/atriskLearners/itemManagement/transactor/ExectorEdit')), 'ExectorEdit')
 const PoorStudentEdit = r => require.ensure([], () => r(require('../views/atriskLearners/itemManagement/transactor/poorStudentEdit')), 'PoorStudentEdit')
-const TransactorEdit = r => require.ensure([], () => r(require('../views/atriskLearners/itemManagement/transactor/transactorEdit')), 'TransactorEdit')
 const ObjectList = r => require.ensure([], () => r(require('../views/atriskLearners/itemManagement/object/objectList')), 'ObjectList')
 const ObjectMan = r => require.ensure([], () => r(require('../views/atriskLearners/itemManagement/object/objectMan')), 'ObjectMan')
 const ObjectEdit = r => require.ensure([], () => r(require('../views/atriskLearners/itemManagement/object/objectEdit')), 'ObjectEdit')
@@ -61,122 +61,189 @@ export const constantRouterMap = [
     children: [
       {
         path: 'userList',
-        component: UserList
+        name: '学校用户管理',
+        component: UserList,
+        meta:{
+          title:'学校用户管理'
+        }
       },
       {
         path: 'userEdit',
-        component: UserEdit
+        name: '编辑学校用户',
+        component: UserEdit,
+        meta:{
+          title:'编辑学校用户'
+        }
       },
       {
         path: 'userAdd',
-        component: UserAdd
+        name: '新增学校用户',
+        component: UserAdd,
+        meta:{
+          title:'新增学校用户'
+        }
       },
       {
         path: 'accountList',
-        component: AccountList
+        name: '账户管理',
+        component: AccountList,
+        meta:{
+          title:'账户管理'
+        }
       },
       {
         path: 'accountEdit',
-        component: AccountEdit
+        name: '编辑账户信息',
+        component: AccountEdit,
+        meta:{
+          title:'编辑账户信息'
+        }
       },
       {
         path: 'accountAdd',
-        component: AccountAdd
+        name: '新增账户信息',
+        component: AccountAdd,
+        meta:{
+          title:'新增账户信息'
+        }
       },
       {
         path: 'powerList',
-        component: PowerList
+        name: '权限管理',
+        component: PowerList,
+        meta:{
+          title:'权限管理'
+        }
       },
       {
         path: 'powerEdit',
-        component: PowerEdit
+        name: '编辑权限管理',
+        component: PowerEdit,
+        meta:{
+          title:'编辑权限管理'
+        }
       },
       {
         path: 'itemList',
-        component: ItemList
-      },
-      {
-        path: 'itemEdit',
-        component: ItemEdit
-      },
-      {
-        path: 'itemAdd',
-        component: ItemAdd
+        component: ItemList,
+        name: '评价项目管理',
+        meta:{
+          title:'评价项目管理'
+        }
       },
       {
         path: 'officialList',
-        component: OfficialList
+        name: '负责人管理',
+        component: OfficialList,
+        meta:{
+          title:'负责人管理'
+        }
       },
       {
         path: 'officialEdit',
-        component: OfficialEdit
+        name: '编辑负责人',
+        component: OfficialEdit,
+        meta:{
+          title: '编辑负责人'
+        }
       },
       {
         path: 'officialAdd',
-        component: OfficialAdd
+        name: '新增负责人',
+        component: OfficialAdd,
+        meta:{
+          title: '新增负责人'
+        }
+      },
+      {
+        path: 'itemEdit',
+        name: '编辑评价项目',
+        component: ItemEdit,
+        meta:{
+          title: '编辑评价项目'
+        }
+      },
+      {
+        path: 'itemAdd',
+        name: '新增评价项目',
+        component: ItemAdd
       },
       {
         path: 'transactorList',
-        component: TransactorList
+        name: '执行人管理',
+        component: TransactorList,
       },
       {
         path: 'transactorEdit',
+        name: '编辑执行人管理',
         component: TransactorEdit
       },
       {
         path: 'exectorAdd',
+        name: '执行人管理添加',
         component: ExectorAdd
       },
       {
         path: 'exectorEdit',
+        name: '执行人管理编辑',
         component: ExectorEdit
       },
       {
         path: 'poorStudentEdit',
+        name: '执行人管理',
         component: PoorStudentEdit
       },
       {
         path: 'objectList',
-        component: ObjectList
+        name: '评价对象管理',
+        component: ObjectList,
       },
       {
         path: 'objectMan',
+        name: '评价对象管理',
         component: ObjectMan
       },
       {
         path: 'objectEdit',
+        name: '编辑评价对象管理',
         component: ObjectEdit
       },
       {
         path: 'templateList',
+        name:'评价模板管理',
         component: TemplateList
       },
       {
         path: 'templateEdit',
+        name: '编辑评价模板',
         component: TemplateEdit
       },
       {
         path: 'templateAdd',
+        name: 'dasdas',
         component: TemplateAdd
       },
       {
         path: 'gainList',
+        name: '评价成果',
         component: GainList
       },
       {
         path: 'gainSchoolList',
+        name: '1212212',
         component: GainSchoolList
       },
       {
         path: 'gainDetails',
+        name: '21qwda',
         component: GainDetails
       },
       {
         path: 'logList',
+        name: '操作日志',
         component: LogList
       }]
-  },
-
+   },
   { path: '*', redirect: '/404', hidden: true }
 ]
 

@@ -1,6 +1,7 @@
 <template>
   <div class="center-content exector-Edit">
-    编辑负责人
+    <my-header :msg='msg'></my-header>
+    <p class="position">编辑执行人</p>
       <div class="edit-form">
       <el-form ref="form" :model="form" label-width="100px">
         <el-form-item label="执行人姓名：">
@@ -53,6 +54,7 @@
   </div>
 </template>
 <script>
+  import myHeader from '../../myHeader/myHeader'
   export default {
     name: 'exectorEdit',
     data() {
@@ -65,6 +67,12 @@
           telephone: '13535790897',
           email: '134752398@348.cn',
           status: 0
+        },
+         msg: {
+          title1: '项目评价管理',
+          title2: '编辑执行人',
+          flag: 1,
+          path: '/itemList'
         },
         options1: [{
           value: '选项1',
@@ -119,6 +127,9 @@
         value1: []
       }
     },
+    components: {
+      myHeader
+    },  
     methods: {
       saveUser() {
         // this.$router.push({ path: '/poorStudentEdit' })

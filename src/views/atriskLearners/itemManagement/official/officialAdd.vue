@@ -1,17 +1,17 @@
 <template>
   <div class="center-content official-Add">
-      <div class="title">新增负责人</div>
+      <my-header :msg='msg'></my-header>
+      <p class="position">新增负责人</p>
       <div class="add-form">
       <el-form ref="form" :model="form" label-width="100px">
         <el-form-item label="负责人姓名：">
-          <el-input v-model="form.name"></el-input>
+          <el-input style='width:500px' v-model="form.name"></el-input>
         </el-form-item>
         <el-form-item label="负责学科：">
           <el-select
             v-model="value1"
             multiple
             collapse-tags
-            style="margin-left: 20px;"
             placeholder="请选择">
             <el-option
               v-for="item in options1"
@@ -26,7 +26,6 @@
             v-model="value2"
             multiple
             collapse-tags
-            style="margin-left: 20px;"
             placeholder="请选择">
             <el-option
               v-for="item in options2"
@@ -45,6 +44,7 @@
   </div>
 </template>
 <script>
+  import myHeader from '../../myHeader/myHeader'
   export default {
     name: 'officialEdit',
     data() {
@@ -58,6 +58,14 @@
           email: '134752398@348.cn',
           status: 0
         },
+        msg: {
+          title1: '项目评价管理',
+          title2: '负责人管理',
+          title3: '新增负责人管理',
+          flag: 2,
+          path1: '/itemList',
+          path2: '/officialList'
+        },     
         options1: [{
           value: '选项1',
           label: '黄金糕'
@@ -94,6 +102,9 @@
         value1: []
       }
     },
+    components: {
+      myHeader
+    },  
     methods: {
       saveUser() {
         this.$router.push({ path: '/itmeList' })

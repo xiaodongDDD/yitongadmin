@@ -1,51 +1,56 @@
 <template>
   <div class="center-content power-list">
-    <div class="list-table">
-      <el-table
-        :data="tableData"
-        border
-        style="width: 100%">
-        <el-table-column
-          align="center"
-          prop="name"
-          label="姓名"
-          width="100">
-        </el-table-column>
-        <el-table-column
-          align="center"
-          prop="type"
-          label="类型"
-          width="60">
-        </el-table-column>
-        <el-table-column
-          prop="schoolName"
-          label="学校名称">
-        </el-table-column>
-        <el-table-column
-          align="center"
-          prop="telephone"
-          label="手机号"
-          width="110">
-        </el-table-column>
-        <el-table-column
-          prop="powerlist"
-          label="菜单权限">
-        </el-table-column>
+    <my-header :msg='msg'></my-header>
+    <div class="content-detail">
+      <p class="position"></p>
+      <div class="list-table">
+        <el-table
+          :data="tableData"
+          border
+          style="width: 100%">
+          <el-table-column
+            align="center"
+            prop="name"
+            label="姓名"
+            width="100">
+          </el-table-column>
+          <el-table-column
+            align="center"
+            prop="type"
+            label="类型"
+            width="60">
+          </el-table-column>
+          <el-table-column
+            prop="schoolName"
+            label="学校名称">
+          </el-table-column>
+          <el-table-column
+            align="center"
+            prop="telephone"
+            label="手机号"
+            width="110">
+          </el-table-column>
+          <el-table-column
+            prop="powerlist"
+            label="菜单权限">
+          </el-table-column>
 
-        <el-table-column
-          align="center" label="操作" width="120">
-          <template slot-scope="scope">
-            <el-button
-              size="mini"
-              @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
+          <el-table-column
+            align="center" label="操作" width="120">
+            <template slot-scope="scope">
+              <el-button
+                size="mini"
+                @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+  import myHeader from '../myHeader/myHeader'
   export default {
     name: 'powerList',
     data() {
@@ -54,6 +59,12 @@
         userName: '',
         form: {
           name: ''
+        },
+        msg: {
+          title1: '权限管理',
+          title2: '',
+          flag: 0,
+          path: '/userList'
         },
         tableData: [{
           name: '都龙族',
@@ -76,6 +87,9 @@
         }]
       }
     },
+    components: {
+      myHeader
+    },        
     methods: {
       handleEdit(index, row) {
         console.log(index, row)

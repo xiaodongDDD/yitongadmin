@@ -1,11 +1,18 @@
 <template>
   <el-menu class="navbar" mode="horizontal">
     <!--<hamburger class="hamburger-container"></hamburger>-->
-
-    <el-breadcrumb class="header-bread" separator="/">
-      <el-breadcrumb-item :to="{ path: '/' }">学校用户管理</el-breadcrumb-item>
+    <el-breadcrumb v-if='msg.flag == 1' class="header-bread" separator="/">
+      <el-breadcrumb-item :to="{ path: msg.path }">{{ msg.title1 }}</el-breadcrumb-item>
+      <el-breadcrumb-item>{{ msg.title2 }}</el-breadcrumb-item>
     </el-breadcrumb>
-
+    <el-breadcrumb v-if='msg.flag == 0' class="header-bread" separator="/">
+      <el-breadcrumb-item>{{ msg.title1 }}</el-breadcrumb-item>
+    </el-breadcrumb>
+     <el-breadcrumb v-if='msg.flag == 2' class="header-bread" separator="/">
+      <el-breadcrumb-item :to="{ path: msg.path1 }">{{ msg.title1 }}</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: msg.path2 }">{{ msg.title2 }}</el-breadcrumb-item>
+      <el-breadcrumb-item>{{ msg.title3 }}</el-breadcrumb-item>
+    </el-breadcrumb>
     <el-dropdown @command="handleCommand" class="avatar-container" trigger="click">
       <div class="avatar-wrapper">
         <img class="user-avatar" src="../../../assets/images/64451924_p3.jpg">
@@ -22,10 +29,11 @@
 <script>
   export default {
     name: 'myHeader',
+    props:['msg'],
     data() {
       return {
         activeIndex: '1',
-        activeIndex2: '1'
+        activeIndex2: '1',
       }
     },
     methods: {
@@ -82,6 +90,7 @@
   }
   .header-bread{
     display: inline-block;
+    margin-left:20px;
   }
   .navbar .avatar-container .avatar-wrapper .el-icon-caret-bottom{
     top: 16px;
