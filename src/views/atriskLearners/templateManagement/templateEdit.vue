@@ -1,6 +1,6 @@
 <template>
   <div class="center-content template-edit">
-  <my-header :msg='msg'></my-header>
+    <my-header :msg='msg'></my-header>
     <div class="content-detail">
       <p class="position">编辑评价模板</p>
       <div class="edit-form">
@@ -72,7 +72,7 @@
         if (!value) {
           return callback(new Error('维度名称不能为空'))
         }
-        if (value.length > 20){
+        if (value.length > 20) {
           return callback(new Error('维度名称过长'))
         }
       }
@@ -101,7 +101,7 @@
     },
     components: {
       myHeader
-    }, 
+    },
     methods: {
       saveUser() {
         this.$router.push({ path: '/accountList' })

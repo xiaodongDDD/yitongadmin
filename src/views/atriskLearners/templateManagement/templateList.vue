@@ -92,7 +92,7 @@
     },
     components: {
       myHeader
-    },  
+    },
     methods: {
       handleEdit(index, row) {
         console.log(index, row)
