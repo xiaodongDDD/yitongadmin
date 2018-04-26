@@ -26,28 +26,28 @@
           </div>
         </el-form-item>
 
-        <div class="" v-for="(bItem, index) in form.signList">
+        <div class="" v-for="(bItem, index1) in form.signList">
           <el-form-item :label="bItem.sign"></el-form-item>
           <el-form-item label="指标名称：">
-            <div class="sign-list" v-for="(item,index) in bItem.target">
+            <div class="sign-list" v-for="(item,index2) in bItem.target">
               <el-input placeholder="" v-model="item.type"></el-input>
-              <i class="el-icon-circle-close-outline type-icon" @click="removeTarget(index)"></i>
+              <i class="el-icon-circle-close-outline type-icon" @click="removeTarget(index1, index2)"></i>
               <span class="ratetxt">占比</span>
               <el-input class="right-in" v-model="item.rate"></el-input>
             </div>
             <div class="sign-list">
-              <el-button class="item-plus" icon="el-icon-plus" @click="addItem1(index)">新增</el-button>
+              <el-button class="item-plus" icon="el-icon-plus" @click="addItem1(index1)">新增</el-button>
             </div>
           </el-form-item>
 
           <el-form-item label="评价等级：">
-            <div class="sign-list" v-for="(item,index) in bItem.rank">
+            <div class="sign-list" v-for="(item,index2) in bItem.rank">
               <el-input placeholder="" v-model="item.type"></el-input>
-              <i class="el-icon-circle-close-outline type-icon" @click="removeRank(index)"></i>
+              <i class="el-icon-circle-close-outline type-icon" @click="removeRank(index1, index2)"></i>
               <el-input class="right-in" v-model="item.rate"></el-input>
             </div>
             <div class="sign-list">
-              <el-button class="item-plus" icon="el-icon-plus" @click="addItem2(index)">新增</el-button>
+              <el-button class="item-plus" icon="el-icon-plus" @click="addItem2(index1)">新增</el-button>
             </div>
           </el-form-item>
         </div>
@@ -68,8 +68,6 @@
       return {
         form: {
           name: '2018年第一学期语文所有学生补差',
-          schoolName: '武宁路小学',
-          userName: 'shixiuan',
           type: ['成绩', '态度'],
           signList: [{ sign: '成绩维度：', type: '成绩', rate: '40%', target: [{ type: '基础', rate: '30%' }, { type: '阅读', rate: '20%' }, { type: '作文', rate: '30%' }], rank: [{ type: '思维', rate: '30%' }, { type: '礼仪', rate: '20%' }] },
             { sign: '态度维度：', type: '态度', rate: '60%', target: [{ type: '思想', rate: '30%' }], rank: [{ type: '优秀', rate: '30%' }] }],
@@ -90,10 +88,9 @@
         this.$router.push({ path: '/accountList' })
       },
       removeDomain(index) {
-        this.form.signList.splice(index,1)
+        this.form.signList.splice(index, 1)
       },
       addSignList() {
-        // console.log(this.addSign.type)
         if (this.addSign.type !== '' && this.addSign.type.length <= 20) {
           this.addSign.sign = this.addSign.type + '维度：'
           this.form.signList.push(this.addSign)
@@ -108,10 +105,12 @@
         const str = { type: '', rate: '' }
         this.form.signList[index].rank.push(str)
       },
-      removeTarget(index) {
-        console.log(index)
+      removeTarget(index1, index2) {
+        this.form.signList[index1].target.splice(index2, 1)
       },
-      removeRank(index) {}
+      removeRank(index1, index2) {
+        this.form.signList[index1].rank.splice(index2, 1)
+      }
     }
   }
 </script>

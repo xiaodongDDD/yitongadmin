@@ -2,6 +2,11 @@
   <div class="center-content gain-details">
     <p class="position">道达尔学困生辅导记录表</p>
 
+    <div class="function-btns">
+      <el-button icon="el-icon-upload2" type="text" @click="">导出</el-button>
+      <router-link to="/gainSchoolList"><el-button type="text">返回</el-button></router-link>
+    </div>
+
     <div class="details-table">
       <el-table
         :data="tableData6"
@@ -54,8 +59,7 @@
           crowFrom: 1,
           amount1: '234',
           amount2: '3.2',
-          amount3: 10,
-          amount4: 15
+          amount3: 10
         }, {
           id: '12987123',
           name: '王小虎2',
@@ -67,18 +71,18 @@
           id: '12987124',
           name: '王小虎3',
           arow: 2,
-          arowFrom: 1,
+          arowFrom: 0,
+          crow: 2,
+          crowFrom: 1,
           amount1: '324',
           amount2: '1.9',
-          amount3: 9,
-          amount4: 15
+          amount3: 9
         }, {
           id: '12987125',
           name: '王小虎4',
           amount1: '621',
           amount2: '2.2',
-          amount3: 17,
-          amount4: 15
+          amount3: 17
         }, {
           id: '12987126',
           name: '王小虎5',
@@ -98,8 +102,6 @@
     },
     methods: {
       arraySpanMethod({ row, column, rowIndex, columnIndex }) {
-        // console.log(row.name + columnIndex)
-        // console.log(row.arowFrom)
         if (row.hasOwnProperty('crow')) {
           if (row.hasOwnProperty('crowFrom')) {
             if (columnIndex === row.crowFrom) {
@@ -108,29 +110,16 @@
           }
         }
 
-        if (columnIndex === 0) {
-          if (rowIndex % 2 === 0) {
-            return {
-              rowspan: 2,
-              colspan: 1
-            }
-          } else {
-            return {
-              rowspan: 0,
-              colspan: 0
+        if (row.hasOwnProperty('arow')) {
+          if (row.hasOwnProperty('arowFrom')) {
+            if (columnIndex === row.arowFrom) {
+              return {
+                rowspan: 2,
+                colspan: 1
+              }
             }
           }
         }
-        // if (row.hasOwnProperty('arow')) {
-        //   if (row.hasOwnProperty('arowFrom')) {
-        //     if (rowIndex === row.arowFrom) {
-        //       return {
-        //         rowspan: 2,
-        //         colspan: 1
-        //       }
-        //     }
-        //   }
-        // }
       }
     }
   }
@@ -139,5 +128,12 @@
 <style scoped>
   .position{
     text-indent: 0;
+  }
+  .position{
+    float: left;
+  }
+  .function-btns{
+    float: right;
+    margin-top: -10px;
   }
 </style>

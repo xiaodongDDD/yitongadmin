@@ -158,4 +158,14 @@
     display: block;
     margin-left: 0;
   }
+
+  .function-btns{
+    text-align: right;
+
+    .el-button--text{
+      color: #666;
+      margin-left: 15px;
+      font-size: 16px;
+    }
+  }
 </style>

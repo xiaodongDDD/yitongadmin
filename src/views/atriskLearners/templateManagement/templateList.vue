@@ -33,6 +33,11 @@
         </el-table-column>
       </el-table>
     </div>
+    <div class="list-add">
+      <router-link to="/templateAdd">
+        <el-button icon="el-icon-plus">新增</el-button>
+      </router-link>
+    </div>
 
     <el-dialog
       title="提示"
