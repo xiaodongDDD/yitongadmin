@@ -1,82 +1,65 @@
 <template>
   <div class="center-content template-edit">
-<<<<<<< HEAD
     <my-header :msg='msg'></my-header>
     <div class="content-detail">
       <p class="position">编辑评价模板</p>
+
       <div class="edit-form">
-        <el-form ref="form" :model="form" label-width="100px">
+        <el-form ref="form" :model="form" label-width="100px" :rules="rules">
           <el-form-item label="模板名称：">
             <el-input v-model="form.name"></el-input>
           </el-form-item>
           <el-form-item label="评价维度：">
-            <el-input v-model="form.type"></el-input>
+            <el-checkbox-group v-model="form.type">
+              <div class="item-list" v-for="(item, index) in form.signList">
+                <el-checkbox :label="item.type"></el-checkbox>
+                <i class="el-icon-circle-close-outline type-icon" @click.prevent="removeDomain(index)"></i>
+                <span class="ratetxt">占比</span>
+                <el-input class="rate" v-model="item.rate"></el-input>
+              </div>
+            </el-checkbox-group>
+            <div class="item-list">
+              <el-button class="item-plus" icon="el-icon-plus" v-show="!isAddSign" @click="isAddSign = true">新增</el-button>
+              <div class="add-item" v-show="isAddSign">
+                <el-input class="add-dimen" placeholder="请输入维度名" v-model="addSignType"></el-input>
+                <i class="el-icon-check" @click="addSignList"></i>
+                <i class="el-icon-close" @click="isAddSign = false"></i>
+              </div>
+            </div>
           </el-form-item>
+
+          <div class="" v-for="(bItem, index1) in form.signList">
+            <el-form-item class="big-label" label-width="auto" :label="bItem.sign"></el-form-item>
+            <el-form-item label="指标名称：">
+              <div class="sign-list" v-for="(item,index2) in bItem.target">
+                <el-input placeholder="" v-model="item.type"></el-input>
+                <i class="el-icon-circle-close-outline type-icon" @click="removeTarget(index1, index2)"></i>
+                <span class="ratetxt">占比</span>
+                <el-input class="right-in" v-model="item.rate"></el-input>
+              </div>
+              <div class="sign-list">
+                <el-button class="item-plus" icon="el-icon-plus" @click="addItem1(index1)">新增</el-button>
+              </div>
+            </el-form-item>
+
+            <el-form-item label="评价等级：">
+              <div class="sign-list" v-for="(item,index2) in bItem.rank">
+                <el-input placeholder="" v-model="item.type"></el-input>
+                <i class="el-icon-circle-close-outline type-icon" @click="removeRank(index1, index2)"></i>
+                <el-input class="right-in" v-model="item.rate"></el-input>
+              </div>
+              <div class="sign-list">
+                <el-button class="item-plus" icon="el-icon-plus" @click="addItem2(index1)">新增</el-button>
+              </div>
+            </el-form-item>
+          </div>
+
           <el-form-item>
-            <router-link to="/accountList"><el-button>取消</el-button></router-link>
+            <router-link to="/templateList"><el-button>取消</el-button></router-link>
             <el-button @click="saveUser()">保存</el-button>
           </el-form-item>
         </el-form>
       </div>
-=======
-    <p class="position">编辑评价模板</p>
-
-    <div class="edit-form">
-      <el-form ref="form" :model="form" label-width="100px" :rules="rules">
-        <el-form-item label="模板名称：">
-          <el-input v-model="form.name"></el-input>
-        </el-form-item>
-        <el-form-item label="评价维度：">
-          <el-checkbox-group v-model="form.type">
-            <div class="item-list" v-for="(item, index) in form.signList">
-              <el-checkbox :label="item.type"></el-checkbox>
-              <i class="el-icon-circle-close-outline type-icon" @click.prevent="removeDomain(index)"></i>
-              <span class="ratetxt">占比</span>
-              <el-input class="rate" v-model="item.rate"></el-input>
-            </div>
-          </el-checkbox-group>
-          <div class="item-list">
-            <el-button class="item-plus" icon="el-icon-plus" v-show="!isAddSign" @click="isAddSign = true">新增</el-button>
-            <div class="add-item" v-show="isAddSign">
-              <el-input class="add-dimen" placeholder="请输入维度名" v-model="addSignType"></el-input>
-              <i class="el-icon-check" @click="addSignList"></i>
-              <i class="el-icon-close" @click="isAddSign = false"></i>
-            </div>
-          </div>
-        </el-form-item>
-
-        <div class="" v-for="(bItem, index1) in form.signList">
-          <el-form-item class="big-label" label-width="auto" :label="bItem.sign"></el-form-item>
-          <el-form-item label="指标名称：">
-            <div class="sign-list" v-for="(item,index2) in bItem.target">
-              <el-input placeholder="" v-model="item.type"></el-input>
-              <i class="el-icon-circle-close-outline type-icon" @click="removeTarget(index1, index2)"></i>
-              <span class="ratetxt">占比</span>
-              <el-input class="right-in" v-model="item.rate"></el-input>
-            </div>
-            <div class="sign-list">
-              <el-button class="item-plus" icon="el-icon-plus" @click="addItem1(index1)">新增</el-button>
-            </div>
-          </el-form-item>
-
-          <el-form-item label="评价等级：">
-            <div class="sign-list" v-for="(item,index2) in bItem.rank">
-              <el-input placeholder="" v-model="item.type"></el-input>
-              <i class="el-icon-circle-close-outline type-icon" @click="removeRank(index1, index2)"></i>
-              <el-input class="right-in" v-model="item.rate"></el-input>
-            </div>
-            <div class="sign-list">
-              <el-button class="item-plus" icon="el-icon-plus" @click="addItem2(index1)">新增</el-button>
-            </div>
-          </el-form-item>
-        </div>
-
-        <el-form-item>
-          <router-link to="/templateList"><el-button>取消</el-button></router-link>
-          <el-button @click="saveUser()">保存</el-button>
-        </el-form-item>
-      </el-form>
->>>>>>> ba1cf0689e63229fe66f4bc91c5cc2bda5f4f94a
     </div>
   </div>
 </template>
@@ -90,7 +73,7 @@
         if (!value) {
           return callback(new Error('维度名称不能为空'))
         }
-        if (value.length > 20){
+        if (value.length > 20) {
           return callback(new Error('维度名称过长'))
         }
       }
@@ -102,14 +85,12 @@
             { sign: '态度维度：', type: '态度', rate: '60%', target: [{ type: '思想', rate: '30%' }], rank: [{ type: '优秀', rate: '30%' }] }],
           status: 0
         },
-<<<<<<< HEAD
         msg: {
           title1: '评价模版管理',
           title2: '编辑评价模版管理',
           flag: 1,
           path: '/templateList'
         },
-=======
         isAddSign: false,
         addSignType: '',
         rules: {
@@ -117,12 +98,11 @@
             { validator: checkSign, trigger: 'blur' }
           ]
         }
->>>>>>> ba1cf0689e63229fe66f4bc91c5cc2bda5f4f94a
       }
     },
     components: {
       myHeader
-    }, 
+    },
     methods: {
       saveUser() {
         this.$router.push({ path: '/accountList' })

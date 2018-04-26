@@ -2,48 +2,49 @@
   <div class="center-content gain-details">
     <my-header :msg='msg'></my-header>
     <div class="content-detail">
-    <p class="position">道达尔学困生辅导记录表</p>
-    <div class="function-btns">
-      <el-button icon="el-icon-upload2" type="text" @click="">导出</el-button>
-      <router-link to="/gainSchoolList"><el-button type="text">返回</el-button></router-link>
-    </div>
+      <p class="position">道达尔学困生辅导记录表</p>
+      <div class="function-btns">
+        <el-button icon="el-icon-upload2" type="text" @click="">导出</el-button>
+        <router-link to="/gainSchoolList"><el-button type="text">返回</el-button></router-link>
+      </div>
 
-    <div class="details-table">
-      <el-table
-        :data="tableData6"
-        :span-method="arraySpanMethod"
-        border
-        style="width: 100%">
-        <el-table-column
-          prop="id"
-          label="ID"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="name"
-          label="姓名">
-        </el-table-column>
-        <el-table-column
-          prop="amount1"
-          sortable
-          label="数值 1">
-        </el-table-column>
-        <el-table-column
-          prop="amount2"
-          sortable
-          label="数值 2">
-        </el-table-column>
-        <el-table-column
-          prop="amount3"
-          sortable
-          label="数值 3">
-        </el-table-column>
-        <el-table-column
-          prop="amount4"
-          sortable
-          label="数值 4">
-        </el-table-column>
-      </el-table>
+      <div class="details-table">
+        <el-table
+          :data="tableData6"
+          :span-method="arraySpanMethod"
+          border
+          style="width: 100%">
+          <el-table-column
+            prop="id"
+            label="ID"
+            width="180">
+          </el-table-column>
+          <el-table-column
+            prop="name"
+            label="姓名">
+          </el-table-column>
+          <el-table-column
+            prop="amount1"
+            sortable
+            label="数值 1">
+          </el-table-column>
+          <el-table-column
+            prop="amount2"
+            sortable
+            label="数值 2">
+          </el-table-column>
+          <el-table-column
+            prop="amount3"
+            sortable
+            label="数值 3">
+          </el-table-column>
+          <el-table-column
+            prop="amount4"
+            sortable
+            label="数值 4">
+          </el-table-column>
+        </el-table>
+      </div>
     </div>
   </div>
 </template>
@@ -112,7 +113,7 @@
     },
     components: {
       myHeader
-    }, 
+    },
     methods: {
       arraySpanMethod({ row, column, rowIndex, columnIndex }) {
         if (row.hasOwnProperty('crow')) {

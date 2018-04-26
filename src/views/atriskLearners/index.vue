@@ -59,7 +59,7 @@
           </el-menu-item>
         </router-link>
       </el-menu>
-     </scroll-bar>  
+     </scroll-bar>
     </div>
 
     <div class="main-container">
@@ -73,7 +73,6 @@
 </template>
 
 <script>
-
   import ScrollBar from '@/components/ScrollBar'
   import myHeader from './myHeader/myHeader'
   export default {
@@ -89,18 +88,17 @@
         flag: 0
       }
     },
-
     mounted() {
       console.log(this.$router.history.current.fullPath)
       this.index = this.$router.history.current.fullPath
       this.msg.title1 = this.$route.name
-     },
+    },
     components: {
       myHeader,
       ScrollBar
     },
     methods: {
-      changeindex(index,indexPath) {
+      changeindex(index, indexPath) {
         console.log(index)
       }
     }
@@ -116,7 +114,7 @@
     padding:5px 0px 20px 0px;
     .edit-form{
       margin-top: 30px;
-      width: 50%;
+      /*width: 50%;*/
       span{
         color: #606266;
         font-size: 14px;
