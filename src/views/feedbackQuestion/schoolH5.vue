@@ -39,25 +39,34 @@
       </el-table-column>
       <el-table-column label="反馈人" width="110" align="center">
         <template slot-scope="scope">
-          <span v-popover:popover3 style="width: 10px;height: 10px">
-            {{scope.row.feedback_name}}
-            <el-popover
-              ref="popover3"
-              placement="top-start"
-              width="200"
-              trigger="hover">
-              <div>
-                <el-row>
-                  <el-col :span="14" class="text-right" style="text-align: right">学校&nbsp;&nbsp;</el-col>
-                  <el-col :span="10">{{scope.row.school_name}}</el-col>
-                </el-row>
-                <el-row>
-                  <el-col :span="14" class="text-right">是否是班主任&nbsp;&nbsp;</el-col>
-                  <el-col :span="10">{{scope.row.header_teacher_flag}}</el-col>
-                </el-row>
-              </div>
-            </el-popover>
+          <span v-popover:popover3 style="cursor: pointer">
+           {{scope.row.feedback_name}}
           </span>
+          <el-popover
+            ref="popover3"
+            placement="top-start"
+            width="300"
+            trigger="hover">
+            <div>
+              <el-row>
+                <el-col :span="9" class="text-right" style="text-align: right">学校&nbsp;&nbsp;</el-col>
+                <el-col :span="15">{{scope.row.school_name}}</el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="9" class="text-right">是否是班主任&nbsp;&nbsp;</el-col>
+                <el-col :span="15">{{scope.row.header_teacher_flag}}</el-col>
+              </el-row>
+            </div>
+          </el-popover>
+          <!--<el-button v-popover:popover1>hover 激活</el-button>-->
+          <!--<el-popover-->
+            <!--ref="popover1"-->
+            <!--placement="top-start"-->
+            <!--title="标题"-->
+            <!--width="200"-->
+            <!--trigger="hover"-->
+            <!--content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。">-->
+          <!--</el-popover>-->
         </template>
       </el-table-column>
       <el-table-column label="手机号码" width="110" align="center">

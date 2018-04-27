@@ -68,7 +68,7 @@
       </el-form-item>
     </el-form>
     <!--列表//-->
-    <div class="infoHeadTable">已为您搜索到<span>{{this.total}}</span>条作品  当前测试版本号: v0.1.1</div>
+    <div class="infoHeadTable">已为您搜索到<span>{{this.total}}</span>条作品</div>
     <div style="margin: 0 30px">
       <el-table v-loading.body="listLoading"
                 :data="list"
@@ -344,8 +344,14 @@
         return statusMap[role]
       },
       timeFilter(item) {
-        const time = new Date(item)
-        return time.getFullYear() + '/' + (time.getMonth() + 1) + '/' + time.getDate() + ' ' + time.getHours() + ':' + time.getMinutes() + ':' + time.getSeconds()
+        const date = new Date(item)
+        const Y = date.getFullYear() + '/'
+        const M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '/'
+        const D = (date.getDate() < 10 ? '0' + (date.getDate()) : date.getDate()) + ' '
+        const h = (date.getHours() < 10 ? '0' + (date.getHours()) : date.getHours()) + ':'
+        const m = (date.getMinutes() < 10 ? '0' + (date.getMinutes()) : date.getMinutes()) + ':'
+        const s = (date.getSeconds() < 10 ? '0' + (date.getSeconds()) : date.getSeconds())
+        return Y + M + D + h + m + s
       }
     },
     created() {
@@ -486,6 +492,13 @@
         console.log(`当前页: ${val}`)
       },
       submitForm(formName) {
+        if (this.formExpertScore === 0) {
+          this.$message({
+            type: 'warning',
+            message: '请选择专家打分'
+          })
+          return
+        }
         const obj = { 'requests': [] }
         obj.requests.push({ 'recordId': this.form.activity.recordId, 'status': this.form.activity.status, 'expertScore': this.formExpertScore })
         updataWorkManagementInfo(obj).then(response => {
@@ -588,13 +601,25 @@
             return
           }
           const arr = []
+          const arrError = []
           for (let i = 0; i < this.multipleSelection.length; i++) {
             arr.push(this.multipleSelection[i].activity.recordId)
             obj.requests.push({ 'recordId': this.multipleSelection[i].activity.recordId, 'status': 3 })
+            if (this.multipleSelection[i].activity.status === 3) {
+              arrError.push(this.multipleSelection[i].activity.recordId)
+            }
           }
-          info = '您已选择' + arr.join(',') + '号作品为入围作品'
-          successInfo = arr.join(',') + '号作品已入围，请重新选择'
-          errorInfo = '操作已取消'
+          if (arrError.length > 0) {
+            this.$message({
+              message: arrError.join(',') + '号作品已入围，请重新选择',
+              type: 'warning'
+            })
+            return
+          } else {
+            info = '您已选择' + arr.join(',') + '号作品为入围作品'
+            successInfo = '操作成功'
+            errorInfo = '操作已取消'
+          }
         } else if (flag === 4) {
           if (this.multipleSelection.length < 1) {
             this.$message({
@@ -604,13 +629,26 @@
             return
           }
           const arr = []
+          const arrError = []
           for (let i = 0; i < this.multipleSelection.length; i++) {
             arr.push(this.multipleSelection[i].activity.recordId)
             obj.requests.push({ 'recordId': this.multipleSelection[i].activity.recordId, 'status': 2, 'expertScore': 0 })
+            if (this.multipleSelection[i].activity.status === 2) {
+              arrError.push(this.multipleSelection[i].activity.recordId)
+            }
           }
-          info = '您已选择' + arr.join(',') + '号作品未入围作品'
-          successInfo = arr.join(',') + '号作品未入围，请重新选择'
-          errorInfo = '操作已取消'
+          console.log(arrError)
+          if (arrError.length > 0) {
+            this.$message({
+              message: arrError.join(',') + '号作品未入围，请重新选择',
+              type: 'warning'
+            })
+            return
+          } else {
+            info = '您已选择' + arr.join(',') + '号作品为未入围作品'
+            successInfo = '操作成功'
+            errorInfo = '操作已取消'
+          }
         }
         this.$confirm(info, '操作确认', {
           confirmButtonText: '保存',
