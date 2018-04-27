@@ -50,7 +50,7 @@
       </el-form>
       <el-row :gutter="20">
         <el-col :span="12"><p>功能权限</p></el-col>
-        <el-col :span="12" class="buttonAlign"><el-button type="primary" plain icon="el-icon-plus" size="small">添加功能</el-button></el-col>
+        <el-col :span="12" class="buttonAlign"><el-button type="primary" plain icon="el-icon-plus" size="small" @click="functionAny">添加功能</el-button></el-col>
       </el-row>
       <el-table
         :data="tableData"
@@ -139,16 +139,16 @@
     <el-dialog title="" :visible.sync="dialogFormVisibleFunction" width="40%" label-width="100">
       <el-form :model="formFunction" :rules="rulesFunction" ref="ruleFormFunction">
         <el-form-item label="菜单名称" prop="handle_people">
-          <el-input v-model="formFunction.handle_people" auto-complete="off"></el-input>
+          <el-input v-model="formFunction.menuname" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="功能名称" prop="coadjutant">
-          <el-input v-model="formFunction.coadjutant" auto-complete="off"></el-input>
+          <el-input v-model="formFunction.name" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="功能标识"  prop="coadjutant">
-          <el-input v-model="formFunction.coadjutant" auto-complete="off"></el-input>
+          <el-input v-model="formFunction.code" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="功能备注"  prop="handle_remark">
-          <el-input type="textarea" v-model="formFunction.handle_remark"></el-input>
+          <el-input type="textarea" v-model="formFunction.remark"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer text-center el-dialog-top">
@@ -226,8 +226,20 @@
           address: '上海市'
         }],
         dialogFormVisibleFunction: false,
-        formFunction: {},
+        formFunction: {
+          menuname: '',
+          name: '',
+          code: '',
+          remark: ''
+        },
         rulesFunction: {
+          name: [
+            { required: true, message: '请输入菜单名称', trigger: 'blur' },
+            { max: 20, message: '最多可输入 20 个字符', trigger: 'blur' }
+          ],
+          mark: [
+            { max: 50, message: '最多可输入 50 个字符', trigger: 'blur' }
+          ]
         }
       }
     },
@@ -280,6 +292,9 @@
           type: 'info',
           message: '已取消操作'
         })
+      },
+      functionAny() {
+        this.dialogFormVisibleFunction = true
       }
     }
   }
