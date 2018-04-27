@@ -39,34 +39,25 @@
       </el-table-column>
       <el-table-column label="反馈人" width="110" align="center">
         <template slot-scope="scope">
-          <span v-popover:popover3 style="cursor: pointer">
-           {{scope.row.feedback_name}}
+          <span v-popover:popover3>
+            <span class="point">{{scope.row.feedback_name}}</span>
+            <el-popover
+              ref="popover3"
+              placement="top-start"
+              width="300"
+              trigger="hover">
+               <div>
+                <el-row>
+                  <el-col :span="9" class="text-right" style="text-align: right">学校&nbsp;&nbsp;</el-col>
+                  <el-col :span="15">{{scope.row.school_name}}</el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="9" class="text-right">是否是班主任&nbsp;&nbsp;</el-col>
+                  <el-col :span="15">{{scope.row.header_teacher_flag}}</el-col>
+                </el-row>
+              </div>
+            </el-popover>
           </span>
-          <el-popover
-            ref="popover3"
-            placement="top-start"
-            width="300"
-            trigger="hover">
-            <div>
-              <el-row>
-                <el-col :span="9" class="text-right" style="text-align: right">学校&nbsp;&nbsp;</el-col>
-                <el-col :span="15">{{scope.row.school_name}}</el-col>
-              </el-row>
-              <el-row>
-                <el-col :span="9" class="text-right">是否是班主任&nbsp;&nbsp;</el-col>
-                <el-col :span="15">{{scope.row.header_teacher_flag}}</el-col>
-              </el-row>
-            </div>
-          </el-popover>
-          <!--<el-button v-popover:popover1>hover 激活</el-button>-->
-          <!--<el-popover-->
-            <!--ref="popover1"-->
-            <!--placement="top-start"-->
-            <!--title="标题"-->
-            <!--width="200"-->
-            <!--trigger="hover"-->
-            <!--content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。">-->
-          <!--</el-popover>-->
         </template>
       </el-table-column>
       <el-table-column label="手机号码" width="110" align="center">
@@ -101,11 +92,6 @@
           <span>{{scope.row.handle_time}}</span>
         </template>
       </el-table-column>
-      <!--<el-table-column class-name="status-col" label="所在省" width="110" align="center">-->
-      <!--<template slot-scope="scope">-->
-      <!--<el-tag :type="scope.row.status | statusFilter">{{scope.row.status}}</el-tag>-->
-      <!--</template>-->
-      <!--</el-table-column>-->
       <el-table-column align="center" prop="created_at" label="处理状态" width="110">
         <template slot-scope="scope">
           {{scope.row.handle_status}}
@@ -268,7 +254,6 @@
     },
     methods: {
       fetchData() {
-        console.log(this.formInline.dateValue)
         let start_time = ''
         let end_time = ''
         if (this.formInline.dateValue === '' || this.formInline.dateValue == null) {
@@ -287,7 +272,6 @@
           now_page: this.currentPage,
           pagesize: this.pagesize
         }
-        console.log(obj)
         getSchoolH5List(obj).then(response => {
           console.log(response)
           this.list = response.response.info
