@@ -71,18 +71,18 @@ export const constantRouterMap = [
       }
     ]
   },
-  {
-    path: '/eventManagement',
-    component: Layout,
-    children: [
-      {
-        path: 'worksManagement',
-        name: 'worksManagement',
-        component: _import('eventManagement/worksManagement'),
-        meta: { title: '作品管理', icon: 'table' }
-      }
-    ]
-  },
+  // {
+  //   path: '/eventManagement',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'worksManagement',
+  //       name: 'worksManagement',
+  //       component: _import('eventManagement/worksManagement'),
+  //       meta: { title: '作品管理', icon: 'table' }
+  //     }
+  //   ]
+  // },
   { path: '*', redirect: '/404', hidden: true }
 ]
 
