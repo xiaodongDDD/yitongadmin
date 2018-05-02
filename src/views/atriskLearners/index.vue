@@ -22,7 +22,7 @@
           </el-menu-item>
         </router-link>
         <router-link to="/powerList">
-          <el-menu-item index="权限管理/powerList" disabled>
+          <el-menu-item index="权限管理/powerList">
             <i class="el-icon-menu"></i>
             <span slot="title">权限管理</span>
           </el-menu-item>
