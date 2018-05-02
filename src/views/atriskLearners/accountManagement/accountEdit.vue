@@ -43,22 +43,14 @@
             <el-input v-model="form.email"></el-input>
           </el-form-item>
           <el-form-item label="账户状态：">
-            <el-dropdown v-if="form.status === 0" trigger="click">
-              <el-button>
-                启用<i class="el-icon-caret-bottom el-icon--right"></i>
-              </el-button>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item>停用</el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
-            <el-dropdown v-else trigger="click">
-              <el-button>
-                停用<i class="el-icon-caret-bottom el-icon--right"></i>
-              </el-button>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item>启用</el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
+            <el-select v-model="form.status" placeholder="请选择">
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
           </el-form-item>
           <el-form-item>
             <router-link to="/accountList"><el-button>取消</el-button></router-link>
@@ -83,8 +75,9 @@
           type: '0',
           telephone: '13535790897',
           email: '134752398@348.cn',
-          status: 0
+          status: '停用'
         },
+        options: [{ value: '1', label: '启用' }, { value: '0', label: '停用' }],
         msg: {
           title1: '账户管理',
           title2: '编辑账户管理',
