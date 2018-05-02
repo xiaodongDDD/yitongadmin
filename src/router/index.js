@@ -62,87 +62,87 @@ export const constantRouterMap = [
         path: 'userList',
         name: '学校用户管理',
         component: UserList,
-        meta:{
-          title:'学校用户管理'
+        meta: {
+          title: '学校用户管理'
         }
       },
       {
         path: 'userEdit',
         name: '编辑学校用户',
         component: UserEdit,
-        meta:{
-          title:'编辑学校用户'
+        meta: {
+          title: '编辑学校用户'
         }
       },
       {
         path: 'userAdd',
         name: '新增学校用户',
         component: UserAdd,
-        meta:{
-          title:'新增学校用户'
+        meta: {
+          title: '新增学校用户'
         }
       },
       {
         path: 'accountList',
         name: '账户管理',
         component: AccountList,
-        meta:{
-          title:'账户管理'
+        meta: {
+          title: '账户管理'
         }
       },
       {
         path: 'accountEdit',
         name: '编辑账户信息',
         component: AccountEdit,
-        meta:{
-          title:'编辑账户信息'
+        meta: {
+          title: '编辑账户信息'
         }
       },
       {
         path: 'accountAdd',
         name: '新增账户信息',
         component: AccountAdd,
-        meta:{
-          title:'新增账户信息'
+        meta: {
+          title: '新增账户信息'
         }
       },
       {
         path: 'powerList',
         name: '权限管理',
         component: PowerList,
-        meta:{
-          title:'权限管理'
+        meta: {
+          title: '权限管理'
         }
       },
       {
         path: 'powerEdit',
         name: '编辑权限管理',
         component: PowerEdit,
-        meta:{
-          title:'编辑权限管理'
+        meta: {
+          title: '编辑权限管理'
         }
       },
       {
         path: 'itemList',
         component: ItemList,
         name: '评价项目管理',
-        meta:{
-          title:'评价项目管理'
+        meta: {
+          title: '评价项目管理'
         }
       },
       {
         path: 'officialList',
         name: '负责人管理',
         component: OfficialList,
-        meta:{
-          title:'负责人管理'
+        meta: {
+          title: '负责人管理'
         }
       },
       {
         path: 'officialEdit',
         name: '编辑负责人',
         component: OfficialEdit,
-        meta:{
+        meta: {
           title: '编辑负责人'
         }
       },
@@ -150,7 +150,7 @@ export const constantRouterMap = [
         path: 'officialAdd',
         name: '新增负责人',
         component: OfficialAdd,
-        meta:{
+        meta: {
           title: '新增负责人'
         }
       },
@@ -158,7 +158,7 @@ export const constantRouterMap = [
         path: 'itemEdit',
         name: '编辑评价项目',
         component: ItemEdit,
-        meta:{
+        meta: {
           title: '编辑评价项目'
         }
       },
@@ -170,7 +170,7 @@ export const constantRouterMap = [
       {
         path: 'transactorList',
         name: '执行人管理',
-        component: TransactorList,
+        component: TransactorList
       },
       {
         path: 'transactorEdit',
@@ -195,7 +195,7 @@ export const constantRouterMap = [
       {
         path: 'objectList',
         name: '评价对象管理',
-        component: ObjectList,
+        component: ObjectList
       },
       {
         path: 'objectMan',
@@ -209,7 +209,7 @@ export const constantRouterMap = [
       },
       {
         path: 'templateList',
-        name:'评价模板管理',
+        name: '评价模板管理',
         component: TemplateList
       },
       {
@@ -242,7 +242,7 @@ export const constantRouterMap = [
         name: '操作日志',
         component: LogList
       }]
-   },
+  },
   { path: '*', redirect: '/404', hidden: true }
 ]
 

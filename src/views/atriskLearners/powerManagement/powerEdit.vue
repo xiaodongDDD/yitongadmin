@@ -24,13 +24,11 @@
               <el-checkbox label="学校用户管理" name="powerlist"></el-checkbox>
               <el-checkbox label="账户管理" name="powerlist"></el-checkbox>
               <el-checkbox label="权限管理" name="powerlist"></el-checkbox>
-
-              <el-checkbox :indeterminate="isIndeterminate" v-mo  del="checkAll" @change="handleCheckAllChange" label="评价项目管理" name="powerlist">评价项目管理</el-checkbox>
+              <el-checkbox :indeterminate="isIndeterminate" label="评价项目管理" name="powerlist" v-model="checkAll" @change="handleCheckAllChange">评价项目管理</el-checkbox>
               <div style="margin: 15px 0;"></div>
-              <el-checkbox-group class="checkbox-menu" v-model="checkedCities" @change="handleCheckedCitiesChange">
-                <el-checkbox v-for="city in cities" :label="city" :key="city">{{city}}</el-checkbox>
+              <el-checkbox-group class="checkbox-menu" v-model="form.powerlist" @change="handleCheckedCitiesChange">
+                <el-checkbox v-for="city in cities" :label="city" :key="city">{{ city }}</el-checkbox>
               </el-checkbox-group>
-
               <el-checkbox label="评价模板管理" name="powerlist"></el-checkbox>
               <el-checkbox label="评价成果" name="powerlist"></el-checkbox>
               <el-checkbox label="操作日志" name="powerlist"></el-checkbox>
@@ -59,7 +57,7 @@
           schoolName: '石选晓可代发集齐啊小花',
           status: 'on',
           telephone: '13535790897',
-          powerlist: ['学校用户管理']
+          powerlist: []
         },
         msg: {
           title1: '权限管理',
@@ -68,28 +66,32 @@
           path: '/powerList'
         },
         checkAll: false,
-        checkedCities: ['负责人管理', '评价对象管理'],
+        checkedCities: [],
         cities: ['负责人管理', '执行人管理', '评价对象管理'],
-        isIndeterminate: true
+        isIndeterminate: false
       }
     },
     components: {
       myHeader
-    },   
+    },
     methods: {
       saveUser() {
-        let hehe = this.form.powerlist
+        const allcheck = this.form.powerlist.concat(this.checkedCities)
         console.log(this.form.powerlist)
-        this.$router.push({ path: '/powerList' })
+        console.log(allcheck)
+        // this.$router.push({ path: '/powerList' })
       },
       handleCheckAllChange(val) {
         this.checkedCities = val ? this.cities : []
         this.isIndeterminate = false
+        console.log(this.isIndeterminate)
       },
       handleCheckedCitiesChange(value) {
-        const checkedCount = value.length
+        console.log(value)
+        let checkedCount = value.length
         this.checkAll = checkedCount === this.cities.length
         this.isIndeterminate = checkedCount > 0 && checkedCount < this.cities.length
+        console.log(this.isIndeterminate )
       }
     }
   }

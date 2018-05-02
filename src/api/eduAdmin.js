@@ -1,20 +1,15 @@
 import request from '@/utils/request'
 
-export function getData(username, password) {
+export default function getData(username, password) {
   return request({
     url: '/user/login',
     method: 'post',
     data: {
       username,
-      password  
+      password
     }
   })
 }
-
-
-
-
-
 
 // import axios from 'axios'
 

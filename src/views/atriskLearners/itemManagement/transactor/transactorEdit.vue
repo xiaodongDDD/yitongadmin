@@ -55,12 +55,12 @@
           flag: 2,
           path1: '/itemList',
           path2: '/officialList'
-        }, 
+        }
       }
     },
     components: {
       myHeader
-    }, 
+    },
     methods: {
       saveUser() {
         this.$router.push({ path: '/userList' })

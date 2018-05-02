@@ -59,7 +59,7 @@
           title2: '新增账户',
           flag: 1,
           path: '/accountList'
-        },
+        }
       }
     },
     components: {

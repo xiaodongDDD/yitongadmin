@@ -48,12 +48,12 @@
           title2: '编辑学校用户管理',
           flag: 1,
           path: '/userList'
-        },
+        }
       }
     },
     components: {
       myHeader
-    },  
+    },
     methods: {
       saveUser() {
         this.$router.push({ path: '/userList' })

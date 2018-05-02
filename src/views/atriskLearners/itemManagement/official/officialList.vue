@@ -4,8 +4,8 @@
     <div class="content-detail">
     	<div class="title"><span class="officialMan">负责人管理</span><span class="goback">返回</span></div>
       <div class="smallTitle">
-        <span class='manName'>管理员{{}}</span>
-        <span class="num">负责人{{}}</span>
+        <span class='manName'>管理员{{ manName }}&nbsp&nbsp</span>
+        <span class="manNum">负责人{{ manNum }}</span>
       </div>
       <div class="list-table">
         <el-table
@@ -70,8 +70,14 @@
         <router-link to="/officialAdd">
           <el-button icon="el-icon-plus">新增</el-button>
         </router-link>
+         <el-pagination
+          style='display:inline-block;margin-left:30%;'
+          @current-change="handleCurrentChange" 
+          background
+          layout="prev, pager, next"
+          :total="1000">
+        </el-pagination>
       </div>
-
       <el-dialog
         title="提示"
         :visible.sync="centerDialogVisible"
@@ -92,13 +98,15 @@
 </template>
 
 <script>
-   import myHeader from '../../myHeader/myHeader'
+  import myHeader from '../../myHeader/myHeader'
   export default {
     name: 'officialList',
     data() {
-    	return {
+      return {
         centerDialogVisible: false,
         userName: '',
+        manName: 'ray',
+        manNum: 100,
         form: {
           name: ''
         },
@@ -137,7 +145,7 @@
     },
     components: {
       myHeader
-    },   
+    },
     methods: {
       handleEdit(index, row) {
         console.log(index, row)
@@ -146,6 +154,9 @@
       handleDelete(index, row) {
         console.log(index, row)
         this.centerDialogVisible = true
+      },
+      handleCurrentChange(val) {
+        console.log(`当前页: ${val}`)
       }
     }
   }
@@ -158,6 +169,9 @@
   overflow: hidden;
   margin-bottom: 30px;
   margin-top: 20px;
+  color: #333;
+  font-size: 18px;
+  padding: 0px 20px;
 }
 .officialMan {
    float: left;
@@ -173,12 +187,15 @@
 }
 .smallTitle {
   margin-bottom: 10px;
+  padding: 0px 20px;
 }
 .manName {
   font-size: 14px;
+  color: #333;
 }
-.num {
+.manNum {
     font-size: 14px;
+    color: #333;
 }
 .dialogContent span {
   display:block;

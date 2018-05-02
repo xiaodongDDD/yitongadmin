@@ -11,6 +11,7 @@
           </el-form-item>
           <el-form-item label="负责学科：">
             <el-select
+              id='officialSelect1'
               v-model="value1"
               multiple
               collapse-tags
@@ -25,6 +26,7 @@
           </el-form-item>
           <el-form-item label="负责年级：">
             <el-select
+              id='officialSelect2'
               v-model="value2"
               multiple
               collapse-tags
@@ -108,7 +110,7 @@
     },
     components: {
       myHeader
-    },  
+    },
     methods: {
       saveUser() {
         // this.$router.push({ path: '/officialList' })

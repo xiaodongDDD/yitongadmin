@@ -28,13 +28,14 @@
 
 <script>
   import Breadcrumb from '@/components/Breadcrumb'
+  import { removeToken } from '@/utils/auth.js'
   export default {
     name: 'myHeader',
-    props:['msg'],
+    props: ['msg'],
     data() {
       return {
         activeIndex: '1',
-        activeIndex2: '1',
+        activeIndex2: '1'
       }
     },
     components: {
@@ -45,8 +46,12 @@
         console.log(key, keyPath)
       },
       handleCommand(command) {
-        console.log(1111)
-        console.log(command)
+        if (command === 'b') {
+          removeToken()
+          this.$router.push({path:'/login'})
+        } else if(command === 'a') {
+          this.$router.push({ path: '/' })
+        }
       }
     }
   }

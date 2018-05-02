@@ -90,7 +90,7 @@
           title2: '编辑账户管理',
           flag: 1,
           path: '/accountList'
-        },
+        }
       }
     },
     components: {

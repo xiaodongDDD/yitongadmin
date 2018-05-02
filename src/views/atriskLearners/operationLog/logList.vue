@@ -1,51 +1,69 @@
 <template>
   <div class="center-content log-list">
-    <div class="list-table">
-      <el-table
-        :data="tableData"
-        border
-        style="width: 100%">
-        <el-table-column
-          align="center"
-          prop="name"
-          label="操作人"
-          width="">
-        </el-table-column>
-        <el-table-column
-          align="center"
-          prop="type"
-          label="类型"
-          width="">
-        </el-table-column>
-        <el-table-column
-          align="center"
-          prop="instruction"
-          label="内容"
-          width="">
-        </el-table-column>
-        <el-table-column
-          align="center"
-          prop="time"
-          label="时间"
-          width="">
-        </el-table-column>
-        <el-table-column
-          align="center"
-          prop="IP"
-          label="IP"
-          width="">
-        </el-table-column>
+    <my-header :msg='msg'></my-header>
+    <p class="position"></p>
+    <div class="content-detail">
+      <div class="list-table">
+        <el-table
+          :data="tableData"
+          border
+          style="width: 100%">
+          <el-table-column
+            align="center"
+            prop="name"
+            label="操作人"
+            width="">
+          </el-table-column>
+          <el-table-column
+            align="center"
+            prop="type"
+            label="类型"
+            width="">
+          </el-table-column>
+          <el-table-column
+            align="center"
+            prop="instruction"
+            label="内容"
+            width="">
+          </el-table-column>
+          <el-table-column
+            align="center"
+            prop="time"
+            label="时间"
+            width="">
+          </el-table-column>
+          <el-table-column
+            align="center"
+            prop="IP"
+            label="IP"
+            width="">
+          </el-table-column>
+        </el-table>
 
-      </el-table>
+         <el-pagination
+          style='display:inline-block;margin-left:37%;margin-top:20px'
+          @current-change="handleCurrentChange"
+          background
+          layout="prev, pager, next"
+          :total="1000">
+        </el-pagination>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+  import myHeader from '../myHeader/myHeader'
   export default {
     name: 'logList',
     data() {
       return {
+        msg: {
+          title1: '操作日志',
+          title2: '',
+          flag: 0,
+          path: '/itemList'
+        },
         tableData: [{
           name: '2018年第二学期语文补差',
           type: '学校',
@@ -61,6 +79,14 @@
           time: '2018/03/12 15:00',
           IP: ''
         }]
+      }
+    },
+    components: {
+      myHeader
+    },
+    methods: {
+      handleCurrentChange(val) {
+        console.log(`当前页: ${val}`)
       }
     }
   }

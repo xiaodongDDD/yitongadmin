@@ -47,12 +47,12 @@
           title2: '新增学校用户',
           flag: 1,
           path: '/userList'
-        },
+        }
       }
     },
     components: {
       myHeader
-    },  
+    },
     methods: {
       saveUser() {
         this.$router.push({ path: '/userList' })

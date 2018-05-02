@@ -67,7 +67,7 @@
           flag: 2,
           path1: '/itemList',
           path2: '/officialList'
-        },     
+        },
         options1: [{
           value: '选项1',
           label: '黄金糕'
@@ -106,10 +106,10 @@
     },
     components: {
       myHeader
-    },  
+    },
     methods: {
       saveUser() {
-        this.$router.push({ path: '/itmeList' })
+        this.$router.push({ path: '/itemList' })
       }
     }
   }

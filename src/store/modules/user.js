@@ -1,4 +1,4 @@
-  // import { logout } from '@/api/login'
+// import { logout } from '@/api/login'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { getList } from '@/api/table'
 
@@ -26,13 +26,13 @@ const user = {
     SET_ROLES: (state, roles) => {
       state.roles = roles
     },
-    SET_TITLE1: (state,title1) => {
+    SET_TITLE1: (state, title1) => {
       state.title1 = title1
     },
-    SET_TITLE2: (state,title2) => {
+    SET_TITLE2: (state, title2) => {
       state.title2 = title2
     },
-    SET_PATH: (state,paths) => {
+    SET_PATH: (state, paths) => {
       state.paths = paths
     }
   },

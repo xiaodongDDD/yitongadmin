@@ -93,6 +93,13 @@
         <router-link to="/itemAdd">
           <el-button icon="el-icon-plus">新增</el-button>
         </router-link>
+        <el-pagination
+          style='display:inline-block;margin-left:30%;'
+          @current-change="handleCurrentChange"  
+          background
+          layout="prev, pager, next"
+          :total="1000">
+        </el-pagination>
       </div>
 
       <el-dialog
@@ -117,85 +124,88 @@
 
 <script>
 import myHeader from '../../myHeader/myHeader'
-  export default {
-    name: 'itemList',
-    data() {
-    	return {
-        centerDialogVisible: false,
-        userName: '',
-        form: {
-          name: ''
-        },
-        msg: {
-          title1: '项目评价管理',
-          title2: '',
-          flag: 0,
-          path: '/itemList'
-        },
-        // options: [{
-        //   value: '选项1',
-        //   label: '启用'
-        // }, {
-        //   value: '选项2',
-        //   label: '停用'
-        // }],
-        // value: '选项1',
-        tableData: [{
-          onOff: 0,
-          name: '都龙族',
-          userName: 'doulongzu',
-          type: '学校',
-          schoolName: '武宁路育才',
-          email: '16783949@163.com',
-          telephone: '13533790697'
-        }, {
-          onOff: 1,
-          name: '都龙族',
-          userName: 'doulongzu',
-          type: '运营',
-          schoolName: '',
-          email: '16783949@163.com',
-          telephone: '13533790697'
-        }, {
-          onOff: 0,
-          name: '都龙族',
-          userName: 'doulongzu',
-          type: '学校',
-          schoolName: '武宁路育才',
-          email: '16783949@163.com',
-          telephone: '13533790697'
-        }, {
-          onOff: 0,
-          name: '都龙族',
-          userName: 'doulongzu',
-          type: '运营',
-          schoolName: '武宁路育才11',
-          email: '1623123783949@163.com',
-          telephone: '13533790697'
-        }]
-      }
+export default {
+  name: 'itemList',
+  data() {
+    return {
+      centerDialogVisible: false,
+      userName: '',
+      form: {
+        name: ''
+      },
+      msg: {
+        title1: '项目评价管理',
+        title2: '',
+        flag: 0,
+        path: '/itemList'
+      },
+      // options: [{
+      //   value: '选项1',
+      //   label: '启用'
+      // }, {
+      //   value: '选项2',
+      //   label: '停用'
+      // }],
+      // value: '选项1',
+      tableData: [{
+        onOff: 0,
+        name: '都龙族',
+        userName: 'doulongzu',
+        type: '学校',
+        schoolName: '武宁路育才',
+        email: '16783949@163.com',
+        telephone: '13533790697'
+      }, {
+        onOff: 1,
+        name: '都龙族',
+        userName: 'doulongzu',
+        type: '运营',
+        schoolName: '',
+        email: '16783949@163.com',
+        telephone: '13533790697'
+      }, {
+        onOff: 0,
+        name: '都龙族',
+        userName: 'doulongzu',
+        type: '学校',
+        schoolName: '武宁路育才',
+        email: '16783949@163.com',
+        telephone: '13533790697'
+      }, {
+        onOff: 0,
+        name: '都龙族',
+        userName: 'doulongzu',
+        type: '运营',
+        schoolName: '武宁路育才11',
+        email: '1623123783949@163.com',
+        telephone: '13533790697'
+      }]
+    }
+  },
+  components: {
+    myHeader
+  },
+  methods: {
+    handleEdit(index, row) {
+      console.log(index, row)
+      this.$router.push({ path: '/itemEdit' })
     },
-     components: {
-      myHeader
+    handleDelete(index, row) {
+      console.log(index, row)
+      this.centerDialogVisible = true
     },
-    methods: {
-      handleEdit(index, row) {
-        console.log(index, row)
-        this.$router.push({ path: '/itemEdit' })
-      },
-      handleDelete(index, row) {
-        console.log(index, row)
-        this.centerDialogVisible = true
-      },
-      handleCommand(indexx) {
-        // console.log(command)
-        console.log(indexx)
-      },
-      change() {
-        console.log("change")
-      }
+    handleCommand(indexx) {
+      // console.log(command)
+      console.log(indexx)
+    },
+    change() {
+      console.log('change')
+    },
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`)
     }
   }
+}
 </script>
 
 <style scoped>

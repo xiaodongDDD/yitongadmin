@@ -70,7 +70,7 @@
           email: '134752398@348.cn',
           status: 0
         },
-         msg: {
+        msg: {
           title1: '项目评价管理',
           title2: '编辑执行人',
           flag: 1,
@@ -131,7 +131,7 @@
     },
     components: {
       myHeader
-    },  
+    },
     methods: {
       saveUser() {
         // this.$router.push({ path: '/poorStudentEdit' })

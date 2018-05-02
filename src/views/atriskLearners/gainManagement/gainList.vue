@@ -30,6 +30,14 @@
             </template>
           </el-table-column>
         </el-table>
+
+        <el-pagination
+          style='display:inline-block;margin-left:37%;margin-top:20px'
+          @current-change="handleCurrentChange" 
+          background
+          layout="prev, pager, next"
+          :total="1000">
+        </el-pagination>
       </div>
     </div>
   </div>
@@ -58,10 +66,13 @@
     },
     components: {
       myHeader
-    },   
+    },
     methods: {
       handleEdit(index, row) {
         this.$router.push({ path: '/gainSchoolList' })
+      },
+      handleCurrentChange(val) {
+        console.log(`当前页: ${val}`)
       }
     }
   }

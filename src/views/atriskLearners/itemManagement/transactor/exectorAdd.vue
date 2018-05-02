@@ -133,7 +133,7 @@
     },
     components: {
       myHeader
-    }, 
+    },
     methods: {
       saveUser() {
         this.$router.push({ path: '/poorStudentEdit' })

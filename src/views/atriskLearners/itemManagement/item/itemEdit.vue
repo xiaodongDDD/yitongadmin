@@ -9,7 +9,7 @@
             <el-input v-model="form.name"></el-input>
           </el-form-item>
           <el-form-item label="项目说明：">
-            <el-input type="textarea" :rows="10" v-model="form.email"></el-input>
+            <el-input type="textarea" :rows="10" style='max-width:700px;' v-model="form.email"></el-input>
           </el-form-item>
           <el-form-item label="项目状态：">
             <el-dropdown v-if="form.status === 0" trigger="click">
@@ -40,36 +40,36 @@
 </template>
 <script>
  import myHeader from '../../myHeader/myHeader'
-  export default {
-    name: 'itemEdit',
-    data() {
-      return {
-        form: {
-          name: '石选晓',
-          schoolName: '武宁路小学',
-          userName: 'shixiuan',
-          type: '0',
-          telephone: '13535790897',
-          email: '134752398@348.cn',
-          status: 0
-        },
-        msg: {
-          title1: '评价项目管理',
-          title2: '编辑评价项目管理',
-          flag: 1,
-          path: '/itemList'
-        },
-      }
-    },
-    components: {
-      myHeader
-    },        
-    methods: {
-      saveUser() {
-        this.$router.push({ path: '/accountList' })
-      }
-    }
-  }
+ export default {
+   name: 'itemEdit',
+   data() {
+     return {
+       form: {
+         name: '石选晓',
+         schoolName: '武宁路小学',
+         userName: 'shixiuan',
+         type: '0',
+         telephone: '13535790897',
+         email: '134752398@348.cn',
+         status: 0
+       },
+       msg: {
+         title1: '评价项目管理',
+         title2: '编辑评价项目管理',
+         flag: 1,
+         path: '/itemList'
+       }
+     }
+   },
+   components: {
+     myHeader
+   },
+   methods: {
+     saveUser() {
+       this.$router.push({ path: '/accountList' })
+     }
+   }
+ }
 </script>
 
 <style scoped>

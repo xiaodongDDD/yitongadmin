@@ -46,7 +46,8 @@
             align="center"
             label="执行人">
              <template slot-scope="scope">
-              <span @click='go'>12</span>
+              <span v-if='scope.row.nums != 0' @click='go' style='cursor: pointer;'>{{ scope.row.nums }}</span>
+              <span @click='go' v-if='scope.row.nums == 0' style='cursor: pointer;'><i class="el-icon-edit-outline"></i></span>
             </template>
           </el-table-column>
 
@@ -60,6 +61,14 @@
           </el-table-column>
         </el-table>
       </div>
+
+       <el-pagination
+          style='display:inline-block;margin-left:37%;margin-top:20px;' 
+          @current-change="handleCurrentChange" 
+          background
+          layout="prev, pager, next"
+          :total="1000">
+        </el-pagination>
 
       <el-dialog
         title="提示"
@@ -83,62 +92,68 @@
 
 <script>
  import myHeader from '../../myHeader/myHeader'
-  export default {
-    name: 'officialList',
-    data() {
-    	return {
-        centerDialogVisible: false,
-        userName: '',
-        form: {
-          name: ''
-        },
-        msg: {
-          title1: '项目评价管理',
-          title2: '执行人管理',
-          flag: 1,
-          path: '/itemList'
-        },
-        tableData: [{
-          onOff: 0,
-          name: '都龙族',
-          userName: 'doulongzu',
-          type: '学校',
-          schoolName: '武宁路育才',
-          telephone: '13533790697'
-        }, {
-          onOff: 1,
-          name: '都龙族',
-          userName: 'doulongzu',
-          type: '运营',
-          schoolName: '',
-          telephone: '13533790697'
-        }, {
-          onOff: 0,
-          name: '都龙族',
-          userName: 'doulongzu',
-          type: '学校',
-          schoolName: '武宁路育才',
-          telephone: '13533790697'
-        }]
-      }
-    },
-    components: {
-      myHeader
-    },  
-    methods: {
-      handleEdit(index, row) {
-        console.log(index, row)
-        this.$router.push({ path: '/transactorEdit' })
-      },
-      handleDelete(index, row) {
-        console.log(index, row)
-        this.centerDialogVisible = true
-      },
-      go() {
-        this.$router.push({ path: '/poorStudentEdit' })
-      }
-    }
-  }
+ export default {
+   name: 'officialList',
+   data() {
+     return {
+       centerDialogVisible: false,
+       userName: '',
+       form: {
+         name: ''
+       },
+       msg: {
+         title1: '项目评价管理',
+         title2: '执行人管理',
+         flag: 1,
+         path: '/itemList'
+       },
+       tableData: [{
+         onOff: '在人间有谁',
+         name: '都龙族',
+         userName: 'doulongzu',
+         type: '学校',
+         schoolName: '武宁路育才',
+         telephone: '13533790697',
+         nums: 0
+       }, {
+         onOff: '活得不像是',
+         name: '都龙族',
+         userName: 'doulongzu',
+         type: '运营',
+         schoolName: '',
+         telephone: '13533790697',
+         nums: 12
+       }, {
+         onOff: '一场炼狱',
+         name: '都龙族',
+         userName: 'doulongzu',
+         type: '学校',
+         schoolName: '武宁路育才',
+         telephone: '13533790697',
+         nums: 22
+       }]
+     }
+   },
+   components: {
+     myHeader
+   },
+   methods: {
+     handleEdit(index, row) {
+       console.log(index, row)
+       this.$router.push({ path: '/transactorEdit' })
+     },
+     handleDelete(index, row) {
+       console.log(index, row)
+       this.centerDialogVisible = true
+     },
+     go() {
+       this.$router.push({ path: '/poorStudentEdit' })
+     },
+     handleCurrentChange(val) {
+       console.log(`当前页: ${val}`)
+     }
+   }
+}
 </script>
 
 <style scoped>

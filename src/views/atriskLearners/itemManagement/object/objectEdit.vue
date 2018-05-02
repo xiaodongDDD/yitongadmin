@@ -35,38 +35,38 @@
 </template>
 
 <script>
-  import myHeader from '../../myHeader/myHeader'
-  export default {
-    name: 'transactorEdit',
-    data() {
-      return {
-        form: {
-          name: '石选晓',
-          type: 0,
-          schoolName: '石选晓可代发集齐啊小花',
-          status: 'on',
-          telephone: '13535790897',
-          powerlist: ['学校用户管理']
-        },
-        msg: {
-          title1: '项目评价管理',
-          title2: '评价对象管理',
-          title3: '编辑评价对象管理',
-          flag: 2,
-          path1: '/itemList',
-          path2: '/objectList'
-        },
-      }
-    },
-    components: {
-      myHeader
-    }, 
-    methods: {
-      saveUser() {
-        this.$router.push({ path: '/objectList' })
-      }
-    }
-  }
+ import myHeader from '../../myHeader/myHeader'
+ export default {
+   name: 'transactorEdit',
+   data() {
+     return {
+       form: {
+         name: '石选晓',
+         type: 0,
+         schoolName: '石选晓可代发集齐啊小花',
+         status: 'on',
+         telephone: '13535790897',
+         powerlist: ['学校用户管理']
+       },
+       msg: {
+         title1: '项目评价管理',
+         title2: '评价对象管理',
+         title3: '编辑评价对象管理',
+         flag: 2,
+         path1: '/itemList',
+         path2: '/objectList'
+       }
+     }
+   },
+   components: {
+     myHeader
+   },
+   methods: {
+     saveUser() {
+       this.$router.push({ path: '/objectList' })
+     }
+   }
+ }
 </script>
 
 <style scoped>

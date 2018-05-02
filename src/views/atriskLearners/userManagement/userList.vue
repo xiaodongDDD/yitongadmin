@@ -78,6 +78,13 @@
         <router-link to="/userAdd">
           <el-button icon="el-icon-plus">新增</el-button>
         </router-link>
+        <el-pagination
+          style='display:inline-block;margin-left:30%;'
+          @current-change="handleCurrentChange"  
+          background
+          layout="prev, pager, next"
+          :total="1000">
+        </el-pagination>
       </div>
 
       <el-dialog
@@ -135,9 +142,9 @@
         }]
       }
     },
-     components: {
+    components: {
       myHeader
-    },        
+    },
     methods: {
       handleEdit(index, row) {
         console.log(index, row)
@@ -146,6 +153,9 @@
       handleDelete(index, row) {
         console.log(index, row)
         this.centerDialogVisible = true
+      },
+      handleCurrentChange(val) {
+        console.log(`当前页: ${val}`)
       }
     }
   }

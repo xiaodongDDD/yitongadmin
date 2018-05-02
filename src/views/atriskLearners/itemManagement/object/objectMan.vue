@@ -39,6 +39,14 @@
         </el-table>
       </div>
 
+      <el-pagination
+          style='display:inline-block;margin-left:37%;margin-top:20px' 
+          @current-change="handleCurrentChange" 
+          background
+          layout="prev, pager, next"
+          :total="1000">
+      </el-pagination>
+
       <el-dialog
         title="提示"
         :visible.sync="centerDialogVisible"
@@ -59,54 +67,57 @@
 </template>
 
 <script>
-  import myHeader from '../../myHeader/myHeader'
-  export default {
-    name: 'objectMan',
-    data() {
-    	 return {
-        centerDialogVisible: false,
-        userName: '',
-        form: {
-          name: ''
-        },
-        msg: {
-          title1: '评价项目管理',
-          title2: '评价对象管理',
-          flag: 1,
-          path: '/itemList'
-        },
-        tableData: [{
-          onOff: 0,
-          name: '都龙族',
-          userName: 'doulongzu',
-          type: '学校'
-        }, {
-          onOff: 1,
-          name: '都龙族',
-          userName: 'doulongzu',
-          type: '运营'
-        }, {
-          onOff: 2,
-          name: '都龙族',
-          userName: 'doulongzu',
-          type: '运营'
-        }]
-      }
-    },
-    components: {
-      myHeader
-    }, 
-    methods: {
-      handleEdit(index, row) {
-        console.log(index, row)
-        this.$router.push({ path: '/exectorEdit' })
-      },
-      handleDelete(index, row) {
-        console.log(index, row)
-        this.centerDialogVisible = true
-      }
-    }
-  }
+ import myHeader from '../../myHeader/myHeader'
+ export default {
+   name: 'objectMan',
+   data() {
+     return {
+       centerDialogVisible: false,
+       userName: '',
+       form: {
+         name: ''
+       },
+       msg: {
+         title1: '评价项目管理',
+         title2: '评价对象管理',
+         flag: 1,
+         path: '/itemList'
+       },
+       tableData: [{
+         onOff: 0,
+         name: '都龙族',
+         userName: 'doulongzu',
+         type: '学校'
+       }, {
+         onOff: 1,
+         name: '都龙族',
+         userName: 'doulongzu',
+         type: '运营'
+       }, {
+         onOff: 2,
+         name: '都龙族',
+         userName: 'doulongzu',
+         type: '运营'
+       }]
+     }
+   },
+   components: {
+     myHeader
+   },
+   methods: {
+     handleEdit(index, row) {
+       console.log(index, row)
+       this.$router.push({ path: '/exectorEdit' })
+     },
+     handleDelete(index, row) {
+       console.log(index, row)
+       this.centerDialogVisible = true
+     },
+     handleCurrentChange(val) {
+       console.log(`当前页: ${val}`)
+     }
+   }
+ }
 </script>
 
 <style scoped>

@@ -4,8 +4,8 @@
       <div class="content-detail">
         <div class="title"><span class="officialMan">学困生辅导执行人管理</span><span class="goback">返回</span></div>
       <div class="smallTitle">
-        <span class='manName'>管理员{{}}</span>
-        <span class="num">负责人{{}}</span>
+        <span class='manName'>管理员{{ manName }}&nbsp&nbsp</span>
+        <span class="manNum">负责人{{ manNum }}</span>
       </div>
       <div class="list-table">
         <el-table
@@ -60,6 +60,13 @@
         <router-link to="/exectorAdd">
           <el-button icon="el-icon-plus">新增</el-button>
         </router-link>
+        <el-pagination
+          style='display:inline-block;margin-left:30%;' 
+          @current-change="handleCurrentChange" 
+          background
+          layout="prev, pager, next"
+          :total="1000">
+        </el-pagination>
       </div>
 
       <el-dialog
@@ -86,18 +93,20 @@
   export default {
     name: 'poorStudent',
     data() {
-    	 return {
+      return {
         centerDialogVisible: false,
         userName: '',
         form: {
           name: ''
         },
+        manName: 'ray',
+        manNum: '111',
         msg: {
           title1: '项目评价管理',
           title2: '执行人管理',
           flag: 1,
-          path: '/itemList',
-        },    
+          path: '/itemList'
+        },
         tableData: [{
           onOff: 0,
           name: '都龙族',
@@ -120,7 +129,7 @@
     },
     components: {
       myHeader
-    },   
+    },
     methods: {
       handleEdit(index, row) {
         console.log(index, row)
@@ -129,6 +138,9 @@
       handleDelete(index, row) {
         console.log(index, row)
         this.centerDialogVisible = true
+      },
+      handleCurrentChange(val) {
+        console.log(`当前页: ${val}`)
       }
     }
   }
@@ -160,7 +172,7 @@
 .manName {
   font-size: 14px;
 }
-.num {
+.manNum {
     font-size: 14px;
 }
 </style>
