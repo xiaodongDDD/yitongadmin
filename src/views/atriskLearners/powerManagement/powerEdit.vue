@@ -25,7 +25,7 @@
               <el-checkbox label="账户管理" name="powerlist"></el-checkbox>
               <el-checkbox label="权限管理" name="powerlist"></el-checkbox>
 
-              <el-checkbox :indeterminate="isIndeterminate" v-mo  del="checkAll" @change="handleCheckAllChange" label="评价项目管理" name="powerlist">评价项目管理</el-checkbox>
+              <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange" label="评价项目管理" name="powerlist">评价项目管理</el-checkbox>
               <div style="margin: 15px 0;"></div>
               <el-checkbox-group class="checkbox-menu" v-model="checkedCities" @change="handleCheckedCitiesChange">
                 <el-checkbox v-for="city in cities" :label="city" :key="city">{{city}}</el-checkbox>
@@ -75,7 +75,7 @@
     },
     components: {
       myHeader
-    },   
+    },
     methods: {
       saveUser() {
         let hehe = this.form.powerlist

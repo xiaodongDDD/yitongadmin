@@ -81,7 +81,7 @@
         form: {
           name: '2018年第一学期语文所有学生补差',
           type: ['成绩', '态度'],
-          signList: [{ sign: '成绩空的房间阿里维度：', type: '成绩', rate: '40%', target: [{ type: '基础', rate: '30%' }, { type: '阅读', rate: '20%' }, { type: '作文', rate: '30%' }], rank: [{ type: '思维', rate: '30%' }, { type: '礼仪', rate: '20%' }] },
+          signList: [{ sign: '成绩空的房阿里维度：', type: '成绩', rate: '40%', target: [{ type: '基础', rate: '30%' }, { type: '阅读', rate: '20%' }, { type: '作文', rate: '30%' }], rank: [{ type: '思维', rate: '30%' }, { type: '礼仪', rate: '20%' }] },
             { sign: '态度维度：', type: '态度', rate: '60%', target: [{ type: '思想', rate: '30%' }], rank: [{ type: '优秀', rate: '30%' }] }],
           status: 0
         },
