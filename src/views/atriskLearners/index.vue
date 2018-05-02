@@ -175,7 +175,19 @@
     }
   }
   .big-label{
-    /*min-width: 100px;*/
     text-indent: 30px;
+  }
+  .link-item{
+    .el-breadcrumb__inner{
+      font-weight: 700!important;
+    }
+  }
+  .step-item{
+    .el-breadcrumb__inner{
+      color: #99a9bf!important;
+    }
+    .is-link{
+      font-weight: 400!important;
+    }
   }
 </style>

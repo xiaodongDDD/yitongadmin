@@ -24,12 +24,7 @@
               <el-checkbox label="学校用户管理" name="powerlist"></el-checkbox>
               <el-checkbox label="账户管理" name="powerlist"></el-checkbox>
               <el-checkbox label="权限管理" name="powerlist"></el-checkbox>
-<<<<<<< HEAD
               <el-checkbox :indeterminate="isIndeterminate" label="评价项目管理" name="powerlist" v-model="checkAll" @change="handleCheckAllChange">评价项目管理</el-checkbox>
-=======
-
-              <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange" label="评价项目管理" name="powerlist">评价项目管理</el-checkbox>
->>>>>>> bd2143aef4819ac6ea2752633e1062347ae0ab38
               <div style="margin: 15px 0;"></div>
               <el-checkbox-group class="checkbox-menu" v-model="form.powerlist" @change="handleCheckedCitiesChange">
                 <el-checkbox v-for="city in cities" :label="city" :key="city">{{ city }}</el-checkbox>
@@ -93,10 +88,10 @@
       },
       handleCheckedCitiesChange(value) {
         console.log(value)
-        let checkedCount = value.length
+        const checkedCount = value.length
         this.checkAll = checkedCount === this.cities.length
         this.isIndeterminate = checkedCount > 0 && checkedCount < this.cities.length
-        console.log(this.isIndeterminate )
+        console.log(this.isIndeterminate)
       }
     }
   }
