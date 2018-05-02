@@ -149,6 +149,7 @@
             <el-button type="" size="mini" @click="operating(scope.row,1)" v-if="scope.row.activity.status !== 3">入围</el-button>
             <el-button type="" size="mini" @click="operating(scope.row,2)" v-if="scope.row.activity.status === 3">取消</el-button>
             <el-button type="" size="mini" @click="goMark(scope.row)" v-if="scope.row.activity.status === 3">专家打分</el-button>
+            <el-button type="danger" size="mini" @click="deleteData(scope.row)" v-if="scope.row.activity.status !== 3">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -210,7 +211,7 @@
 </template>
 
 <script>
-  import { getWorkManagementList, updataWorkManagementInfo } from '@/api/workManagement'
+  import { getWorkManagementList, updataWorkManagementInfo, deleteWorkManagementInfo } from '@/api/workManagement'
   import dataProvinces from '@/staticData/provinces.json'
   export default {
     data() {
@@ -698,6 +699,36 @@
       timeFilter(item) {
         const time = new Date(item)
         return time.getFullYear() + '/' + (time.getMonth() + 1) + '/' + time.getDate() + '/' + time.getHours() + ':' + time.getMinutes() + ':' + time.getSeconds()
+      },
+      deleteData(item) {
+        this.$confirm('此操作将永久删除该数据, 是否继续?', '警告', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+          center: true
+        }).then(() => {
+          deleteWorkManagementInfo(item).then(response => {
+            if (response.response.info[0].status === '1') {
+              this.$message({
+                type: 'success',
+                message: '删除成功!'
+              })
+              this.dialogFormVisible = false
+              this.currentPage = 1
+              this.fetchData()
+            } else {
+              this.$message({
+                message: response.response.info[0].msg,
+                type: 'error'
+              })
+            }
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
       }
     }
   }
