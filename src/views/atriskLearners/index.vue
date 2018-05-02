@@ -179,12 +179,15 @@
   }
   .link-item{
     .el-breadcrumb__inner{
-      font-weight: 700!important;
+      color: #303133!important;
+      font-weight: 500!important;
+      font-size: 16px!important;
     }
   }
   .step-item{
     .el-breadcrumb__inner{
       color: #99a9bf!important;
+      font-size: 16px!important;
     }
     .is-link{
       font-weight: 400!important;
