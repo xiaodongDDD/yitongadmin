@@ -1,6 +1,9 @@
 <template>
   <div class="myInfo">
     <el-form ref="form" :model="form" label-width="100px" class="formMyInfo" :rules="rules">
+      <el-form-item label="头像">
+        <img src="../../../assets/404_images/404_cloud.png" height="100" class="imgStyle" width="100"/>
+      </el-form-item>
       <el-form-item label="姓名" prop="name">
         <el-input v-model="form.name" ></el-input>
       </el-form-item>

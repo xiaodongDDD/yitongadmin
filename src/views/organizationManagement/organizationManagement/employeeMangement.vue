@@ -30,19 +30,15 @@
             :expand-on-click-node="false">
               <span class="custom-tree-node" slot-scope="{ node, data }">
                 <span>{{ node.label }}</span>
-                <span>
-                  <el-button
-                    type="text"
-                    size="mini"
-                    @click="() => append(data)">
-                    Append
-                  </el-button>
-                  <el-button
-                    type="text"
-                    size="mini"
-                    @click="() => remove(node, data)">
-                    Delete
-                  </el-button>
+                <span class="operatingList">
+                  <el-dropdown trigger="click" @command="goDialog">
+                    <span class="el-dropdown-link">
+                      <i class="el-icon-more"></i>
+                    </span>
+                    <el-dropdown-menu slot="dropdown">
+                      <el-dropdown-item v-for="item in operatingList" :key="item.id" :command="item">{{item.label}}</el-dropdown-item>
+                    </el-dropdown-menu>
+                  </el-dropdown>
                 </span>
               </span>
           </el-tree>
@@ -109,8 +105,8 @@
             <template slot-scope="scope">
               <el-button type="" size="mini" @click="operating(scope.row,1)">启用</el-button>
               <!--<el-button type="" size="mini" @click="operating(scope.row,2)">冻结</el-button>-->
-              <el-button type="" size="mini" @click="operating(scope.row,1)">详情</el-button>
-              <el-button type="" size="mini" @click="goMark(scope.row)">重置密码</el-button>
+              <el-button type="" size="mini" @click="operating(scope.row,3)">详情</el-button>
+              <el-button type="" size="mini" @click="passwordInit(scope.row)">重置密码</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -150,6 +146,27 @@
       </div>
     </div>
 
+    <!--添加子部门弹窗-->
+    <el-dialog title="添加子部门" :visible.sync="dialogFormAddepartment" width="40%"  center>
+      <el-form :label-position="labelPosition" label-width="100px" :model="formAddepartment" :rules="rulesAddepartment" ref="ruleFormAddepartment">
+        <el-form-item label="部门名称" prop="name">
+          <el-input v-model="formAddepartment.name"></el-input>
+        </el-form-item>
+        <el-form-item label="上级部门" prop="menuname">
+          <el-input v-model="formAddepartment.menuname"></el-input>
+        </el-form-item>
+        <el-form-item label="包含职务" prop="code">
+          <el-input v-model="formAddepartment.code"></el-input>
+        </el-form-item>
+        <el-form-item label="对应职级"  prop="remark">
+          <el-input  v-model="formAddepartment.remark"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer text-center el-dialog-top">
+        <el-button @click="dialogFormAddepartment = false">取 消</el-button>
+        <el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
+      </div>
+    </el-dialog>
 
   </div>
 </template>
@@ -165,6 +182,7 @@
         total: 0,
         id: 1000,
         listLoading: false,
+        labelPosition: 'right',
         formInline: {
           user: '',
           status: ''
@@ -217,7 +235,28 @@
           name: '王小虎',
           address: '上海市普陀区金沙江路 1516 弄'
         }],
-        fileList: []
+        fileList: [],
+        operatingList: [{ id: 1, label: '添加子部门' },
+          { id: 2, label: '编辑部门' },
+          { id: 3, label: '上移' },
+          { id: 4, label: '下移' },
+          { id: 5, label: '删除' }],
+        dialogFormAddepartment: false,
+        formAddepartment: {
+          menuname: '',
+          name: '',
+          code: '',
+          remark: ''
+        },
+        rulesAddepartment: {
+          name: [
+            { required: true, message: '请输入菜单名称', trigger: 'blur' },
+            { max: 20, message: '最多可输入 20 个字符', trigger: 'blur' }
+          ],
+          mark: [
+            { max: 50, message: '最多可输入 50 个字符', trigger: 'blur' }
+          ]
+        }
       }
     },
     methods: {
@@ -261,6 +300,107 @@
       },
       beforeRemove(file, fileList) {
         return this.$confirm(`确定移除 ${file.name} ？`)
+      },
+      goDialog(item) {
+        console.log(item.id)
+        if (item.id === 1) {
+          this.dialogFormAddepartment = true
+        } else if (item.id === 2) {
+          this.dialogFormAddepartment = true
+        } else if (item.id === 3) {
+          this.$confirm('确认上移?', '确认操作', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
+            center: true
+          }).then(() => {
+            this.$message({
+              type: 'success',
+              message: '上移成功!'
+            })
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消上移'
+            })
+          })
+        } else if (item.id === 4) {
+          this.$confirm('确认下移?', '确认操作', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
+            center: true
+          }).then(() => {
+            this.$message({
+              type: 'success',
+              message: '下移成功!'
+            })
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消下移'
+            })
+          })
+        } else {
+          this.$confirm('确认删除?', '确认操作', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
+            center: true
+          }).then(() => {
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            })
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消删除'
+            })
+          })
+        }
+      },
+      operating(item, id) {
+        if (id === 1) {
+          console.log(item)
+        } else if (id === 2) {
+          this.$confirm('确认冻结?', '确认操作', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
+            center: true
+          }).then(() => {
+            this.$message({
+              type: 'success',
+              message: '冻结成功!'
+            })
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消冻结'
+            })
+          })
+        } else {
+          this.$router.push('employeeMangementsp')
+        }
+      },
+      passwordInit(item) {
+        this.$confirm('确认重置密码?', '确认操作', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+          center: true
+        }).then(() => {
+          this.$message({
+            type: 'success',
+            message: '重置密码成功!'
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消重置密码'
+          })
+        })
       }
     },
     created() {
@@ -272,6 +412,9 @@
   .text-center{
     text-align: center;
     margin-top: 10px;
+  }
+  .el-dialog-top{
+    margin-top: -30px;
   }
   .employeeMangement {
     margin: 20px 30px;
@@ -294,6 +437,24 @@
       .uploadClass{
         width: 50%;
       }
+    }
+    .custom-tree-node {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 15px;
+      padding-right: 8px;
+    }
+    .operatingList{
+      opacity: 0;
+      transition: 0.3s;
+      -webkit-transition: .5s;
+      -moz-transition: .5s;
+      display: flex;
+    }
+    .custom-tree-node:hover .operatingList{
+      opacity: 1;
     }
   }
 </style>
