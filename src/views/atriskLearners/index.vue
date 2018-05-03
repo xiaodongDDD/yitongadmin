@@ -114,13 +114,13 @@
     padding:5px 0px 20px 0px;
     .edit-form{
       margin-top: 30px;
-      /*width: 50%;*/
       span{
         color: #606266;
         font-size: 14px;
       }
 
-      .el-input{
+      .el-input,
+      .el-textarea{
         width: 43%;
       }
     }
