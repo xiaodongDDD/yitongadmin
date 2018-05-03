@@ -73,7 +73,6 @@
           name: '',
           type: ['成绩'],
           signList: [{ sign: '成绩维度：', type: '成绩', rate: '', target: [{ type: '', rate: '' }], rank: [{ type: '', remark: '' }] }],
-          status: 0
         },
         isAddSign: false,
         msg: {
@@ -91,12 +90,39 @@
     methods: {
       saveTemplate() {
         const obj = this.form
-        console.log(obj)
-        // return false
+        const token = localStorage.getItem('TOKEN')
+        obj.token = token
+        obj.is_update = 1
+
+        const len = this.form.signList.length
+        let signSum = 0
+        let oneSum = 0
+        for (let i = 0; i < len; i++) {
+          signSum += parseInt(this.form.signList[i].rate)
+          let targetSum = 0
+          for (let k = 0; k < this.form.signList[i].target.length; k++) {
+            // console.log(this.form.signList[i].target.length)
+            // console.log(parseInt(this.form.signList[i].target[k].rate))
+            targetSum += parseInt(this.form.signList[i].target[k].rate)
+            console.log(targetSum)
+          }
+          if (targetSum !== 100) {
+            oneSum++
+          }
+        }
+        console.log('signSum' + signSum)
+        console.log('oneSum' + oneSum)
+
         addTemplate(obj).then(res => {
-          console.log(res)
+          if (res.hasOwnProperty('response')) {
+            this.$message('添加成功')
+            this.$router.push({ path: '/templateList' })
+          } else {
+            this.$alert(res.error_response.msg, '提示', {
+              confirmButtonText: '确定'
+            })
+          }
         })
-        this.$router.push({ path: '/accountList' })
       },
       removeDomain(index) {
         this.form.signList.splice(index, 1)

@@ -1,5 +1,8 @@
 import request from '@/utils/request'
 
+// const token = localStorage.getItem('TOKEN')
+// console.log(token)
+
 // 登录
 export function getLogin(params) {
   return request({

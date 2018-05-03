@@ -53,6 +53,7 @@
       handleCommand(command) {
         if (command === 'b') {
           removeToken()
+          localStorage.removeItem('TOKEN')
           this.$router.push({ path: '/login' })
         } else if (command === 'a') {
           this.$router.push({ path: '/' })
