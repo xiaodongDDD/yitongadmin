@@ -72,7 +72,7 @@
         </router-link>
          <el-pagination
           style='display:inline-block;margin-left:30%;'
-          @current-change="handleCurrentChange" 
+          @current-change="handleCurrentChange"
           background
           layout="prev, pager, next"
           :total="1000">
@@ -93,7 +93,7 @@
           <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
         </span>
       </el-dialog>
-     </div> 
+     </div>
   </div>
 </template>
 
@@ -167,10 +167,10 @@
   width: 100%;
   height: 30px;
   overflow: hidden;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   margin-top: 20px;
   color: #333;
-  font-size: 18px;
+  /*font-size: 18px;*/
   padding: 0px 20px;
 }
 .officialMan {
