@@ -13,6 +13,7 @@
             <el-select
               id='officialSelect1'
               v-model="value1"
+              size='medium'
               multiple
               collapse-tags
               placeholder="请选择">
@@ -26,8 +27,8 @@
           </el-form-item>
           <el-form-item label="负责年级：">
             <el-select
-              id='officialSelect2'
               v-model="value2"
+              size='medium'
               multiple
               collapse-tags
               placeholder="请选择">
@@ -127,5 +128,7 @@
   margin-bottom: 30px;
 }
 </style>
+
+
 
 
