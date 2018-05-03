@@ -1,17 +1,20 @@
 <template>
   <el-menu class="navbar" mode="horizontal">
-    <!--<hamburger class="hamburger-container"></hamburger>-->
+    <!--<hamburger class="hamburger-container" :toggleClick="toggleSideBar" :isActive="sidebar.opened"></hamburger>-->
+    <div class="icon-div">
+      <span></span><span></span><span></span>
+    </div>
     <el-breadcrumb v-if='msg.flag == 1' class="header-bread" separator="/">
-      <el-breadcrumb-item :to="{ path: msg.path }">{{ msg.title1 }}</el-breadcrumb-item>
-      <el-breadcrumb-item>{{ msg.title2 }}</el-breadcrumb-item>
+      <el-breadcrumb-item class="link-item" :to="{ path: msg.path }">{{ msg.title1 }}</el-breadcrumb-item>
+      <el-breadcrumb-item class="step-item">{{ msg.title2 }}</el-breadcrumb-item>
     </el-breadcrumb>
     <el-breadcrumb v-if='msg.flag == 0' class="header-bread" separator="/">
-      <el-breadcrumb-item>{{ msg.title1 }}</el-breadcrumb-item>
+      <el-breadcrumb-item class="link-item">{{ msg.title1 }}</el-breadcrumb-item>
     </el-breadcrumb>
      <el-breadcrumb v-if='msg.flag == 2' class="header-bread" separator="/">
-      <el-breadcrumb-item :to="{ path: msg.path1 }">{{ msg.title1 }}</el-breadcrumb-item>
-      <el-breadcrumb-item :to="{ path: msg.path2 }">{{ msg.title2 }}</el-breadcrumb-item>
-      <el-breadcrumb-item>{{ msg.title3 }}</el-breadcrumb-item>
+      <el-breadcrumb-item class="link-item" :to="{ path: msg.path1 }">{{ msg.title1 }}</el-breadcrumb-item>
+      <el-breadcrumb-item class="step-item" :to="{ path: msg.path2 }">{{ msg.title2 }}</el-breadcrumb-item>
+      <el-breadcrumb-item class="step-item">{{ msg.title3 }}</el-breadcrumb-item>
     </el-breadcrumb>
     <el-dropdown @command="handleCommand" class="avatar-container" trigger="click">
       <div class="avatar-wrapper">
@@ -29,6 +32,7 @@
 <script>
   import Breadcrumb from '@/components/Breadcrumb'
   import { removeToken } from '@/utils/auth.js'
+  import Hamburger from '@/components/Hamburger'
   export default {
     name: 'myHeader',
     props: ['msg'],
@@ -39,7 +43,8 @@
       }
     },
     components: {
-      Breadcrumb
+      Breadcrumb,
+      Hamburger
     },
     methods: {
       handleSelect(key, keyPath) {
@@ -48,8 +53,8 @@
       handleCommand(command) {
         if (command === 'b') {
           removeToken()
-          this.$router.push({path:'/login'})
-        } else if(command === 'a') {
+          this.$router.push({ path: '/login' })
+        } else if (command === 'a') {
           this.$router.push({ path: '/' })
         }
       }
@@ -99,9 +104,30 @@
   }
   .header-bread{
     display: inline-block;
-    margin-left:20px;
+    margin-left:15px;
   }
   .navbar .avatar-container .avatar-wrapper .el-icon-caret-bottom{
     top: 16px;
+  }
+  .hamburger-container {
+    line-height: 58px;
+    height: 50px;
+    float: left;
+    padding: 0 10px;
+  }
+
+  .icon-div{
+    float: left;
+    margin-left: 17px;
+    line-height: 55px;
+    height: 50px;
+
+    span{
+      display: inline-block;
+      width: 3px;
+      height: 22px;
+      background: #000;
+      margin-left: 3px;
+    }
   }
 </style>

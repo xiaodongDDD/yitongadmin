@@ -14,31 +14,14 @@
             label="账户状态"
             width="100">
             <template slot-scope="scope">
-              <el-dropdown v-if="scope.row.onOff === 0" @command="handleCommand(scope.$index)">
-                <el-button size="mini">
-                  启用<i class="el-icon-caret-bottom el-icon--right"></i>
-                </el-button>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item>停用</el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
-              <el-dropdown v-else @command="handleCommand(scope.$index)">
-                <el-button size="mini">
-                  停用<i class="el-icon-caret-bottom el-icon--right"></i>
-                </el-button>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item>启用</el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
-                  <!-- <el-select v-model="value" @change='haha(scope.row.onOff)' placeholder="请选择">
-                    <el-option
-                      v-for="item in options"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value">
-                    </el-option>
-                  </el-select> -->
-
+              <el-select size="mini" v-model="scope.row.onOff" placeholder="请选择">
+                <el-option
+                  v-for="item in form.options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value">
+                </el-option>
+              </el-select>
             </template>
           </el-table-column>
           <el-table-column
@@ -95,7 +78,7 @@
         </router-link>
         <el-pagination
           style='display:inline-block;margin-left:30%;'
-          @current-change="handleCurrentChange"  
+          @current-change="handleCurrentChange"
           background
           layout="prev, pager, next"
           :total="1000">
@@ -131,7 +114,8 @@ export default {
       centerDialogVisible: false,
       userName: '',
       form: {
-        name: ''
+        name: '',
+        options: [{ value: '1', label: '启用' }, { value: '0', label: '停用' }]
       },
       msg: {
         title1: '项目评价管理',
@@ -148,7 +132,7 @@ export default {
       // }],
       // value: '选项1',
       tableData: [{
-        onOff: 0,
+        onOff: '停用',
         name: '都龙族',
         userName: 'doulongzu',
         type: '学校',
@@ -156,7 +140,7 @@ export default {
         email: '16783949@163.com',
         telephone: '13533790697'
       }, {
-        onOff: 1,
+        onOff: '停用',
         name: '都龙族',
         userName: 'doulongzu',
         type: '运营',
@@ -164,7 +148,7 @@ export default {
         email: '16783949@163.com',
         telephone: '13533790697'
       }, {
-        onOff: 0,
+        onOff: '停用',
         name: '都龙族',
         userName: 'doulongzu',
         type: '学校',
@@ -172,7 +156,7 @@ export default {
         email: '16783949@163.com',
         telephone: '13533790697'
       }, {
-        onOff: 0,
+        onOff: '停用',
         name: '都龙族',
         userName: 'doulongzu',
         type: '运营',
