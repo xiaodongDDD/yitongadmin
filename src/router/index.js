@@ -48,28 +48,28 @@ export const constantRouterMap = [
   //     }
   //   ]
   // },
-  {
-    path: '/feedbackQuestion',
-    component: Layout,
-    redirect: '/feedbackQuestion/schoolH5',
-    name: '反馈问题',
-    meta: { title: '反馈问题', icon: 'table' },
-    children: [
-      {
-        path: 'schoolH5',
-        name: '整校h5',
-        component: _import('feedbackQuestion/schoolH5'),
-        meta: { title: '整校h5', icon: 'table' }
-      },
-      {
-        path: 'schoolPC',
-        name: '整校pc',
-        component: _import('form/index'),
-        meta: { title: '整校pc', icon: 'table' },
-        hidden: true
-      }
-    ]
-  },
+  // {
+  //   path: '/feedbackQuestion',
+  //   component: Layout,
+  //   redirect: '/feedbackQuestion/schoolH5',
+  //   name: '反馈问题',
+  //   meta: { title: '反馈问题', icon: 'table' },
+  //   children: [
+  //     {
+  //       path: 'schoolH5',
+  //       name: '整校h5',
+  //       component: _import('feedbackQuestion/schoolH5'),
+  //       meta: { title: '整校h5', icon: 'table' }
+  //     },
+  //     {
+  //       path: 'schoolPC',
+  //       name: '整校pc',
+  //       component: _import('form/index'),
+  //       meta: { title: '整校pc', icon: 'table' },
+  //       hidden: true
+  //     }
+  //   ]
+  // },
   // {
   //   path: '/eventManagement',
   //   component: Layout,

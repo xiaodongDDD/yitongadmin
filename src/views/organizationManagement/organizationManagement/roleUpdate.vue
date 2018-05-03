@@ -1,36 +1,30 @@
 <template>
   <div class="employeeUpdata">
-    <el-tabs v-model="activeName" @tab-click="handleClick">
-      <el-tab-pane label="用户管理" name="first">
-        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="ruleForm">
-          <el-form-item label="角色名称" prop="name">
-            <el-input v-model="ruleForm.name"></el-input>
-          </el-form-item>
-          <el-form-item label="角色编号" prop="code">
-            <el-input v-model="ruleForm.code"></el-input>
-          </el-form-item>
-          <el-form-item label="备注" prop="desc">
-            <el-input type="textarea" v-model="ruleForm.desc"></el-input>
-          </el-form-item>
-        </el-form>
-        <div>权限控制</div>
-        <div class="treeInfo">
-          <el-tree
-            :data="data2"
-            show-checkbox
-            node-key="id"
-            :default-expanded-keys="[2, 3]"
-            :default-checked-keys="[5]"
-            :props="defaultProps">
-          </el-tree>
-        </div>
-        <div class="buttonClass">
-          <el-button type="primary" @click="keepInfo">保 存</el-button>
-        </div>
-      </el-tab-pane>
-      <el-tab-pane label="配置管理" name="second">权限设置
-      </el-tab-pane>
-    </el-tabs>
+    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="ruleForm">
+      <el-form-item label="角色名称" prop="name">
+        <el-input v-model="ruleForm.name"></el-input>
+      </el-form-item>
+      <el-form-item label="角色编号" prop="code">
+        <el-input v-model="ruleForm.code"></el-input>
+      </el-form-item>
+      <el-form-item label="备注" prop="desc">
+        <el-input type="textarea" v-model="ruleForm.desc"></el-input>
+      </el-form-item>
+    </el-form>
+    <div>权限控制</div>
+    <div class="treeInfo">
+      <el-tree
+        :data="data2"
+        show-checkbox
+        node-key="id"
+        :default-expanded-keys="[2, 3]"
+        :default-checked-keys="[5]"
+        :props="defaultProps">
+      </el-tree>
+    </div>
+    <div class="buttonClass">
+      <el-button type="primary" @click="keepInfo">保 存</el-button>
+    </div>
   </div>
 </template>
 <script>
