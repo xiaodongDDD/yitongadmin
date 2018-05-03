@@ -107,6 +107,7 @@
 
 <script>
 import myHeader from '../../myHeader/myHeader'
+import { getProjectList } from '@/api/eduAdmin'
 export default {
   name: 'itemList',
   data() {
@@ -169,7 +170,21 @@ export default {
   components: {
     myHeader
   },
+  mounted() {
+    this.getData()
+  },
   methods: {
+    getData() {
+      const obj = {
+        school_id: 1,
+        page: 1,
+        pagesize: 10
+      }
+      getProjectList(obj)
+      .then(res => {
+        console.log(res)
+      })
+    },
     handleEdit(index, row) {
       console.log(index, row)
       this.$router.push({ path: '/itemEdit' })
