@@ -18,7 +18,7 @@ export function updataWorkManagementInfo(params) {
 
 export function deleteWorkManagementInfo(params) {
   return request({
-    url: '/api/?v=0.1&method=Yi.enterCancel',
+    url: '/api/?v=0.1&method=Yi.delWork',
     method: 'post',
     data: params
   })

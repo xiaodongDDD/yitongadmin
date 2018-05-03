@@ -212,7 +212,9 @@
 
 <script>
   import { getWorkManagementList, updataWorkManagementInfo, deleteWorkManagementInfo } from '@/api/workManagement'
+  import { dateFormat } from '@/utils/validate'
   import dataProvinces from '@/staticData/provinces.json'
+  import md5 from 'js-md5'
   export default {
     data() {
       return {
@@ -440,9 +442,11 @@
                   this.total = response.response.info[0].data.pageInfo.totalNum
                 } else {
                   this.list = []
+                  this.total = 0
                 }
               } else {
                 this.list = []
+                this.total = 0
               }
               for (let i = 0; i < this.list.length; i++) {
                 if (!this.list[i].hasOwnProperty('extraContent')) {
@@ -701,13 +705,22 @@
         return time.getFullYear() + '/' + (time.getMonth() + 1) + '/' + time.getDate() + '/' + time.getHours() + ':' + time.getMinutes() + ':' + time.getSeconds()
       },
       deleteData(item) {
+        console.log(item)
+        const time = new Date()
+        const date = dateFormat(time)
+        console.log('===' + date + '---')
+        console.log(md5('2018-05-03'))
+        const obj = {
+          'recordId': item.activity.recordId,
+          'salt': md5(date)
+        }
         this.$confirm('此操作将永久删除该数据, 是否继续?', '警告', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning',
           center: true
         }).then(() => {
-          deleteWorkManagementInfo(item).then(response => {
+          deleteWorkManagementInfo(obj).then(response => {
             if (response.response.info[0].status === '1') {
               this.$message({
                 type: 'success',
