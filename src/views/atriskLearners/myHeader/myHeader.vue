@@ -118,15 +118,15 @@
 
   .icon-div{
     float: left;
-    margin-left: 17px;
-    line-height: 55px;
+    margin-left: 10px;
+    line-height: 57px;
     height: 50px;
 
     span{
       display: inline-block;
       width: 3px;
-      height: 22px;
-      background: #000;
+      height: 24px;
+      background: #303133;
       margin-left: 3px;
     }
   }

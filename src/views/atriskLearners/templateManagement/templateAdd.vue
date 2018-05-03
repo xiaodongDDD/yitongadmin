@@ -1,5 +1,6 @@
 <template>
   <div class="center-content template-add">
+    <my-header :msg='msg'></my-header>
     <p class="position">新增评价模板</p>
 
     <div class="edit-form">
@@ -44,7 +45,7 @@
             <div class="sign-list" v-for="(item,index2) in bItem.rank">
               <el-input placeholder="请输入等级名称（中文、英文、数字不限）" v-model="item.type"></el-input>
               <i class="el-icon-circle-close-outline type-icon" @click="removeRank(index1, index2)"></i>
-              <el-input class="right-in" placeholder="请输入等级说明（选填）" v-model="item.rate"></el-input>
+              <el-input class="right-in" placeholder="请输入等级说明（选填）" v-model="item.remark"></el-input>
             </div>
             <div class="sign-list">
               <el-button class="item-plus" icon="el-icon-plus" @click="addItem2(index1)">新增</el-button>
@@ -62,6 +63,7 @@
 </template>
 
 <script>
+  import myHeader from '../myHeader/myHeader'
   export default {
     name: 'templateEdit',
     data() {
@@ -69,12 +71,21 @@
         form: {
           name: '',
           type: ['成绩'],
-          signList: [{ sign: '成绩维度：', type: '成绩', rate: '', target: [{ type: '', rate: '' }], rank: [{ type: '', rate: '' }] }],
+          signList: [{ sign: '成绩维度：', type: '成绩', rate: '', target: [{ type: '', rate: '' }], rank: [{ type: '', remark: '' }] }],
           status: 0
         },
         isAddSign: false,
+        msg: {
+          title1: '评价模版管理',
+          title2: '新增评价模版管理',
+          flag: 1,
+          path: '/templateList'
+        },
         addSignType: ''
       }
+    },
+    components: {
+      myHeader
     },
     methods: {
       saveUser() {

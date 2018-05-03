@@ -4,9 +4,9 @@
     <div class="content-detail">
       <p class="position">编辑评价模板</p>
       <div class="edit-form">
-      <el-form ref="form" :model="form" label-width="100px" :rules="rules">
+      <el-form ref="form" :model="form" label-width="100px">
         <el-form-item label="模板名称：">
-          <el-input v-model="form.name"></el-input>
+          <el-input v-model="form.name" maxlength="50"></el-input>
         </el-form-item>
         <el-form-item label="评价维度：">
           <el-checkbox-group v-model="form.type">
@@ -20,7 +20,7 @@
           <div class="item-list">
             <el-button class="item-plus" icon="el-icon-plus" v-show="!isAddSign" @click="isAddSign = true">新增</el-button>
             <div class="add-item" v-show="isAddSign">
-              <el-input class="add-dimen" placeholder="请输入维度名" v-model="addSignType"></el-input>
+              <el-input class="add-dimen" maxlength="20" placeholder="请输入维度名" v-model="addSignType"></el-input>
               <i class="el-icon-check" @click="addSignList"></i>
               <i class="el-icon-close" @click="isAddSign = false"></i>
             </div>
@@ -31,10 +31,10 @@
           <el-form-item class="big-label" label-width="auto" :label="bItem.sign"></el-form-item>
           <el-form-item label="指标名称：">
             <div class="sign-list" v-for="(item,index2) in bItem.target">
-              <el-input placeholder="" v-model="item.type"></el-input>
+              <el-input placeholder="请输入指标名称" maxlength="200" v-model="item.type"></el-input>
               <i class="el-icon-circle-close-outline type-icon" @click="removeTarget(index1, index2)"></i>
               <span class="ratetxt">占比</span>
-              <el-input class="right-in" v-model="item.rate"></el-input>
+              <el-input class="right-in" placeholder="请输入占比（选填）" v-model="item.rate"></el-input>
             </div>
             <div class="sign-list">
               <el-button class="item-plus" icon="el-icon-plus" @click="addItem1(index1)">新增</el-button>
@@ -43,9 +43,9 @@
 
           <el-form-item label="评价等级：">
             <div class="sign-list" v-for="(item,index2) in bItem.rank">
-              <el-input placeholder="" v-model="item.type"></el-input>
+              <el-input placeholder="请输入等级名称（中文、英文、数字不限）" maxlength="200" v-model="item.type"></el-input>
               <i class="el-icon-circle-close-outline type-icon" @click="removeRank(index1, index2)"></i>
-              <el-input class="right-in" v-model="item.rate"></el-input>
+              <el-input class="right-in" placeholder="请输入等级说明（选填）" v-model="item.remark"></el-input>
             </div>
             <div class="sign-list">
               <el-button class="item-plus" icon="el-icon-plus" @click="addItem2(index1)">新增</el-button>
@@ -68,21 +68,12 @@
   export default {
     name: 'templateEdit',
     data() {
-      var checkSign = (rule, value, callback) => {
-        if (!value) {
-          return callback(new Error('维度名称不能为空'))
-        }
-        if (value.length > 20) {
-          return callback(new Error('维度名称过长'))
-        }
-      }
       return {
         form: {
           name: '2018年第一学期语文所有学生补差',
           type: ['成绩', '态度'],
-          signList: [{ sign: '成绩空的房阿里维度：', type: '成绩', rate: '40%', target: [{ type: '基础', rate: '30%' }, { type: '阅读', rate: '20%' }, { type: '作文', rate: '30%' }], rank: [{ type: '思维', rate: '30%' }, { type: '礼仪', rate: '20%' }] },
-            { sign: '态度维度：', type: '态度', rate: '60%', target: [{ type: '思想', rate: '30%' }], rank: [{ type: '优秀', rate: '30%' }] }],
-          status: 0
+          signList: [{ sign: '成绩维度：', type: '成绩', rate: '40%', target: [{ type: '基础', rate: '30%' }, { type: '作文', rate: '30%' }], rank: [{ type: '优', rate: '30%' }, { type: '良', rate: '20%' }] },
+            { id: '300', sign: '态度维度：', type: '态度', rate: '60%', target: [{ type: '思想', remark: '30%' }], rank: [{ type: '优秀', remark: '30%' }] }]
         },
         msg: {
           title1: '评价模版管理',
@@ -91,12 +82,7 @@
           path: '/templateList'
         },
         isAddSign: false,
-        addSignType: '',
-        rules: {
-          type: [
-            { validator: checkSign, trigger: 'blur' }
-          ]
-        }
+        addSignType: ''
       }
     },
     components: {

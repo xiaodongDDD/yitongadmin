@@ -114,16 +114,30 @@
     padding:5px 0px 20px 0px;
     .edit-form{
       margin-top: 30px;
-      /*width: 50%;*/
       span{
         color: #606266;
         font-size: 14px;
       }
 
-      .el-input{
+      .el-input,
+      .el-textarea{
         width: 43%;
       }
     }
+    .list-table{
+      .el-button{
+        border: none;
+        background: none;
+      }
+      .el-button--danger{
+        color: #606266;
+
+        &:hover{
+          color: #409EFF;
+        }
+      }
+    }
+
     .content-detail{
       padding:10px 20px;
     }
@@ -179,12 +193,15 @@
   }
   .link-item{
     .el-breadcrumb__inner{
-      font-weight: 700!important;
+      color: #303133!important;
+      font-weight: 500!important;
+      font-size: 16px!important;
     }
   }
   .step-item{
     .el-breadcrumb__inner{
       color: #99a9bf!important;
+      font-size: 16px!important;
     }
     .is-link{
       font-weight: 400!important;
