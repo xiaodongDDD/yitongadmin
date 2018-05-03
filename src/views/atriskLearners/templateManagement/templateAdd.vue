@@ -55,7 +55,7 @@
 
         <el-form-item>
           <router-link to="/templateList"><el-button>取消</el-button></router-link>
-          <el-button @click="saveUser()">保存</el-button>
+          <el-button @click="saveTemplate()">保存</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -64,6 +64,7 @@
 
 <script>
   import myHeader from '../myHeader/myHeader'
+  import { addTemplate } from '@/api/eduAdmin'
   export default {
     name: 'templateEdit',
     data() {
@@ -88,7 +89,13 @@
       myHeader
     },
     methods: {
-      saveUser() {
+      saveTemplate() {
+        const obj = this.form
+        console.log(obj)
+        // return false
+        addTemplate(obj).then(res => {
+          console.log(res)
+        })
         this.$router.push({ path: '/accountList' })
       },
       removeDomain(index) {

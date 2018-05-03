@@ -1,6 +1,6 @@
 <template>
   <div class="login-container">
-    <el-form autoComplete="on" :model="loginForm" :rules="loginRules" ref="loginForm" label-position="left" label-width="0px"
+    <el-form autoComplete="on" :model="loginForm" ref="loginForm" label-position="left" label-width="0px"
       class="card-box login-form">
       <h3 class="title">登录评价管理后台</h3>
       <el-form-item prop="username">
@@ -22,44 +22,41 @@
            登 录
         </el-button>
       </el-form-item>
-      <div class="tips">
-        <!--<span style="margin-right:20px;">username: admin</span>-->
-        <!--</span> password: admin</span>-->
-      </div>
     </el-form>
   </div>
 </template>
 
 <script>
-import { isvalidUsername } from '@/utils/validate'
-import { getData } from '@/api/eduAdmin'
+// import { isvalidUsername } from '@/utils/validate'
+import { getLogin } from '@/api/eduAdmin'
+import { setToken } from '@/utils/auth'
 
 export default {
   name: 'login',
   data() {
-    const validateUsername = (rule, value, callback) => {
-      if (!isvalidUsername(value)) {
-        callback(new Error('请输入正确的用户名'))
-      } else {
-        callback()
-      }
-    }
-    const validatePass = (rule, value, callback) => {
-      if (value.length < 5) {
-        callback(new Error('密码不能小于5位'))
-      } else {
-        callback()
-      }
-    }
+    // const validateUsername = (rule, value, callback) => {
+    //   if (!isvalidUsername(value)) {
+    //     callback(new Error('请输入正确的用户名'))
+    //   } else {
+    //     callback()
+    //   }
+    // }
+    // const validatePass = (rule, value, callback) => {
+    //   if (value.length < 5) {
+    //     callback(new Error('密码不能小于5位'))
+    //   } else {
+    //     callback()
+    //   }
+    // }
     return {
       loginForm: {
-        username: 'admin',
-        password: 'admin'
+        username: '13045684793',
+        password: '123456'
       },
-      loginRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePass }]
-      },
+      // loginRules: {
+      //   username: [{ required: true, trigger: 'blur', validator: validateUsername }],
+      //   password: [{ required: true, trigger: 'blur', validator: validatePass }]
+      // },
       loading: false,
       pwdType: 'password'
     }
@@ -72,34 +69,45 @@ export default {
         this.pwdType = 'password'
       }
     },
-    // handleLogin() {
-    //   this.$refs.loginForm.validate(valid => {
-    //     console.log('00000020')
-    //     if (valid) {
-    //       this.loading = true
-    //       console.log('00000030')
-    //       this.$store.dispatch('Login', this.loginForm).then(() => {
-    //         console.log('0000000')
-    //         this.loading = false
-    //         this.$router.push({ path: '/' })
-    //       }).catch(() => {
-    //         this.loading = false
-    //       })
-    //     } else {
-    //       console.log('error submit!!')
-    //       return false
-    //     }
-    //   })
-    // }
     handleLogin() {
       const obj = {
         username: this.loginForm.username,
         password: this.loginForm.password
       }
-      getData(obj).then(res => { console.log(res) })
-      // data = this.eduData.getData(this.loginForm.username, this.loginForm.password)
-      // console.log(data)
+      this.$refs.loginForm.validate(valid => {
+        if (valid) {
+          this.loading = true
+          getLogin(obj).then((res) => {
+            this.loading = false
+            console.log(res)
+            if (res.hasOwnProperty('response')) {
+              setToken(res.response.token)
+              localStorage.removeItem('TOKEN')
+              localStorage.setItem('TOKEN', res.response.token)
+              this.$router.push({ path: '/' })
+            } else {
+              this.$alert(res.error_response.msg, '提示', {
+                confirmButtonText: '确定'
+              })
+            }
+          }).catch(() => {
+            this.loading = false
+          })
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
     }
+    // handleLogin() {
+    //   const obj = {
+    //     username: this.loginForm.username,
+    //     password: this.loginForm.password
+    //   }
+    //   getLogin(obj).then(res => { console.log(res) })
+    //   // data = this.eduData.getData(this.loginForm.username, this.loginForm.password)
+    //   // console.log(data)
+    // }
   }
 }
 </script>
