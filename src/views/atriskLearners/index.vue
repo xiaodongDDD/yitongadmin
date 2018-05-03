@@ -124,6 +124,20 @@
         width: 43%;
       }
     }
+    .list-table{
+      .el-button{
+        border: none;
+        background: none;
+      }
+      .el-button--danger{
+        color: #606266;
+
+        &:hover{
+          color: #409EFF;
+        }
+      }
+    }
+
     .content-detail{
       padding:10px 20px;
     }

@@ -118,7 +118,7 @@
 
   .icon-div{
     float: left;
-    margin-left: 17px;
+    margin-left: 10px;
     line-height: 57px;
     height: 50px;
 
