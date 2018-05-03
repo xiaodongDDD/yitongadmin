@@ -32,6 +32,7 @@
 
 <script>
 import { isvalidUsername } from '@/utils/validate'
+import { getData } from '@/api/eduAdmin'
 
 export default {
   name: 'login',
@@ -71,24 +72,33 @@ export default {
         this.pwdType = 'password'
       }
     },
+    // handleLogin() {
+    //   this.$refs.loginForm.validate(valid => {
+    //     console.log('00000020')
+    //     if (valid) {
+    //       this.loading = true
+    //       console.log('00000030')
+    //       this.$store.dispatch('Login', this.loginForm).then(() => {
+    //         console.log('0000000')
+    //         this.loading = false
+    //         this.$router.push({ path: '/' })
+    //       }).catch(() => {
+    //         this.loading = false
+    //       })
+    //     } else {
+    //       console.log('error submit!!')
+    //       return false
+    //     }
+    //   })
+    // }
     handleLogin() {
-      this.$refs.loginForm.validate(valid => {
-        console.log('00000020')
-        if (valid) {
-          this.loading = true
-          console.log('00000030')
-          this.$store.dispatch('Login', this.loginForm).then(() => {
-            console.log('0000000')
-            this.loading = false
-            this.$router.push({ path: '/' })
-          }).catch(() => {
-            this.loading = false
-          })
-        } else {
-          console.log('error submit!!')
-          return false
-        }
-      })
+      const obj = {
+        username: this.loginForm.username,
+        password: this.loginForm.password
+      }
+      getData(obj).then(res => { console.log(res) })
+      // data = this.eduData.getData(this.loginForm.username, this.loginForm.password)
+      // console.log(data)
     }
   }
 }
