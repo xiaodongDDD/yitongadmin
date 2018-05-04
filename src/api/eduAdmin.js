@@ -1,5 +1,23 @@
 import request from '@/utils/request'
 
+// 获取链接参数
+export function getQueryString(params) {
+  var currentUrl = window.location.hash
+  var arr = currentUrl.split('?')
+  if (arr.length > 1) {
+    arr = arr[1].split('&')
+    for (var i = 0; i < arr.length; i++) {
+      var tem = arr[i].split('=')
+      if (tem[0] === params) {
+        return tem[1]
+      }
+    }
+    return null
+  } else {
+    return null
+  }
+}
+
 // 登录
 export function getLogin(params) {
   return request({
@@ -70,6 +88,33 @@ export function accountList(params) {
 export function accountDelete(params) {
   return request({
     url: '/evaluate/?v=0.1&method=Usermanage.userDel',
+    method: 'post',
+    params
+  })
+}
+
+// 获取账户
+export function accountDetail(params) {
+  return request({
+    url: '/evaluate/?v=0.1&method=Usermanage.teacherDetail',
+    method: 'post',
+    params
+  })
+}
+
+// 账户状态
+export function accountSet(params) {
+  return request({
+    url: '/evaluate/?v=0.1&method=Usermanage.accountSet',
+    method: 'post',
+    params
+  })
+}
+
+// 账户修改
+export function accountEdit(params) {
+  return request({
+    url: '/evaluate/?v=0.1&method=Usermanage.accountSet',
     method: 'post',
     params
   })

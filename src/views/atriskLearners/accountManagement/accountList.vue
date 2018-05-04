@@ -22,7 +22,7 @@
             label="账户状态"
             width="110">
             <template slot-scope="scope">
-              <el-select size="mini" v-model="scope.row.enabled_status" placeholder="请选择">
+              <el-select size="mini" @focus="form.id = scope.row.teacher_id" v-model="scope.row.status" @change="accountSet" placeholder="请选择">
                 <el-option
                   v-for="item in form.options"
                   :key="item.value"
@@ -73,7 +73,7 @@
             <template slot-scope="scope">
               <el-button
                 size="mini"
-                @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                @click="handleEdit(scope.$index, scope.row.teacher_id)">编辑</el-button>
               <el-button
                 size="mini"
                 type="danger"
@@ -123,7 +123,7 @@
 
 <script>
   import myHeader from '../myHeader/myHeader'
-  import { accountList, accountDelete } from '@/api/eduAdmin'
+  import { accountList, accountDelete, accountSet } from '@/api/eduAdmin'
   export default {
     name: 'accountList',
     data() {
@@ -137,6 +137,7 @@
         },
         form: {
           name: '',
+          id: '',
           options: [{ value: '1', label: '启用' }, { value: '0', label: '停用' }]
         },
         msg: {
@@ -167,9 +168,9 @@
             const data = res.response
             for (let i = 0; i < data.list.length; i++) {
               if (data.list[i].enabled_status === true) {
-                data.list[i].enabled_status = '启用'
+                data.list[i].status = '启用'
               } else {
-                data.list[i].enabled_status = '停用'
+                data.list[i].status = '停用'
               }
             }
             this.tableData = data.list
@@ -181,11 +182,24 @@
           }
         })
       },
-      handleEdit(index, row) {
-        this.$router.push({ path: '/accountEdit' })
+      handleEdit(index, id) {
+        this.$router.push({ path: '/accountEdit?teacher_id=' + id })
       },
       handleDelete() {
         this.centerDialogVisible = true
+      },
+      accountSet(val) {
+        const obj = {}
+        obj.teacher_id = this.form.id
+        obj.status = val
+        obj.token = localStorage.getItem('TOKEN')
+        // console.log(obj)
+        accountSet(obj).then(res => {
+          console.log(res)
+          if (res.hasOwnProperty('response')) {
+            // conso
+          }
+        })
       },
       accountDelete() {
         accountDelete(this.accountDel).then(res => {
