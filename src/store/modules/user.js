@@ -1,6 +1,6 @@
 // import { logout } from '@/api/login'
 import { getToken, setToken, removeToken } from '@/utils/auth'
-import { getList } from '@/api/table'
+import { login } from '@/api/login'
 
 const user = {
   state: {
@@ -28,14 +28,15 @@ const user = {
   actions: {
     // 登录
     Login({ commit }, userInfo) {
-      // setToken('admin')
-      // commit('SET_TOKEN', 'admin')
-      // const username = userInfo.username.trim()
       return new Promise((resolve, reject) => {
-        getList().then(response => {
-          setToken('admin')
-          commit('SET_TOKEN', 'admin')
-          resolve()
+        console.log('00-00000')
+        login(userInfo).then(response => {
+          console.log(response)
+          if (!response.hasOwnProperty('error_response')) {
+            setToken(response.response.token)
+            commit('SET_TOKEN', response.response.token)
+          }
+          resolve(response)
         }).catch(error => {
           reject(error)
         })

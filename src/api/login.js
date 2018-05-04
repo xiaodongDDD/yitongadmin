@@ -1,13 +1,10 @@
 import request from '@/utils/request'
 
-export function login(username, password) {
+export function login(params) {
   return request({
-    url: '/user/login',
+    url: '/api/?v=0.1&method=Yi.backgroundLogin',
     method: 'post',
-    data: {
-      username,
-      password
-    }
+    data: params
   })
 }
 

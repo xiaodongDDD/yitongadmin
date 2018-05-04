@@ -23,7 +23,7 @@
         </el-button>
       </el-form-item>
       <div class="tips">
-        <!--<span style="margin-right:20px;">username: admin</span>-->
+        <span style="margin-right:20px;text-align: center">若忘记密码，请联系人事部王可可</span>
         <!--</span> password: admin</span>-->
       </div>
     </el-form>
@@ -31,13 +31,12 @@
 </template>
 
 <script>
-import { isvalidUsername } from '@/utils/validate'
 
 export default {
   name: 'login',
   data() {
     const validateUsername = (rule, value, callback) => {
-      if (!isvalidUsername(value)) {
+      if (value === '') {
         callback(new Error('请输入正确的用户名'))
       } else {
         callback()
@@ -52,8 +51,8 @@ export default {
     }
     return {
       loginForm: {
-        username: 'admin',
-        password: 'admin'
+        username: '15021833596',
+        password: '123456'
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
@@ -75,9 +74,20 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
-          this.$store.dispatch('Login', this.loginForm).then(() => {
+          this.$store.dispatch('Login', this.loginForm).then((response) => {
             this.loading = false
-            this.$router.push({ path: '/' })
+            if (response.hasOwnProperty('error_response')) {
+              this.$message({
+                type: 'error',
+                message: response.error_response.msg
+              })
+            } else {
+              this.$message({
+                type: 'success',
+                message: response.response.msg
+              })
+              this.$router.push({ path: '/' })
+            }
           }).catch(() => {
             this.loading = false
           })
