@@ -89,9 +89,9 @@
       }
     },
     mounted() {
-      console.log(this.$router.history.current.fullPath)
+      // console.log(this.$router.history.current.fullPath)
       this.index = this.$router.history.current.fullPath
-      console.log(this.index)
+      // console.log(this.index)
     },
     components: {
       myHeader,
@@ -99,12 +99,12 @@
     },
     methods: {
       changeindex(index, indexPath) {
-        console.log(index)
+        // console.log(index)
       }
     },
     watch: {
       '$route': function(to, from) {
-        console.log(this.$route.path)
+        // console.log(this.$route.path)
         if (this.$route.path === '/userEdit' || this.$route.path === '/userAdd') {
           this.index = '/userList'
         } else if (this.$route.path === '/accountEdit' || this.$route.path === '/accountAdd') {
