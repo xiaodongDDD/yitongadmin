@@ -56,3 +56,21 @@ export function projectLeaderList(params) {
     params
   })
 }
+
+// 账户列表
+export function accountList(params) {
+  return request({
+    url: '/evaluate/?v=0.1&method=Usermanage.getUserList',
+    method: 'post',
+    params
+  })
+}
+
+// 删除账户
+export function accountDelete(params) {
+  return request({
+    url: '/evaluate/?v=0.1&method=Usermanage.userDel',
+    method: 'post',
+    params
+  })
+}
