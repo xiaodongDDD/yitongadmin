@@ -119,3 +119,12 @@ export function accountEdit(params) {
     params
   })
 }
+
+// 添加模板
+export function addTemplate(params) {
+  return request({
+    url: '/evaluate/?v=0.1&method=Templatesmanage.createTemplate',
+    method: 'post',
+    params
+  })
+}
