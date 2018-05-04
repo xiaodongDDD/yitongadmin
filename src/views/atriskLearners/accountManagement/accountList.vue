@@ -19,11 +19,10 @@
           style="width: 100%">
           <el-table-column
             align="center"
-            prop="onOff"
             label="账户状态"
-            width="100">
+            width="110">
             <template slot-scope="scope">
-              <el-select size="mini" v-model="scope.row.onOff" placeholder="请选择">
+              <el-select size="mini" @focus="form.id = scope.row.teacher_id" v-model="scope.row.status" @change="accountSet" placeholder="请选择">
                 <el-option
                   v-for="item in form.options"
                   :key="item.value"
@@ -35,34 +34,37 @@
           </el-table-column>
           <el-table-column
             align="center"
-            prop="name"
+            prop="teacher_name"
             label="姓名"
             width="100">
           </el-table-column>
           <el-table-column
             align="center"
-            prop="userName"
+            prop="username"
             label="用户名"
             width="100">
           </el-table-column>
           <el-table-column
             align="center"
-            prop="type"
             label="类型"
-            width="60">
+            width="80">
+            <template slot-scope="scope">
+              <span v-if="scope.row.teacher_type === '1'">学校</span>
+              <span v-if="scope.row.teacher_type === '3'">运营</span>
+            </template>
           </el-table-column>
           <el-table-column
-            prop="schoolName"
+            prop="school_name"
             label="学校名称">
           </el-table-column>
           <el-table-column
             align="center"
             prop="telephone"
             label="手机号"
-            width="110">
+            width="120">
           </el-table-column>
           <el-table-column
-            prop="email"
+            prop="e_mail"
             label="邮箱">
           </el-table-column>
 
@@ -71,11 +73,11 @@
             <template slot-scope="scope">
               <el-button
                 size="mini"
-                @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                @click="handleEdit(scope.$index, scope.row.teacher_id)">编辑</el-button>
               <el-button
                 size="mini"
                 type="danger"
-                @click="handleDelete(scope.$index, userName = scope.row.name)">删除</el-button>
+                @click="handleDelete(accountDel.index = scope.$index, accountDel.teacher_id = scope.row.teacher_id, accountDel.userName = scope.row.teacher_name)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -91,7 +93,7 @@
           @current-change="handleCurrentChange"
           background
           layout="prev, pager, next"
-          :total="1000">
+          :page-count	="pageData.allPage">
         </el-pagination>
       </div>
 
@@ -102,13 +104,13 @@
         center>
         <div class="dialogContent">
           <p>请确认是否要删除</p>
-          <p>{{ userName }}账户</p>
+          <p>{{ accountDel.userName }} 账户</p>
 
           <p>删除后，该账户将无法登录</p>
         </div>
         <span slot="footer" class="dialog-footer">
           <el-button @click="centerDialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
+          <el-button type="primary" @click="accountDelete">确 定</el-button>
         </span>
       </el-dialog>
 
@@ -121,14 +123,21 @@
 
 <script>
   import myHeader from '../myHeader/myHeader'
+  import { accountList, accountDelete, accountSet } from '@/api/eduAdmin'
   export default {
     name: 'accountList',
     data() {
       return {
         centerDialogVisible: false,
-        userName: '',
+        accountDel: {
+          index: '',
+          userName: '',
+          teacher_id: '',
+          token: localStorage.getItem('TOKEN')
+        },
         form: {
           name: '',
+          id: '',
           options: [{ value: '1', label: '启用' }, { value: '0', label: '停用' }]
         },
         msg: {
@@ -137,48 +146,80 @@
           flag: 0,
           path: '/accountList'
         },
-        tableData: [{
-          onOff: '启用',
-          name: '都龙族',
-          userName: 'doulongzu',
-          type: '学校',
-          schoolName: '武宁路育才',
-          email: '16783949@163.com',
-          telephone: '13533790697'
-        }, {
-          onOff: '启用',
-          name: '都龙族',
-          userName: 'doulongzu',
-          type: '运营',
-          schoolName: '',
-          email: '16783949@163.com',
-          telephone: '13533790697'
-        }, {
-          onOff: '启用',
-          name: '都龙族',
-          userName: 'doulongzu',
-          type: '学校',
-          schoolName: '武宁路育才',
-          email: '16783949@163.com',
-          telephone: '13533790697'
-        }]
+        tableData: [],
+        pageData: {
+          page: '',
+          allPage: 1
+        }
       }
     },
     components: {
       myHeader
     },
     methods: {
-      handleEdit(index, row) {
-        console.log(index, row)
-        this.$router.push({ path: '/accountEdit' })
+      getList(page) {
+        const obj = {}
+        obj.page = page
+        obj.token = localStorage.getItem('TOKEN')
+        this.pageData.page = page
+        accountList(obj).then(res => {
+          // console.log(res)
+          if (res.hasOwnProperty('response')) {
+            const data = res.response
+            for (let i = 0; i < data.list.length; i++) {
+              if (data.list[i].enabled_status === true) {
+                data.list[i].status = '启用'
+              } else {
+                data.list[i].status = '停用'
+              }
+            }
+            this.tableData = data.list
+            this.pageData.allPage = data.allPage
+          } else {
+            this.$alert('系统出错！', '提示', {
+              confirmButtonText: '确定'
+            })
+          }
+        })
       },
-      handleDelete(index, row) {
-        console.log(index, row)
+      handleEdit(index, id) {
+        this.$router.push({ path: '/accountEdit?teacher_id=' + id })
+      },
+      handleDelete() {
         this.centerDialogVisible = true
       },
+      accountSet(val) {
+        const obj = {}
+        obj.teacher_id = this.form.id
+        obj.status = val
+        obj.token = localStorage.getItem('TOKEN')
+        // console.log(obj)
+        accountSet(obj).then(res => {
+          console.log(res)
+          if (res.hasOwnProperty('response')) {
+            // conso
+          }
+        })
+      },
+      accountDelete() {
+        accountDelete(this.accountDel).then(res => {
+          if (res.hasOwnProperty('response')) {
+            this.$message('删除成功！')
+            this.getList(this.pageData.page)
+            this.centerDialogVisible = false
+          } else {
+            this.$alert(res.error_response.msg, '提示', {
+              confirmButtonText: '确定'
+            })
+          }
+        })
+      },
       handleCurrentChange(val) {
-        console.log(`当前页: ${val}`)
+        this.getList(val)
       }
+    },
+    mounted() {
+      this.getList(1)
     }
   }
 </script>

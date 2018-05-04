@@ -72,8 +72,8 @@
         form: {
           name: '2018年第一学期语文所有学生补差',
           type: ['成绩', '态度'],
-          signList: [{ sign: '成绩维度：', type: '成绩', rate: '40%', target: [{ type: '基础', rate: '30%' }, { type: '作文', rate: '30%' }], rank: [{ type: '优', rate: '30%' }, { type: '良', rate: '20%' }] },
-            { id: '300', sign: '态度维度：', type: '态度', rate: '60%', target: [{ type: '思想', remark: '30%' }], rank: [{ type: '优秀', remark: '30%' }] }]
+          signList: [{ sign: '成绩维度：', type: '成绩', rate: '40', target: [{ type: '基础', rate: '30%' }, { type: '作文', rate: '30%' }], rank: [{ type: '优', rate: '30%' }, { type: '良', rate: '20%' }] },
+            { id: '300', sign: '态度维度：', type: '态度', rate: '60', target: [{ type: '思想', remark: '30%' }], rank: [{ type: '优秀', remark: '30%' }] }]
         },
         msg: {
           title1: '评价模版管理',
@@ -90,7 +90,26 @@
     },
     methods: {
       saveUser() {
-        this.$router.push({ path: '/accountList' })
+        const len = this.form.signList.length
+        let signSum = 0
+        let oneSum = 0
+        for (let i = 0; i < len; i++) {
+          signSum += parseInt(this.form.signList[i].rate)
+          let targetSum = 0
+          for (let k = 0; k < this.form.signList[i].target.length; k++) {
+            targetSum += parseInt(this.form.signList[i].target[k].rate)
+          }
+          if (targetSum !== 100) {
+            oneSum++
+          }
+        }
+        if (signSum === 100 && oneSum === 0) {
+          this.$router.push({ path: '/templateList' })
+        } else {
+          this.$alert('请确认占比总和！', '提示', {
+            confirmButtonText: '确定'
+          })
+        }
       },
       removeDomain(index) {
         this.form.signList.splice(index, 1)

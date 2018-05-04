@@ -6,7 +6,7 @@
       <div class="edit-form">
         <el-form ref="form" :model="form" label-width="100px">
           <el-form-item label="类型：">
-            <el-col :span="7" v-if="form.type != 0">
+            <el-col :span="7" v-if="form.teacher_type != 1">
               <el-form-item prop="date1">
                 <el-select v-model="form.type" placeholder="请选择">
                   <el-option label="学校" value="0"></el-option>
@@ -19,28 +19,28 @@
                 <span>学校</span>
               </el-form-item>
             </el-col>
-            <el-col :span="17" v-if="form.type != 0">
+            <el-col :span="17" v-if="form.teacher_type != 1">
               <el-form-item prop="date2">
                 <el-input v-model="form.schoolName"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="17" v-else>
               <el-form-item>
-                <span>{{form.schoolName}}</span>
+                <span>{{form.school_name}}</span>
               </el-form-item>
             </el-col>
           </el-form-item>
           <el-form-item label="姓名：">
-            <el-input v-model="form.name"></el-input>
+            <el-input v-model="form.teacher_name"></el-input>
           </el-form-item>
           <el-form-item label="用户名：">
-            <el-input v-model="form.userName"></el-input>
+            <el-input v-model="form.username"></el-input>
           </el-form-item>
           <el-form-item label="手机号：">
             <el-input v-model="form.telephone"></el-input>
           </el-form-item>
           <el-form-item label="邮箱：">
-            <el-input v-model="form.email"></el-input>
+            <el-input v-model="form.e_mail"></el-input>
           </el-form-item>
           <el-form-item label="账户状态：">
             <el-select v-model="form.status" placeholder="请选择">
@@ -64,19 +64,12 @@
 
 <script>
   import myHeader from '../myHeader/myHeader'
+  import { accountDetail, accountEdit, getQueryString } from '@/api/eduAdmin'
   export default {
     name: 'accountEdit',
     data() {
       return {
-        form: {
-          name: '石选晓',
-          schoolName: '武宁路小学',
-          userName: 'shixiuan',
-          type: '0',
-          telephone: '13535790897',
-          email: '134752398@348.cn',
-          status: '停用'
-        },
+        form: {},
         options: [{ value: '1', label: '启用' }, { value: '0', label: '停用' }],
         msg: {
           title1: '账户管理',
@@ -91,8 +84,35 @@
     },
     methods: {
       saveUser() {
-        this.$router.push({ path: '/accountList' })
+        this.form.token = localStorage.getItem('TOKEN')
+        accountEdit(this.form).then(res => {
+          console.log(res)
+          if (res.hasOwnProperty('response')) {
+            this.$message('修改成功！')
+            this.$router.push({ path: '/accountList' })
+          }
+        })
+      },
+      getDetail() {
+        const obj = {}
+        obj.teacher_id = getQueryString('teacher_id')
+        obj.token = localStorage.getItem('TOKEN')
+        accountDetail(obj).then(res => {
+          console.log(res)
+          if (res.hasOwnProperty('response')) {
+            const data = res.response
+            if (data.info.enabled_status === true) {
+              data.info.status = '启用'
+            } else {
+              data.info.status = '停用'
+            }
+            this.form = data.info
+          }
+        })
       }
+    },
+    mounted() {
+      this.getDetail()
     }
   }
 </script>

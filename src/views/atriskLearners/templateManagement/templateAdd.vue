@@ -72,7 +72,7 @@
         form: {
           name: '',
           type: ['成绩'],
-          signList: [{ sign: '成绩维度：', type: '成绩', rate: '', target: [{ type: '', rate: '' }], rank: [{ type: '', remark: '' }] }],
+          signList: [{ sign: '成绩维度：', type: '成绩', rate: '', target: [{ type: '', rate: '' }], rank: [{ type: '', remark: '' }] }]
         },
         isAddSign: false,
         msg: {
@@ -101,28 +101,28 @@
           signSum += parseInt(this.form.signList[i].rate)
           let targetSum = 0
           for (let k = 0; k < this.form.signList[i].target.length; k++) {
-            // console.log(this.form.signList[i].target.length)
-            // console.log(parseInt(this.form.signList[i].target[k].rate))
             targetSum += parseInt(this.form.signList[i].target[k].rate)
-            console.log(targetSum)
           }
           if (targetSum !== 100) {
             oneSum++
           }
         }
-        console.log('signSum' + signSum)
-        console.log('oneSum' + oneSum)
-
-        addTemplate(obj).then(res => {
-          if (res.hasOwnProperty('response')) {
-            this.$message('添加成功')
-            this.$router.push({ path: '/templateList' })
-          } else {
-            this.$alert(res.error_response.msg, '提示', {
-              confirmButtonText: '确定'
-            })
-          }
-        })
+        if (signSum === 100 && oneSum === 0) {
+          addTemplate(obj).then(res => {
+            if (res.hasOwnProperty('response')) {
+              this.$message('添加成功')
+              this.$router.push({ path: '/templateList' })
+            } else {
+              this.$alert(res.error_response.msg, '提示', {
+                confirmButtonText: '确定'
+              })
+            }
+          })
+        } else {
+          this.$alert('请确认占比总和！', '提示', {
+            confirmButtonText: '确定'
+          })
+        }
       },
       removeDomain(index) {
         this.form.signList.splice(index, 1)

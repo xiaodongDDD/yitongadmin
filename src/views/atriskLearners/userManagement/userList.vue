@@ -24,7 +24,7 @@
             label="产品状态"
             width="100">
             <template slot-scope="scope">
-              <el-select size="mini" v-model="scope.row.onOff" placeholder="请选择">
+              <el-select size="mini" v-model="scope.row.onOff" @change="statusProject(scope.row.project_id, scope.row.project_status)" placeholder="请选择">
                 <el-option
                   v-for="item in form.options"
                   :key="item.value"
@@ -101,6 +101,7 @@
 
 <script>
   import myHeader from '../myHeader/myHeader'
+  import { statusProject } from '@/api/eduAdmin'
   export default {
     name: 'userList',
     data() {
@@ -139,16 +140,22 @@
       myHeader
     },
     methods: {
+      statusProject(id, status) {
+        const obj = {}
+        obj.project_id = id
+        obj.project_status = status
+        statusProject(obj).then(res => {
+          console.log(res)
+        })
+      },
       handleEdit(index, row) {
-        console.log(index, row)
         this.$router.push({ path: '/userEdit' })
       },
       handleDelete(index, row) {
-        console.log(index, row)
         this.centerDialogVisible = true
       },
       handleCurrentChange(val) {
-        console.log(`当前页: ${val}`)
+        // console.log(`当前页: ${val}`)
       }
     }
   }
