@@ -28,8 +28,8 @@
 
 <script>
 // import { isvalidUsername } from '@/utils/validate'
-import { getLogin } from '@/api/eduAdmin'
 import { setToken } from '@/utils/auth'
+import { getLogin } from '@/api/eduAdmin'
 
 export default {
   name: 'login',
@@ -71,16 +71,16 @@ export default {
     },
     handleLogin() {
       const obj = {
-        username: this.loginForm.username,
-        password: this.loginForm.password
+        username: 13045684793,
+        password: 123456
       }
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
           getLogin(obj).then((res) => {
-            this.loading = false
             console.log(res)
             if (res.hasOwnProperty('response')) {
+              this.loading = false
               setToken(res.response.token)
               localStorage.setItem('TOKEN', res.response.token)
               this.$router.push({ path: '/' })
@@ -98,15 +98,6 @@ export default {
         }
       })
     }
-    // handleLogin() {
-    //   const obj = {
-    //     username: this.loginForm.username,
-    //     password: this.loginForm.password
-    //   }
-    //   getLogin(obj).then(res => { console.log(res) })
-    //   // data = this.eduData.getData(this.loginForm.username, this.loginForm.password)
-    //   // console.log(data)
-    // }
   }
 }
 </script>

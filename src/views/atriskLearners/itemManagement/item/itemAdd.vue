@@ -9,23 +9,23 @@
             <el-input v-model="form.name"></el-input>
           </el-form-item>
           <el-form-item label="项目说明：">
-            <el-input type="textarea" :rows="10" v-model="form.email"></el-input>
+            <el-input type="textarea" :rows="10" v-model="form.remark"></el-input>
           </el-form-item>
           <el-form-item label="项目状态：">
-            <el-dropdown v-if="form.status === 0" trigger="click">
+            <el-dropdown @command="handleCommand" v-if="form.status === 0" trigger="click">
               <el-button>
                 启用<i class="el-icon-caret-bottom el-icon--right"></i>
               </el-button>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item>停用</el-dropdown-item>
+                <el-dropdown-item command='a'>停用</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
-            <el-dropdown v-else trigger="click">
+            <el-dropdown v-else trigger="click" @command="handleCommand">
               <el-button>
                 停用<i class="el-icon-caret-bottom el-icon--right"></i>
               </el-button>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item>启用</el-dropdown-item>
+                <el-dropdown-item command='b'>启用</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
           </el-form-item>
@@ -40,6 +40,7 @@
 </template>
 <script>
  import myHeader from '../../myHeader/myHeader'
+ import { saveProject } from '@/api/eduAdmin'
  export default {
    name: 'itemAdd',
    data() {
@@ -50,7 +51,7 @@
          userName: 'shixiuan',
          type: '0',
          telephone: '13535790897',
-         email: '134752398@348.cn',
+         remark: '134752398@348.cn',
          status: 0
        },
        msg: {
@@ -66,7 +67,24 @@
    },
    methods: {
      saveUser() {
-       this.$router.push({ path: '/itmeList' })
+       const obj = {
+         project_name: this.form.name,
+         project_remark: this.form.remark,
+         school_id: 1,
+         project_status: this.form.status
+       }
+       saveProject(obj)
+         .then(res => {
+           console.log(res)
+         })
+       this.$router.push({ path: '/itemList' })
+     },
+     handleCommand(command) {
+       if (command === 'b') {
+         this.form.status = 0
+       } else if (command === 'a') {
+         this.form.status = 1
+       }
      }
    }
  }
