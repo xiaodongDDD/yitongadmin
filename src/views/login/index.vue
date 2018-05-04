@@ -82,7 +82,6 @@ export default {
             if (res.hasOwnProperty('response')) {
               this.loading = false
               setToken(res.response.token)
-              localStorage.removeItem('TOKEN')
               localStorage.setItem('TOKEN', res.response.token)
               this.$router.push({ path: '/' })
             } else {
