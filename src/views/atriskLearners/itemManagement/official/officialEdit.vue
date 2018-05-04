@@ -9,11 +9,10 @@
           <el-form-item label="负责人姓名：">
             <el-input v-model="form.name"></el-input>
           </el-form-item>
-          <el-form-item label="负责学科：">
+          <el-form-item label="负责学科：" id='official'>
             <el-select
               id='officialSelect1'
               v-model="value1"
-              size='medium'
               multiple
               collapse-tags
               placeholder="请选择">
@@ -28,7 +27,6 @@
           <el-form-item label="负责年级：">
             <el-select
               v-model="value2"
-              size='medium'
               multiple
               collapse-tags
               placeholder="请选择">
@@ -126,6 +124,14 @@
 <style scoped>
 .title {
   margin-bottom: 30px;
+}
+</style>
+<style type="text/css">
+#official .el-select__tags{
+  max-width: 163px;
+}
+.main-content .edit-form .el-input{
+  width: 195px;
 }
 </style>
 

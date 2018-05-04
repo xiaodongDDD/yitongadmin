@@ -47,6 +47,7 @@
 </template>
 <script>
   import myHeader from '../../myHeader/myHeader'
+  import { saveLeader } from '@/api/eduAdmin'
   export default {
     name: 'officialEdit',
     data() {
@@ -109,7 +110,20 @@
     },
     methods: {
       saveUser() {
-        this.$router.push({ path: '/itemList' })
+        const obj = {
+          project_id: 1,
+          add_flag: 0,
+          teacher_id: 1,
+          school_id: 1,
+          grade_select: this.value1,
+          subject_select: this.value2,
+        }
+        saveLeader(obj)
+          .then(res => {
+            console.log(res)
+          })
+        // this.$router.push({ path: '/itemList' })
+        // console.log(this.value1)
       }
     }
   }

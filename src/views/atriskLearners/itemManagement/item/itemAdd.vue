@@ -66,6 +66,13 @@
      myHeader
    },
    methods: {
+     handleCommand(command) {
+       if (command === 'b') {
+         this.form.status = 0
+       } else if (command === 'a') {
+         this.form.status = 1
+       }
+     },
      saveUser() {
        const obj = {
          project_name: this.form.name,
@@ -78,13 +85,6 @@
            console.log(res)
          })
        this.$router.push({ path: '/itemList' })
-     },
-     handleCommand(command) {
-       if (command === 'b') {
-         this.form.status = 0
-       } else if (command === 'a') {
-         this.form.status = 1
-       }
      }
    }
  }

@@ -50,7 +50,7 @@
               <el-button
                 size="mini"
                 type="danger"
-                @click="handleDelete(scope.$index, userName = scope.row.name)">删除</el-button>
+                @click="handleDelete(scope.row.teacher_id, scope.row.project_id)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -80,7 +80,7 @@
         </div>
         <span slot="footer" class="dialog-footer">
           <el-button @click="centerDialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
+          <el-button type="primary" @click="confirmeDelete">确 定</el-button>
         </span>
       </el-dialog>
      </div>
@@ -89,7 +89,7 @@
 
 <script>
   import myHeader from '../../myHeader/myHeader'
-  import { projectLeaderList } from '@/api/eduAdmin'
+  import { projectLeaderList, deleteLeader } from '@/api/eduAdmin'
   export default {
     name: 'officialList',
     data() {
@@ -108,30 +108,39 @@
           path: '/itemList'
         },
         tableData: [{
+          project_id: 1,
+          teacher_id: 1,
           leader: 'rag',
           project: '都龙族',
           grade: 'doulongzu',
           type: '学校',
           projectComment: '武宁路育才'
         }, {
+          project_id: 2,
           leader: 'haha',
+          teacher_id: 2,
           project: '都龙族',
           grade: 'doulongzu',
           type: '运营',
           projectComment: ''
         }, {
+          project_id: 3,
+          teacher_id: 3,
           leader: 'lei',
           project: '都龙族',
           grade: 'doulongzu',
           type: '学校',
           projectComment: '武宁路育才'
-        }]
+        }],
+        current_teacher_id: 0,
+        current_project_id: 0
       }
     },
     components: {
       myHeader
     },
     mounted() {
+      //获取数据
       this.getData()
     },
     methods: {
@@ -147,14 +156,32 @@
             console.log(res)
           })
       },
+      //编辑负责人
       handleEdit(index, row) {
         console.log(index, row)
         this.$router.push({ path: '/officialEdit' })
       },
+      //删除负责人
       handleDelete(index, row) {
         console.log(index, row)
+        this.current_teacher_id = index
+        this.current_project_id = row
         this.centerDialogVisible = true
       },
+      //确认删除
+      confirmeDelete() {
+        this.centerDialogVisible = false
+        const obj = {
+          project_id: this.current_project_id,
+          teacher_id: this.current_teacher_id,
+          token: localStorage.getItem('TOKEN')
+        }
+        deleteLeader(obj)
+          .then(res => {
+            console.log(res)
+          })
+      },
+      //分页
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`)
       }
