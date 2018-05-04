@@ -22,18 +22,14 @@
            登 录
         </el-button>
       </el-form-item>
-      <div class="tips">
-        <!--<span style="margin-right:20px;">username: admin</span>-->
-        <!--</span> password: admin</span>-->
-      </div>
     </el-form>
   </div>
 </template>
 
 <script>
-import { isvalidUsername } from '@/utils/validate'
-import { getData } from '@/api/eduAdmin'
-import { getToken, setToken, removeToken } from '@/utils/auth'
+// import { isvalidUsername } from '@/utils/validate'
+import { setToken } from '@/utils/auth'
+import { getLogin } from '@/api/eduAdmin'
 
 export default {
   name: 'login',
@@ -79,15 +75,21 @@ export default {
         password: 123456
       }
       this.$refs.loginForm.validate(valid => {
-        console.log('00000020')
         if (valid) {
           this.loading = true
-          console.log('00000030')
-          getData(obj).then(res => {
-            console.log('0000000')
-            setToken('admin')
-            this.loading = false
-            this.$router.push({ path: '/' })
+          getLogin(obj).then((res) => {
+            console.log(res)
+            if (res.hasOwnProperty('response')) {
+              this.loading = false
+              setToken(res.response.token)
+              localStorage.removeItem('TOKEN')
+              localStorage.setItem('TOKEN', res.response.token)
+              this.$router.push({ path: '/' })
+            } else {
+              this.$alert(res.error_response.msg, '提示', {
+                confirmButtonText: '确定'
+              })
+            }
           }).catch(() => {
             this.loading = false
           })

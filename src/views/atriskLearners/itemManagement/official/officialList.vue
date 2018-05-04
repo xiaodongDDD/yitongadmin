@@ -14,45 +14,35 @@
           style="width: 100%">
           <el-table-column
             align="center"
-            prop="onOff"
-            label="账户状态"
+            prop="leader"
+            label="负责人"
             width="100">
           </el-table-column>
           <el-table-column
             align="center"
-            prop="name"
-            label="姓名"
-            width="100">
+            prop="project"
+            label="负责学科"
+            width="150">
           </el-table-column>
           <el-table-column
             align="center"
-            prop="userName"
-            label="用户名"
-            width="100">
+            prop="grade"
+            label="负责年级"
+            width="150">
           </el-table-column>
           <el-table-column
             align="center"
             prop="type"
-            label="类型"
-            width="60">
+            label="执行人"
+            width="100">
           </el-table-column>
           <el-table-column
-            prop="schoolName"
-            label="学校名称">
+            prop="projectComment"
+            label="项目评语"
+            min-width="300">
           </el-table-column>
           <el-table-column
-            align="center"
-            prop="telephone"
-            label="手机号"
-            width="110">
-          </el-table-column>
-          <el-table-column
-            prop="email"
-            label="邮箱">
-          </el-table-column>
-
-          <el-table-column
-            align="center" label="操作" width="">
+            align="center" label="操作" min-width="200">
             <template slot-scope="scope">
               <el-button
                 size="mini"
@@ -72,7 +62,7 @@
         </router-link>
          <el-pagination
           style='display:inline-block;margin-left:30%;'
-          @current-change="handleCurrentChange" 
+          @current-change="handleCurrentChange"
           background
           layout="prev, pager, next"
           :total="1000">
@@ -93,12 +83,13 @@
           <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
         </span>
       </el-dialog>
-     </div> 
+     </div>
   </div>
 </template>
 
 <script>
   import myHeader from '../../myHeader/myHeader'
+  import { projectLeaderList } from '@/api/eduAdmin'
   export default {
     name: 'officialList',
     data() {
@@ -117,36 +108,45 @@
           path: '/itemList'
         },
         tableData: [{
-          onOff: 0,
-          name: '都龙族',
-          userName: 'doulongzu',
+          leader: 'rag',
+          project: '都龙族',
+          grade: 'doulongzu',
           type: '学校',
-          schoolName: '武宁路育才',
-          email: '16783949@163.com',
-          telephone: '13533790697'
+          projectComment: '武宁路育才'
         }, {
-          onOff: 1,
-          name: '都龙族',
-          userName: 'doulongzu',
+          leader: 'haha',
+          project: '都龙族',
+          grade: 'doulongzu',
           type: '运营',
-          schoolName: '',
-          email: '16783949@163.com',
-          telephone: '13533790697'
+          projectComment: ''
         }, {
-          onOff: 0,
-          name: '都龙族',
-          userName: 'doulongzu',
+          leader: 'lei',
+          project: '都龙族',
+          grade: 'doulongzu',
           type: '学校',
-          schoolName: '武宁路育才',
-          email: '16783949@163.com',
-          telephone: '13533790697'
+          projectComment: '武宁路育才'
         }]
       }
     },
     components: {
       myHeader
     },
+    mounted() {
+      this.getData()
+    },
     methods: {
+      getData() {
+        const obj = {
+          project_id: 1,
+          page: 1,
+          pagesize: 10,
+          token: localStorage.getItem('TOKEN')
+        }
+        projectLeaderList(obj)
+          .then(res => {
+            console.log(res)
+          })
+      },
       handleEdit(index, row) {
         console.log(index, row)
         this.$router.push({ path: '/officialEdit' })
@@ -167,10 +167,10 @@
   width: 100%;
   height: 30px;
   overflow: hidden;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   margin-top: 20px;
   color: #333;
-  font-size: 18px;
+  /*font-size: 18px;*/
   padding: 0px 20px;
 }
 .officialMan {

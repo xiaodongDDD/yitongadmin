@@ -14,7 +14,7 @@
             label="账户状态"
             width="100">
             <template slot-scope="scope">
-              <el-select size="mini" v-model="scope.row.onOff" placeholder="请选择">
+              <el-select size="mini" v-model="scope.row.onOff" @change='changeStatus(scope.row.project_id, scope.row.project_status)' placeholder="请选择">
                 <el-option
                   v-for="item in form.options"
                   :key="item.value"
@@ -98,7 +98,7 @@
         </div>
         <span slot="footer" class="dialog-footer">
           <el-button @click="centerDialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
+          <el-button type="primary" @click="confirmDelete">确 定</el-button>
         </span>
       </el-dialog>
      </div>
@@ -107,7 +107,7 @@
 
 <script>
 import myHeader from '../../myHeader/myHeader'
-import { getProjectList } from '@/api/eduAdmin'
+import { getProjectList, deleteProject, statusProject } from '@/api/eduAdmin'
 export default {
   name: 'itemList',
   data() {
@@ -134,31 +134,39 @@ export default {
       // value: '选项1',
       tableData: [{
         onOff: '停用',
+        project_status: 0,
         name: '都龙族',
         userName: 'doulongzu',
         type: '学校',
         schoolName: '武宁路育才',
         email: '16783949@163.com',
+        project_id: 1,
         telephone: '13533790697'
       }, {
-        onOff: '停用',
+        onOff: '启用',
+        project_status: 1,
         name: '都龙族',
         userName: 'doulongzu',
         type: '运营',
+        project_id: 2,
         schoolName: '',
         email: '16783949@163.com',
         telephone: '13533790697'
       }, {
         onOff: '停用',
+        project_status: 0,
         name: '都龙族',
+        project_id: 3,
         userName: 'doulongzu',
         type: '学校',
         schoolName: '武宁路育才',
         email: '16783949@163.com',
         telephone: '13533790697'
       }, {
-        onOff: '停用',
+        onOff: '启用',
+        project_status: 1,
         name: '都龙族',
+        project_id: 4,
         userName: 'doulongzu',
         type: '运营',
         schoolName: '武宁路育才11',
@@ -171,19 +179,19 @@ export default {
     myHeader
   },
   mounted() {
-    this.getData()
   },
   methods: {
     getData() {
       const obj = {
         school_id: 1,
         page: 1,
-        pagesize: 10
+        pagesize: 10,
+        token: localStorage.getItem('TOKEN')
       }
       getProjectList(obj)
-      .then(res => {
-        console.log(res)
-      })
+        .then(res => {
+          console.log(res)
+        })
     },
     handleEdit(index, row) {
       console.log(index, row)
@@ -200,8 +208,39 @@ export default {
     change() {
       console.log('change')
     },
+    changeStatus(id, status) {
+      console.log(id, status)
+      let afterStatus = status
+      if (status === 0) {
+        afterStatus = 1
+      } else {
+        afterStatus = 0
+      }
+      console.log(afterStatus)
+      const obj = {
+        project_id: id,
+        project_status: afterStatus,
+        token: localStorage.getItem('TOKEN')
+      }
+      statusProject(obj)
+        .then(res => {
+          console.log(res)
+          this.getData()
+        })
+    },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`)
+    },
+    confirmDelete() {
+      const obj = {
+        project_id: 1,
+        token: localStorage.getItem('TOKEN')
+      }
+      deleteProject(obj)
+        .then(res => {
+          console.log(res)
+        })
+      this.centerDialogVisible = false
     }
   }
 }

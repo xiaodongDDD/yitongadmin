@@ -53,6 +53,7 @@
       handleCommand(command) {
         if (command === 'b') {
           removeToken()
+          localStorage.removeItem('TOKEN')
           this.$router.push({ path: '/login' })
         } else if (command === 'a') {
           this.$router.push({ path: '/' })
@@ -104,7 +105,7 @@
   }
   .header-bread{
     display: inline-block;
-    margin-left:15px;
+    margin-left:10px;
   }
   .navbar .avatar-container .avatar-wrapper .el-icon-caret-bottom{
     top: 16px;
@@ -119,7 +120,7 @@
   .icon-div{
     float: left;
     margin-left: 10px;
-    line-height: 57px;
+    line-height: 55px;
     height: 50px;
 
     span{

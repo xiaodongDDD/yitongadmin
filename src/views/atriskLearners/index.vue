@@ -115,8 +115,7 @@
           this.index = '/itemList'
         } else if (this.$route.path === '/officialEdit' || this.$route.path === '/officialAdd') {
           this.index = '/officialList'
-        } else if (this.$route.path === '/transactorEdit' || this.$route.path === '/poorStudentEdit'
-          || this.$route.path === '/exectorEdit' || this.$route.path === '/exectorAdd') {
+        } else if (this.$route.path === '/transactorEdit' || this.$route.path === '/poorStudentEdit' || this.$route.path === '/exectorEdit' || this.$route.path === '/exectorAdd') {
           this.index = '/transactorList'
         } else if (this.$route.path === '/objectEdit' || this.$route.path === '/objectMan') {
           this.index = '/objectList'
@@ -128,7 +127,7 @@
           this.index = this.$route.path
         }
       }
-  }
+    }
   }
 </script>
 

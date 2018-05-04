@@ -12,20 +12,20 @@
             <el-input type="textarea" :rows="10" style='max-width:700px;' v-model="form.email"></el-input>
           </el-form-item>
           <el-form-item label="项目状态：">
-            <el-dropdown v-if="form.status === 0" trigger="click">
+            <el-dropdown @command="handleCommand" v-if="form.status === 0" trigger="click">
               <el-button>
                 启用<i class="el-icon-caret-bottom el-icon--right"></i>
               </el-button>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item>停用</el-dropdown-item>
+                <el-dropdown-item command='a'>停用</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
-            <el-dropdown v-else trigger="click">
+            <el-dropdown v-else trigger="click" @command="handleCommand">
               <el-button>
                 停用<i class="el-icon-caret-bottom el-icon--right"></i>
               </el-button>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item>启用</el-dropdown-item>
+                <el-dropdown-item command='b'>启用</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
           </el-form-item>
@@ -40,6 +40,7 @@
 </template>
 <script>
  import myHeader from '../../myHeader/myHeader'
+ import { getProjectInfo, saveProject } from '@/api/eduAdmin'
  export default {
    name: 'itemEdit',
    data() {
@@ -61,12 +62,42 @@
        }
      }
    },
+   mounted() {
+     this.getData()
+   },
    components: {
      myHeader
    },
    methods: {
+     getData() {
+       const obj = {
+         project_id: 1,
+         token: localStorage.getItem('TOKEN')
+       }
+       getProjectInfo(obj)
+         .then(res => {
+           console.log(res)
+         })
+     },
+     handleCommand(command) {
+       if (command === 'b') {
+         this.form.status = 0
+       } else if (command === 'a') {
+         this.form.status = 1
+       }
+     },
      saveUser() {
-       this.$router.push({ path: '/accountList' })
+       const obj = {
+         project_name: this.form.name,
+         project_remark: this.form.remark,
+         school_id: 1,
+         project_status: this.form.status
+       }
+       saveProject(obj)
+         .then(res => {
+           console.log(res)
+         })
+       this.$router.push({ path: '/itemList' })
      }
    }
  }
