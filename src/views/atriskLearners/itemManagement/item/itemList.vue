@@ -2,7 +2,16 @@
   <div class="center-content item-list">
     <my-header :msg='msg'></my-header>
     <div class="content-detail">
-    	<div class="schoolName"><span class='schools'>上海市普陀区武宁路小学</span><span class='change' @click='change'>切换</span></div>
+    	<div class="schoolName"><span class='schools'>上海市普陀区武宁路小学</span>
+          <el-dropdown @command="handleCommand"  trigger="click">
+          <span class="el-dropdown-link change">
+            切换
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item v-for="item in schools" :command="item">{{ item }}</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div>
       <div class="list-table">
         <el-table
           :data="tableData"
@@ -11,7 +20,7 @@
           <el-table-column
             align="center"
             prop="onOff"
-            label="账户状态"
+            label="项目状态"
             width="100">
             <template slot-scope="scope">
               <el-select size="mini" v-model="scope.row.onOff" @change='changeStatus(scope.row.project_id, scope.row.project_status)' placeholder="请选择">
@@ -27,38 +36,26 @@
           <el-table-column
             align="center"
             prop="name"
-            label="姓名"
+            label="项目名称"
+            width="150">
+          </el-table-column>
+          <el-table-column
+            align="left"
+            prop="instructions"
+            label="项目说明"
+            max-width="400">
+          </el-table-column>
+          <el-table-column
+            align="center"
+            label="负责人"
             width="100">
+            <template slot-scope="scope">
+              <span v-if='scope.row.nums != 0' @click='go' style='cursor: pointer;'>{{ scope.row.nums }}</span>
+              <span @click='go' v-if='scope.row.nums == 0' style='cursor: pointer;'><i class="el-icon-edit-outline"></i></span>
+            </template>
           </el-table-column>
           <el-table-column
-            align="center"
-            prop="userName"
-            label="用户名"
-            width="100">
-          </el-table-column>
-          <el-table-column
-            align="center"
-            prop="type"
-            label="类型"
-            width="60">
-          </el-table-column>
-          <el-table-column
-            prop="schoolName"
-            label="学校名称">
-          </el-table-column>
-          <el-table-column
-            align="center"
-            prop="telephone"
-            label="手机号"
-            width="110">
-          </el-table-column>
-          <el-table-column
-            prop="email"
-            label="邮箱">
-          </el-table-column>
-
-          <el-table-column
-            align="center" label="操作" width="">
+            align="center" label="操作" width="200">
             <template slot-scope="scope">
               <el-button
                 size="mini"
@@ -107,7 +104,7 @@
 
 <script>
 import myHeader from '../../myHeader/myHeader'
-import { getProjectList, deleteProject, statusProject } from '@/api/eduAdmin'
+import { getProjectList, deleteProject, statusProject, showSchools } from '@/api/eduAdmin'
 export default {
   name: 'itemList',
   data() {
@@ -124,6 +121,7 @@ export default {
         flag: 0,
         path: '/itemList'
       },
+      schools: ['哈哈哈中学', '呵呵呵中学', '醉了小学'],
       // options: [{
       //   value: '选项1',
       //   label: '启用'
@@ -136,42 +134,46 @@ export default {
         onOff: '停用',
         project_status: 0,
         name: '都龙族',
-        userName: 'doulongzu',
+        instructions: 'doulongzu',
         type: '学校',
         schoolName: '武宁路育才',
         email: '16783949@163.com',
         project_id: 1,
-        telephone: '13533790697'
+        telephone: '13533790697',
+        nums: 0
       }, {
         onOff: '启用',
         project_status: 1,
         name: '都龙族',
-        userName: 'doulongzu',
+        instructions: 'doulongzu',
         type: '运营',
         project_id: 2,
         schoolName: '',
         email: '16783949@163.com',
-        telephone: '13533790697'
+        telephone: '13533790697',
+        nums: 0
       }, {
         onOff: '停用',
         project_status: 0,
         name: '都龙族',
         project_id: 3,
-        userName: 'doulongzu',
+        instructions: 'doulongzu',
         type: '学校',
         schoolName: '武宁路育才',
         email: '16783949@163.com',
-        telephone: '13533790697'
+        telephone: '13533790697',
+        nums: 0
       }, {
         onOff: '启用',
         project_status: 1,
         name: '都龙族',
         project_id: 4,
-        userName: 'doulongzu',
+        instructions: 'doulongzu',
         type: '运营',
         schoolName: '武宁路育才11',
         email: '1623123783949@163.com',
-        telephone: '13533790697'
+        telephone: '13533790697',
+        nums: 0
       }]
     }
   },
@@ -179,6 +181,7 @@ export default {
     myHeader
   },
   mounted() {
+    this.getSchoolList()
   },
   methods: {
     getData() {
@@ -201,12 +204,24 @@ export default {
       console.log(index, row)
       this.centerDialogVisible = true
     },
-    handleCommand(indexx) {
+    handleCommand(index) {
       // console.log(command)
-      console.log(indexx)
+      console.log(index)
     },
     change() {
       console.log('change')
+    },
+    getSchoolList() {
+      const obj = {
+        token: localStorage.getItem('TOKEN')
+      }
+      showSchools(obj)
+        .then(res => {
+          console.log(res)
+        })
+    },
+    go() {
+       this.$router.push({ path: '/officialEdit' })
     },
     changeStatus(id, status) {
       console.log(id, status)
