@@ -3,7 +3,7 @@
     <!--搜索-->
     <el-form :inline="true" :model="formInline" class="form-inline">
       <el-form-item label="处理人">
-        <el-input v-model="formInline.handle_people" placeholder="审批人"></el-input>
+        <el-input v-model="formInline.handle_people" placeholder=""></el-input>
       </el-form-item>
       <el-form-item label="处理状态">
         <el-select v-model="formInline.handle_status" placeholder="活动区域">
@@ -247,6 +247,13 @@
           deleted: 'danger'
         }
         return statusMap[status]
+      },
+      peopleFilter(item) {
+        if (item === '--') {
+          return ''
+        } else {
+          return item
+        }
       }
     },
     created() {
@@ -282,6 +289,9 @@
       },
       goMark(item) {
         this.form = JSON.parse(JSON.stringify(item))
+        if (this.form.handle_people === '--') {
+          this.form.handle_people = ''
+        }
         if (item.handle_status === '已处理') {
           this.typeFlag = true
         } else {
@@ -364,8 +374,8 @@
   }
 
   .school-html {
+    margin: 20px 30px 20px 30px;
     .form-inline{
-      margin: 20px 30px 0 30px;
     }
     .block {
       text-align: center;
