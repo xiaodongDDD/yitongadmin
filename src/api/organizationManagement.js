@@ -2,23 +2,23 @@ import request from '@/utils/request'
 // 用户详情
 export function userDetail(params) {
   return request({
-    url: '/api/?v=0.1&method=Yi.userDetail',
+    url: '&v=0.1&method=Yi.userDetail',
     method: 'post',
     data: params
   })
 }
-// 用户登录菜单列表
+// 菜单列表
 export function menuList(params) {
   return request({
-    url: '/api/?v=0.1&method=Yi.menuList',
+    url: '&v=0.1&method=Yi.menuList',
     method: 'post',
     data: params
   })
 }
-// 用户登录菜单列表
+// 上下移动菜单列表
 export function moveMenu(params) {
   return request({
-    url: '/api/?v=0.1&method=Yi.moveMenu',
+    url: '&v=0.1&method=Yi.moveMenu',
     method: 'post',
     data: params
   })
@@ -26,7 +26,7 @@ export function moveMenu(params) {
 // 删除菜单
 export function delMenu(params) {
   return request({
-    url: '/api/?v=0.1&method=Yi.delMenu',
+    url: '&v=0.1&method=Yi.delMenu',
     method: 'post',
     data: params
   })
@@ -34,7 +34,7 @@ export function delMenu(params) {
 // 添加和编辑菜单
 export function menu(params) {
   return request({
-    url: '/api/?v=0.1&method=Yi.menu',
+    url: '&v=0.1&method=Yi.menu',
     method: 'post',
     data: params
   })
@@ -42,7 +42,7 @@ export function menu(params) {
 // 登录菜单列表
 export function menuAuthList(params) {
   return request({
-    url: '/api/?v=0.1&method=Yi.menuAuthList',
+    url: '&v=0.1&method=Yi.menuAuthList',
     method: 'post',
     data: params
   })

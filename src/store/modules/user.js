@@ -1,10 +1,12 @@
 // import { logout } from '@/api/login'
-import { getToken, setToken, removeToken } from '@/utils/auth'
-import { login } from '@/api/login'
+import { getToken, getXhbToken, setToken, removeToken, setXhbToken, removeXhbToken } from '@/utils/auth'
+// import { login } from '@/api/login'
+import axios from 'axios'
 
 const user = {
   state: {
     token: getToken(),
+    xhbtoken: getXhbToken(),
     name: '',
     avatar: '',
     roles: []
@@ -13,6 +15,9 @@ const user = {
   mutations: {
     SET_TOKEN: (state, token) => {
       state.token = token
+    },
+    SET_XHBTOKEN: (state, xhbtoken) => {
+      state.xhbtoken = xhbtoken
     },
     SET_NAME: (state, name) => {
       state.name = name
@@ -29,17 +34,31 @@ const user = {
     // 登录
     Login({ commit }, userInfo) {
       return new Promise((resolve, reject) => {
-        console.log('00-00000')
-        login(userInfo).then(response => {
-          console.log(response)
-          if (!response.hasOwnProperty('error_response')) {
-            setToken(response.response.token)
-            commit('SET_TOKEN', response.response.token)
-          }
-          resolve(response)
-        }).catch(error => {
-          reject(error)
-        })
+        axios.post(process.env.BASE_API + '/?v=0.1&method=Yi.backgroundLogin', userInfo)
+          .then((response) => {
+            console.log(response)
+            if (!response.hasOwnProperty('error_response')) {
+              setToken(response.data.response.token)
+              setXhbToken(response.data.response.xhb_user_token)
+              commit('SET_TOKEN', response.data.response.token)
+              commit('SET_XHBTOKEN', response.data.response.xhb_user_token)
+            }
+            resolve(response)
+          }).catch((err) => {
+            reject(err)
+          })
+        // login(userInfo).then(response => {
+        //   console.log(response)
+        //   if (!response.hasOwnProperty('error_response')) {
+        //     setToken(response.response.token)
+        //     setXhbToken(response.response.xhb_user_token)
+        //     commit('SET_TOKEN', response.response.token)
+        //     commit('SET_XHBTOKEN', response.response.xhb_user_token)
+        //   }
+        //   resolve(response)
+        // }).catch(error => {
+        //   reject(error)
+        // })
       })
     },
 
@@ -66,8 +85,10 @@ const user = {
     LogOut({ commit, state }) {
       return new Promise((resolve, reject) => {
         commit('SET_TOKEN', '')
+        commit('SET_XHBTOKEN', '')
         commit('SET_ROLES', [])
         removeToken()
+        removeXhbToken()
         resolve()
         // logout(state.token).then(() => {
         //   commit('SET_TOKEN', '')
@@ -85,6 +106,7 @@ const user = {
       return new Promise(resolve => {
         commit('SET_TOKEN', '')
         removeToken()
+        removeXhbToken()
         resolve()
       })
     }

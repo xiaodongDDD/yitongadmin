@@ -76,15 +76,15 @@ export default {
           this.loading = true
           this.$store.dispatch('Login', this.loginForm).then((response) => {
             this.loading = false
-            if (response.hasOwnProperty('error_response')) {
+            if (response.data.hasOwnProperty('error_response')) {
               this.$message({
                 type: 'error',
-                message: response.error_response.msg
+                message: response.data.error_response.msg
               })
             } else {
               this.$message({
                 type: 'success',
-                message: response.response.msg
+                message: response.data.response.msg
               })
               this.$router.push({ path: '/' })
             }

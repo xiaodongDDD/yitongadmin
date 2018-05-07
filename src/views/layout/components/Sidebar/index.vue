@@ -10,8 +10,13 @@
 import { mapGetters } from 'vuex'
 import SidebarItem from './SidebarItem'
 import ScrollBar from '@/components/ScrollBar'
+import { menuAuthList } from '@/api/organizationManagement'
+import { getToken } from '@/utils/auth'
 
 export default {
+  data() {
+    return {}
+  },
   components: { SidebarItem, ScrollBar },
   computed: {
     ...mapGetters([
@@ -23,6 +28,22 @@ export default {
     isCollapse() {
       return !this.sidebar.opened
     }
+  },
+  created() {
+    const token = getToken()
+    const obj = {
+      'token': token
+    }
+    menuAuthList(obj).then(response => {
+      if (!response.hasOwnProperty('error_response')) {
+        console.log(response)
+      } else {
+        this.$message({
+          message: response.error_response.msg,
+          type: 'error'
+        })
+      }
+    })
   }
 }
 </script>

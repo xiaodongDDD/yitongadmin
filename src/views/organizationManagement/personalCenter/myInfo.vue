@@ -66,6 +66,8 @@
   </div>
 </template>
 <script>
+  import { userDetail } from '@/api/organizationManagement'
+
   export default {
     data() {
       return {
@@ -102,6 +104,23 @@
           ]
         }
       }
+    },
+    created() {
+      const obj = {
+        'u_id': 1,
+        'module_id': 19,
+        'type': 1
+      }
+      userDetail(obj).then(response => {
+        if (!response.hasOwnProperty('error_response')) {
+          console.log(response)
+        } else {
+          this.$message({
+            message: response.error_response.msg,
+            type: 'error'
+          })
+        }
+      })
     },
     methods: {
       onSubmit() {

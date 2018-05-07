@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function login(params) {
   return request({
-    url: '/api/?v=0.1&method=Yi.backgroundLogin',
+    url: '&v=0.1&method=Yi.backgroundLogin',
     method: 'post',
     data: params
   })

@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function getSchoolH5List(params) {
   return request({
-    url: '/api/?v=0.1&method=Yi.feedbackList',
+    url: '&v=0.1&method=Yi.feedbackList',
     method: 'get',
     params
   })
@@ -10,7 +10,7 @@ export function getSchoolH5List(params) {
 
 export function saveFeedbackInfo(params) {
   return request({
-    url: '/api/?v=0.1&method=Yi.feedbackInfoSave',
+    url: '&v=0.1&method=Yi.feedbackInfoSave',
     method: 'post',
     params
   })
