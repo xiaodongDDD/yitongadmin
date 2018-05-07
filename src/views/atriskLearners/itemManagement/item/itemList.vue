@@ -8,7 +8,7 @@
             切换
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item v-for="item in schools" :command="item">{{ item }}</el-dropdown-item>
+            <el-dropdown-item v-for="(item, value) in schools" :key='value' :command="item">{{ item }}</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -140,7 +140,7 @@ export default {
         email: '16783949@163.com',
         project_id: 1,
         telephone: '13533790697',
-        nums: 0
+        nums: 3
       }, {
         onOff: '启用',
         project_status: 1,
@@ -162,7 +162,7 @@ export default {
         schoolName: '武宁路育才',
         email: '16783949@163.com',
         telephone: '13533790697',
-        nums: 0
+        nums: 10
       }, {
         onOff: '启用',
         project_status: 1,
@@ -221,7 +221,7 @@ export default {
         })
     },
     go() {
-       this.$router.push({ path: '/officialEdit' })
+      this.$router.push({ path: '/officialEdit' })
     },
     changeStatus(id, status) {
       console.log(id, status)
