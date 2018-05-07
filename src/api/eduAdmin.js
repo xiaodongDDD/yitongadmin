@@ -1,24 +1,6 @@
 import request from '@/utils/request'
 import qs from 'qs'
 
-// 获取链接参数
-export function getQueryString(params) {
-  var currentUrl = window.location.hash
-  var arr = currentUrl.split('?')
-  if (arr.length > 1) {
-    arr = arr[1].split('&')
-    for (var i = 0; i < arr.length; i++) {
-      var tem = arr[i].split('=')
-      if (tem[0] === params) {
-        return tem[1]
-      }
-    }
-    return null
-  } else {
-    return null
-  }
-}
-
 // 登录
 export function getLogin(datas) {
   return request({
@@ -114,7 +96,7 @@ export function accountList(params) {
   return request({
     url: '/evaluate/?v=0.1&method=Usermanage.getUserList',
     method: 'post',
-    params
+    data: qs.stringify(params)
   })
 }
 
@@ -123,7 +105,7 @@ export function accountDelete(params) {
   return request({
     url: '/evaluate/?v=0.1&method=Usermanage.userDel',
     method: 'post',
-    params
+    data: qs.stringify(params)
   })
 }
 
@@ -132,7 +114,7 @@ export function accountDetail(params) {
   return request({
     url: '/evaluate/?v=0.1&method=Usermanage.teacherDetail',
     method: 'post',
-    params
+    data: qs.stringify(params)
   })
 }
 
@@ -141,7 +123,7 @@ export function accountSet(params) {
   return request({
     url: '/evaluate/?v=0.1&method=Usermanage.accountSet',
     method: 'post',
-    params
+    data: qs.stringify(params)
   })
 }
 
@@ -150,7 +132,7 @@ export function accountEdit(params) {
   return request({
     url: '/evaluate/?v=0.1&method=Usermanage.accountSet',
     method: 'post',
-    params
+    data: qs.stringify(params)
   })
 }
 
@@ -159,6 +141,6 @@ export function addTemplate(params) {
   return request({
     url: '/evaluate/?v=0.1&method=Templatesmanage.createTemplate',
     method: 'post',
-    params
+    data: qs.stringify(params)
   })
 }
