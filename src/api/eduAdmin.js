@@ -28,7 +28,7 @@ export function getLogin(datas) {
   })
 }
 
-//项目列表
+// 项目列表
 export function getProjectList(datas) {
   return request({
     url: '/evaluate/?v=0.1&method=Projectevaluate.projectList',
@@ -37,7 +37,7 @@ export function getProjectList(datas) {
   })
 }
 
-//获取项目信息
+// 获取项目信息
 export function getProjectInfo(datas) {
   return request({
     url: '/evaluate/?v=0.1&method=Projectevaluate.getProjectInfo',
@@ -46,7 +46,7 @@ export function getProjectInfo(datas) {
   })
 }
 
-//删除项目
+// 删除项目
 export function deleteProject(datas) {
   return request({
     url: '/evaluate/?v=0.1&method=Projectevaluate.deleteProject',
@@ -55,7 +55,7 @@ export function deleteProject(datas) {
   })
 }
 
-//保存项目
+// 保存项目
 export function saveProject(datas) {
   return request({
     url: '/evaluate/?v=0.1&method=Projectevaluate.saveProject',
@@ -64,7 +64,7 @@ export function saveProject(datas) {
   })
 }
 
-//状态管理
+// 状态管理
 export function statusProject(datas) {
   return request({
     url: '/evaluate/?v=0.1&method=Projectevaluate.statusProject',
@@ -73,7 +73,7 @@ export function statusProject(datas) {
   })
 }
 
-//负责人列表
+// 负责人列表
 export function projectLeaderList(datas) {
   return request({
     url: '/evaluate/?v=0.1&method=Projecteleader.projectLeaderList',
@@ -82,7 +82,7 @@ export function projectLeaderList(datas) {
   })
 }
 
-//保存新增负责人
+// 保存新增负责人
 export function saveLeader(datas) {
   return request({
     url: '/evaluate/?v=0.1&method=Projecteleader.saveLeader',
@@ -91,7 +91,7 @@ export function saveLeader(datas) {
   })
 }
 
-//删除负责人
+// 删除负责人
 export function deleteLeader(datas) {
   return request({
     url: '/evaluate/?v=0.1&method=Projecteleader.deleteLeader',
@@ -100,7 +100,7 @@ export function deleteLeader(datas) {
   })
 }
 
-//显示切换学校列表
+// 显示切换学校列表
 export function showSchools(datas) {
   return request({
     url: '/evaluate/?v=0.1&method=Projectbase.showSchools',
@@ -114,7 +114,7 @@ export function accountList(params) {
   return request({
     url: '/evaluate/?v=0.1&method=Usermanage.getUserList',
     method: 'post',
-    params
+    data: qs.stringify(params)
   })
 }
 
@@ -123,7 +123,7 @@ export function accountDelete(params) {
   return request({
     url: '/evaluate/?v=0.1&method=Usermanage.userDel',
     method: 'post',
-    params
+    data: qs.stringify(params)
   })
 }
 
@@ -132,7 +132,7 @@ export function accountDetail(params) {
   return request({
     url: '/evaluate/?v=0.1&method=Usermanage.teacherDetail',
     method: 'post',
-    params
+    data: qs.stringify(params)
   })
 }
 
@@ -141,7 +141,7 @@ export function accountSet(params) {
   return request({
     url: '/evaluate/?v=0.1&method=Usermanage.accountSet',
     method: 'post',
-    params
+    data: qs.stringify(params)
   })
 }
 
@@ -150,7 +150,7 @@ export function accountEdit(params) {
   return request({
     url: '/evaluate/?v=0.1&method=Usermanage.accountSet',
     method: 'post',
-    params
+    data: qs.stringify(params)
   })
 }
 

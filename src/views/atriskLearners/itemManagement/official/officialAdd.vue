@@ -116,7 +116,7 @@
           teacher_id: 1,
           school_id: 1,
           grade_select: this.value1,
-          subject_select: this.value2,
+          subject_select: this.value2
         }
         saveLeader(obj)
           .then(res => {

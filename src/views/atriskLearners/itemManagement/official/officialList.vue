@@ -140,7 +140,7 @@
       myHeader
     },
     mounted() {
-      //获取数据
+      // 获取数据
       this.getData()
     },
     methods: {
@@ -156,19 +156,19 @@
             console.log(res)
           })
       },
-      //编辑负责人
+      // 编辑负责人
       handleEdit(index, row) {
         console.log(index, row)
         this.$router.push({ path: '/officialEdit' })
       },
-      //删除负责人
+      // 删除负责人
       handleDelete(index, row) {
         console.log(index, row)
         this.current_teacher_id = index
         this.current_project_id = row
         this.centerDialogVisible = true
       },
-      //确认删除
+      // 确认删除
       confirmeDelete() {
         this.centerDialogVisible = false
         const obj = {
@@ -181,7 +181,7 @@
             console.log(res)
           })
       },
-      //分页
+      // 分页
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`)
       }
