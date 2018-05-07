@@ -193,11 +193,15 @@
         obj.teacher_id = this.form.id
         obj.status = val
         obj.token = localStorage.getItem('TOKEN')
-        // console.log(obj)
         accountSet(obj).then(res => {
           console.log(res)
           if (res.hasOwnProperty('response')) {
             // conso
+            this.$message('修改成功！')
+          } else {
+            this.$alert(res.error_response.msg, '提示', {
+              confirmButtonText: '确定'
+            })
           }
         })
       },
