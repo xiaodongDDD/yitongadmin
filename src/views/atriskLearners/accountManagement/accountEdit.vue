@@ -64,7 +64,7 @@
 
 <script>
   import myHeader from '../myHeader/myHeader'
-  import { accountDetail, accountEdit, getQueryString } from '@/api/eduAdmin'
+  import { accountDetail, accountEdit } from '@/api/eduAdmin'
   export default {
     name: 'accountEdit',
     data() {
@@ -86,7 +86,7 @@
       saveUser() {
         this.form.token = localStorage.getItem('TOKEN')
         accountEdit(this.form).then(res => {
-          console.log(res)
+          // console.log(res)
           if (res.hasOwnProperty('response')) {
             this.$message('修改成功！')
             this.$router.push({ path: '/accountList' })
@@ -95,10 +95,10 @@
       },
       getDetail() {
         const obj = {}
-        obj.teacher_id = getQueryString('teacher_id')
+        obj.teacher_id = this.$route.query.teacher_id
         obj.token = localStorage.getItem('TOKEN')
         accountDetail(obj).then(res => {
-          console.log(res)
+          // console.log(res)
           if (res.hasOwnProperty('response')) {
             const data = res.response
             if (data.info.enabled_status === true) {

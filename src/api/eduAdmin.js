@@ -1,24 +1,6 @@
 import request from '@/utils/request'
 import qs from 'qs'
 
-// 获取链接参数
-export function getQueryString(params) {
-  var currentUrl = window.location.hash
-  var arr = currentUrl.split('?')
-  if (arr.length > 1) {
-    arr = arr[1].split('&')
-    for (var i = 0; i < arr.length; i++) {
-      var tem = arr[i].split('=')
-      if (tem[0] === params) {
-        return tem[1]
-      }
-    }
-    return null
-  } else {
-    return null
-  }
-}
-
 // 登录
 export function getLogin(datas) {
   return request({
@@ -154,3 +136,11 @@ export function accountEdit(params) {
   })
 }
 
+// 添加模板
+export function addTemplate(params) {
+  return request({
+    url: '/evaluate/?v=0.1&method=Templatesmanage.createTemplate',
+    method: 'post',
+    data: qs.stringify(params)
+  })
+}

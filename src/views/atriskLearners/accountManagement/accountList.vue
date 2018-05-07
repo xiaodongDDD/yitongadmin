@@ -183,7 +183,7 @@
         })
       },
       handleEdit(index, id) {
-        this.$router.push({ path: '/accountEdit?teacher_id=' + id })
+        this.$router.push({ path: '/accountEdit', query: { teacher_id: id } })
       },
       handleDelete() {
         this.centerDialogVisible = true
