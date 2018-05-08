@@ -6,7 +6,7 @@
     <div class="edit-form">
       <el-form ref="form" :model="form" label-width="100px">
         <el-form-item label="模板名称：">
-          <el-input v-model="form.name"></el-input>
+          <el-input v-model="form.name" maxlength="50"></el-input>
         </el-form-item>
         <el-form-item label="评价维度：">
           <el-checkbox-group v-model="form.type">
@@ -20,7 +20,7 @@
           <div class="item-list">
             <el-button class="item-plus" icon="el-icon-plus" v-show="!isAddSign" @click="isAddSign = true">新增</el-button>
             <div class="add-item" v-show="isAddSign">
-              <el-input class="add-dimen" placeholder="请输入维度名" v-model="addSignType"></el-input>
+              <el-input class="add-dimen" maxlength="20" placeholder="请输入维度名" v-model="addSignType"></el-input>
               <i class="el-icon-check" @click="addSignList"></i>
               <i class="el-icon-close" @click="isAddSign = false"></i>
             </div>
@@ -31,7 +31,7 @@
           <el-form-item class="big-label" label-width="auto" :label="bItem.sign"></el-form-item>
           <el-form-item label="指标名称：">
             <div class="sign-list" v-for="(item,index2) in bItem.target">
-              <el-input placeholder="请输入指标名称" v-model="item.type"></el-input>
+              <el-input placeholder="请输入指标名称" maxlength="200" v-model="item.type"></el-input>
               <i class="el-icon-circle-close-outline type-icon" @click="removeTarget(index1, index2)"></i>
               <span class="ratetxt">占比</span>
               <el-input class="right-in" placeholder="请输入占比（选填）" v-model="item.rate"></el-input>
@@ -43,7 +43,7 @@
 
           <el-form-item label="评价等级：">
             <div class="sign-list" v-for="(item,index2) in bItem.rank">
-              <el-input placeholder="请输入等级名称（中文、英文、数字不限）" v-model="item.type"></el-input>
+              <el-input placeholder="请输入等级名称（中文、英文、数字不限）" maxlength="15" v-model="item.type"></el-input>
               <i class="el-icon-circle-close-outline type-icon" @click="removeRank(index1, index2)"></i>
               <el-input class="right-in" placeholder="请输入等级说明（选填）" v-model="item.remark"></el-input>
             </div>

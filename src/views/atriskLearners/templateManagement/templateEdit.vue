@@ -43,7 +43,7 @@
 
           <el-form-item label="评价等级：">
             <div class="sign-list" v-for="(item,index2) in bItem.rank">
-              <el-input placeholder="请输入等级名称（中文、英文、数字不限）" maxlength="200" v-model="item.type"></el-input>
+              <el-input placeholder="请输入等级名称（中文、英文、数字不限）" maxlength="15" v-model="item.type"></el-input>
               <i class="el-icon-circle-close-outline type-icon" @click="removeRank(index1, index2)"></i>
               <el-input class="right-in" placeholder="请输入等级说明（选填）" v-model="item.remark"></el-input>
             </div>
@@ -121,7 +121,7 @@
             oneSum++
           }
         }
-        console.log(JSON.stringify(obj))
+        // console.log(JSON.stringify(obj))
         // return false
         if (signSum === 100 && oneSum === 0) {
           addTemplate(obj).then(res => {
