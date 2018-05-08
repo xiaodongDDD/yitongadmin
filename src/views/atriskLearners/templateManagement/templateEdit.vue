@@ -9,7 +9,7 @@
           <el-input v-model="form.name" maxlength="50"></el-input>
         </el-form-item>
         <el-form-item label="评价维度：">
-          <el-checkbox-group v-model="form.type">
+          <el-checkbox-group v-model="form.checktype">
             <div class="item-list" v-for="(item, index) in form.signList">
               <el-checkbox :label="item.type"></el-checkbox>
               <i class="el-icon-circle-close-outline type-icon" @click.prevent="removeDomain(index)"></i>
@@ -43,7 +43,7 @@
 
           <el-form-item label="评价等级：">
             <div class="sign-list" v-for="(item,index2) in bItem.rank">
-              <el-input placeholder="请输入等级名称（中文、英文、数字不限）" maxlength="200" v-model="item.type"></el-input>
+              <el-input placeholder="请输入等级名称（中文、英文、数字不限）" maxlength="15" v-model="item.type"></el-input>
               <i class="el-icon-circle-close-outline type-icon" @click="removeRank(index1, index2)"></i>
               <el-input class="right-in" placeholder="请输入等级说明（选填）" v-model="item.remark"></el-input>
             </div>
@@ -65,16 +65,12 @@
 
 <script>
   import myHeader from '../myHeader/myHeader'
+  import { templateDetail, addTemplate } from '@/api/eduAdmin'
   export default {
     name: 'templateEdit',
     data() {
       return {
-        form: {
-          name: '2018年第一学期语文所有学生补差',
-          type: ['成绩', '态度'],
-          signList: [{ sign: '成绩维度：', type: '成绩', rate: '40', target: [{ type: '基础', rate: '30%' }, { type: '作文', rate: '30%' }], rank: [{ type: '优', rate: '30%' }, { type: '良', rate: '20%' }] },
-            { id: '300', sign: '态度维度：', type: '态度', rate: '60', target: [{ type: '思想', remark: '30%' }], rank: [{ type: '优秀', remark: '30%' }] }]
-        },
+        form: {},
         msg: {
           title1: '评价模版管理',
           title2: '编辑评价模版管理',
@@ -89,7 +85,29 @@
       myHeader
     },
     methods: {
+      getDetail() {
+        const obj = {}
+        obj.template_id = this.$route.query.template_id
+        obj.token = localStorage.getItem('TOKEN')
+        templateDetail(obj).then(res => {
+          // console.log(res)
+          if (res.hasOwnProperty('response')) {
+            this.form = res.response.info
+            const checktype = []
+            for (let i = 0; i < res.response.info.type.length; i++) {
+              checktype.push(res.response.info.type[i].rank)
+            }
+            this.form.checktype = checktype
+          }
+        })
+      },
       saveUser() {
+        const obj = this.form
+        const token = localStorage.getItem('TOKEN')
+        obj.token = token
+        obj.is_update = 2
+        obj.type = this.form.checktype
+
         const len = this.form.signList.length
         let signSum = 0
         let oneSum = 0
@@ -103,8 +121,19 @@
             oneSum++
           }
         }
+        // console.log(JSON.stringify(obj))
+        // return false
         if (signSum === 100 && oneSum === 0) {
-          this.$router.push({ path: '/templateList' })
+          addTemplate(obj).then(res => {
+            if (res.hasOwnProperty('response')) {
+              this.$message('修改成功')
+              this.$router.push({ path: '/templateList' })
+            } else {
+              this.$alert(res.error_response.msg, '提示', {
+                confirmButtonText: '确定'
+              })
+            }
+          })
         } else {
           this.$alert('请确认占比总和！', '提示', {
             confirmButtonText: '确定'
@@ -120,7 +149,11 @@
           sign: '',
           rate: '',
           target: [{ type: '', rate: '' }],
-          rank: [{ type: '', rate: '' }]
+          rank: [{ type: '', remark: '' }]
+        }
+        const addType = {
+          rank: '',
+          rate: ''
         }
         if (this.addSignType !== '' && this.addSignType.length <= 20) {
           addSign.type = this.addSignType
@@ -128,7 +161,11 @@
           this.form.signList.push(addSign)
           this.isAddSign = false
           this.addSignType = ''
-          this.form.type.push(addSign.type)
+          this.form.checktype.push(addSign.type)
+
+          addType.rank = addSign.type
+          addType.rate = addSign.rate
+          this.form.type.push(addType)
         }
       },
       addItem1(index) {
@@ -136,7 +173,7 @@
         this.form.signList[index].target.push(str)
       },
       addItem2(index) {
-        const str = { type: '', rate: '' }
+        const str = { type: '', remark: '' }
         this.form.signList[index].rank.push(str)
       },
       removeTarget(index1, index2) {
@@ -145,6 +182,9 @@
       removeRank(index1, index2) {
         this.form.signList[index1].rank.splice(index2, 1)
       }
+    },
+    mounted() {
+      this.getDetail()
     }
   }
 </script>

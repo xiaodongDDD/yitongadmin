@@ -127,16 +127,34 @@ export function accountSet(params) {
   })
 }
 
-// 账户修改
-export function accountEdit(params) {
+// 添加/保存账户
+export function accountSave(params) {
   return request({
-    url: '/evaluate/?v=0.1&method=Usermanage.accountSet',
+    url: '/evaluate/?v=0.1&method=Usermanage.accountSave',
     method: 'post',
     data: qs.stringify(params)
   })
 }
 
-// 添加模板
+// 获取登录者类型
+export function getAccountType(params) {
+  return request({
+    url: '/evaluate/?v=0.1&method=Usermanage.getUserSchoolInfo',
+    method: 'post',
+    data: qs.stringify(params)
+  })
+}
+
+// 运营获取学校列表
+export function getSchoolList(params) {
+  return request({
+    url: '/evaluate/?v=0.1&method=Usermanage.schoolList',
+    method: 'post',
+    data: qs.stringify(params)
+  })
+}
+
+// 添加编辑模板
 export function addTemplate(params) {
   return request({
     url: '/evaluate/?v=0.1&method=Templatesmanage.createTemplate',
@@ -178,5 +196,32 @@ export function deleteExecutor(datas) {
     url: '/evaluate/?v=0.1&method=Projecteexecutor.deleteExecutor',
     method: 'post',
     data: qs.stringify(datas)
+  })
+}  
+
+// 模板列表
+export function templateList(params) {
+  return request({
+    url: '/evaluate/?v=0.1&method=Templatesmanage.templatesList',
+    method: 'post',
+    data: qs.stringify(params)
+  })
+}
+
+// 删除模板
+export function templateDelete(params) {
+  return request({
+    url: '/evaluate/?v=0.1&method=Templatesmanage.deleteTemplate',
+    method: 'post',
+    data: qs.stringify(params)
+  })
+}
+
+// 获取模板详情
+export function templateDetail(params) {
+  return request({
+    url: '/evaluate/?v=0.1&method=Templatesmanage.templateDetail',
+    method: 'post',
+    data: qs.stringify(params)
   })
 }

@@ -70,17 +70,14 @@ export default {
       }
     },
     handleLogin() {
-      const obj = {
-        username: 13045684793,
-        password: 123456
-      }
+      const obj = this.loginForm
       this.$refs.loginForm.validate(valid => {
         if (valid) {
-          this.loading = true
+          // this.loading = true
           getLogin(obj).then((res) => {
             console.log(res)
             if (res.hasOwnProperty('response')) {
-              this.loading = false
+              // this.loading = false
               setToken(res.response.token)
               localStorage.setItem('TOKEN', res.response.token)
               localStorage.setItem('school_id', res.response.school.school_id)
