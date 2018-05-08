@@ -145,6 +145,7 @@
         templateList(obj).then(res => {
           // console.log(res)
           if (res.hasOwnProperty('response')) {
+            // console.log(res)
             const data = res.response
             this.tableData = data.info
             this.schoolChange = data.school_change

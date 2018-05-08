@@ -94,6 +94,8 @@
         obj.token = token
         obj.is_update = 1
 
+        // console.log(JSON.stringify(obj))
+        // return false
         const len = this.form.signList.length
         let signSum = 0
         let oneSum = 0

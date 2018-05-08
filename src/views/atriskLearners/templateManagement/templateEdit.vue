@@ -31,10 +31,10 @@
           <el-form-item class="big-label" label-width="auto" :label="bItem.sign"></el-form-item>
           <el-form-item label="指标名称：">
             <div class="sign-list" v-for="(item,index2) in bItem.target">
-              <el-input placeholder="请输入指标名称" maxlength="200" v-model="item.rank"></el-input>
+              <el-input placeholder="请输入指标名称" maxlength="200" v-model="item.type"></el-input>
               <i class="el-icon-circle-close-outline type-icon" @click="removeTarget(index1, index2)"></i>
               <span class="ratetxt">占比</span>
-              <el-input class="right-in" placeholder="请输入占比（选填）" v-model="item.tag_ratio"></el-input>
+              <el-input class="right-in" placeholder="请输入占比（选填）" v-model="item.rate"></el-input>
             </div>
             <div class="sign-list">
               <el-button class="item-plus" icon="el-icon-plus" @click="addItem1(index1)">新增</el-button>
@@ -43,9 +43,9 @@
 
           <el-form-item label="评价等级：">
             <div class="sign-list" v-for="(item,index2) in bItem.rank">
-              <el-input placeholder="请输入等级名称（中文、英文、数字不限）" maxlength="200" v-model="item.rank"></el-input>
+              <el-input placeholder="请输入等级名称（中文、英文、数字不限）" maxlength="200" v-model="item.type"></el-input>
               <i class="el-icon-circle-close-outline type-icon" @click="removeRank(index1, index2)"></i>
-              <el-input class="right-in" placeholder="请输入等级说明（选填）" v-model="item.tag_remark"></el-input>
+              <el-input class="right-in" placeholder="请输入等级说明（选填）" v-model="item.remark"></el-input>
             </div>
             <div class="sign-list">
               <el-button class="item-plus" icon="el-icon-plus" @click="addItem2(index1)">新增</el-button>
@@ -106,6 +106,7 @@
         const token = localStorage.getItem('TOKEN')
         obj.token = token
         obj.is_update = 2
+        obj.type = this.form.checktype
 
         const len = this.form.signList.length
         let signSum = 0
@@ -114,7 +115,7 @@
           signSum += parseInt(this.form.signList[i].rate)
           let targetSum = 0
           for (let k = 0; k < this.form.signList[i].target.length; k++) {
-            targetSum += parseInt(this.form.signList[i].target[k].tag_ratio)
+            targetSum += parseInt(this.form.signList[i].target[k].rate)
           }
           if (targetSum !== 100) {
             oneSum++
@@ -147,8 +148,12 @@
           type: '',
           sign: '',
           rate: '',
-          target: [{ rank: '', tag_ratio: '' }],
-          rank: [{ rank: '', tag_remark: '' }]
+          target: [{ type: '', rate: '' }],
+          rank: [{ type: '', remark: '' }]
+        }
+        const addType = {
+          rank: '',
+          rate: ''
         }
         if (this.addSignType !== '' && this.addSignType.length <= 20) {
           addSign.type = this.addSignType
@@ -157,14 +162,18 @@
           this.isAddSign = false
           this.addSignType = ''
           this.form.checktype.push(addSign.type)
+
+          addType.rank = addSign.type
+          addType.rate = addSign.rate
+          this.form.type.push(addType)
         }
       },
       addItem1(index) {
-        const str = { rank: '', tag_ratio: '' }
+        const str = { type: '', rate: '' }
         this.form.signList[index].target.push(str)
       },
       addItem2(index) {
-        const str = { rank: '', tag_remark: '' }
+        const str = { type: '', remark: '' }
         this.form.signList[index].rank.push(str)
       },
       removeTarget(index1, index2) {
