@@ -8,7 +8,7 @@
           <el-form-item label="执行人姓名：">
             <el-input v-model="form.name"></el-input>
           </el-form-item>
-          <el-form-item label="执行学科：">
+          <el-form-item label="执行学科：" id='subject'>
             <el-select
               v-model="value1"
               multiple
@@ -22,7 +22,7 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="执行班级：">
+          <el-form-item label="执行班级：" id='grade'>
             <el-select
               v-model="value2"
               multiple
@@ -36,7 +36,7 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="评价项目模版：">
+          <el-form-item label="评价项目模版：" id='templet'>
             <el-select v-model="value3" placeholder="请选择">
               <el-option
                 v-for="item in options3"
@@ -143,6 +143,17 @@
 
 <style scoped>
 
+</style>
+<style type="text/css">
+.main-content .edit-form #subject .el-input {
+  width: 195px;
+}
+.main-content .edit-form #grade .el-input {
+  width: 195px;
+}
+.main-content .edit-form #templet .el-input {
+  width: 195px;
+}
 </style>
 
 

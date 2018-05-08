@@ -92,6 +92,7 @@
 
 <script>
  import myHeader from '../../myHeader/myHeader'
+ import { projectExecutorList } from '@/api/eduAdmin'
  export default {
    name: 'officialList',
    data() {
@@ -137,7 +138,20 @@
    components: {
      myHeader
    },
+   mounted() {
+     this.getData()
+   },
    methods: {
+     getData() {
+       const obj = {
+         page: '',
+         pagesize: ''
+       }
+       projectExecutorList(obj)
+         .then(res => {
+           console.log(res)
+         })
+     },
      handleEdit(index, row) {
        console.log(index, row)
        this.$router.push({ path: '/transactorEdit' })

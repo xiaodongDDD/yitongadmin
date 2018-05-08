@@ -54,6 +54,8 @@
         if (command === 'b') {
           removeToken()
           localStorage.removeItem('TOKEN')
+          localStorage.removeItem('school_id')
+          localStorage.removeItem('teacher_id')
           this.$router.push({ path: '/login' })
         } else if (command === 'a') {
           this.$router.push({ path: '/' })

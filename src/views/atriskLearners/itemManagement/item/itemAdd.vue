@@ -52,7 +52,7 @@
          type: '0',
          telephone: '13535790897',
          remark: '134752398@348.cn',
-         status: 0
+         status: 1
        },
        msg: {
          title1: '评价项目管理',
@@ -77,8 +77,9 @@
        const obj = {
          project_name: this.form.name,
          project_remark: this.form.remark,
-         school_id: 1,
-         project_status: this.form.status
+         school_id: localStorage.getItem('school_id'),
+         project_status: this.form.status,
+         token: localStorage.getItem('TOKEN')
        }
        saveProject(obj)
          .then(res => {

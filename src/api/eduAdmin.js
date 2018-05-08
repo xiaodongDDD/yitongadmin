@@ -144,3 +144,39 @@ export function addTemplate(params) {
     data: qs.stringify(params)
   })
 }
+
+// 执行人列表
+export function projectExecutorList(datas) {
+  return request({
+    url: '/evaluate/?v=0.1&method=Projecteexecutor.projectExecutorList',
+    method: 'post',
+    data: qs.stringify(datas)
+  })
+}
+
+// 编辑执行人管理
+export function showExecutorManager(datas) {
+  return request({
+    url: '/evaluate/?v=0.1&method=Projecteexecutor.showExecutorManager',
+    method: 'post',
+    data: qs.stringify(datas)
+  })
+}
+
+// 负责人下执行人列表
+export function leaderExecutorList(datas) {
+  return request({
+    url: '/evaluate/?v=0.1&method=Projecteexecutor.leaderExecutorList',
+    method: 'post',
+    data: qs.stringify(datas)
+  })
+}
+
+// 删除执行人
+export function deleteExecutor(datas) {
+  return request({
+    url: '/evaluate/?v=0.1&method=Projecteexecutor.deleteExecutor',
+    method: 'post',
+    data: qs.stringify(datas)
+  })
+}
