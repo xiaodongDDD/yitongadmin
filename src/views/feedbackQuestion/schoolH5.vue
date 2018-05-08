@@ -27,11 +27,11 @@
         </el-date-picker>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="onSubmit">查询</el-button>
+        <el-button type="primary" @click="onSubmit">搜索</el-button>
       </el-form-item>
     </el-form>
     <!--列表//-->
-    <el-table :data="list" v-loading.body="listLoading" element-loading-text="加载中..." border fit highlight-current-row>
+    <el-table :data="list" v-loading.body="listLoading" element-loading-text="加载中..." border fit highlight-current-row style="width: 100%">
       <el-table-column align="center" label='id' width="95">
         <template slot-scope="scope">
           {{scope.row.f_id}}
@@ -78,7 +78,18 @@
       </el-table-column>
       <el-table-column label="问题详情" align="center">
         <template slot-scope="scope">
-          {{scope.row.detail}}
+          <span v-popover:popover4 style="width: 10px;height: 10px">
+              <span class="point">{{scope.row.detail | contentFilter}}</span>
+              <el-popover
+                ref="popover4"
+                placement="top-start"
+                width="200"
+                trigger="hover">
+                <div style="max-height: 300px;overflow-y: scroll">
+                  {{scope.row.detail}}
+                </div>
+              </el-popover>
+            </span>
         </template>
       </el-table-column>
       <el-table-column label="处理人" width="110" align="center">
@@ -175,7 +186,7 @@
         currentPage: 1,
         total: 0,
         page: false,
-        pagesize: 20,
+        pagesize: 10,
         dialogFormVisible: false,
         form: {},
         formLabelWidth: '80px',
@@ -253,6 +264,13 @@
           return ''
         } else {
           return item
+        }
+      },
+      contentFilter(content) {
+        if (content.length > 7) {
+          return content.substr(0, 7) + '...'
+        } else {
+          return content
         }
       }
     },
