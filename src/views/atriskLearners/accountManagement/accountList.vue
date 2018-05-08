@@ -49,8 +49,8 @@
             label="类型"
             width="80">
             <template slot-scope="scope">
-              <span v-if="scope.row.teacher_type === '1'">学校</span>
-              <span v-if="scope.row.teacher_type === '3'">运营</span>
+              <span v-if="scope.row.teacher_type != '3'">学校</span>
+              <span v-else>运营</span>
             </template>
           </el-table-column>
           <el-table-column
@@ -85,7 +85,7 @@
 
 
       <div class="list-add">
-        <router-link to="/accountAdd">
+        <router-link to="/accountAdd" v-show="userInfo.teacher_type == 3">
           <el-button icon="el-icon-plus">新增</el-button>
         </router-link>
         <el-pagination
@@ -123,7 +123,7 @@
 
 <script>
   import myHeader from '../myHeader/myHeader'
-  import { accountList, accountDelete, accountSet } from '@/api/eduAdmin'
+  import { accountList, accountDelete, accountSet, getAccountType } from '@/api/eduAdmin'
   export default {
     name: 'accountList',
     data() {
@@ -139,6 +139,11 @@
           name: '',
           id: '',
           options: [{ value: '1', label: '启用' }, { value: '0', label: '停用' }]
+        },
+        userInfo: {
+          teacher_type: '1',
+          school_id: '10008',
+          school_name: '上海市普陀区武宁路小学'
         },
         msg: {
           title1: '账户管理',
@@ -157,6 +162,16 @@
       myHeader
     },
     methods: {
+      getType() {
+        const obj = {}
+        obj.token = localStorage.getItem('TOKEN')
+        getAccountType(obj).then(res => {
+          // console.log(res)
+          if (res.hasOwnProperty('response')) {
+            this.userInfo = res.response
+          }
+        })
+      },
       getList(page) {
         const obj = {}
         obj.page = page
@@ -183,7 +198,7 @@
         })
       },
       handleEdit(index, id) {
-        this.$router.push({ path: '/accountEdit', query: { teacher_id: id } })
+        this.$router.push({ path: '/accountEdit', query: { teacher_id: id }})
       },
       handleDelete() {
         this.centerDialogVisible = true
@@ -194,14 +209,14 @@
         obj.status = val
         obj.token = localStorage.getItem('TOKEN')
         accountSet(obj).then(res => {
-          console.log(res)
+          // console.log(res)
           if (res.hasOwnProperty('response')) {
-            // conso
             this.$message('修改成功！')
           } else {
             this.$alert(res.error_response.msg, '提示', {
               confirmButtonText: '确定'
             })
+            this.getList(this.pageData.page)
           }
         })
       },
@@ -223,6 +238,7 @@
       }
     },
     mounted() {
+      this.getType()
       this.getList(1)
     }
   }

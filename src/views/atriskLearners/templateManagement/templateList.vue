@@ -2,7 +2,17 @@
   <div class="center-content template-list">
     <my-header :msg='msg'></my-header>
     <div class="content-detail">
-      <p class="position">上海市普陀山叮叮当小学</p>
+      <div class="schoolName"><span class='schools'>上海市普陀区武宁路小学</span>
+        <el-dropdown @command="handleCommand"  trigger="click" v-show="schoolChange">
+          <span class="el-dropdown-link change">
+            切换
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item v-for="(item, value) in schools" :key='value' :command="item">{{ item }}</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div>
+
       <div class="list-table">
         <el-table
           :data="tableData"
@@ -10,13 +20,13 @@
           style="width: 100%">
           <el-table-column
             align="center"
-            prop="name"
+            prop="template_name"
             label="模板名称"
             width="">
           </el-table-column>
           <el-table-column
             align="center"
-            prop="type"
+            prop="mark_weidu"
             label="维度"
             width="">
           </el-table-column>
@@ -30,7 +40,7 @@
             <el-button
               size="mini"
               type="danger"
-              @click="handleDelete(scope.$index, tname = scope.row.name)">删除</el-button>
+              @click="handleDelete(scope.$index, tinfo.tname = scope.row.template_name, tinfo.template_id = scope.row.template_id)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -41,10 +51,10 @@
       </router-link>
       <el-pagination
           style='display:inline-block;margin-left:30%;'
-          @current-change="handleCurrentChange"  
+          @current-change="handleCurrentChange"
           background
           layout="prev, pager, next"
-          :total="1000">
+          :page-count	="pageData.allPage">
         </el-pagination>
     </div>
 
@@ -55,13 +65,13 @@
         center>
         <div class="dialogContent">
           <p>请确认是否要删除</p>
-          <p>{{ tname }}模板</p>
+          <p>{{ tinfo.tname }}模板</p>
 
           <p>删除后，该模板相关的评价将彻底删除</p>
         </div>
         <span slot="footer" class="dialog-footer">
           <el-button @click="centerDialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
+          <el-button type="primary" @click="templateDelete()">确 定</el-button>
         </span>
       </el-dialog>
     </div>
@@ -70,31 +80,33 @@
 
 <script>
   import myHeader from '../myHeader/myHeader'
+  import { templateList, templateDelete } from '@/api/eduAdmin'
   export default {
     name: 'templateList',
     data() {
       return {
         centerDialogVisible: false,
-        tname: '',
+        tinfo: {
+          tname: '',
+          template_id: '',
+          token: localStorage.getItem('TOKEN')
+        },
         form: {
           name: ''
         },
+        schools: ['哈哈哈中学', '呵呵呵中学', '醉了小学'],
         msg: {
           title1: '评价模版管理',
           title2: '',
           flag: 0,
           path: '/itemList'
         },
-        tableData: [{
-          name: '2018年第一学期语文所有学生补差',
-          type: '成绩'
-        }, {
-          name: '都龙族',
-          type: '成绩'
-        }, {
-          name: '都龙族',
-          type: '成绩'
-        }]
+        tableData: [],
+        pageData: {
+          page: '',
+          allPage: 1
+        },
+        schoolChange: false
       }
     },
     components: {
@@ -102,16 +114,51 @@
     },
     methods: {
       handleEdit(index, row) {
-        console.log(index, row)
-        this.$router.push({ path: '/templateEdit' })
+        this.$router.push({ path: '/templateEdit', query: { template_id: row.template_id }})
       },
-      handleDelete(index, row) {
-        console.log(index, row)
+      handleDelete(index) {
         this.centerDialogVisible = true
       },
       handleCurrentChange(val) {
-        console.log(`当前页: ${val}`)
+        this.getList(val)
+      },
+      templateDelete() {
+        templateDelete(this.tinfo).then(res => {
+          // console.log(res)
+          if (res.hasOwnProperty('response')) {
+            this.$message('删除成功！')
+            this.getList(this.pageData.page)
+            this.centerDialogVisible = false
+          } else {
+            this.$alert(res.error_response.msg, '提示', {
+              confirmButtonText: '确定'
+            })
+          }
+        })
+      },
+      handleCommand() {},
+      getList(page) {
+        const obj = {}
+        obj.page = page
+        this.pageData.page = page
+        obj.token = localStorage.getItem('TOKEN')
+        templateList(obj).then(res => {
+          // console.log(res)
+          if (res.hasOwnProperty('response')) {
+            const data = res.response
+            this.tableData = data.info
+            this.schoolChange = data.school_change
+            this.pageData.allPage = data.total_page
+          } else {
+            this.$alert('系统出错！', '提示', {
+              confirmButtonText: '确定'
+            })
+          }
+        })
       }
+    },
+    mounted() {
+      this.getList(1)
     }
   }
 </script>
@@ -119,5 +166,27 @@
 <style scoped>
   .position{
     text-indent: 0;
+  }
+  .schoolName {
+    margin-bottom: 30px;
+    margin-top: 20px;
+  }
+  .schools {
+    display: inline-block;
+    margin-right: 30px;
+  }
+  .change {
+    display: inline-block;
+    width: 40px;
+    text-align: center;
+    line-height: 22px;
+    border-radius: 5px;
+    font-size: 14px;
+    height: 25px;
+    border: 1px solid #f4f4f4;
+    padding: 2px;
+    background-color: #f4f4f4;
+    cursor: pointer;
+
   }
 </style>

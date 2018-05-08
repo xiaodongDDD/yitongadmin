@@ -4,29 +4,43 @@
     <div class="content-detail">
       <p class="position">新增账户</p>
       <div class="edit-form">
-        <el-form ref="form" :model="form" label-width="100px">
+        <el-form ref="form" :rules="rules" :model="form" label-width="100px">
           <el-form-item label="类型：">
-            <!--<el-input v-model="form.type"></el-input>-->
-            <span v-if="form.type == 0"> 学校   {{form.schoolName}}</span>
-            <span v-else>运营</span>
+            <span>运营</span>
+            <!--<span v-if="userInfo.teacher_type != 3"> 学校   {{userInfo.school_name}}</span>-->
+            <!--<div class="acadd-selcect">-->
+              <!--<el-select v-model="form.teacher_type" placeholder="请选择">-->
+                <!--<el-option-->
+                  <!--v-for="item in form.options"-->
+                  <!--:key="item.value"-->
+                  <!--:label="item.label"-->
+                  <!--:value="item.value">-->
+                <!--</el-option>-->
+              <!--</el-select>-->
+              <!--<el-input v-model="form.school_name"></el-input>-->
+            <!--</div>-->
           </el-form-item>
 
-          <el-form-item label="姓名：">
-            <el-input v-model="form.name"></el-input>
+          <el-form-item label="姓名：" prop="teacher_name">
+            <el-input v-model="form.teacher_name"></el-input>
           </el-form-item>
-          <el-form-item label="用户名：">
-            <el-input v-model="form.userName"></el-input>
+          <el-form-item label="用户名：" prop="username">
+            <el-input v-model="form.username"></el-input>
           </el-form-item>
-          <el-form-item label="手机号：">
+          <el-form-item label="手机号：" prop="telephone">
             <el-input v-model="form.telephone"></el-input>
           </el-form-item>
-          <el-form-item label="邮箱：">
-            <el-input v-model="form.email"></el-input>
+          <el-form-item label="邮箱：" prop="">
+            <el-input v-model="form.e_mail"></el-input>
           </el-form-item>
           <el-form-item label="账户状态：">
             <el-select v-model="form.status" placeholder="请选择">
-              <el-option label="启用" value="on"></el-option>
-              <el-option label="停用" value="off"></el-option>
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
             </el-select>
           </el-form-item>
           <el-form-item>
@@ -41,38 +55,118 @@
 
 <script>
   import myHeader from '../myHeader/myHeader'
+  import { accountSave, getAccountType } from '@/api/eduAdmin'
   export default {
     name: 'accountAdd',
     data() {
+      const checkName = (rule, value, callback) => {
+        if (value !== '') {
+          if (!(/[a-zA-Z0-9]/.test(value))) {
+            return callback(new Error('包含非法字符'))
+          }
+        }
+      }
+      const checkEmail = (rule, value, callback) => {
+        if (value !== '') {
+          if (!(/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(value))) {
+            return callback(new Error('邮箱格式不正确'))
+          }
+        }
+      }
+      const checkTel = (rule, value, callback) => {
+        if (value !== '') {
+          if (!(/^[1][3,4,5,7,8][0-9]{9}$/.test(value))) {
+            return callback(new Error('请输入正确的手机号'))
+          }
+        }
+      }
       return {
         form: {
-          type: 0,
-          schoolName: '无盈利瑟瑟发抖小学',
-          name: '石选晓',
-          userName: 'shixuanxiao',
-          email: 'lfdlfejdfkaj@190.com',
-          status: 'off',
-          telephone: '13535790897'
+          school_id: '',
+          teacher_type: '3',
+          school_name: '',
+          teacher_name: '',
+          username: '',
+          e_mail: '',
+          status: '停用',
+          telephone: '',
+          options: [{ value: '1', label: '学校' }, { value: '3', label: '运营' }]
+        },
+        rules: {
+          teacher_name: [
+            { max: 28, message: '不得超过28个字符', trigger: 'blur' }
+          ],
+          username: [
+            { validator: checkName, trigger: 'blur' }
+          ],
+          telephone: [
+            { validator: checkTel, trigger: 'blur' }
+          ],
+          e_mail: [
+            { validator: checkEmail, trigger: 'blur' }
+          ]
+        },
+        userInfo: {
+          teacher_type: '1',
+          school_id: '10008',
+          school_name: '上海市普陀区武宁路小学'
         },
         msg: {
           title1: '账户管理',
           title2: '新增账户',
           flag: 1,
           path: '/accountList'
-        }
+        },
+        options: [{ value: '1', label: '启用' }, { value: '0', label: '停用' }]
       }
     },
     components: {
       myHeader
     },
     methods: {
+      getType() {
+        const obj = {}
+        obj.token = localStorage.getItem('TOKEN')
+        getAccountType(obj).then(res => {
+          // console.log(res)
+          if (res.hasOwnProperty('response')) {
+            this.userInfo = res.response
+            this.form.school_name = res.response.school_name
+            this.form.school_id = res.response.school_id
+          }
+        })
+      },
       saveUser() {
-        this.$router.push({ path: '/powerEdit' })
+        if (this.form.status === '停用') {
+          this.form.enabled_status = 0
+        } else {
+          this.form.enabled_status = 1
+        }
+        this.form.token = localStorage.getItem('TOKEN')
+        accountSave(this.form).then(res => {
+          // console.log(res)
+          if (res.hasOwnProperty('response')) {
+            this.$message('添加成功！')
+            this.$router.push({ path: '/powerEdit' })
+          } else {
+            this.$alert(res.error_response.msg, '提示', {
+              confirmButtonText: '确定'
+            })
+          }
+        })
       }
+    },
+    mounted() {
+      this.getType()
     }
   }
 </script>
 
-<style scoped>
-
+<style rel="stylesheet/scss" lang="scss">
+  .acadd-selcect{
+    width: 43%;
+    .el-select .el-input{
+      width: 120px!important;
+    }
+  }
 </style>

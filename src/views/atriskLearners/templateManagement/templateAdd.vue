@@ -107,6 +107,7 @@
             oneSum++
           }
         }
+
         if (signSum === 100 && oneSum === 0) {
           addTemplate(obj).then(res => {
             if (res.hasOwnProperty('response')) {
