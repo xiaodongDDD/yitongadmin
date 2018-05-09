@@ -197,7 +197,7 @@ export function deleteExecutor(datas) {
     method: 'post',
     data: qs.stringify(datas)
   })
-}  
+}
 
 // 模板列表
 export function templateList(params) {
