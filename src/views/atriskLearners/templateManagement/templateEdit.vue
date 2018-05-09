@@ -121,7 +121,7 @@
             oneSum++
           }
         }
-        // console.log(JSON.stringify(obj))
+        console.log(JSON.stringify(obj))
         // return false
         if (signSum === 100 && oneSum === 0) {
           addTemplate(obj).then(res => {
