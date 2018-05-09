@@ -16,26 +16,28 @@
               multiple
               collapse-tags
               placeholder="请选择">
+              <span id="checkAll2" @click='checkAll2'>全选</span>
               <el-option
                 v-for="item in options1"
-                :key="item.value"
+                :key="item.values"
                 :label="item.label"
-                :value="item.value">
+                :value="item.values">
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="负责年级：">
+          <el-form-item label="负责年级：" id='official2'>
             <el-select
               v-model="value2"
               multiple
               collapse-tags
               placeholder="请选择">
+              <span id="checkAll" @click='checkAll'>全选</span>
               <el-option
                 v-for="item in options2"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value">
-              </el-option>
+              </el-option> 
             </el-select>
           </el-form-item>
           <el-form-item>
@@ -72,19 +74,19 @@
           path2: '/officialList'
         },
         options1: [{
-          value: '选项1',
+          values: '选项1',
           label: '黄金糕'
         }, {
-          value: '选项2',
+          values: '选项2',
           label: '双皮奶'
         }, {
-          value: '选项3',
+          values: '选项3',
           label: '蚵仔煎'
         }, {
-          value: '选项4',
+          values: '选项4',
           label: '龙须面'
         }, {
-          value: '选项5',
+          values: '选项5',
           label: '北京烤鸭'
         }],
         options2: [{
@@ -104,7 +106,8 @@
           label: '北京烤鸭1'
         }],
         value2: [],
-        value1: []
+        value1: [],
+        allValues: ['选项1', '选项2', '选项3', '选项4', '选项5']
       }
     },
     components: {
@@ -116,6 +119,32 @@
         console.log(this.value1)
         console.log(this.value2)
         console.log(this.$router)
+      },
+      checkAll() {
+        this.value2 = ['选项1', '选项2', '选项3', '选项4', '选项5']
+      },
+      checkAll2() {
+        this.value1 = ['选项1', '选项2', '选项3', '选项4', '选项5']
+      }
+    },
+    watch: {
+      value2: function(news, olds) {
+        console.log(news)
+        console.log(olds)
+        if (news.length === this.allValues.length) {
+          document.getElementById('checkAll').style.color = '#409EFF'
+        } else {
+          document.getElementById('checkAll').style.color = '#606266'
+        }
+      },
+      value1: function(news, olds) {
+        console.log(news)
+        console.log(olds)
+        if (news.length === this.allValues.length) {
+          document.getElementById('checkAll2').style.color = '#409EFF'
+        } else {
+          document.getElementById('checkAll2').style.color = '#606266'
+        }
       }
     }
   }
@@ -127,11 +156,32 @@
 }
 </style>
 <style type="text/css">
-#official .el-select__tags{
+#official .el-select__tags {
   max-width: 163px;
 }
-.main-content .edit-form .el-input{
+.main-content .edit-form #official .el-input {
   width: 195px;
+}
+.main-content .edit-form #official2 .el-input {
+  width: 195px;
+}
+#checkAll {
+  display: inline-block;
+  text-indent: 140px;
+  font-size: 14px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  cursor: pointer;
+  color: #606266;
+}
+#checkAll2 {
+  display: inline-block;
+  text-indent: 140px;
+  font-size: 14px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  cursor: pointer;
+  color: #606266;
 }
 </style>
 

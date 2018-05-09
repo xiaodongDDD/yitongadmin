@@ -6,13 +6,13 @@
         <div class="edit-form">
         <el-form ref="form" :model="form" label-width="100px">
           <el-form-item label="项目名称：">
-            <el-input v-model="form.name"></el-input>
+            <el-input v-model="form.project_name"></el-input>
           </el-form-item>
           <el-form-item label="项目说明：">
-            <el-input type="textarea" :rows="10" style='max-width:700px;' v-model="form.email"></el-input>
+            <el-input type="textarea" :rows="10" style='max-width:700px;' v-model="form.project_remark"></el-input>
           </el-form-item>
           <el-form-item label="项目状态：">
-            <el-dropdown @command="handleCommand" v-if="form.status === 0" trigger="click">
+            <el-dropdown @command="handleCommand" v-if="form.project_status === '1'" trigger="click">
               <el-button>
                 启用<i class="el-icon-caret-bottom el-icon--right"></i>
               </el-button>
@@ -46,13 +46,14 @@
    data() {
      return {
        form: {
-         name: '石选晓',
+         project_name: '石选晓',
          schoolName: '武宁路小学',
-         userName: 'shixiuan',
-         type: '0',
-         telephone: '13535790897',
-         email: '134752398@348.cn',
-         status: 0
+         semester_id: 'shixiuan',
+         project_id: '',
+         school_id: '',
+         create_time: '',
+         project_remark: '134752398@348.cn',
+         project_status: '0'
        },
        msg: {
          title1: '评价项目管理',
@@ -71,33 +72,41 @@
    methods: {
      getData() {
        const obj = {
-         project_id: 1,
+         project_id: this.$route.query.project_id,
          token: localStorage.getItem('TOKEN')
        }
        getProjectInfo(obj)
          .then(res => {
            console.log(res)
+           if (res.hasOwnProperty('response')) {
+             this.form = res.response.info
+           } else {
+             this.$alert('系统出错！', '提示', {
+               confirmButtonText: '确定'
+             })
+           }
          })
      },
      handleCommand(command) {
        if (command === 'b') {
-         this.form.status = 0
+         this.form.project_status = '0'
        } else if (command === 'a') {
-         this.form.status = 1
+         this.form.project_status = '1'
        }
      },
      saveUser() {
        const obj = {
-         project_name: this.form.name,
-         project_remark: this.form.remark,
-         school_id: 1,
-         project_status: this.form.status
+         project_id: this.$route.query.project_id,
+         project_name: this.form.project_name,
+         project_remark: this.form.project_remark,
+         school_id: localStorage.getItem('school_id'),
+         project_status: this.form.project_status
        }
        saveProject(obj)
          .then(res => {
            console.log(res)
+           this.$router.push({ path: '/itemList' })
          })
-       this.$router.push({ path: '/itemList' })
      }
    }
  }

@@ -111,7 +111,6 @@
     methods: {
       saveUser() {
         const obj = {
-          project_id: 1,
           add_flag: 0,
           teacher_id: 1,
           school_id: 1,

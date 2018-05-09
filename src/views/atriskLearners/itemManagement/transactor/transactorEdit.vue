@@ -6,20 +6,19 @@
       <div class="edit-form">
         <el-form ref="form" :model="form" label-width="100px">
           <el-form-item label="项目名称：">
-            <span>{{form.name}}</span>
+            <span>{{form.project_name}}</span>
           </el-form-item>
           <el-form-item label="项目说明：">
-            <span v-if="form.type == 0">学校</span>
-            <span v-else>运营</span>
+            <span>{{ form.project_remark }}</span>
           </el-form-item>
           <el-form-item label="负责人：">
-            <span>{{form.schoolName}}</span>
+            <span>{{form.teacher_name}}</span>
           </el-form-item>
           <el-form-item label="负责学科：">
-            <span>{{form.telephone}}</span>
+            <span>{{form.subject_name}}</span>
           </el-form-item>
           <el-form-item label="负责年级：">
-            <span>{{form.telephone}}</span>
+            <span>{{form.grade_name}}</span>
           </el-form-item>
          <el-form-item label="项目评语：">
             <el-input type="textarea" :rows="5" v-model="form.phone"></el-input>
@@ -36,17 +35,18 @@
 
 <script>
   import myHeader from '../../myHeader/myHeader'
+  import { showExecutorManager } from '@/api/eduAdmin'
   export default {
     name: 'transactorEdit',
     data() {
       return {
         form: {
-          name: '石选晓',
-          type: 0,
+          project_name: '',
+          teacher_name: '石选晓',
           schoolName: '石选晓可代发集齐啊小花',
-          status: 'on',
-          telephone: '13535790897',
-          powerlist: ['学校用户管理']
+          subject_name: '',
+          grade_name: '13535790897',
+          project_comment: ''
         },
         msg: {
           title1: '项目评价管理',
@@ -61,7 +61,25 @@
     components: {
       myHeader
     },
+    mounted() {
+      this.getData()
+    },
     methods: {
+      getData() {
+        const obj = {
+          project_id: 1,
+          teacher_id: 10220,
+          token: localStorage.getItem('TOKEN')
+        }
+        showExecutorManager(obj)
+          .then(res => {
+            console.log(res)
+            this.form = res.response.info
+          })
+          .catch(err => {
+            console.log(err)
+          })
+      },
       saveUser() {
         this.$router.push({ path: '/userList' })
       }

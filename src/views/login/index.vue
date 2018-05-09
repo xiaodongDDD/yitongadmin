@@ -80,6 +80,8 @@ export default {
               // this.loading = false
               setToken(res.response.token)
               localStorage.setItem('TOKEN', res.response.token)
+              localStorage.setItem('school_id', res.response.school.school_id)
+              localStorage.setItem('teacher_id', res.response.teacher_info.teacher_id)
               this.$router.push({ path: '/' })
             } else {
               this.$alert(res.error_response.msg, '提示', {

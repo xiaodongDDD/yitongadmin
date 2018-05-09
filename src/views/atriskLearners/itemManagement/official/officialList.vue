@@ -96,8 +96,8 @@
       return {
         centerDialogVisible: false,
         userName: '',
-        manName: 'ray',
-        manNum: 100,
+        manName: '',
+        manNum: 0,
         form: {
           name: ''
         },
@@ -146,14 +146,19 @@
     methods: {
       getData() {
         const obj = {
-          project_id: 1,
+          project_id: this.$route.query.project_id,
           page: 1,
           pagesize: 10,
           token: localStorage.getItem('TOKEN')
         }
+        console.log(obj)
         projectLeaderList(obj)
           .then(res => {
             console.log(res)
+            if (res.hasOwnProperty('response')) {
+              this.manName = res.response.school_admin
+              this.manNum = res.response.teacher_count
+            }
           })
       },
       // 编辑负责人
@@ -179,6 +184,7 @@
         deleteLeader(obj)
           .then(res => {
             console.log(res)
+            this.getData()
           })
       },
       // 分页
@@ -209,8 +215,13 @@
 .goback {
   float: right;
   height: 30px;
-  line-height: 30px;
+  line-height: 26px;
+  font-size: 15px;
   display: inline-block;
+  cursor: pointer;
+  padding: 3px;
+  background-color: #f4f4f4;
+  border-radius: 5px;
 }
 .smallTitle {
   margin-bottom: 10px;

@@ -19,11 +19,11 @@
           style="width: 100%">
           <el-table-column
             align="center"
-            prop="onOff"
+            prop="status"
             label="项目状态"
             width="100">
             <template slot-scope="scope">
-              <el-select size="mini" v-model="scope.row.onOff" @change='changeStatus(scope.row.project_id, scope.row.project_status)' placeholder="请选择">
+              <el-select size="mini" v-model="scope.row.project_status" @change='changeStatus(scope.row.project_id, scope.row.project_status)' placeholder="请选择">
                 <el-option
                   v-for="item in form.options"
                   :key="item.value"
@@ -35,13 +35,13 @@
           </el-table-column>
           <el-table-column
             align="center"
-            prop="name"
+            prop="project_name"
             label="项目名称"
             width="150">
           </el-table-column>
           <el-table-column
             align="left"
-            prop="instructions"
+            prop="project_remark"
             label="项目说明"
             max-width="400">
           </el-table-column>
@@ -50,8 +50,8 @@
             label="负责人"
             width="100">
             <template slot-scope="scope">
-              <span v-if='scope.row.nums != 0' @click='go' style='cursor: pointer;'>{{ scope.row.nums }}</span>
-              <span @click='go' v-if='scope.row.nums == 0' style='cursor: pointer;'><i class="el-icon-edit-outline"></i></span>
+              <span v-if='scope.row.leader_cnt != 0' @click='go(scope.row.project_id)' style='cursor: pointer;'>{{ scope.row.leader_cnt }}</span>
+              <span @click='go(scope.row.project_id)' v-if='scope.row.leader_cnt == 0' style='cursor: pointer;'><i class="el-icon-edit-outline"></i></span>
             </template>
           </el-table-column>
           <el-table-column
@@ -59,11 +59,11 @@
             <template slot-scope="scope">
               <el-button
                 size="mini"
-                @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                @click="handleEdit(scope.row.project_id)">编辑</el-button>
               <el-button
                 size="mini"
                 type="danger"
-                @click="handleDelete(scope.$index, userName = scope.row.name)">删除</el-button>
+                @click="handleDelete(scope.row.project_id)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -90,7 +90,6 @@
         <div class="dialogContent">
           <p>请确认是否要删除</p>
           <p>{{ userName }}账户</p>
-
           <p>删除后，该账户将无法登录</p>
         </div>
         <span slot="footer" class="dialog-footer">
@@ -130,78 +129,48 @@ export default {
       //   label: '停用'
       // }],
       // value: '选项1',
-      tableData: [{
-        onOff: '停用',
-        project_status: 0,
-        name: '都龙族',
-        instructions: 'doulongzu',
-        type: '学校',
-        schoolName: '武宁路育才',
-        email: '16783949@163.com',
-        project_id: 1,
-        telephone: '13533790697',
-        nums: 3
-      }, {
-        onOff: '启用',
-        project_status: 1,
-        name: '都龙族',
-        instructions: 'doulongzu',
-        type: '运营',
-        project_id: 2,
-        schoolName: '',
-        email: '16783949@163.com',
-        telephone: '13533790697',
-        nums: 0
-      }, {
-        onOff: '停用',
-        project_status: 0,
-        name: '都龙族',
-        project_id: 3,
-        instructions: 'doulongzu',
-        type: '学校',
-        schoolName: '武宁路育才',
-        email: '16783949@163.com',
-        telephone: '13533790697',
-        nums: 10
-      }, {
-        onOff: '启用',
-        project_status: 1,
-        name: '都龙族',
-        project_id: 4,
-        instructions: 'doulongzu',
-        type: '运营',
-        schoolName: '武宁路育才11',
-        email: '1623123783949@163.com',
-        telephone: '13533790697',
-        nums: 0
-      }]
+      tableData: [],
+      current_proID: ''
     }
   },
   components: {
     myHeader
   },
   mounted() {
+    this.getData()
     this.getSchoolList()
   },
   methods: {
     getData() {
       const obj = {
-        school_id: 1,
+        school_id: localStorage.getItem('school_id'),
         page: 1,
         pagesize: 10,
         token: localStorage.getItem('TOKEN')
       }
+      console.log(obj)
       getProjectList(obj)
         .then(res => {
           console.log(res)
+          if (res.hasOwnProperty('response')) {
+            this.tableData = res.response.list
+            // for (let i = 0; i < res.response.list.length; i++) {
+            //   if (res.response.list[i].project_status === "0") {
+            //     res.response.list[i].status = '启用'
+            //   } else {
+            //     res.response.list[i].status = '停用'
+            //   }
+            // }
+          }
         })
     },
-    handleEdit(index, row) {
-      console.log(index, row)
-      this.$router.push({ path: '/itemEdit' })
+    handleEdit(val) {
+      console.log(val)
+      this.$router.push({ path: '/itemEdit', query: { project_id: val }})
     },
-    handleDelete(index, row) {
-      console.log(index, row)
+    handleDelete(val) {
+      console.log(val)
+      this.current_proID = val
       this.centerDialogVisible = true
     },
     handleCommand(index) {
@@ -220,21 +189,21 @@ export default {
           console.log(res)
         })
     },
-    go() {
-      this.$router.push({ path: '/officialEdit' })
+    go(val) {
+      this.$router.push({ path: '/officialList', query: { project_id: val }})
     },
     changeStatus(id, status) {
-      console.log(id, status)
-      let afterStatus = status
-      if (status === 0) {
-        afterStatus = 1
-      } else {
-        afterStatus = 0
-      }
-      console.log(afterStatus)
+      // console.log('first', status)
+      // let afterStatus = status
+      // if (status === "0") {
+      //   afterStatus = "1"
+      // } else if (status === "1") {
+      //   afterStatus = "0"
+      // }
+      // console.log('second',afterStatus)
       const obj = {
         project_id: id,
-        project_status: afterStatus,
+        project_status: status,
         token: localStorage.getItem('TOKEN')
       }
       statusProject(obj)
@@ -248,17 +217,19 @@ export default {
     },
     confirmDelete() {
       const obj = {
-        project_id: 1,
+        project_id: this.current_proID,
         token: localStorage.getItem('TOKEN')
       }
       deleteProject(obj)
         .then(res => {
           console.log(res)
+          this.getData()
+          this.centerDialogVisible = false
         })
-      this.centerDialogVisible = false
     }
   }
 }
+
 </script>
 
 <style scoped>

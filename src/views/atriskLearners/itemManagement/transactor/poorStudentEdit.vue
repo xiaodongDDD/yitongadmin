@@ -4,8 +4,8 @@
       <div class="content-detail">
         <div class="title"><span class="officialMan">学困生辅导执行人管理</span><span class="goback">返回</span></div>
       <div class="smallTitle">
-        <span class='manName'>管理员{{ manName }}&nbsp&nbsp</span>
-        <span class="manNum">负责人{{ manNum }}</span>
+        <span class='manName'>管理员 {{ manName }}&nbsp&nbsp</span>
+        <span class="manNum">负责人 {{ manNum }}</span>
       </div>
       <div class="list-table">
         <el-table
@@ -50,7 +50,7 @@
               <el-button
                 size="mini"
                 type="danger"
-                @click="handleDelete(scope.$index, userName = scope.row.name)">删除</el-button>
+                @click="handleDelete(scope.row.project_id, scope.row.subject_id, scope.row.teacher_id)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -81,7 +81,7 @@
         </div>
         <span slot="footer" class="dialog-footer">
           <el-button @click="centerDialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
+          <el-button type="primary" @click="confirmDelete">确 定</el-button>
         </span>
       </el-dialog>
     </div>  
@@ -90,6 +90,7 @@
 
 <script>
   import myHeader from '../../myHeader/myHeader'
+  import { leaderExecutorList, deleteExecutor } from '@/api/eduAdmin'
   export default {
     name: 'poorStudent',
     data() {
@@ -101,6 +102,9 @@
         },
         manName: 'ray',
         manNum: '111',
+        current_project_id: '',
+        current_subject_id: '',
+        current_teacher_id: '',
         msg: {
           title1: '项目评价管理',
           title2: '执行人管理',
@@ -130,17 +134,47 @@
     components: {
       myHeader
     },
+    mounted() {
+      this.getData()
+    },
     methods: {
+      getData() {
+        const obj = {
+          project_id: 1,
+          teacher_id: 10220,
+          token: localStorage.getItem('TOKEN')
+        }
+        leaderExecutorList(obj)
+          .then(res => {
+            console.log(res)
+          })
+      },
       handleEdit(index, row) {
         console.log(index, row)
         this.$router.push({ path: '/exectorEdit' })
       },
-      handleDelete(index, row) {
-        console.log(index, row)
+      handleDelete(val1, val2, val3) {
+        this.current_project_id = val1
+        this.current_subject_id = val2
+        this.current_teacher_id = val3
         this.centerDialogVisible = true
       },
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`)
+      },
+      confirmDelete() {
+        const obj = {
+          project_id: this.current_project_id,
+          subject_id: this.current_subject_id,
+          teacher_id: this.current_teacher_id
+        }
+        deleteExecutor(obj)
+          .then(res => {
+            console.log(res)
+          })
+          .catch(err => {
+            console.log(err)
+          })
       }
     }
   }
