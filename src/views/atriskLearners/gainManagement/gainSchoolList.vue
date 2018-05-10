@@ -11,7 +11,14 @@
         <div class="search-contaier">
           <el-form :inline="true" :model="formInline" class="demo-form-inline">
             <el-form-item label="年级">
-              <el-input v-model="formInline.grade" placeholder=""></el-input>
+              <el-dropdown @command="changeGrade" trigger="click">
+                <span class="el-dropdown-link">
+                  <el-input v-model="formInline.grade" placeholder=""></el-input>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item v-for="item in gradeData" :command="item">{{ item.grade_name}}</el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
             </el-form-item>
             <el-form-item label="班级">
               <el-input v-model="formInline.class" placeholder=""></el-input>
@@ -40,37 +47,37 @@
             style="width: 100%">
             <el-table-column
               align="center"
-              prop="name"
+              prop="student_name"
               label="学生姓名"
               width="120">
             </el-table-column>
             <el-table-column
               align="center"
-              prop="class"
+              prop="grade_class"
               label="年级班级"
               width="120">
             </el-table-column>
             <el-table-column
               align="center"
-              prop="subject"
+              prop="subject_name"
               label="辅导学科"
               width="120">
             </el-table-column>
             <el-table-column
               align="center"
-              prop="teacher"
+              prop="teacher_name"
               label="辅导老师"
               width="120">
             </el-table-column>
             <el-table-column
               align="center"
-              prop="template"
+              prop="template_name"
               label="评价模板"
               width="">
             </el-table-column>
             <el-table-column
               align="center"
-              prop="time"
+              prop="semester_name"
               label="时间"
               width="">
             </el-table-column>
@@ -105,12 +112,21 @@
             <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
          </span>
         </el-dialog>
+
+        <el-pagination
+          style='display:inline-block;margin-left:37%;margin-top:20px'
+          @current-change="handleCurrentChange"
+          background
+          layout="prev, pager, next"
+          :page-count	="pageData.allPage">
+        </el-pagination>
     </div>
   </div>
 </template>
 
 <script>
   import myHeader from '../myHeader/myHeader'
+  import { gainSchoolList, gainClassSubject } from '@/api/eduAdmin'
   export default {
     name: 'gainSchoolList',
     data() {
@@ -131,27 +147,16 @@
           class: '',
           subject: ''
         },
-        tableData: [{
-          name: '和多啦',
-          class: '一年级1班',
-          subject: '语文',
-          teacher: '尅阿拉丁',
-          template: '2018年第二学期语文补差',
-          time: '2018年第二学期',
-          type: '成绩'
-        }, {
-          name: '都龙族',
-          class: '一年级1班',
-          subject: '语文',
-          teacher: '尅阿拉丁',
-          template: '2018年第二学期语文补差',
-          time: '2018年第二学期',
-          type: '成绩'
-        }],
+        tableData: [],
+        pageData: {
+          page: '',
+          allPage: 1
+        },
         isSearch: {
           searched: false,
           listNum: 3
-        }
+        },
+        gradeData: []
       }
     },
     components: {
@@ -159,7 +164,7 @@
     },
     methods: {
       handleEdit(index, row) {
-        console.log(index, row)
+        // console.log(index, row)
         this.$router.push({ path: '/gainDetails' })
       },
       importGain() {
@@ -169,7 +174,45 @@
       onSubmit() {},
       clearCondition() {
         this.formInline = { grade: '', class: '', subject: '' }
+      },
+      getList(page, grade_id, class_id, subject_id) {
+        const obj = {}
+        obj.project_id = this.$route.query.project_id
+        obj.page = page
+        obj.grade_id = grade_id
+        obj.class_id = class_id
+        obj.subject_id = subject_id
+        obj.token = localStorage.getItem('TOKEN')
+        gainSchoolList(obj).then(res => {
+          // console.log(res)
+          if (res.hasOwnProperty('response')) {
+            this.tableData = res.response.info
+            this.gradeData = res.response.grade_list
+            this.pageData.allPage = res.response.total_page
+          }
+        })
+      },
+      changeGrade(item) {
+        const obj = {}
+        obj.grade_id = item.grade_id
+        this.formInline.grade = item.grade_name
+        gainClassSubject(obj).then(res => {
+          console.log(res)
+          if (res.hasOwnProperty('response')) {
+            this.gradeData = res.response.info
+          } else {
+            this.$alert(res.error_response.msg, '提示', {
+              confirmButtonText: '确定'
+            })
+          }
+        })
+      },
+      handleCurrentChange(val) {
+        this.getList(val)
       }
+    },
+    mounted() {
+      this.getList(1)
     }
   }
 </script>
@@ -185,6 +228,14 @@
     .search-result{
       color: #666;
       font-size: 14px;
+    }
+  }
+  .grade-list{
+    list-style: none;
+    line-height: 30px;
+    margin: 0;
+    li{
+      cursor: pointer;
     }
   }
 </style>
