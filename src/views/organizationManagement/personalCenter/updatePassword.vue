@@ -10,7 +10,7 @@
       <el-form-item label="确认密码" prop="checkPass">
         <el-input type="password" v-model="ruleForm.checkPass" auto-complete="off"></el-input>
       </el-form-item>
-      <el-form-item>
+      <el-form-item class="text-center">
         <el-button @click="resetForm('ruleForm')">取消</el-button>
         <el-button type="primary" @click="submitForm('ruleForm')">保存</el-button>
       </el-form-item>
@@ -85,5 +85,8 @@
   .ruleForm{
     margin-top: 20px;
     width: 75%;
+    .text-center{
+      text-align: center;
+    }
   }
 </style>

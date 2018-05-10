@@ -28,6 +28,7 @@
   </div>
 </template>
 <script>
+  import { addEditRole } from '@/api/organizationManagement'
   export default {
     data() {
       return {
@@ -106,6 +107,13 @@
       keepInfo() {
         this.$refs['ruleForm'].validate((valid) => {
           if (valid) {
+            const obj = {
+              'module_id': this.module_id,
+              'pagesize': this.pagesize,
+              'now_page': this.currentPage
+            }
+            addEditRole(obj).then(response => {
+            }).catch()
             alert('submit!')
           } else {
             console.log('error submit!!')

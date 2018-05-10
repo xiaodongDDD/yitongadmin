@@ -31,12 +31,12 @@
               <span class="custom-tree-node" slot-scope="{ node, data }">
                 <span>{{ node.label }}</span>
                 <span class="operatingList">
-                  <el-dropdown trigger="click" @command="goDialog">
+                  <el-dropdown trigger="click" >
                     <span class="el-dropdown-link">
                       <i class="el-icon-more"></i>
                     </span>
                     <el-dropdown-menu slot="dropdown">
-                      <el-dropdown-item v-for="item in operatingList" :key="item.id" :command="item">{{item.label}}</el-dropdown-item>
+                      <el-dropdown-item v-for="item in operatingList" :key="item.id" :command="item" @click.native = "goDialog(item, data)">{{item.label}}</el-dropdown-item>
                     </el-dropdown-menu>
                   </el-dropdown>
                 </span>
@@ -301,8 +301,9 @@
       beforeRemove(file, fileList) {
         return this.$confirm(`确定移除 ${file.name} ？`)
       },
-      goDialog(item) {
+      goDialog(item, data) {
         console.log(item.id)
+        console.log(data)
         if (item.id === 1) {
           this.dialogFormAddepartment = true
         } else if (item.id === 2) {

@@ -7,10 +7,12 @@
           <el-col :span="12" class="buttonAlign"><el-button size="mini" icon="el-icon-plus" round></el-button></el-col>
         </el-row>
         <el-tree
-          :data="data5"
+          :data="dataList"
           node-key="id"
           default-expand-all
-          :expand-on-click-node="false">
+          :props="defaultProps"
+          :expand-on-click-node="false"
+          @node-click="handleNodeClick">
           <span class="custom-tree-node" slot-scope="{ node, data }">
             <span>{{ node.label }}</span>
             <span class="operatingList">
@@ -19,7 +21,7 @@
                   <i class="el-icon-more"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item v-for="item in operatingList" :key="item.id">{{item.label}}</el-dropdown-item>
+                  <el-dropdown-item v-for="item in operatingList" :key="item.id"  @click.native = "goDialog(item, data)">{{item.label}}</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
             </span>
@@ -32,20 +34,20 @@
         <el-col :span="12"><p>菜单权限</p></el-col>
       </el-row>
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-        <el-form-item label="菜单名称" prop="name">
-          <el-input v-model="ruleForm.name"></el-input>
+        <el-form-item label="菜单名称" prop="menu_name">
+          <el-input v-model="ruleForm.menu_name"></el-input>
         </el-form-item>
-        <el-form-item label="上级菜单" prop="upname">
-          <el-input v-model="ruleForm.upname"></el-input>
+        <el-form-item label="上级菜单" >
+          <el-input v-model="ruleForm.parent_menu_name" disabled></el-input>
         </el-form-item>
-        <el-form-item label="菜单编号" prop="code">
-          <el-input v-model="ruleForm.code"></el-input>
+        <el-form-item label="菜单编号" >
+          <el-input v-model="ruleForm.yt_m_id" disabled></el-input>
         </el-form-item>
-        <el-form-item label="菜单标识" prop="menuid">
-          <el-input v-model="ruleForm.menuid"></el-input>
+        <el-form-item label="菜单标识" >
+          <el-input v-model="ruleForm.menu_url" ></el-input>
         </el-form-item>
-        <el-form-item label="备注" prop="mark">
-          <el-input type="textarea" v-model="ruleForm.mark"></el-input>
+        <el-form-item label="备注" prop="comment">
+          <el-input type="textarea" v-model="ruleForm.comment"></el-input>
         </el-form-item>
       </el-form>
       <el-row :gutter="20">
@@ -154,7 +156,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer text-center el-dialog-top">
         <el-button @click="dialogFormVisibleFunction = false">取 消</el-button>
-        <el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
+        <el-button type="primary" @click="submitForm('formFunction')">确 定</el-button>
       </div>
     </el-dialog>
 
@@ -176,7 +178,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer text-center el-dialog-top">
         <el-button @click="dialogFormVisibleData = false">取 消</el-button>
-        <el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
+        <el-button type="primary" @click="submitForm('formData')">确 定</el-button>
       </div>
     </el-dialog>
 
@@ -185,56 +187,28 @@
 
 
 <script>
-  let id = 1000
+  import { menuList, moveMenu, delMenu, menuDetailt, menu, menuFunctionAuth, menuDataAuth } from '@/api/organizationManagement'
   export default {
     data() {
-      const data = [{
-        id: 1,
-        label: '组织架构',
-        children: [{
-          id: 4,
-          label: '二级 1-1',
-          children: [{
-            id: 9,
-            label: '三级 1-1-1'
-          }, {
-            id: 10,
-            label: '三级 1-1-2'
-          }]
-        }]
-      }, {
-        id: 2,
-        label: '个人中心'
-      }, {
-        id: 3,
-        label: '首页'
-      }, {
-        id: 99,
-        label: '首页'
-      }, {
-        id: 88,
-        label: '首页'
-      }]
       return {
-        data5: JSON.parse(JSON.stringify(data)),
+        dataList: [],
+        defaultProps: {
+          children: 'children',
+          label: 'menu_name'
+        },
         operatingList: [{ id: 1, label: '添加子菜单' },
           { id: 2, label: '编辑菜单' },
           { id: 3, label: '上移' },
           { id: 4, label: '下移' },
           { id: 5, label: '删除' }],
         ruleForm: {
-          name: '',
-          upname: '',
-          code: '',
-          menuid: '',
-          mark: ''
         },
         rules: {
-          name: [
+          menu_name: [
             { required: true, message: '请输入菜单名称', trigger: 'blur' },
             { max: 40, message: '最多可输入 40 个字符', trigger: 'blur' }
           ],
-          mark: [
+          comment: [
             { max: 50, message: '最多可输入 50 个字符', trigger: 'blur' }
           ]
         },
@@ -279,28 +253,172 @@
           mark: [
             { max: 50, message: '最多可输入 50 个字符', trigger: 'blur' }
           ]
-        }
+        },
+        module_id: 18
       }
     },
+    created() {
+      this.initTree('init')
+    },
     methods: {
-      append(data) {
-        const newChild = { id: id++, label: 'testtest', children: [] }
-        if (!data.children) {
-          this.$set(data, 'children', [])
+      initTree(item) {
+        const obj = {
+          'module_id': this.module_id
         }
-        data.children.push(newChild)
+        menuList(obj).then(response => {
+          this.dataList = response.response.info
+          if (item === 'init') {
+            this.menuDetail(this.dataList[0].yt_m_id)
+          }
+        })
       },
-
-      remove(node, data) {
-        const parent = node.parent
-        const children = parent.data.children || parent.data
-        const index = children.findIndex(d => d.id === data.id)
-        children.splice(index, 1)
+      goDialog(item, data) {
+        console.log(item)
+        console.log(data)
+        if (item.id === 1) {
+          this.dialogFormAddepartment = true
+        } else if (item.id === 2) {
+          this.dialogFormAddepartment = true
+        } else if (item.id === 3) {
+          this.$confirm('确认上移?', '确认操作', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
+            center: true
+          }).then(() => {
+            const obj = {
+              'yt_m_id': data.yt_m_id,
+              'module_id': this.module_id,
+              'move_type': '-1'
+            }
+            moveMenu(obj).then(response => {
+              this.$message({
+                type: 'success',
+                message: response.response.msg
+              })
+              this.initTree()
+            })
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消上移'
+            })
+          })
+        } else if (item.id === 4) {
+          this.$confirm('确认下移?', '确认操作', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
+            center: true
+          }).then(() => {
+            const obj = {
+              'yt_m_id': data.yt_m_id,
+              'module_id': this.module_id,
+              'move_type': '1'
+            }
+            moveMenu(obj).then(response => {
+              this.$message({
+                type: 'success',
+                message: response.response.msg
+              })
+              this.initTree()
+            })
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消下移'
+            })
+          })
+        } else {
+          this.$confirm('确认删除?', '确认操作', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
+            center: true
+          }).then(() => {
+            const obj = {
+              'yt_m_id': data.yt_m_id,
+              'module_id': this.module_id
+            }
+            delMenu(obj).then(response => {
+              this.$message({
+                type: 'success',
+                message: response.response.msg
+              })
+              this.initTree()
+            })
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消删除'
+            })
+          })
+        }
       },
-      // 保存
+      // 保存菜单权限
       submitForm() {
         this.$refs['ruleForm'].validate((valid) => {
           if (valid) {
+            const obj = {
+              yt_m_id: this.ruleForm.yt_m_id, // 菜单id（编辑必传）
+              module_id: this.module_id,
+              parent_id: this.ruleForm.parent_menu_id, // 父类id（新增必传）
+              menu_name: this.ruleForm.menu_name,
+              menu_url: this.ruleForm.menu_url,
+              comment: this.ruleForm.comment
+            }
+            menu(obj).then(response => {
+              this.$message({
+                type: 'success',
+                message: response.response.msg
+              })
+            })
+          } else {
+            console.log('error submit!!')
+            return false
+          }
+        })
+      },
+      // 保存菜单数据权限表格
+      submitFormData() {
+        this.$refs['formData'].validate((valid) => {
+          if (valid) {
+            const obj = {
+              name: this.ruleForm.yt_m_id,
+              remark: this.module_id,
+              comment: this.ruleForm.parent_menu_id,
+              yt_m_id: this.ruleForm.menu_name
+            }
+            menuDataAuth(obj).then(response => {
+              this.$message({
+                type: 'success',
+                message: response.response.msg
+              })
+            })
+            alert('submit!')
+          } else {
+            console.log('error submit!!')
+            return false
+          }
+        })
+      },
+      // 保存菜单功能权限表格
+      submitFormFunction() {
+        this.$refs['formFunction'].validate((valid) => {
+          if (valid) {
+            const obj = {
+              name: this.ruleForm.yt_m_id,
+              remark: this.module_id,
+              comment: this.ruleForm.parent_menu_id,
+              yt_m_id: this.ruleForm.menu_name,
+              module_id: ''
+            }
+            menuFunctionAuth(obj).then(response => {
+              this.$message({
+                type: 'success',
+                message: response.response.msg
+              })
+            })
             alert('submit!')
           } else {
             console.log('error submit!!')
@@ -337,6 +455,27 @@
       },
       dataAny() {
         this.dialogFormVisibleData = true
+      },
+      // 点击tree的节点
+      handleNodeClick(data) {
+        this.menuDetail(data.yt_m_id)
+      },
+      // 调用菜单详情接口
+      menuDetail(item) {
+        const obj = {
+          yt_m_id: item,
+          module_id: this.module_id
+        }
+        menuDetailt(obj).then(response => {
+          this.ruleForm = response.response.info
+          if (this.ruleForm.parent_info.hasOwnProperty('menu_name')) {
+            this.ruleForm.parent_menu_name = this.ruleForm.parent_info.menu_name
+            this.ruleForm.parent_menu_id = this.ruleForm.parent_info.yt_m_id
+          } else {
+            this.ruleForm.parent_menu_name = ''
+            this.ruleForm.parent_menu_id = ''
+          }
+        })
       }
     }
   }
