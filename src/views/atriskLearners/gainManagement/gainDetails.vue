@@ -203,6 +203,9 @@
       font-size: 14px;
       border:1px solid #ebeef5;
     }
+    tr:hover{
+      background: #f5f7fa;
+    }
   }
   .el-table tr th:first-child{
     width: 180px!important;
