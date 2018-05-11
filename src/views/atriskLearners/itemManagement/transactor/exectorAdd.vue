@@ -5,30 +5,38 @@
       <p class="position">新增执行人</p>
         <div class="edit-form">
         <el-form ref="form" :model="form" label-width="100px">
-          <el-form-item label="执行人姓名：">
-            <el-input v-model="form.name"></el-input>
+          <el-form-item label="执行人姓名：" id='names'>
+            <el-select
+              v-model="value"
+              collapse-tags
+              @change="chooseName"
+              placeholder="请选择">
+              <el-option
+                v-for="item in options"
+                :key="item.teacher_id"
+                :label="item.teacher_name"
+                :value="item.teacher_id">
+              </el-option>
+            </el-select>
           </el-form-item>
-          <el-form-item label="执行学科：">
+          <el-form-item label="执行学科：" id='subject'>
             <el-select
               v-model="value1"
-              multiple
               collapse-tags
-              style="margin-left: 20px;"
               placeholder="请选择">
               <el-option
                 v-for="item in options1"
                 :key="item.value"
-                :label="item.label"
-                :value="item.value">
+                :label="item.subject_name"
+                :value="item.subject_id">
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="执行班级：">
+          <el-form-item label="执行班级：" id='grade'>
             <el-select
               v-model="value2"
               multiple
               collapse-tags
-              style="margin-left: 20px;"
               placeholder="请选择">
               <el-option
                 v-for="item in options2"
@@ -38,7 +46,7 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="评价项目：">
+          <el-form-item label="评价项目：" id='project'>
             <el-select v-model="value3" placeholder="请选择">
               <el-option
                 v-for="item in options3"
@@ -134,7 +142,15 @@
     components: {
       myHeader
     },
+    mounted() {
+      this.getData()
+    },
     methods: {
+      getData() {
+        const obj = {
+          
+        }
+      },
       saveUser() {
         this.$router.push({ path: '/poorStudentEdit' })
       }
@@ -145,5 +161,21 @@
 <style scoped>
 
 </style>
-
+<style type="text/css">
+#subject .el-select__tags {
+  max-width: 163px;
+}
+#grade .el-select__tags {
+  max-width: 163px;
+}
+.main-content .edit-form #subject .el-input {
+  width: 195px;
+}
+.main-content .edit-form #grade .el-input {
+  width: 195px;
+}
+.main-content .edit-form #project .el-input {
+  width: 375px;
+}
+</style>
 

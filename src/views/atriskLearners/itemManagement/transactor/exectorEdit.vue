@@ -43,12 +43,12 @@
               <el-option
                 v-for="item in options2"
                 :key="item.value"
-                :label="item.label"
-                :value="item.value">
+                :label="item.c_name"
+                :value="item.class_id">
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="评价项目模版：" id='templet'>
+          <el-form-item label="评价项目模板：" id='templet'>
             <el-select v-model="value3" placeholder="请选择">
               <el-option
                 v-for="item in options3"
@@ -69,7 +69,7 @@
 </template>
 <script>
   import myHeader from '../../myHeader/myHeader'
-  import { getExecutor, getExecutorSubject, getExecutorTemplate, getExecutorTeacher } from '@/api/eduAdmin'
+  import { getExecutor, getExecutorSubject, getExecutorTeacher, getExecutorClass, saveExecutor } from '@/api/eduAdmin'
   export default {
     name: 'exectorEdit',
     data() {
@@ -100,8 +100,9 @@
         options3: [],
         value3: '',
         value2: [],
-        value1: [],
-        value: []
+        value1: '',
+        value: '',
+        class_list:[]
       }
     },
     components: {
@@ -113,7 +114,11 @@
       this.leader_id = this.$route.query.leader_id
       this.subject_id = this.$route.query.subject_id
       this.executor_id = this.$route.query.executor_id
+      this.class_list = this.$route.query.class_list
+      this.template_id = this.$route.query.template_id
+      this.grade_id = this.$route.query.grade_id
       this.getData()
+      this.showData()
     },
     methods: {
       getData() {
@@ -141,18 +146,107 @@
             console.log(err)
           })
       },
+      showData() {
+        this.value = this.executor_id
+        this.value1 = this.subject_id
+        this.value2 = this.class_list
+        this.value3 = this.template_id
+      },
       chooseName() {
-        console.log('change111')
+        this.getSubjectData()
+        this.getClassData()
       },
       chooseSubject() {
-        console.log('change222')
+        this.getNameData()
+        this.getClassData()
       },
       chooseGrade() {
-        console.log('change333')
+      },
+      getNameData() {
+        const obj = {
+          project_id: this.project_id,
+          leader_id: this.leader_id,
+          subject_id: this.value1,
+          token: localStorage.getItem('TOKEN')
+        }
+        getExecutorTeacher(obj)
+          .then(res => {
+            if (res.hasOwnProperty('response')) {
+              this.options = res.response.executor_list
+            } else {
+              this.$message.error(res.error_response.msg)
+            }
+          })
+          .catch(err => {
+            console.log(err)
+          })
+      },
+      getSubjectData() {
+        const obj = {
+          project_id: this.project_id,
+          leader_id: this.leader_id,
+          school_id: this.school_id,
+          token: localStorage.getItem('TOKEN')
+        }
+        getExecutorSubject(obj)
+          .then(res => {
+            if (res.hasOwnProperty('response')) {
+              this.options = res.response.executor_list
+            } else {
+              this.$message.error(res.error_response.msg)
+            }
+          })
+          .catch(err => {
+            console.log(err)
+          })
+      },
+      getClassData() {
+        const obj = {
+          project_id: this.project_id,
+          leader_id: this.leader_id,
+          school_id: this.school_id,
+          subject_id: this.value1,
+          executor_id: this.value,
+          token: localStorage.getItem('TOKEN')
+        }
+        getExecutorClass(obj)
+          .then(res => {
+            if (res.hasOwnProperty('response')) {
+              this.options1 = res.response.subject_list
+            } else {
+              this.$message.error(res.error_response.msg)
+            }
+          })
+          .catch(err => {
+            console.log(err)
+          })
       },
       saveUser() {
-        // this.$router.push({ path: '/poorStudentEdit' })
         console.log(this.value3, this.value2, this.value1)
+        const obj = {
+          project_id: this.project_id,
+          leader_id: this.leader_id,
+          school_id: this.school_id,
+          executor_id: this.value,
+          template_id: this.value3,
+          grade_id: this.grade_id,
+          subject_id: this.value1,
+          class_id: this.value2,
+          token: localStorage.getItem('TOKEN')
+        }
+        saveExecutor(obj)
+          .then(res => {
+            if (res.hasOwnProperty('response')) {
+              this.$router.push({ path: '/poorStudentEdit' })
+              console.log(res)
+            } else {
+              this.$message.error(res.error_response.msg)
+              console.log(res)
+            }
+          })
+          .catch(err => {
+            console.log(err)
+          })
       }
     }
   }

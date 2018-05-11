@@ -45,8 +45,8 @@
             label="评价对象"
             width='100'>
              <template slot-scope="scope">
-              <span v-if='scope.row.num != 0'  @click='go' style='cursor: pointer;'>{{ scope.row.num }}</span>
-              <span @click='go' v-if='scope.row.num == 0' style='cursor: pointer;'><i class="el-icon-edit-outline"></i></span>
+              <span v-if='scope.row.num != 0'  @click='go(scope.row.executor_id, scope.row.subject_id)' style='cursor: pointer;'>{{ scope.row.num }}</span>
+              <span @click='go(scope.row.executor_id, scope.row.subject_id)' v-if='scope.row.num == 0' style='cursor: pointer;'><i class="el-icon-edit-outline"></i></span>
             </template>
           </el-table-column>
 
@@ -89,77 +89,79 @@
 </template>
 
 <script>
- import myHeader from '../../myHeader/myHeader'
- import { getObjectList } from '@/api/eduAdmin'
- export default {
-   name: 'objectList',
-   data() {
-     return {
-       centerDialogVisible: false,
-       userName: '',
-       total: 0,
-       form: {
-         name: ''
-       },
-       msg: {
-         title1: '项目评价管理',
-         title2: '评价对象管理',
-         flag: 1,
-         path: '/itemList'
-       },
-       tableData: [{
-         project_name: '1212',
-         project_remark: '2hahashdasdh',
-         teacher_name: '112sdasdas',
-         subject_name: '1212sdas',
-         g_c_name: 'dadasd',
-         project_comment: 'uyasyasd',
-         num: 12
-       }]
-     }
-   },
-   components: {
-     myHeader
-   },
-   mounted() {
-     this.getData(1)
-   },
-   methods: {
-     getData(pages) {
-       const obj = {
-         page: pages,
-         token: localStorage.getItem('TOKEN')
-       }
-       getObjectList(obj)
-         .then(res => {
-           if (res.hasOwnProperty('response')) {
-             console.log(res)
-             // this.tableData = res.response.list
-             this.total = res.response.allPage
-           } else {
-             console.log(res)
-           }
-         })
-         .catch(err => {
-           console.log(err)
-         })
-     },
-     handleEdit(val1, val2) {
-       console.log(val1, val2)
-       this.$router.push({ path: '/objectEdit', query: { teacher_id: val1, subject_id: val2 }})
-     },
-     handleDelete(index, row) {
-       console.log(index, row)
-       this.centerDialogVisible = true
-     },
-     go() {
-       this.$router.push({ path: '/objectMan' })
-     },
-     handleCurrentChange(val) {
-       console.log(`当前页: ${val}`)
-     }
-   }
- }
+import myHeader from '../../myHeader/myHeader'
+import { getObjectList } from '@/api/eduAdmin'
+export default {
+  name: 'objectList',
+  data() {
+    return {
+      centerDialogVisible: false,
+      userName: '',
+      total: 0,
+      form: {
+        name: ''
+      },
+      msg: {
+        title1: '项目评价管理',
+        title2: '评价对象管理',
+        flag: 1,
+        path: '/itemList'
+      },
+      tableData: [{
+        project_name: '1212',
+        project_remark: '2hahashdasdh',
+        teacher_name: '112sdasdas',
+        subject_name: '1212sdas',
+        g_c_name: 'dadasd',
+        project_comment: 'uyasyasd',
+        num: 12
+      }]
+    }
+  },
+  components: {
+    myHeader
+  },
+  mounted() {
+    this.getData(1)
+  },
+  methods: {
+    getData(pages) {
+      const obj = {
+        page: pages,
+        token: localStorage.getItem('TOKEN')
+      }
+      getObjectList(obj)
+        .then(res => {
+          if (res.hasOwnProperty('response')) {
+            console.log(res)
+            this.tableData = res.response.list
+            this.total = res.response.allPage
+          } else {
+            console.log(res)
+          }
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
+    handleEdit(val1, val2) {
+      console.log(val1, val2)
+      this.$router.push({ path: '/objectEdit', query: { teacher_id: val1, subject_id: val2 }})
+    },
+    handleDelete(index, row) {
+      console.log(index, row)
+      this.centerDialogVisible = true
+    },
+    go(val1, val2) {
+      console.log(val1, val2)
+      this.$router.push({ path: '/objectMan', query: { teacher_id: val1, subject_id: val2 }})
+    },
+    handleCurrentChange(val) {
+      this.getData(val)
+      console.log(`当前页: ${val}`)
+    }
+  }
+}
 </script>
 
 <style scoped>
