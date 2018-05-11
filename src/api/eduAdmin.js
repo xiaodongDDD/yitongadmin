@@ -226,6 +226,42 @@ export function templateDetail(params) {
   })
 }
 
+// 成果列表
+export function gainList(params) {
+  return request({
+    url: '/evaluate/?v=0.1&method=Evaluateresult.projectList',
+    method: 'post',
+    data: qs.stringify(params)
+  })
+}
+
+// 成果详情列表
+export function gainSchoolList(params) {
+  return request({
+    url: '/evaluate/?v=0.1&method=Evaluateresult.evaluateResultList',
+    method: 'post',
+    data: qs.stringify(params)
+  })
+}
+
+// 成果详情
+export function gainDetail(params) {
+  return request({
+    url: '/evaluate/?v=0.1&method=Evaluateresult.evaluateResultDetail',
+    method: 'post',
+    data: qs.stringify(params)
+  })
+}
+
+// 成果列表筛选
+export function gainClassSubject(params) {
+  return request({
+    url: '/evaluate/?v=0.1&method=getClassesSubjectst',
+    method: 'post',
+    data: qs.stringify(params)
+  })
+}
+
 // 权限列表
 export function getPowerList(datas) {
   return request({

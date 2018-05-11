@@ -19,13 +19,13 @@
           style="width: 100%">
           <el-table-column
             align="center"
-            prop="name"
+            prop="project_name"
             label="项目名称"
             width="">
           </el-table-column>
           <el-table-column
             align="center"
-            prop="instruction"
+            prop="project_remark"
             label="项目说明"
             width="">
           </el-table-column>
@@ -45,7 +45,7 @@
           @current-change="handleCurrentChange"
           background
           layout="prev, pager, next"
-          :total="1000">
+          :page-count	="pageData.allPage">
         </el-pagination>
       </div>
     </div>
@@ -54,6 +54,7 @@
 
 <script>
   import myHeader from '../myHeader/myHeader'
+  import { gainList } from '@/api/eduAdmin'
   export default {
     name: 'gainList',
     data() {
@@ -65,13 +66,11 @@
           path: ''
         },
         schools: ['的饭卡士大夫'],
-        tableData: [{
-          name: '2018年第二学期语文补差',
-          instruction: '2018年第二学期'
-        }, {
-          name: '2018年第二学期语文补差',
-          instruction: '2018年第二学期'
-        }],
+        tableData: [],
+        pageData: {
+          page: '',
+          allPage: 1
+        },
         schoolChange: true
       }
     },
@@ -80,11 +79,33 @@
     },
     methods: {
       handleEdit(index, row) {
-        this.$router.push({ path: '/gainSchoolList' })
+        this.$router.push({ path: '/gainSchoolList', query: { 'project_id': row.project_id }})
       },
       handleCurrentChange(val) {
-        console.log(`当前页: ${val}`)
+        // console.log(`当前页: ${val}`)
+        this.getList(val)
+      },
+      handleCommand() {},
+      getList(page, id) {
+        const obj = {}
+        obj.page = page
+        obj.id = id
+        obj.token = localStorage.getItem('TOKEN')
+        gainList(obj).then(res => {
+          // console.log(res)
+          if (res.hasOwnProperty('response')) {
+            this.tableData = res.response.info
+            this.pageData.allPage = res.response.total_page
+          } else {
+            this.$alert(res.error_response.msg, '提示', {
+              confirmButtonText: '确定'
+            })
+          }
+        })
       }
+    },
+    mounted() {
+      this.getList(1)
     }
   }
 </script>
