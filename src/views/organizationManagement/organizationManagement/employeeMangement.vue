@@ -43,7 +43,8 @@
                       <i class="el-icon-more"></i>
                     </span>
                     <el-dropdown-menu slot="dropdown">
-                      <el-dropdown-item v-for="item in operatingList" :key="item.id" :command="item" @click.native = "goDialog(item, data)">{{item.label}}</el-dropdown-item>
+                      <el-dropdown-item v-for="item in operatingList" v-if="data.company_flag === '2'" :key="item.id" :command="item" @click.native = "goDialog(item, data)">{{item.label}}</el-dropdown-item>
+                      <el-dropdown-item v-for="item in operatingListSp" v-if="data.company_flag === '1'" :key="item.id" :command="item" @click.native = "goDialog(item, data)">{{item.label}}</el-dropdown-item>
                     </el-dropdown-menu>
                   </el-dropdown>
                 </span>
@@ -155,18 +156,49 @@
 
     <!--添加子部门弹窗-->
     <el-dialog title="添加子部门" :visible.sync="dialogFormAddepartment" width="40%"  center>
-      <el-form :label-position="labelPosition" label-width="100px" :model="formAddepartment" :rules="rulesAddepartment" ref="ruleFormAddepartment">
+      <el-form :label-position="labelPosition" label-width="100px" :model="formAddepartment" :rules="rulesAddepartment" ref="ruleFormAddepartment" >
         <el-form-item label="部门名称" prop="name">
-          <el-input v-model="formAddepartment.name"></el-input>
+          <el-col :span="20">
+            <el-input v-model="formAddepartment.name"></el-input>
+          </el-col>
         </el-form-item>
         <el-form-item label="上级部门" prop="menuname">
-          <el-input v-model="formAddepartment.menuname"></el-input>
+          <el-col :span="20"><el-input v-model="formAddepartment.menuname"></el-input></el-col>
         </el-form-item>
-        <el-form-item label="包含职务" prop="code">
-          <el-input v-model="formAddepartment.code"></el-input>
+        <el-form-item
+          v-for="(domain, index) in formAddepartment.position_data"
+          label="包含职务"
+          :key="domain.key"
+          :rules="{max: 20, message: '最多可输入 20 个字符', trigger: 'blur'}">
+          <el-col :span="20"> <el-input v-model="formAddepartment.position_data.work_level"></el-input></el-col>
         </el-form-item>
-        <el-form-item label="对应职级"  prop="remark">
-          <el-input  v-model="formAddepartment.remark"></el-input>
+        <el-form-item
+          v-for="(domain, index) in formAddepartment.position_data"
+          label="对应职级"
+          :key="domain.key"
+          :rules="{max: 20, message: '最多可输入 20 个字符', trigger: 'blur'}">
+          <el-col :span="20"><el-input v-model="formAddepartment.position_data.work_level"></el-input></el-col>
+          <el-col :span="1" >&nbsp;</el-col>
+          <el-col :span="3" ><el-button @click.prevent="addDomain(domain)">删除</el-button></el-col>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer text-center el-dialog-top">
+        <el-button @click="dialogFormAddepartment = false">取 消</el-button>
+        <el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
+      </div>
+    </el-dialog>
+
+
+    <!--添加分公司弹窗-->
+    <el-dialog title="添加分公司" :visible.sync="dialogFormCompany" width="40%"  center>
+      <el-form :label-position="labelPosition" label-width="100px" :model="formCompany" :rules="rulesCompany" ref="ruleFormCompany" >
+        <el-form-item label="分公司名称" prop="name">
+          <el-col :span="20">
+            <el-input v-model="formCompany.name"></el-input>
+          </el-col>
+        </el-form-item>
+        <el-form-item label="上级分公司" prop="menuname">
+          <el-col :span="20"><el-input v-model="formCompany.menuname"></el-input></el-col>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer text-center el-dialog-top">
@@ -235,18 +267,42 @@
         operatingListSp: [
           { id: 6, label: '添加分公司' },
           { id: 7, label: '添加部门' },
-          { id: 8, label: '添加部门' },
+          { id: 8, label: '编辑分公司' },
           { id: 3, label: '上移' },
           { id: 4, label: '下移' },
           { id: 5, label: '删除' }],
         dialogFormAddepartment: false,
         formAddepartment: {
-          menuname: '',
           name: '',
-          code: '',
-          remark: ''
+          parent_id: '',
+          yt_c_id: '',
+          module_id: '',
+          type: '',
+          position_data: [
+            { work_level: '2' }
+          ]
         },
         rulesAddepartment: {
+          name: [
+            { required: true, message: '请输入菜单名称', trigger: 'blur' },
+            { max: 20, message: '最多可输入 20 个字符', trigger: 'blur' }
+          ],
+          mark: [
+            { max: 50, message: '最多可输入 50 个字符', trigger: 'blur' }
+          ]
+        },
+        dialogFormCompany: false,
+        formCompany: {
+          name: '',
+          parent_id: '',
+          yt_c_id: '',
+          module_id: '',
+          type: '',
+          position_data: [
+            { work_level: '2' }
+          ]
+        },
+        rulesCompany: {
           name: [
             { required: true, message: '请输入菜单名称', trigger: 'blur' },
             { max: 20, message: '最多可输入 20 个字符', trigger: 'blur' }
@@ -371,7 +427,7 @@
               message: '已取消下移'
             })
           })
-        } else {
+        } else if (item.id === 5) {
           this.$confirm('确认删除?', '确认操作', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
@@ -395,6 +451,13 @@
               message: '已取消删除'
             })
           })
+        } else if (item.id === 6) {
+          this.dialogFormCompany = true
+          console.log(data)
+        } else if (item.id === 7) {
+          console.log(data)
+        } else if (item.id === 8) {
+          console.log(data)
         }
       },
       operating(item, id) {
@@ -437,6 +500,18 @@
             type: 'info',
             message: '已取消重置密码'
           })
+        })
+      },
+      removeDomain(item) {
+        var index = this.formAddepartment.position_data.indexOf(item)
+        if (index !== -1) {
+          this.formAddepartment.position_data.splice(index, 1)
+        }
+      },
+      addDomain() {
+        this.formAddepartment.position_data.push({
+          work_position: '',
+          key: Date.now()
         })
       }
     },
