@@ -85,7 +85,7 @@
                 placement="top-start"
                 width="200"
                 trigger="hover">
-                <div style="max-height: 300px;overflow-y: scroll;word-break:break-all;">
+                <div style="max-height: 100px;overflow-y: auto;word-break:break-all;">
                   {{scope.row.detail}}
                 </div>
               </el-popover>
