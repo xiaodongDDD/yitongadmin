@@ -244,6 +244,15 @@ export function gainSchoolList(params) {
   })
 }
 
+// 成果详情
+export function gainDetail(params) {
+  return request({
+    url: '/evaluate/?v=0.1&method=Evaluateresult.evaluateResultDetail',
+    method: 'post',
+    data: qs.stringify(params)
+  })
+}
+
 // 成果列表筛选
 export function gainClassSubject(params) {
   return request({

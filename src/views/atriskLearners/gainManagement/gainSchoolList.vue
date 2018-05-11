@@ -165,7 +165,7 @@
     methods: {
       handleEdit(index, row) {
         // console.log(index, row)
-        this.$router.push({ path: '/gainDetails' })
+        this.$router.push({ path: '/gainDetails', query: { 'p_t_id': row.p_t_id, 'student_id': row.student_id, 'p_e_id': row.p_e_id }})
       },
       importGain() {
         if (this.formInline.grade === '' && this.formInline.class === '' && this.formInline.subject === '') {
