@@ -78,14 +78,14 @@
       </el-table-column>
       <el-table-column label="问题详情" align="center">
         <template slot-scope="scope">
-          <span v-popover:popover4 style="width: 10px;height: 10px">
+          <span v-popover:popover4 style="width: 10px;height: 10px;">
               <span class="point">{{scope.row.detail | contentFilter}}</span>
               <el-popover
                 ref="popover4"
                 placement="top-start"
                 width="200"
                 trigger="hover">
-                <div style="max-height: 300px;overflow-y: scroll">
+                <div style="max-height: 300px;overflow-y: scroll;word-break:break-all;">
                   {{scope.row.detail}}
                 </div>
               </el-popover>
