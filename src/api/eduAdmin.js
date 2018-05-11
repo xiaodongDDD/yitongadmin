@@ -252,3 +252,102 @@ export function gainClassSubject(params) {
     data: qs.stringify(params)
   })
 }
+
+// 权限列表
+export function getPowerList(datas) {
+  return request({
+    url: '/evaluate/?v=0.1&method=Authmanage.getList',
+    method: 'post',
+    data: qs.stringify(datas)
+  })
+}
+
+// 老师权限信息
+export function getPowerDetail(datas) {
+  return request({
+    url: '/evaluate/?v=0.1&method=Authmanage.getDetail',
+    method: 'post',
+    data: qs.stringify(datas)
+  })
+}
+
+// 查询执行人信息【编辑列】
+export function getExecutor(datas) {
+  return request({
+    url: '/evaluate/?v=0.1&method=Projecteexecutor.getExecutor',
+    method: 'post',
+    data: qs.stringify(datas)
+  })
+}
+
+// 编辑执行人-班级
+export function getExecutorClass(datas) {
+  return request({
+    url: '/evaluate/?v=0.1&method=Projecteexecutor.getExecutorClass',
+    method: 'post',
+    data: qs.stringify(datas)
+  })
+}
+
+// 编辑执行人-学科
+export function getExecutorSubject(datas) {
+  return request({
+    url: '/evaluate/?v=0.1&method=Projecteexecutor.getExecutorSubject',
+    method: 'post',
+    data: qs.stringify(datas)
+  })
+}
+
+// 编辑执行人-模板
+export function getExecutorTemplate(datas) {
+  return request({
+    url: '/evaluate/?v=0.1&method=Projecteexecutor.getExecutorTemplate',
+    method: 'post',
+    data: qs.stringify(datas)
+  })
+}
+
+// 编辑执行人-老师
+export function getExecutorTeacher(datas) {
+  return request({
+    url: '/evaluate/?v=0.1&method=Projecteexecutor.getExecutorTeacher',
+    method: 'post',
+    data: qs.stringify(datas)
+  })
+}
+
+// 权限保存
+export function authSave(datas) {
+  return request({
+    url: '/evaluate/?v=0.1&method=Authmanage.authSave',
+    method: 'post',
+    data: qs.stringify(datas)
+  })
+}
+
+// 查询负责人信息
+export function getLeader(datas) {
+  return request({
+    url: '/evaluate/?v=0.1&method=Projecteleader.getLeader',
+    method: 'post',
+    data: qs.stringify(datas)
+  })
+}
+
+// 评价对象列表
+export function getObjectList(datas) {
+  return request({
+    url: '/evaluate/?v=0.1&method=Projectresult.getList',
+    method: 'post',
+    data: qs.stringify(datas)
+  })
+}
+
+// 评价对象详情
+export function getObjectDetail(datas) {
+  return request({
+    url: '/evaluate/?v=0.1&method=Projectresult.getDetail',
+    method: 'post',
+    data: qs.stringify(datas)
+  })
+}

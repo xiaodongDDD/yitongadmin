@@ -46,8 +46,8 @@
             align="center"
             label="执行人">
              <template slot-scope="scope">
-              <span v-if='scope.row.nums != 0' @click='go' style='cursor: pointer;'>{{ scope.row.nums }}</span>
-              <span @click='go' v-if='scope.row.nums == 0' style='cursor: pointer;'><i class="el-icon-edit-outline"></i></span>
+              <span v-if='scope.row.nums != 0' @click='go(scope.row.teacher_id)' style='cursor: pointer;'>{{ scope.row.nums }}</span>
+              <span @click='go(scope.row.teacher_id)' v-if='scope.row.nums == 0' style='cursor: pointer;'><i class="el-icon-edit-outline"></i></span>
             </template>
           </el-table-column>
 
@@ -56,7 +56,7 @@
             <template slot-scope="scope">
               <el-button
                 size="mini"
-                @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                @click="handleEdit(scope.row.teacher_id, scope.row.project_id)">编辑</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -67,7 +67,8 @@
           @current-change="handleCurrentChange" 
           background
           layout="prev, pager, next"
-          :total="1000">
+          :total="total"
+          :pageSize='10'>
         </el-pagination>
 
       <el-dialog
@@ -78,7 +79,6 @@
         <div class="dialogContent">
           <p>请确认是否要删除</p>
           <p>{{ userName }}账户</p>
-
           <p>删除后，该账户将无法登录</p>
         </div>
         <span slot="footer" class="dialog-footer">
@@ -99,6 +99,7 @@
      return {
        centerDialogVisible: false,
        userName: '',
+       total: 0,
        form: {
          name: ''
        },
@@ -139,32 +140,36 @@
      myHeader
    },
    mounted() {
-     this.getData()
+     this.getData(1)
    },
    methods: {
-     getData() {
+     getData(pages) {
        const obj = {
-         page: '',
-         pagesize: ''
+         page: pages,
+         token: localStorage.getItem('TOKEN')
        }
        projectExecutorList(obj)
          .then(res => {
-           console.log(res)
+           if (res.hasOwnProperty('response')) {
+             console.log(res)
+           }
          })
      },
-     handleEdit(index, row) {
-       console.log(index, row)
-       this.$router.push({ path: '/transactorEdit' })
+     handleEdit(val1, val2) {
+       console.log(val1, val2)
+       this.$router.push({ path: '/transactorEdit', query: { teacher_id: val1, project_id: val2 }})
      },
      handleDelete(index, row) {
        console.log(index, row)
        this.centerDialogVisible = true
      },
-     go() {
-       this.$router.push({ path: '/poorStudentEdit' })
+     go(val) {
+       console.log(val)
+       this.$router.push({ path: '/poorStudentEdit', query: { teacher_id: val }})
      },
      handleCurrentChange(val) {
        console.log(`当前页: ${val}`)
+       this.getData(val)
      }
    }
 }

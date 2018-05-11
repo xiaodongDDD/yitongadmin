@@ -82,8 +82,6 @@
           </el-table-column>
         </el-table>
       </div>
-
-
       <div class="list-add">
         <router-link to="/accountAdd" v-show="userInfo.teacher_type == 3">
           <el-button icon="el-icon-plus">新增</el-button>

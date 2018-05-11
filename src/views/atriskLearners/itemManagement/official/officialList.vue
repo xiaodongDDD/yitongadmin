@@ -46,7 +46,7 @@
             <template slot-scope="scope">
               <el-button
                 size="mini"
-                @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                @click="handleEdit(scope.row.school_id, scope.row.project_id, scope.row.teacher_id)">编辑</el-button>
               <el-button
                 size="mini"
                 type="danger"
@@ -65,7 +65,8 @@
           @current-change="handleCurrentChange"
           background
           layout="prev, pager, next"
-          :total="1000">
+          :page-count="total"
+          :pageSize='10'>
         </el-pagination>
       </div>
       <el-dialog
@@ -98,6 +99,8 @@
         userName: '',
         manName: '',
         manNum: 0,
+        total: 0,
+        current_page: 0,
         form: {
           name: ''
         },
@@ -108,6 +111,7 @@
           path: '/itemList'
         },
         tableData: [{
+          school_id: 1,
           project_id: 1,
           teacher_id: 1,
           leader: 'rag',
@@ -116,6 +120,7 @@
           type: '学校',
           projectComment: '武宁路育才'
         }, {
+          school_id: 1,
           project_id: 2,
           leader: 'haha',
           teacher_id: 2,
@@ -124,6 +129,7 @@
           type: '运营',
           projectComment: ''
         }, {
+          school_id: 1,
           project_id: 3,
           teacher_id: 3,
           leader: 'lei',
@@ -141,13 +147,13 @@
     },
     mounted() {
       // 获取数据
-      this.getData()
+      this.getData(1)
     },
     methods: {
-      getData() {
+      getData(pages) {
         const obj = {
           project_id: this.$route.query.project_id,
-          page: 1,
+          page: pages,
           pagesize: 10,
           token: localStorage.getItem('TOKEN')
         }
@@ -158,13 +164,14 @@
             if (res.hasOwnProperty('response')) {
               this.manName = res.response.school_admin
               this.manNum = res.response.teacher_count
+              this.total = res.response.total_page
             }
           })
       },
       // 编辑负责人
-      handleEdit(index, row) {
-        console.log(index, row)
-        this.$router.push({ path: '/officialEdit' })
+      handleEdit(val1, val2, val3) {
+        console.log(val1, val2, val3)
+        this.$router.push({ path: '/officialEdit', query: { school_id: val1, project_id: val2, teacher_id: val3 }})
       },
       // 删除负责人
       handleDelete(index, row) {
@@ -184,12 +191,14 @@
         deleteLeader(obj)
           .then(res => {
             console.log(res)
-            this.getData()
+            this.getData(this.current_page)
           })
       },
       // 分页
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`)
+        this.current_page = val
+        this.getData(val)
       }
     }
   }
