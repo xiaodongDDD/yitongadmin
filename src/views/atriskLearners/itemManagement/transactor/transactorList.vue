@@ -10,30 +10,30 @@
           style="width: 100%">
           <el-table-column
             align="center"
-            prop="onOff"
+            prop="project_name"
             label="项目名称"
             width="100">
           </el-table-column>
           <el-table-column
             align="center"
-            prop="name"
+            prop="project_remark"
             label="项目说明"
             width="100">
           </el-table-column>
           <el-table-column
             align="center"
-            prop="userName"
+            prop="teacher_name"
             label="负责人"
             width="100">
           </el-table-column>
           <el-table-column
             align="center"
-            prop="type"
-            label="负责学科"
-            width="60">
+            prop="subject_name"
+            label="负责学科">
           </el-table-column>
           <el-table-column
-            prop="schoolName"
+            align="center"
+            prop="grade_name"
             label="负责年级">
           </el-table-column>
           <el-table-column
@@ -46,8 +46,8 @@
             align="center"
             label="执行人">
              <template slot-scope="scope">
-              <span v-if='scope.row.nums != 0' @click='go(scope.row.teacher_id)' style='cursor: pointer;'>{{ scope.row.nums }}</span>
-              <span @click='go(scope.row.teacher_id)' v-if='scope.row.nums == 0' style='cursor: pointer;'><i class="el-icon-edit-outline"></i></span>
+              <span v-if='scope.row.count != 0' @click='go(scope.row.teacher_id)' style='cursor: pointer;'>{{ scope.row.count }}</span>
+              <span @click='go(scope.row.teacher_id)' v-if='scope.row.count == 0' style='cursor: pointer;'><i class="el-icon-edit-outline"></i></span>
             </template>
           </el-table-column>
 
@@ -109,31 +109,7 @@
          flag: 1,
          path: '/itemList'
        },
-       tableData: [{
-         onOff: '在人间有谁',
-         name: '都龙族',
-         userName: 'doulongzu',
-         type: '学校',
-         schoolName: '武宁路育才',
-         telephone: '13533790697',
-         nums: 0
-       }, {
-         onOff: '活得不像是',
-         name: '都龙族',
-         userName: 'doulongzu',
-         type: '运营',
-         schoolName: '',
-         telephone: '13533790697',
-         nums: 12
-       }, {
-         onOff: '一场炼狱',
-         name: '都龙族',
-         userName: 'doulongzu',
-         type: '学校',
-         schoolName: '武宁路育才',
-         telephone: '13533790697',
-         nums: 22
-       }]
+       tableData: []
      }
    },
    components: {
@@ -152,6 +128,7 @@
          .then(res => {
            if (res.hasOwnProperty('response')) {
              console.log(res)
+             this.tableData = res.response.list
            }
          })
      },

@@ -112,6 +112,7 @@ export default {
       centerDialogVisible: false,
       userName: '',
       total: 0,
+      current_page: 1,
       form: {
         name: '',
         options: [{ value: '1', label: '启用' }, { value: '0', label: '停用' }]
@@ -212,11 +213,12 @@ export default {
       statusProject(obj)
         .then(res => {
           console.log(res)
-          this.getData()
+          this.getData(this.current_page)
         })
     },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`)
+      this.current_page = val
       this.getData(val)
     },
     confirmDelete() {

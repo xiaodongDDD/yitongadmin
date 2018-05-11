@@ -325,6 +325,15 @@ export function getExecutorTeacher(datas) {
   })
 }
 
+// 保存执行人
+export function saveExecutor(datas) {
+  return request({
+    url: '/evaluate/?v=0.1&method=Projecteexecutor.saveExecutor',
+    method: 'post',
+    data: qs.stringify(datas)
+  })
+}
+
 // 权限保存
 export function authSave(datas) {
   return request({
@@ -356,6 +365,24 @@ export function getObjectList(datas) {
 export function getObjectDetail(datas) {
   return request({
     url: '/evaluate/?v=0.1&method=Projectresult.getDetail',
+    method: 'post',
+    data: qs.stringify(datas)
+  })
+}
+
+// 评价对象编辑保存
+export function resultsave(datas) {
+  return request({
+    url: '/evaluate/?v=0.1&method=projectresult.resultsave',
+    method: 'post',
+    data: qs.stringify(datas)
+  })
+}
+
+// 评价项目详情
+export function getresultstu(datas) {
+  return request({
+    url: '/evaluate/?v=0.1&method=projectresult.getresultstu',
     method: 'post',
     data: qs.stringify(datas)
   })

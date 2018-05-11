@@ -46,7 +46,7 @@
             <template slot-scope="scope">
               <el-button
                 size="mini"
-                @click="handleEdit(scope.row.school_id, scope.row.project_id, scope.row.teacher_id,scope.row.subject_id, scope.row.executor_id)">编辑</el-button>
+                @click="handleEdit(scope.row.school_id, scope.row.project_id, scope.row.teacher_id,scope.row.subject_id, scope.row.executor_id, scope.row.class_list, scope.row.template_id, scope.row.grade_id)">编辑</el-button>
               <el-button
                 size="mini"
                 type="danger"
@@ -56,10 +56,8 @@
         </el-table>
       </div>
 
-      <div class="list-add">
-        <router-link to="/exectorAdd">
-          <el-button icon="el-icon-plus">新增</el-button>
-        </router-link>
+      <div class="list-add">      
+          <el-button icon="el-icon-plus" @click="add()">新增</el-button>
         <el-pagination
           style='display:inline-block;margin-left:30%;' 
           @current-change="handleCurrentChange" 
@@ -90,7 +88,7 @@
 
 <script>
   import myHeader from '../../myHeader/myHeader'
-  import { leaderExecutorList, deleteExecutor } from '@/api/eduAdmin'
+  import { leaderExecutorList, deleteExecutor, getExecutor } from '@/api/eduAdmin'
   export default {
     name: 'poorStudent',
     data() {
@@ -98,6 +96,7 @@
         centerDialogVisible: false,
         userName: '',
         total: 0,
+        current_page: 1,
         form: {
           name: ''
         },
@@ -112,25 +111,7 @@
           flag: 1,
           path: '/itemList'
         },
-        tableData: [{
-          teacher_name: '',
-          count: 0,
-          subject_name: '都龙族',
-          project_name: 'doulongzu',
-          class_names: '学校'
-        }, {
-          teacher_name: '',
-          count: 0,
-          subject_name: '都龙族',
-          project_name: 'doulongzu',
-          class_names: '运营'
-        }, {
-          teacher_name: '',
-          count: 0,
-          subject_name: '都龙族',
-          project_name: 'doulongzu',
-          class_names: '学校'
-        }]
+        tableData: []
       }
     },
     components: {
@@ -157,16 +138,37 @@
             }
           })
       },
-      handleEdit(val1, val2, val3, val4, val5) {
-        console.log(val1, val2, val3, val4, val5)
+      handleEdit(val1, val2, val3, val4, val5, val6, val7, val8) {
+        console.log(val1, val2, val3, val4, val5, val6, val7)
         const datas = {
           school_id: val1,
           project_id: val2,
           leader_id: val3,
           subject_id: val4,
-          executor_id: val5
+          executor_id: val5,
+          class_list: val6,
+          template_id: val7,
+          grade_id: val8
         }
-        this.$router.push({ path: '/exectorEdit', query: datas })
+        const obj = {
+          school_id: val1,
+          project_id: val2,
+          leader_id: val3,
+          subject_id: val4,
+          executor_id: val5,
+          token: localStorage.getItem('TOKEN')
+        }
+        getExecutor(obj)
+          .then(res => {
+            if (res.hasOwnProperty('response')) {
+              this.$router.push({ path: '/exectorEdit', query: datas })
+            } else {
+              this.$message.error(res.error_response.msg)
+            }
+          })
+          .catch(err => {
+            console.log(err)
+          })
       },
       handleDelete(val1, val2, val3) {
         this.current_project_id = val1
@@ -174,7 +176,14 @@
         this.current_executor_id = val3
         this.centerDialogVisible = true
       },
+      add() {
+        const datas = {
+        }
+        this.$router.push({ path: '/exectorAdd', query: datas })
+      },
       handleCurrentChange(val) {
+        this.current_page = val
+        this.getData(val)
         console.log(`当前页: ${val}`)
       },
       confirmDelete() {
@@ -188,8 +197,9 @@
           .then(res => {
             console.log(res)
             if (res.hasOwnProperty('response')) {
+              this.centerDialogVisible = false
               console.log(res)
-              this.getData()
+              this.getData(this.current_page)
             } else {
               console.log(res.error_response.msg)
             }
