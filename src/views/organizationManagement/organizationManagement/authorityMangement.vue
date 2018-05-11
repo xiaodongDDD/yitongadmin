@@ -52,14 +52,14 @@
       </el-form>
       <el-row :gutter="20">
         <el-col :span="12"><p>功能权限</p></el-col>
-        <el-col :span="12" class="buttonAlign"><el-button type="primary" plain icon="el-icon-plus" size="small" @click="functionAny()">添加功能</el-button></el-col>
+        <el-col :span="12" class="buttonAlign"><el-button type="primary" plain icon="el-icon-plus" size="small" @click="functionAny('',2)">添加功能</el-button></el-col>
       </el-row>
       <el-table
-        :data="tableData"
+        :data="tableFunction"
         element-loading-text="加载中..." border fit highlight-current-row
         style="width: 100%">
         <el-table-column
-          prop="date"
+          prop="yt_m_f_id"
           align="center"
           label="编号"
           width="120">
@@ -71,13 +71,13 @@
           width="120">
         </el-table-column>
         <el-table-column
-          prop="address"
+          prop="remark"
           label="标识"
           align="center"
           width="120">
         </el-table-column>
         <el-table-column
-          prop="address"
+          prop="comment"
           label="备注"
           align="center">
         </el-table-column>
@@ -87,38 +87,38 @@
           width="230">
           <template slot-scope="scope">
             <el-button type="" size="mini" @click="functionAny(scope.row,1)">详情</el-button>
-            <el-button type="" size="mini" @click="deleteData(scope.row)">删除</el-button>
+            <el-button type="danger" size="mini" @click="deleteData(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
       <el-row :gutter="20" class="rowMargin">
         <el-col :span="12"><p>数据权限</p></el-col>
-        <el-col :span="12" class="buttonAlign"><el-button type="primary" plain icon="el-icon-plus" size="small" @click="dataAny()">添加数据</el-button></el-col>
+        <el-col :span="12" class="buttonAlign"><el-button type="primary" plain icon="el-icon-plus" size="small" @click="dataAny('',2)">添加数据</el-button></el-col>
       </el-row>
       <el-table
         :data="tableData"
         element-loading-text="加载中..." border fit highlight-current-row
         style="width: 100%">
         <el-table-column
-          prop="date"
+          prop="yt_m_d_id"
           align="center"
           label="编号"
           width="120">
         </el-table-column>
         <el-table-column
-          prop="name"
+          prop="data_name"
           label="数据名称"
           align="center"
           width="120">
         </el-table-column>
         <el-table-column
-          prop="address"
+          prop="remark"
           label="标识"
           align="center"
           width="120">
         </el-table-column>
         <el-table-column
-          prop="address"
+          prop="comment"
           label="备注"
           align="center">
         </el-table-column>
@@ -128,7 +128,7 @@
           width="230">
           <template slot-scope="scope">
             <el-button type="" size="mini" @click="dataAny(scope.row,1)">详情</el-button>
-            <el-button type="" size="mini" @click="deleteData(scope.row)">删除</el-button>
+            <el-button type="danger" size="mini" @click="deleteData(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -140,45 +140,45 @@
 
     <!--功能弹窗-->
     <el-dialog title="添加功能" :visible.sync="dialogFormVisibleFunction" width="40%"  center>
-      <el-form :label-position="labelPosition" label-width="100px" :model="formFunction" :rules="rulesFunction" ref="ruleFormFunction">
-        <el-form-item label="菜单名称" prop="menuname">
-          <el-input v-model="formFunction.menuname"></el-input>
+      <el-form :label-position="labelPosition" label-width="100px" :model="formFunction" :rules="rulesFunction" ref="formFunction">
+        <el-form-item label="菜单名称" prop="menu_name">
+          <el-input v-model="formFunction.menu_name" disabled></el-input>
         </el-form-item>
         <el-form-item label="功能名称" prop="name">
           <el-input v-model="formFunction.name"></el-input>
         </el-form-item>
         <el-form-item label="功能标识" prop="code">
-          <el-input v-model="formFunction.code"></el-input>
+          <el-input v-model="formFunction.remark"></el-input>
         </el-form-item>
-        <el-form-item label="功能备注"  prop="remark">
-          <el-input type="textarea" v-model="formFunction.remark"></el-input>
+        <el-form-item label="功能备注"  prop="comment">
+          <el-input type="textarea" v-model="formFunction.comment"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer text-center el-dialog-top">
         <el-button @click="dialogFormVisibleFunction = false">取 消</el-button>
-        <el-button type="primary" @click="submitForm('formFunction')">确 定</el-button>
+        <el-button type="primary" @click="submitFormFunction()">确 定</el-button>
       </div>
     </el-dialog>
 
     <!--数据权限弹窗-->
     <el-dialog title="数据权限" :visible.sync="dialogFormVisibleData" width="40%"  center>
-      <el-form :label-position="labelPosition" label-width="100px" :model="formData" :rules="rulesData" ref="ruleFormData">
-        <el-form-item label="菜单名称" prop="menuname">
-          <el-input v-model="formData.menuname"></el-input>
+      <el-form :label-position="labelPosition" label-width="100px" :model="formData" :rules="rulesData" ref="formData">
+        <el-form-item label="菜单名称" prop="menu_name">
+          <el-input v-model="formData.menu_name" disabled></el-input>
         </el-form-item>
         <el-form-item label="数据名称" prop="name">
           <el-input v-model="formData.name"></el-input>
         </el-form-item>
-        <el-form-item label="数据标识" prop="code">
-          <el-input v-model="formData.code"></el-input>
+        <el-form-item label="数据标识" prop="remark">
+          <el-input v-model="formData.remark"></el-input>
         </el-form-item>
-        <el-form-item label="数据备注"  prop="remark">
-          <el-input type="textarea" v-model="formData.remark"></el-input>
+        <el-form-item label="数据备注"  prop="comment">
+          <el-input type="textarea" v-model="formData.comment"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer text-center el-dialog-top">
         <el-button @click="dialogFormVisibleData = false">取 消</el-button>
-        <el-button type="primary" @click="submitForm('formData')">确 定</el-button>
+        <el-button type="primary" @click="submitFormData()">确 定</el-button>
       </div>
     </el-dialog>
 
@@ -187,7 +187,7 @@
 
 
 <script>
-  import { menuList, moveMenu, delMenu, menuDetailt, menu, menuFunctionAuth, menuDataAuth } from '@/api/organizationManagement'
+  import { menuList, moveMenu, delMenu, menuDetail, menu, menuFunctionAuth, menuDataAuth } from '@/api/organizationManagement'
   export default {
     data() {
       return {
@@ -212,45 +212,42 @@
             { max: 50, message: '最多可输入 50 个字符', trigger: 'blur' }
           ]
         },
-        tableData: [{
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海'
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市'
-        }],
+        tableData: [],
+        tableFunction: [],
         dialogFormVisibleFunction: false,
         formFunction: {
-          menuname: '',
+          menu_name: '',
           name: '',
-          code: '',
-          remark: ''
+          remark: '',
+          comment: '',
+          yt_m_id: '',
+          module_id: ''
         },
         rulesFunction: {
           name: [
             { required: true, message: '请输入菜单名称', trigger: 'blur' },
             { max: 20, message: '最多可输入 20 个字符', trigger: 'blur' }
           ],
-          mark: [
+          comment: [
             { max: 50, message: '最多可输入 50 个字符', trigger: 'blur' }
           ]
         },
         labelPosition: 'right',
         dialogFormVisibleData: false,
         formData: {
-          menuname: '',
+          menu_name: '',
           name: '',
-          code: '',
-          remark: ''
+          remark: '',
+          comment: '',
+          yt_m_id: '',
+          module_id: ''
         },
         rulesData: {
           name: [
             { required: true, message: '请输入菜单名称', trigger: 'blur' },
             { max: 20, message: '最多可输入 20 个字符', trigger: 'blur' }
           ],
-          mark: [
+          comment: [
             { max: 50, message: '最多可输入 50 个字符', trigger: 'blur' }
           ]
         },
@@ -383,19 +380,14 @@
       submitFormData() {
         this.$refs['formData'].validate((valid) => {
           if (valid) {
-            const obj = {
-              name: this.ruleForm.yt_m_id,
-              remark: this.module_id,
-              comment: this.ruleForm.parent_menu_id,
-              yt_m_id: this.ruleForm.menu_name
-            }
-            menuDataAuth(obj).then(response => {
+            menuDataAuth(this.formData).then(response => {
               this.$message({
                 type: 'success',
                 message: response.response.msg
               })
+              this.dialogFormVisibleData = false
+              this.initTree('init')
             })
-            alert('submit!')
           } else {
             console.log('error submit!!')
             return false
@@ -406,20 +398,14 @@
       submitFormFunction() {
         this.$refs['formFunction'].validate((valid) => {
           if (valid) {
-            const obj = {
-              name: this.ruleForm.yt_m_id,
-              remark: this.module_id,
-              comment: this.ruleForm.parent_menu_id,
-              yt_m_id: this.ruleForm.menu_name,
-              module_id: ''
-            }
-            menuFunctionAuth(obj).then(response => {
+            menuFunctionAuth(this.formFunction).then(response => {
               this.$message({
                 type: 'success',
                 message: response.response.msg
               })
+              this.dialogFormVisibleFunction = false
+              this.initTree('init')
             })
-            alert('submit!')
           } else {
             console.log('error submit!!')
             return false
@@ -450,10 +436,48 @@
           message: '已取消操作'
         })
       },
-      functionAny() {
+      functionAny(item, flag) {
+        if (flag === 1) {
+          this.formFunction = {
+            menu_name: this.ruleForm.menu_name,
+            name: item.name,
+            remark: item.remark,
+            comment: item.comment,
+            yt_m_id: item.yt_m_id,
+            module_id: this.module_id
+          }
+        } else {
+          this.formFunction = {
+            menu_name: this.ruleForm.menu_name,
+            name: '',
+            remark: '',
+            comment: '',
+            yt_m_id: item.yt_m_id,
+            module_id: this.module_id
+          }
+        }
         this.dialogFormVisibleFunction = true
       },
-      dataAny() {
+      dataAny(item, flag) {
+        if (flag === 1) {
+          this.formData = {
+            menu_name: this.ruleForm.menu_name,
+            name: item.data_name,
+            remark: item.remark,
+            comment: item.comment,
+            yt_m_id: item.yt_m_id,
+            module_id: this.module_id
+          }
+        } else {
+          this.formData = {
+            menu_name: this.ruleForm.menu_name,
+            name: '',
+            remark: '',
+            comment: '',
+            yt_m_id: item.yt_m_id,
+            module_id: this.module_id
+          }
+        }
         this.dialogFormVisibleData = true
       },
       // 点击tree的节点
@@ -466,8 +490,10 @@
           yt_m_id: item,
           module_id: this.module_id
         }
-        menuDetailt(obj).then(response => {
+        menuDetail(obj).then(response => {
           this.ruleForm = response.response.info
+          this.tableData = this.ruleForm.data
+          this.tableFunction = this.ruleForm.function
           if (this.ruleForm.parent_info.hasOwnProperty('menu_name')) {
             this.ruleForm.parent_menu_name = this.ruleForm.parent_info.menu_name
             this.ruleForm.parent_menu_id = this.ruleForm.parent_info.yt_m_id

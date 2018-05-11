@@ -50,7 +50,7 @@ export function menu(params) {
 }
 
 // 菜单详情接口
-export function menuDetailt(params) {
+export function menuDetail(params) {
   return request({
     url: '&v=0.1&method=Yi.menuDetail',
     method: 'post',
