@@ -2,11 +2,17 @@
   <div class="employeeMangement">
     <!--搜索-->
     <el-form :inline="true" :model="formInline" class="demo-form-inline">
-      <el-form-item label="">
-        <el-input v-model="formInline.user" placeholder="搜索员工、部门、分公司"></el-input>
+      <el-form-item label="公司">
+        <el-input v-model="formInline.company" placeholder="公司名称"></el-input>
+      </el-form-item>
+      <el-form-item label="部门">
+        <el-input v-model="formInline.department" placeholder="部门名称"></el-input>
+      </el-form-item>
+      <el-form-item label="员工">
+        <el-input v-model="formInline.user_name" placeholder="员工姓名"></el-input>
       </el-form-item>
       <el-form-item label="账户状态">
-        <el-select v-model="formInline.status" placeholder="活动区域">
+        <el-select v-model="formInline.status" placeholder="请选择">
           <el-option
             v-for="item in statusList"
             :key="item.value"
@@ -24,8 +30,9 @@
       <div class="left">
         <div class="block">
           <el-tree
-            :data="data5"
+            :data="dataTree"
             node-key="id"
+            :props="defaultProps"
             default-expand-all
             :expand-on-click-node="false">
               <span class="custom-tree-node" slot-scope="{ node, data }">
@@ -172,6 +179,7 @@
 </template>
 
 <script>
+  import { companyList, moveCompanyDepartment, delCompanyDepartment } from '@/api/organizationManagement'
   export default {
     name: 'employeeMangement',
     computed: {},
@@ -184,7 +192,9 @@
         listLoading: false,
         labelPosition: 'right',
         formInline: {
-          user: '',
+          company: '',
+          department: '',
+          user_name: '',
           status: ''
         },
         statusList: [
@@ -193,31 +203,11 @@
           { value: '2', label: '已激活' },
           { value: '3', label: '已冻结' }
         ],
-        data5: [{
-          id: 1,
-          label: '晓信科技上海总公司 （300人）',
-          children: [{
-            id: 4,
-            label: '北京分公司 （30人）',
-            children: [{
-              id: 9,
-              label: '人事部 （230人）'
-            }, {
-              id: 11,
-              label: '培训部 （30人）'
-            }]
-          }, {
-            id: 5,
-            label: '深圳分公司 （12人）',
-            children: [{
-              id: 9,
-              label: '培训部 （39人）'
-            }, {
-              id: 10,
-              label: '人事部 （88人）'
-            }]
-          }]
-        }],
+        dataTree: [],
+        defaultProps: {
+          children: 'children',
+          label: 'name'
+        },
         tableData: [{
           date: '2016-05-02',
           name: '王小虎',
@@ -236,8 +226,16 @@
           address: '上海市普陀区金沙江路 1516 弄'
         }],
         fileList: [],
-        operatingList: [{ id: 1, label: '添加子部门' },
+        operatingList: [
+          { id: 1, label: '添加子部门' },
           { id: 2, label: '编辑部门' },
+          { id: 3, label: '上移' },
+          { id: 4, label: '下移' },
+          { id: 5, label: '删除' }],
+        operatingListSp: [
+          { id: 6, label: '添加分公司' },
+          { id: 7, label: '添加部门' },
+          { id: 8, label: '添加部门' },
           { id: 3, label: '上移' },
           { id: 4, label: '下移' },
           { id: 5, label: '删除' }],
@@ -256,12 +254,27 @@
           mark: [
             { max: 50, message: '最多可输入 50 个字符', trigger: 'blur' }
           ]
-        }
+        },
+        module_id: 16
       }
     },
     methods: {
+      initData() {
+        const obj = {
+          'module_id': this.module_id,
+          'company': '',
+          'yt_m_id': '',
+          'department': '',
+          'user_name': '',
+          'status': '',
+          'id': ''
+        }
+        companyList(obj).then(response => {
+          this.dataTree = response.response.list
+        })
+      },
       onSubmit() {
-        console.log('submit!')
+        this.initData()
       },
       append(data) {
         const newChild = { id: this.id++, label: 'testtest', children: [] }
@@ -315,9 +328,17 @@
             type: 'warning',
             center: true
           }).then(() => {
-            this.$message({
-              type: 'success',
-              message: '上移成功!'
+            const obj = {
+              'module_id': this.module_id,
+              'move_type': '-1',
+              'yt_c_id': data.yt_c_id
+            }
+            moveCompanyDepartment(obj).then(response => {
+              this.$message({
+                type: 'success',
+                message: response.response.msg
+              })
+              this.initData()
             })
           }).catch(() => {
             this.$message({
@@ -332,9 +353,17 @@
             type: 'warning',
             center: true
           }).then(() => {
-            this.$message({
-              type: 'success',
-              message: '下移成功!'
+            const obj = {
+              'module_id': this.module_id,
+              'move_type': '1',
+              'yt_c_id': data.yt_c_id
+            }
+            moveCompanyDepartment(obj).then(response => {
+              this.$message({
+                type: 'success',
+                message: response.response.msg
+              })
+              this.initData()
             })
           }).catch(() => {
             this.$message({
@@ -349,9 +378,16 @@
             type: 'warning',
             center: true
           }).then(() => {
-            this.$message({
-              type: 'success',
-              message: '删除成功!'
+            const obj = {
+              'module_id': this.module_id,
+              'yt_c_id': data.yt_c_id
+            }
+            delCompanyDepartment(obj).then(response => {
+              this.$message({
+                type: 'success',
+                message: response.response.msg
+              })
+              this.initData()
             })
           }).catch(() => {
             this.$message({
@@ -405,6 +441,7 @@
       }
     },
     created() {
+      this.initData()
     }
   }
 </script>

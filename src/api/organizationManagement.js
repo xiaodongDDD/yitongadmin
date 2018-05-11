@@ -104,6 +104,15 @@ export function addEditRole(params) {
 }
 
 // 员工的管理接口 冻结、启用账号
+export function companyList(params) {
+  return request({
+    url: '&v=0.1&method=Yi.companyList',
+    method: 'post',
+    data: params
+  })
+}
+
+// 员工的管理接口 冻结、启用账号
 export function freezeStart(params) {
   return request({
     url: '&v=0.1&method=Yi.freezeStart',
