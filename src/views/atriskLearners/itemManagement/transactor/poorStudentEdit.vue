@@ -14,39 +14,39 @@
           style="width: 100%">
           <el-table-column
             align="center"
-            prop="onOff"
+            prop="teacher_name"
             label="执行人"
             width="100">
           </el-table-column>
           <el-table-column
             align="center"
-            prop="name"
+            prop="subject_name"
             label="执行学科"
             width="100">
           </el-table-column>
           <el-table-column
             align="center"
-            prop="userName"
-            label="执行班级"
-            width="100">
+            prop="class_names"
+            label="执行班级">
           </el-table-column>
           <el-table-column
             align="center"
-            prop="type"
+            prop="project_name"
             label="评价项目"
             width="200">
           </el-table-column>
           <el-table-column
             align="center"
             label="评价对象"
-            prop="comment">
+            prop="count"
+            width="100">
           </el-table-column>
           <el-table-column
             align="center" label="操作" width="">
             <template slot-scope="scope">
               <el-button
                 size="mini"
-                @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                @click="handleEdit(scope.row.school_id, scope.row.project_id, scope.row.teacher_id,scope.row.subject_id, scope.row.executor_id)">编辑</el-button>
               <el-button
                 size="mini"
                 type="danger"
@@ -65,7 +65,7 @@
           @current-change="handleCurrentChange" 
           background
           layout="prev, pager, next"
-          :total="1000">
+          :total="total">
         </el-pagination>
       </div>
 
@@ -97,6 +97,7 @@
       return {
         centerDialogVisible: false,
         userName: '',
+        total: 0,
         form: {
           name: ''
         },
@@ -112,22 +113,23 @@
           path: '/itemList'
         },
         tableData: [{
-          onOff: 0,
-          name: '都龙族',
-          userName: 'doulongzu',
-          type: '学校',
-          comment: '武宁路育才'
+          teacher_name: '',
+          count: 0,
+          subject_name: '都龙族',
+          project_name: 'doulongzu',
+          class_names: '学校'
         }, {
-          onOff: 1,
-          name: '都龙族',
-          userName: 'doulongzu',
-          type: '运营',
-          comment: ''
+          teacher_name: '',
+          count: 0,
+          subject_name: '都龙族',
+          project_name: 'doulongzu',
+          class_names: '运营'
         }, {
-          onOff: 0,
-          name: '都龙族',
-          userName: 'doulongzu',
-          type: '学校'
+          teacher_name: '',
+          count: 0,
+          subject_name: '都龙族',
+          project_name: 'doulongzu',
+          class_names: '学校'
         }]
       }
     },
@@ -135,11 +137,13 @@
       myHeader
     },
     mounted() {
-      this.getData()
+      // this.leader_id = this.$route.query.teacher_id
+      this.getData(1)
     },
     methods: {
-      getData() {
+      getData(pages) {
         const obj = {
+          page: pages,
           project_id: 1,
           teacher_id: 10220,
           token: localStorage.getItem('TOKEN')
@@ -147,16 +151,27 @@
         leaderExecutorList(obj)
           .then(res => {
             console.log(res)
+            if (res.hasOwnProperty('response')) {
+              this.tableData = res.response.list
+              this.total = res.response.total_page
+            }
           })
       },
-      handleEdit(index, row) {
-        console.log(index, row)
-        this.$router.push({ path: '/exectorEdit' })
+      handleEdit(val1, val2, val3, val4, val5) {
+        console.log(val1, val2, val3, val4, val5)
+        const datas = {
+          school_id: val1,
+          project_id: val2,
+          leader_id: val3,
+          subject_id: val4,
+          executor_id: val5
+        }
+        this.$router.push({ path: '/exectorEdit', query: datas })
       },
       handleDelete(val1, val2, val3) {
         this.current_project_id = val1
         this.current_subject_id = val2
-        this.current_teacher_id = val3
+        this.current_executor_id = val3
         this.centerDialogVisible = true
       },
       handleCurrentChange(val) {
@@ -166,11 +181,18 @@
         const obj = {
           project_id: this.current_project_id,
           subject_id: this.current_subject_id,
-          teacher_id: this.current_teacher_id
+          executor_id: this.current_executor_id,
+          token: localStorage.getItem('TOKEN')
         }
         deleteExecutor(obj)
           .then(res => {
             console.log(res)
+            if (res.hasOwnProperty('response')) {
+              console.log(res)
+              this.getData()
+            } else {
+              console.log(res.error_response.msg)
+            }
           })
           .catch(err => {
             console.log(err)

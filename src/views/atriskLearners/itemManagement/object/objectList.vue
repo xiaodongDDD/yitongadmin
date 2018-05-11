@@ -10,44 +10,43 @@
           style="width: 100%">
           <el-table-column
             align="center"
-            prop="onOff"
+            prop="project_name"
             label="项目名称"
             width="100">
           </el-table-column>
           <el-table-column
             align="center"
-            prop="name"
-            label="项目说明"
-            width="100">
+            prop="project_remark"
+            label="项目说明">
           </el-table-column>
           <el-table-column
             align="center"
-            prop="userName"
+            prop="teacher_name"
             label="执行人"
             width="100">
           </el-table-column>
           <el-table-column
             align="center"
-            prop="type"
+            prop="subject_name"
             label="执行学科"
-            width="60">
+            width="100">
           </el-table-column>
           <el-table-column
-            prop="schoolName"
+            prop="g_c_name"
             label="执行班级">
           </el-table-column>
           <el-table-column
             align="center"
-            prop="telephone"
-            label="评语"
-            width="110">
+            prop="project_comment"
+            label="评语">
           </el-table-column>
           <el-table-column
             align="center"
-            label="评价对象">
+            label="评价对象"
+            width='100'>
              <template slot-scope="scope">
-              <span v-if='scope.row.nums != 0'  @click='go' style='cursor: pointer;'>{{ scope.row.nums }}</span>
-              <span @click='go' v-if='scope.row.nums == 0' style='cursor: pointer;'><i class="el-icon-edit-outline"></i></span>
+              <span v-if='scope.row.num != 0'  @click='go' style='cursor: pointer;'>{{ scope.row.num }}</span>
+              <span @click='go' v-if='scope.row.num == 0' style='cursor: pointer;'><i class="el-icon-edit-outline"></i></span>
             </template>
           </el-table-column>
 
@@ -56,7 +55,7 @@
             <template slot-scope="scope">
               <el-button
                 size="mini"
-                @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                @click="handleEdit(scope.row.executor_id, scope.row.subject_id)">编辑</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -67,7 +66,7 @@
           @current-change="handleCurrentChange"  
           background
           layout="prev, pager, next"
-          :total="1000">
+          :page-count="total">
         </el-pagination>
 
       <el-dialog
@@ -91,12 +90,14 @@
 
 <script>
  import myHeader from '../../myHeader/myHeader'
+ import { getObjectList } from '@/api/eduAdmin'
  export default {
    name: 'objectList',
    data() {
      return {
        centerDialogVisible: false,
        userName: '',
+       total: 0,
        form: {
          name: ''
        },
@@ -107,39 +108,45 @@
          path: '/itemList'
        },
        tableData: [{
-         onOff: 0,
-         name: '都龙族',
-         userName: 'doulongzu',
-         type: '学校',
-         schoolName: '武宁路育才',
-         nums: 11,
-         telephone: '13533790697'
-       }, {
-         onOff: 1,
-         name: '都龙族',
-         userName: 'doulongzu',
-         type: '运营',
-         schoolName: '',
-         nums: 0,
-         telephone: '13533790697'
-       }, {
-         onOff: 0,
-         name: '都龙族',
-         userName: 'doulongzu',
-         type: '学校',
-         nums: 111,
-         schoolName: '武宁路育才',
-         telephone: '13533790697'
+         project_name: '1212',
+         project_remark: '2hahashdasdh',
+         teacher_name: '112sdasdas',
+         subject_name: '1212sdas',
+         g_c_name: 'dadasd',
+         project_comment: 'uyasyasd',
+         num: 12
        }]
      }
    },
    components: {
      myHeader
    },
+   mounted() {
+     this.getData(1)
+   },
    methods: {
-     handleEdit(index, row) {
-       console.log(index, row)
-       this.$router.push({ path: '/objectEdit' })
+     getData(pages) {
+       const obj = {
+         page: pages,
+         token: localStorage.getItem('TOKEN')
+       }
+       getObjectList(obj)
+         .then(res => {
+           if (res.hasOwnProperty('response')) {
+             console.log(res)
+             // this.tableData = res.response.list
+             this.total = res.response.allPage
+           } else {
+             console.log(res)
+           }
+         })
+         .catch(err => {
+           console.log(err)
+         })
+     },
+     handleEdit(val1, val2) {
+       console.log(val1, val2)
+       this.$router.push({ path: '/objectEdit', query: { teacher_id: val1, subject_id: val2 }})
      },
      handleDelete(index, row) {
        console.log(index, row)

@@ -52,6 +52,7 @@
 </template>
 <script>
   import myHeader from '../../myHeader/myHeader'
+  import { getLeader } from '@/api/eduAdmin'
   export default {
     name: 'officialEdit',
     data() {
@@ -107,13 +108,41 @@
         }],
         value2: [],
         value1: [],
-        allValues: ['选项1', '选项2', '选项3', '选项4', '选项5']
+        allValues: ['选项1', '选项2', '选项3', '选项4', '选项5'],
+        school_id: '',
+        project_id: '',
+        teacher_id: ''
       }
     },
     components: {
       myHeader
     },
+    mounted() {
+      this.school_id = this.$route.query.school_id
+      this.project_id = this.$route.query.project_id
+      this.teacher_id = this.$route.query.teacher_id
+      this.getData()
+    },
     methods: {
+      getData() {
+        const obj = {
+          school_id: this.school_id,
+          project_id: this.project_id,
+          teacher_id: this.teacher_id,
+          token: localStorage.getItem('TOKEN')
+        }
+        getLeader(obj)
+          .then(res => {
+            if (res.hasOwnProperty('response')) {
+              console.log(res)
+            } else {
+              console.log(res)
+            }
+          })
+          .catch(err => {
+            console.log(err)
+          })
+      },
       saveUser() {
         // this.$router.push({ path: '/officialList' })
         console.log(this.value1)

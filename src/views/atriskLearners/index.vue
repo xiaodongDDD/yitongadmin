@@ -40,6 +40,16 @@
             </el-menu-item-group>
           </el-submenu>
         </router-link>
+       <!--  <el-submenu index="/itemList">
+            <template slot="title">
+              <i class="el-icon-menu"></i>
+              <span>评价项目管理</span>
+            </template>
+            <el-menu-item-group>
+              <router-link to="/transactorList"><el-menu-item index="/transactorList">执行人管理</el-menu-item></router-link>
+              <router-link to="/objectList"><el-menu-item index="/objectList">评价对象管理</el-menu-item></router-link>
+            </el-menu-item-group>
+          </el-submenu> -->
         <router-link to="/templateList">
           <el-menu-item index="/templateList">
             <i class="el-icon-menu"></i>
@@ -89,9 +99,27 @@
       }
     },
     mounted() {
-      // console.log(this.$router.history.current.fullPath)
-      this.index = this.$router.history.current.fullPath
-      // console.log(this.index)
+      if (this.$route.path === '/userEdit' || this.$route.path === '/userAdd') {
+        this.index = '/userList'
+      } else if (this.$route.path === '/accountEdit' || this.$route.path === '/accountAdd') {
+        this.index = '/accountList'
+      } else if (this.$route.path === '/powerEdit') {
+        this.index = '/powerList'
+      } else if (this.$route.path === '/itemEdit' || this.$route.path === '/itemAdd') {
+        this.index = '/itemList'
+      } else if (this.$route.path === '/officialEdit' || this.$route.path === '/officialAdd') {
+        this.index = '/officialList'
+      } else if (this.$route.path === '/transactorEdit' || this.$route.path === '/poorStudentEdit' || this.$route.path === '/exectorEdit' || this.$route.path === '/exectorAdd') {
+        this.index = '/transactorList'
+      } else if (this.$route.path === '/objectEdit' || this.$route.path === '/objectMan') {
+        this.index = '/objectList'
+      } else if (this.$route.path === '/templateEdit' || this.$route.path === '/templateAdd') {
+        this.index = '/templateList'
+      } else if (this.$route.path === '/gainSchoolList' || this.$route.path === '/gainDetails') {
+        this.index = '/gainList'
+      } else {
+        this.index = this.$route.path
+      }
     },
     components: {
       myHeader,

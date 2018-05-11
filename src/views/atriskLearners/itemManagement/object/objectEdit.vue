@@ -36,6 +36,7 @@
 
 <script>
  import myHeader from '../../myHeader/myHeader'
+ import { getObjectDetail } from '@/api/eduAdmin'
  export default {
    name: 'transactorEdit',
    data() {
@@ -61,7 +62,30 @@
    components: {
      myHeader
    },
+   mounted() {
+     this.teacher_id = this.$route.query.teacher_id
+     this.subject_id = this.$route.query.subject_id
+     this.getData()
+   },
    methods: {
+     getData() {
+       const obj = {
+         teacher_id: this.teacher_id,
+         subject_id: this.subject_id,
+         token: localStorage.getItem('TOKEN')
+       }
+       getObjectDetail(obj)
+         .then(res => {
+           if (res.hasOwnProperty('response')) {
+             console.log(res)
+           } else {
+             console.log(res.error_response.msg)
+           }
+         })
+         .catch(err => {
+           console.log(err)
+         })
+     },
      saveUser() {
        this.$router.push({ path: '/objectList' })
      }

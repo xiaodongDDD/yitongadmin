@@ -78,7 +78,8 @@
           @current-change="handleCurrentChange"
           background
           layout="prev, pager, next"
-          :total="1000">
+          :page-count="total"
+          :pageSize='10'>
         </el-pagination>
       </div>
 
@@ -110,6 +111,7 @@ export default {
     return {
       centerDialogVisible: false,
       userName: '',
+      total: 0,
       form: {
         name: '',
         options: [{ value: '1', label: '启用' }, { value: '0', label: '停用' }]
@@ -137,14 +139,14 @@ export default {
     myHeader
   },
   mounted() {
-    this.getData()
+    this.getData(1)
     this.getSchoolList()
   },
   methods: {
-    getData() {
+    getData(pages) {
       const obj = {
         school_id: localStorage.getItem('school_id'),
-        page: 1,
+        page: pages,
         pagesize: 10,
         token: localStorage.getItem('TOKEN')
       }
@@ -154,6 +156,7 @@ export default {
           console.log(res)
           if (res.hasOwnProperty('response')) {
             this.tableData = res.response.list
+            this.total = res.response.total_page
             // for (let i = 0; i < res.response.list.length; i++) {
             //   if (res.response.list[i].project_status === "0") {
             //     res.response.list[i].status = '启用'
@@ -214,6 +217,7 @@ export default {
     },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`)
+      this.getData(val)
     },
     confirmDelete() {
       const obj = {

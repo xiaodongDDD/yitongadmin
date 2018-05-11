@@ -5,20 +5,31 @@
       <p class="position">编辑执行人</p>
         <div class="edit-form">
         <el-form ref="form" :model="form" label-width="100px">
-          <el-form-item label="执行人姓名：">
-            <el-input v-model="form.name"></el-input>
+          <el-form-item label="执行人姓名：" id='names'>
+            <el-select
+              v-model="value"
+              collapse-tags
+              @change="chooseName"
+              placeholder="请选择">
+              <el-option
+                v-for="item in options"
+                :key="item.teacher_id"
+                :label="item.teacher_name"
+                :value="item.teacher_id">
+              </el-option>
+            </el-select>
           </el-form-item>
           <el-form-item label="执行学科：" id='subject'>
             <el-select
               v-model="value1"
-              multiple
               collapse-tags
+              @change="chooseSubject"
               placeholder="请选择">
               <el-option
                 v-for="item in options1"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
+                :key="item.subject_id"
+                :label="item.subject_name"
+                :value="item.subject_id">
               </el-option>
             </el-select>
           </el-form-item>
@@ -27,7 +38,8 @@
               v-model="value2"
               multiple
               collapse-tags
-              placeholder="请选择">
+              placeholder="请选择"
+              @change="chooseGrade">
               <el-option
                 v-for="item in options2"
                 :key="item.value"
@@ -40,9 +52,9 @@
             <el-select v-model="value3" placeholder="请选择">
               <el-option
                 v-for="item in options3"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
+                :key="item.template_id"
+                :label="item.template_name"
+                :value="item.template_id">
               </el-option>
             </el-select>
           </el-form-item>
@@ -57,6 +69,7 @@
 </template>
 <script>
   import myHeader from '../../myHeader/myHeader'
+  import { getExecutor, getExecutorSubject, getExecutorTemplate, getExecutorTeacher } from '@/api/eduAdmin'
   export default {
     name: 'exectorEdit',
     data() {
@@ -70,69 +83,73 @@
           email: '134752398@348.cn',
           status: 0
         },
+        school_id: '',
+        project_id: '',
+        leader_id: '',
+        subject_id: '',
+        executor_id: '',
         msg: {
           title1: '项目评价管理',
           title2: '编辑执行人',
           flag: 1,
           path: '/itemList'
         },
-        options1: [{
-          value: '选项1',
-          label: '黄金糕'
-        }, {
-          value: '选项2',
-          label: '双皮奶'
-        }, {
-          value: '选项3',
-          label: '蚵仔煎'
-        }, {
-          value: '选项4',
-          label: '龙须面'
-        }, {
-          value: '选项5',
-          label: '北京烤鸭'
-        }],
-        options2: [{
-          value: '选项1',
-          label: '黄金糕1'
-        }, {
-          value: '选项2',
-          label: '双皮奶1'
-        }, {
-          value: '选项3',
-          label: '蚵仔煎1'
-        }, {
-          value: '选项4',
-          label: '龙须面1'
-        }, {
-          value: '选项5',
-          label: '北京烤鸭1'
-        }],
-        options3: [{
-          value: '选项1',
-          label: '黄金糕'
-        }, {
-          value: '选项2',
-          label: '双皮奶'
-        }, {
-          value: '选项3',
-          label: '蚵仔煎'
-        }, {
-          value: '选项4',
-          label: '龙须面'
-        }, {
-          value: '选项5',
-          label: '北京烤鸭'
-        }],
+        options: [],
+        options1: [],
+        options2: [],
+        options3: [],
         value3: '',
         value2: [],
-        value1: []
+        value1: [],
+        value: []
       }
     },
     components: {
       myHeader
     },
+    mounted() {
+      this.school_id = this.$route.query.school_id
+      this.project_id = this.$route.query.project_id
+      this.leader_id = this.$route.query.leader_id
+      this.subject_id = this.$route.query.subject_id
+      this.executor_id = this.$route.query.executor_id
+      this.getData()
+    },
     methods: {
+      getData() {
+        const obj = {
+          school_id: this.school_id,
+          project_id: this.project_id,
+          leader_id: this.leader_id,
+          subject_id: this.subject_id,
+          executor_id: this.executor_id,
+          token: localStorage.getItem('TOKEN')
+        }
+        getExecutor(obj)
+          .then(res => {
+            if (res.hasOwnProperty('response')) {
+              console.log(res)
+              this.options = res.response.executor_list
+              this.options1 = res.response.subject_list
+              this.options2 = res.response.class_list
+              this.options3 = res.response.template_list
+            } else {
+              console.log(res)
+            }
+          })
+          .catch(err => {
+            console.log(err)
+          })
+      },
+      chooseName() {
+        console.log('change111')
+      },
+      chooseSubject() {
+        console.log('change222')
+      },
+      chooseGrade() {
+        console.log('change333')
+      },
       saveUser() {
         // this.$router.push({ path: '/poorStudentEdit' })
         console.log(this.value3, this.value2, this.value1)
@@ -145,6 +162,9 @@
 
 </style>
 <style type="text/css">
+.main-content .edit-form #names .el-input {
+  width: 300px;
+}
 .main-content .edit-form #subject .el-input {
   width: 195px;
 }
@@ -152,7 +172,7 @@
   width: 195px;
 }
 .main-content .edit-form #templet .el-input {
-  width: 195px;
+  width: 300px;
 }
 </style>
 

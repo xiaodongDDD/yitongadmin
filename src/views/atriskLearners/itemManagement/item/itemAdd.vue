@@ -46,12 +46,8 @@
    data() {
      return {
        form: {
-         name: '石选晓',
-         schoolName: '武宁路小学',
-         userName: 'shixiuan',
-         type: '0',
-         telephone: '13535790897',
-         remark: '134752398@348.cn',
+         name: '',
+         remark: '',
          status: 1
        },
        msg: {
