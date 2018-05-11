@@ -152,7 +152,7 @@
         this.form.signList[index].target.push(str)
       },
       addItem2(index) {
-        const str = { type: '', rate: '' }
+        const str = { type: '', remark: '' }
         this.form.signList[index].rank.push(str)
       },
       removeTarget(index1, index2) {

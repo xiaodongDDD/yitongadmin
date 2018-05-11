@@ -2,7 +2,7 @@
   <div class="center-content template-list">
     <my-header :msg='msg'></my-header>
     <div class="content-detail">
-      <div class="schoolName"><span class='schools'>上海市普陀区武宁路小学</span>
+      <div class="schoolName"><span class='schools'>{{ school_info.school_name}}</span>
         <el-dropdown @command="handleCommand"  trigger="click" v-show="schoolChange">
           <span class="el-dropdown-link change">
             切换
@@ -80,7 +80,7 @@
 
 <script>
   import myHeader from '../myHeader/myHeader'
-  import { templateList, templateDelete } from '@/api/eduAdmin'
+  import { templateList, templateDelete, getSchoolList } from '@/api/eduAdmin'
   export default {
     name: 'templateList',
     data() {
@@ -94,7 +94,8 @@
         form: {
           name: ''
         },
-        schools: ['哈哈哈中学', '呵呵呵中学', '醉了小学'],
+        school_info: {},
+        schools: [],
         msg: {
           title1: '评价模版管理',
           title2: '',
@@ -122,6 +123,16 @@
       handleCurrentChange(val) {
         this.getList(val)
       },
+      getSchoolList() {
+        const obj = {}
+        obj.token = localStorage.getItem('TOKEN')
+        getSchoolList(obj).then(res => {
+          // console.log(res)
+          if (res.hasOwnProperty('response')) {
+            this.schools = res.response.info
+          }
+        })
+      },
       templateDelete() {
         templateDelete(this.tinfo).then(res => {
           // console.log(res)
@@ -148,6 +159,7 @@
             // console.log(res)
             const data = res.response
             this.tableData = data.info
+            this.school_info = data.school_info
             this.schoolChange = data.school_change
             this.pageData.allPage = data.total_page
           } else {
@@ -159,6 +171,7 @@
       }
     },
     mounted() {
+      this.getSchoolList()
       this.getList(1)
     }
   }
