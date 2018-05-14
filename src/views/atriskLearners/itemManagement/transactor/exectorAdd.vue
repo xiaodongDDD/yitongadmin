@@ -9,7 +9,6 @@
             <el-select
               v-model="value"
               collapse-tags
-              @change="chooseName"
               placeholder="请选择">
               <el-option
                 v-for="item in options"
@@ -51,8 +50,8 @@
               <el-option
                 v-for="item in options3"
                 :key="item.value"
-                :label="item.label"
-                :value="item.value">
+                :label="item.template_name"
+                :value="item.template_id">
               </el-option>
             </el-select>
           </el-form-item>
@@ -67,6 +66,7 @@
 </template>
 <script>
   import myHeader from '../../myHeader/myHeader'
+  import { getExecutor } from '@/api/eduAdmin'
   export default {
     name: 'exectorEdit',
     data() {
@@ -80,12 +80,32 @@
           email: '134752398@348.cn',
           status: 0
         },
+        leader_id: '',
+        school_id: '',
+        project_id: '',
+        subject_id: '',
         msg: {
           title1: '项目评价管理',
           title2: '新增执行人',
           flag: 1,
           path: '/itemList'
         },
+        options: [{
+          value: '选项1',
+          label: '黄金糕'
+        }, {
+          value: '选项2',
+          label: '双皮奶'
+        }, {
+          value: '选项3',
+          label: '蚵仔煎'
+        }, {
+          value: '选项4',
+          label: '龙须面'
+        }, {
+          value: '选项5',
+          label: '北京烤鸭'
+        }],
         options1: [{
           value: '选项1',
           label: '黄金糕'
@@ -136,20 +156,44 @@
         }],
         value3: '',
         value2: [],
-        value1: []
+        value1: [],
+        value: ''
       }
     },
     components: {
       myHeader
     },
     mounted() {
+      this.leader_id = this.$route.query.leader_id
+      this.school_id = this.$route.query.school_id
+      this.project_id = this.$route.query.project_id
+      this.subject_id = this.$route.query.subject_id
       this.getData()
     },
     methods: {
       getData() {
         const obj = {
-          
+          school_id: this.school_id,
+          project_id: this.project_id,
+          leader_id: this.leader_id,
+          subject_id: this.subject_id,
+          token: localStorage.getItem('TOKEN')
         }
+        getExecutor(obj)
+          .then(res => {
+            if (res.hasOwnProperty('response')) {
+              console.log(res)
+              this.options = res.response.executor_list
+              this.options1 = res.response.subject_list
+              this.options2 = res.response.class_list
+              this.options3 = res.response.template_list
+            } else {
+              console.log(res)
+            }
+          })
+          .catch(err => {
+            console.log(err)
+          })
       },
       saveUser() {
         this.$router.push({ path: '/poorStudentEdit' })
@@ -167,6 +211,12 @@
 }
 #grade .el-select__tags {
   max-width: 163px;
+}
+#names .el-select__tags {
+  max-width: 163px;
+}
+.main-content .edit-form #names .el-input {
+  width: 195px;
 }
 .main-content .edit-form #subject .el-input {
   width: 195px;

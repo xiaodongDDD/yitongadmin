@@ -13,7 +13,6 @@
             <el-select
               id='officialSelect1'
               v-model="value1"
-              multiple
               collapse-tags
               placeholder="请选择">
               <span id="checkAll2" @click='checkAll2'>全选</span>

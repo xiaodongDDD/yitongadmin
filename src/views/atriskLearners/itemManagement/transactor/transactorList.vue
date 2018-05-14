@@ -46,8 +46,8 @@
             align="center"
             label="执行人">
              <template slot-scope="scope">
-              <span v-if='scope.row.count != 0' @click='go(scope.row.teacher_id)' style='cursor: pointer;'>{{ scope.row.count }}</span>
-              <span @click='go(scope.row.teacher_id)' v-if='scope.row.count == 0' style='cursor: pointer;'><i class="el-icon-edit-outline"></i></span>
+              <span v-if='scope.row.count != 0' @click='go(scope.row.teacher_id, scope.row.school_id, scope.row.project_id, scope.row.subject_id)' style='cursor: pointer;'>{{ scope.row.count }}</span>
+              <span @click='go(scope.row.teacher_id, scope.row.school_id, scope.row.project_id, scope.row.subject_id)' v-if='scope.row.count == 0' style='cursor: pointer;'><i class="el-icon-edit-outline"></i></span>
             </template>
           </el-table-column>
 
@@ -140,9 +140,15 @@
        console.log(index, row)
        this.centerDialogVisible = true
      },
-     go(val) {
-       console.log(val)
-       this.$router.push({ path: '/poorStudentEdit', query: { teacher_id: val }})
+     go(val1, val2, val3, val4) {
+       console.log(val1, val2, val3, val4)
+       const datas = {
+         teacher_id: val1,
+         school_id: val2,
+         project_id: val3,
+         subject_id: val4
+       }
+       this.$router.push({ path: '/poorStudentEdit', query: datas })
      },
      handleCurrentChange(val) {
        console.log(`当前页: ${val}`)

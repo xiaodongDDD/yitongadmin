@@ -5,7 +5,7 @@
         <div class="title"><span class="officialMan">学困生辅导执行人管理</span><span class="goback">返回</span></div>
       <div class="smallTitle">
         <span class='manName'>管理员 {{ manName }}&nbsp&nbsp</span>
-        <span class="manNum">负责人 {{ manNum }}</span>
+        <span class="manNum">执行人 {{ manNum }}</span>
       </div>
       <div class="list-table">
         <el-table
@@ -97,6 +97,10 @@
         userName: '',
         total: 0,
         current_page: 1,
+        leader_id: '',
+        school_id: '',
+        project_id: '',
+        subject_id: '',
         form: {
           name: ''
         },
@@ -118,7 +122,10 @@
       myHeader
     },
     mounted() {
-      // this.leader_id = this.$route.query.teacher_id
+      this.leader_id = this.$route.query.teacher_id
+      this.school_id = this.$route.query.school_id
+      this.project_id = this.$route.query.project_id
+      this.subject_id = this.$route.query.subject_id
       this.getData(1)
     },
     methods: {
@@ -178,6 +185,10 @@
       },
       add() {
         const datas = {
+          school_id: this.school_id,
+          project_id: this.project_id,
+          leader_id: this.leader_id,
+          subject_id: this.subject_id
         }
         this.$router.push({ path: '/exectorAdd', query: datas })
       },

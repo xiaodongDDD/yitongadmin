@@ -102,7 +102,7 @@
         value2: [],
         value1: '',
         value: '',
-        class_list:[]
+        class_list: []
       }
     },
     components: {
@@ -191,7 +191,7 @@
         getExecutorSubject(obj)
           .then(res => {
             if (res.hasOwnProperty('response')) {
-              this.options = res.response.executor_list
+              this.options1 = res.response.executor_list
             } else {
               this.$message.error(res.error_response.msg)
             }
@@ -212,7 +212,7 @@
         getExecutorClass(obj)
           .then(res => {
             if (res.hasOwnProperty('response')) {
-              this.options1 = res.response.subject_list
+              this.options2 = res.response.subject_list
             } else {
               this.$message.error(res.error_response.msg)
             }

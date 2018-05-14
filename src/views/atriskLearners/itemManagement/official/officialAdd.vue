@@ -11,7 +11,6 @@
           <el-form-item label="负责学科：">
             <el-select
               v-model="value1"
-              multiple
               collapse-tags
               placeholder="请选择">
               <el-option

@@ -101,7 +101,7 @@
             console.log(res)
             if (res.hasOwnProperty('response')) {
               this.form = res.response.detail
-              let nowList = res.response.detail.auth_list
+              const nowList = res.response.detail.auth_list
               if (nowList.indexOf('4') !== -1) {
                 this.checked1 = true
               }

@@ -104,7 +104,7 @@
                this.$message.success('保存成功')
                this.$router.push({ path: '/objectList' })
              } else {
-              this.$message.error(res.error_response.msg)
+               this.$message.error(res.error_response.msg)
              }
            })
        }
