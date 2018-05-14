@@ -1,7 +1,7 @@
 <template>
   <div class="roleMangement">
     <!--添加-->
-    <div class="buttonAdd">  <el-button>&nbsp;&nbsp;新&nbsp;增&nbsp;&nbsp;</el-button>
+    <div class="buttonAdd">  <el-button @click="updateInfo(scope.row)">&nbsp;&nbsp;新&nbsp;增&nbsp;&nbsp;</el-button>
     </div>
     <!--表格-->
     <el-table

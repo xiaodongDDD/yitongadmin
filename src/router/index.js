@@ -135,6 +135,13 @@ export const constantRouterMap = [
         name: '我的资料',
         component: _import('organizationManagement/personalCenter/myInfo'),
         meta: { title: '我的资料', icon: 'table' }
+      },
+      {
+        path: 'updatePassword',
+        name: '修改密码',
+        component: _import('organizationManagement/personalCenter/updatePassword'),
+        meta: { title: '修改密码', icon: 'table' },
+        hidden: true
       }
     ]
   },

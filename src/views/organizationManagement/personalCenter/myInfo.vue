@@ -17,7 +17,7 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item label="员工编号">
-        <span>12345</span>
+        <span>{{form.u_id}}</span>
       </el-form-item>
       <el-form-item label="手机"  prop="mobile_phone">
         <div>
@@ -73,7 +73,7 @@
       return {
         form: {
           name: '',
-          nameEn: '',
+          english_name: '',
           sex: '男',
           phoneNUm: '+86',
           phone: '',
@@ -114,7 +114,6 @@
     },
     created() {
       const obj = {
-        // 'u_id': 1,
         'module_id': this.module_id,
         'type': 1
       }

@@ -4,7 +4,7 @@
       <div class="blockTree">
         <el-row :gutter="20">
           <el-col :span="12"><p>一统管理系统</p></el-col>
-          <el-col :span="12" class="buttonAlign"><el-button size="mini" icon="el-icon-plus" round></el-button></el-col>
+          <el-col :span="12" class="buttonAlign"><el-button size="mini" type="text" icon="el-icon-plus" @click="addMenu('','')"></el-button></el-col>
         </el-row>
         <el-tree
           :data="dataList"
@@ -38,7 +38,7 @@
           <el-input v-model="ruleForm.menu_name"></el-input>
         </el-form-item>
         <el-form-item label="上级菜单" >
-          <el-input v-model="ruleForm.parent_menu_name" disabled></el-input>
+          <el-input v-model="ruleForm.parent_info" disabled></el-input>
         </el-form-item>
         <el-form-item label="菜单编号" >
           <el-input v-model="ruleForm.yt_m_id" disabled></el-input>
@@ -50,91 +50,100 @@
           <el-input type="textarea" v-model="ruleForm.comment"></el-input>
         </el-form-item>
       </el-form>
-      <el-row :gutter="20">
-        <el-col :span="12"><p>功能权限</p></el-col>
-        <el-col :span="12" class="buttonAlign"><el-button type="primary" plain icon="el-icon-plus" size="small" @click="functionAny('',2)">添加功能</el-button></el-col>
-      </el-row>
-      <el-table
-        :data="tableFunction"
-        element-loading-text="加载中..." border fit highlight-current-row
-        style="width: 100%">
-        <el-table-column
-          prop="yt_m_f_id"
-          align="center"
-          label="编号"
-          width="120">
-        </el-table-column>
-        <el-table-column
-          prop="name"
-          label="功能名称"
-          align="center"
-          width="120">
-        </el-table-column>
-        <el-table-column
-          prop="remark"
-          label="标识"
-          align="center"
-          width="120">
-        </el-table-column>
-        <el-table-column
-          prop="comment"
-          label="备注"
-          align="center">
-        </el-table-column>
-        <el-table-column
-          label="操作"
-          align="center"
-          width="230">
-          <template slot-scope="scope">
-            <el-button type="" size="mini" @click="functionAny(scope.row,1)">详情</el-button>
-            <el-button type="danger" size="mini" @click="deleteData(scope.row)">删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-      <el-row :gutter="20" class="rowMargin">
-        <el-col :span="12"><p>数据权限</p></el-col>
-        <el-col :span="12" class="buttonAlign"><el-button type="primary" plain icon="el-icon-plus" size="small" @click="dataAny('',2)">添加数据</el-button></el-col>
-      </el-row>
-      <el-table
-        :data="tableData"
-        element-loading-text="加载中..." border fit highlight-current-row
-        style="width: 100%">
-        <el-table-column
-          prop="yt_m_d_id"
-          align="center"
-          label="编号"
-          width="120">
-        </el-table-column>
-        <el-table-column
-          prop="data_name"
-          label="数据名称"
-          align="center"
-          width="120">
-        </el-table-column>
-        <el-table-column
-          prop="remark"
-          label="标识"
-          align="center"
-          width="120">
-        </el-table-column>
-        <el-table-column
-          prop="comment"
-          label="备注"
-          align="center">
-        </el-table-column>
-        <el-table-column
-          label="操作"
-          align="center"
-          width="230">
-          <template slot-scope="scope">
-            <el-button type="" size="mini" @click="dataAny(scope.row,1)">详情</el-button>
-            <el-button type="danger" size="mini" @click="deleteData(scope.row)">删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-      <div class="submitButton">
+
+      <!--下一步的按钮-->
+      <div class="submitButton" v-show="!addShow">
         <el-button @click="cancleForm()">取 消</el-button>
-        <el-button type="primary" @click="submitForm('ruleForm')">保 存</el-button>
+        <el-button type="primary" @click="submitForm('next')">保存，下一步</el-button>
+      </div>
+      <!--数据和功能权限-->
+      <div v-show="addShow">
+        <el-row :gutter="20">
+          <el-col :span="12"><p>功能权限</p></el-col>
+          <el-col :span="12" class="buttonAlign"><el-button type="primary" plain icon="el-icon-plus" size="small" @click="functionAny('',2)">添加功能</el-button></el-col>
+        </el-row>
+        <el-table
+          :data="tableFunction"
+          element-loading-text="加载中..." border fit highlight-current-row
+          style="width: 100%">
+          <el-table-column
+            prop="yt_m_f_id"
+            align="center"
+            label="编号"
+            width="120">
+          </el-table-column>
+          <el-table-column
+            prop="name"
+            label="功能名称"
+            align="center"
+            width="120">
+          </el-table-column>
+          <el-table-column
+            prop="remark"
+            label="标识"
+            align="center"
+            width="120">
+          </el-table-column>
+          <el-table-column
+            prop="comment"
+            label="备注"
+            align="center">
+          </el-table-column>
+          <el-table-column
+            label="操作"
+            align="center"
+            width="230" >
+            <template slot-scope="scope">
+              <el-button type="" size="mini" @click="functionAny(scope.row,1)">详情</el-button>
+              <el-button type="danger" size="mini" @click="deleteFunction(scope.row)">删除</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <el-row :gutter="20" class="rowMargin">
+          <el-col :span="12"><p>数据权限</p></el-col>
+          <el-col :span="12" class="buttonAlign"><el-button type="primary" plain icon="el-icon-plus" size="small" @click="dataAny('',2)">添加数据</el-button></el-col>
+        </el-row>
+        <el-table
+          :data="tableData"
+          element-loading-text="加载中..." border fit highlight-current-row
+          style="width: 100%">
+          <el-table-column
+            prop="yt_m_d_id"
+            align="center"
+            label="编号"
+            width="120">
+          </el-table-column>
+          <el-table-column
+            prop="data_name"
+            label="数据名称"
+            align="center"
+            width="120">
+          </el-table-column>
+          <el-table-column
+            prop="remark"
+            label="标识"
+            align="center"
+            width="120">
+          </el-table-column>
+          <el-table-column
+            prop="comment"
+            label="备注"
+            align="center">
+          </el-table-column>
+          <el-table-column
+            label="操作"
+            align="center"
+            width="230">
+            <template slot-scope="scope">
+              <el-button type="" size="mini" @click="dataAny(scope.row,1)">详情</el-button>
+              <el-button type="danger" size="mini" @click="deleteData(scope.row)">删除</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <div class="submitButton" >
+          <el-button @click="cancleForm()">取 消</el-button>
+          <el-button type="primary" @click="submitForm('ruleForm')">保 存</el-button>
+        </div>
       </div>
     </div>
 
@@ -187,7 +196,7 @@
 
 
 <script>
-  import { menuList, moveMenu, delMenu, menuDetail, menu, menuFunctionAuth, menuDataAuth } from '@/api/organizationManagement'
+  import { menuList, moveMenu, delMenu, menuDetail, menu, menuFunctionAuth, menuDataAuth, delMenuFunction, delMenuData } from '@/api/organizationManagement'
   export default {
     data() {
       return {
@@ -251,6 +260,8 @@
             { max: 50, message: '最多可输入 50 个字符', trigger: 'blur' }
           ]
         },
+        addShow: true,
+        yt_m_id: '',
         module_id: 18
       }
     },
@@ -266,6 +277,7 @@
           this.dataList = response.response.info
           if (item === 'init') {
             this.menuDetail(this.dataList[0].yt_m_id)
+            this.yt_m_id = this.dataList[0].yt_m_id
           }
         })
       },
@@ -273,9 +285,10 @@
         console.log(item)
         console.log(data)
         if (item.id === 1) {
-          this.dialogFormAddepartment = true
+          this.addMenu('1', data)
         } else if (item.id === 2) {
-          this.dialogFormAddepartment = true
+          this.menuDetail(data.yt_m_id)
+          this.yt_m_id = data.yt_m_id
         } else if (item.id === 3) {
           this.$confirm('确认上移?', '确认操作', {
             confirmButtonText: '确定',
@@ -353,13 +366,13 @@
         }
       },
       // 保存菜单权限
-      submitForm() {
+      submitForm(item) {
         this.$refs['ruleForm'].validate((valid) => {
           if (valid) {
             const obj = {
               yt_m_id: this.ruleForm.yt_m_id, // 菜单id（编辑必传）
               module_id: this.module_id,
-              parent_id: this.ruleForm.parent_menu_id, // 父类id（新增必传）
+              parent_id: this.ruleForm.parent_id, // 父类id（新增必传）
               menu_name: this.ruleForm.menu_name,
               menu_url: this.ruleForm.menu_url,
               comment: this.ruleForm.comment
@@ -369,6 +382,12 @@
                 type: 'success',
                 message: response.response.msg
               })
+              if (item === 'next') {
+                this.addShow = true
+                this.yt_m_id = response.response.id
+                this.menuDetail(this.yt_m_id)
+                this.initTree()
+              }
             })
           } else {
             console.log('error submit!!')
@@ -386,7 +405,7 @@
                 message: response.response.msg
               })
               this.dialogFormVisibleData = false
-              this.initTree('init')
+              this.menuDetail(this.yt_m_id)
             })
           } else {
             console.log('error submit!!')
@@ -404,7 +423,7 @@
                 message: response.response.msg
               })
               this.dialogFormVisibleFunction = false
-              this.initTree('init')
+              this.menuDetail(this.yt_m_id)
             })
           } else {
             console.log('error submit!!')
@@ -412,16 +431,24 @@
           }
         })
       },
-      deleteData() {
+      // 删除数据权限
+      deleteData(item) {
         this.$confirm('确认删除?', '确认操作', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning',
           center: true
         }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
+          const obj = {
+            yt_m_d_id: item.yt_m_d_id,
+            module_id: this.module_id
+          }
+          delMenuData(obj).then(response => {
+            this.$message({
+              type: 'success',
+              message: response.response.msg
+            })
+            this.menuDetail(this.yt_m_id)
           })
         }).catch(() => {
           this.$message({
@@ -430,6 +457,33 @@
           })
         })
       },
+      // 删除功能权限
+      deleteFunction(item) {
+        this.$confirm('确认删除?', '确认操作', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+          center: true
+        }).then(() => {
+          const obj = {
+            yt_m_f_id: item.yt_m_f_id,
+            module_id: this.module_id
+          }
+          delMenuFunction(obj).then(response => {
+            this.$message({
+              type: 'success',
+              message: response.response.msg
+            })
+            this.menuDetail(this.yt_m_id)
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
+      },
+      // 取消操作
       cancleForm() {
         this.$message({
           type: 'info',
@@ -444,7 +498,8 @@
             remark: item.remark,
             comment: item.comment,
             yt_m_id: item.yt_m_id,
-            module_id: this.module_id
+            module_id: this.module_id,
+            yt_m_f_id: item.yt_m_f_id
           }
         } else {
           this.formFunction = {
@@ -452,7 +507,7 @@
             name: '',
             remark: '',
             comment: '',
-            yt_m_id: item.yt_m_id,
+            yt_m_id: this.ruleForm.yt_m_id,
             module_id: this.module_id
           }
         }
@@ -466,7 +521,8 @@
             remark: item.remark,
             comment: item.comment,
             yt_m_id: item.yt_m_id,
-            module_id: this.module_id
+            module_id: this.module_id,
+            yt_m_d_id: item.yt_m_d_id
           }
         } else {
           this.formData = {
@@ -474,7 +530,7 @@
             name: '',
             remark: '',
             comment: '',
-            yt_m_id: item.yt_m_id,
+            yt_m_id: this.ruleForm.yt_m_id,
             module_id: this.module_id
           }
         }
@@ -482,7 +538,7 @@
       },
       // 点击tree的节点
       handleNodeClick(data) {
-        this.menuDetail(data.yt_m_id)
+        // this.menuDetail(data.yt_m_id)
       },
       // 调用菜单详情接口
       menuDetail(item) {
@@ -494,14 +550,21 @@
           this.ruleForm = response.response.info
           this.tableData = this.ruleForm.data
           this.tableFunction = this.ruleForm.function
-          if (this.ruleForm.parent_info.hasOwnProperty('menu_name')) {
-            this.ruleForm.parent_menu_name = this.ruleForm.parent_info.menu_name
-            this.ruleForm.parent_menu_id = this.ruleForm.parent_info.yt_m_id
-          } else {
-            this.ruleForm.parent_menu_name = ''
-            this.ruleForm.parent_menu_id = ''
-          }
         })
+      },
+      addMenu(item, data) {
+        console.log(data)
+        if (item === '') {
+          this.ruleForm = {}
+          this.ruleForm.parent_id = 0
+        } else {
+          this.ruleForm = {}
+          this.ruleForm.parent_id = data.yt_m_id
+          if (data.hasOwnProperty('menu_name')) {
+            this.ruleForm.parent_info = data.menu_name
+          }
+        }
+        this.addShow = false
       }
     }
   }
@@ -521,14 +584,14 @@
       width: 30%;
       .blockTree {
         width: 85%;
-        border: 1px solid #8c939d;
+        border: 1px solid lightgrey;
         padding: 10px 15px;
       }
     }
     .right {
       float: left;
       width: 70%;
-      border: 1px solid #8c939d;
+      border: 1px solid lightgrey;
       padding: 10px 15px;
       /*margin-left: 400px;*/
       /*word-break: break-all;*/

@@ -76,6 +76,24 @@ export function menuFunctionAuth(params) {
   })
 }
 
+// 删除菜单数据
+export function delMenuData(params) {
+  return request({
+    url: '&v=0.1&method=Yi.delMenuData',
+    method: 'post',
+    data: params
+  })
+}
+
+// 删除菜单功能模块
+export function delMenuFunction(params) {
+  return request({
+    url: '&v=0.1&method=Yi.delMenuFunction',
+    method: 'post',
+    data: params
+  })
+}
+
 // 角色管理 列表
 export function roleList(params) {
   return request({
