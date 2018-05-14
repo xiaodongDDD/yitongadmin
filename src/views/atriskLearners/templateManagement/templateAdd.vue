@@ -54,7 +54,7 @@
         </div>
 
         <el-form-item>
-          <router-link to="/templateList"><el-button>取消</el-button></router-link>
+          <el-button @click="reback">取消</el-button>
           <el-button @click="saveTemplate()">保存</el-button>
         </el-form-item>
       </el-form>
@@ -112,8 +112,6 @@
         obj.token = token
         obj.is_update = 1
 
-        // console.log(JSON.stringify(obj))
-        // return false
         const len = this.form.signList.length
         let signSum = 0
         let oneSum = 0
@@ -132,7 +130,7 @@
           addTemplate(obj).then(res => {
             if (res.hasOwnProperty('response')) {
               this.$message('添加成功')
-              this.$router.push({ path: '/templateList' })
+              this.$router.push({ path: '/templateList', query: { school_id: this.$route.query.school_id }})
             } else {
               this.$alert(res.error_response.msg, '提示', {
                 confirmButtonText: '确定'
@@ -144,6 +142,10 @@
             confirmButtonText: '确定'
           })
         }
+      },
+      reback() {
+        const school_id = this.$route.query.school_id
+        this.$router.push({ path: '/templateList', query: { school_id: school_id }})
       },
       removeDomain(index, type) {
         this.tinfo.index = index

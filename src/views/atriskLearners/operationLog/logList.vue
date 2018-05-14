@@ -12,13 +12,13 @@
             align="center"
             prop="teacher_name"
             label="操作人"
-            width="">
+            width="120">
           </el-table-column>
           <el-table-column
             align="center"
             prop="type_name"
             label="类型"
-            width="">
+            width="100">
           </el-table-column>
           <el-table-column
             align="center"
@@ -59,7 +59,7 @@
           @current-change="handleCurrentChange"
           background
           layout="prev, pager, next"
-          :total="1000">
+          :page-count	="pageData.allPage">
         </el-pagination>
       </div>
     </div>
@@ -80,7 +80,11 @@
           flag: 0,
           path: '/itemList'
         },
-        tableData: []
+        tableData: [],
+        pageData: {
+          page: '',
+          allPage: 1
+        }
       }
     },
     components: {
@@ -96,12 +100,13 @@
       getList(page) {
         const obj = {}
         obj.page = page
-        obj.pagesize = 10
+        // obj.pagesize = 1
         obj.token = localStorage.getItem('TOKEN')
         getLogList(obj).then(res => {
           // console.log(res)
           if (res.hasOwnProperty('response')) {
             this.tableData = res.response.list
+            this.pageData.allPage = res.response.total_page
           }
         })
       }

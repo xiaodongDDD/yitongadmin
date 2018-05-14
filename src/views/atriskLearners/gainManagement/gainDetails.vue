@@ -130,7 +130,7 @@
         obj.student_id = this.$route.query.student_id
         obj.p_e_id = this.$route.query.p_e_id
         gainDetail(obj).then(res => {
-          console.log(res)
+          // console.log(res)
           if (res.hasOwnProperty('response')) {
             this.tableData.column = res.response.table_head
             this.tableData.data = res.response.table_body
@@ -148,7 +148,7 @@
       },
       reback() {
         this.project_id = this.$route.query.project_id
-        this.$router.push({ path: '/gainSchoolList', query: { 'project_id': this.project_id }})
+        this.$router.push({ path: '/gainSchoolList', query: { 'project_id': this.project_id, 'school_id': this.$route.query.school_id }})
       },
       // 跨行跨列处理
       arraySpanMethod({ row, column, rowIndex, columnIndex }) {
