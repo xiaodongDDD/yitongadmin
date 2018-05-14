@@ -5,7 +5,8 @@
       <p class="position">道达尔学困生辅导记录表</p>
       <div class="function-btns">
         <el-button icon="el-icon-upload2" type="text" @click="">导出</el-button>
-        <router-link to="/gainSchoolList"><el-button type="text">返回</el-button></router-link>
+        <!--<router-link to="/gainSchoolList"><el-button type="text">返回</el-button></router-link>-->
+        <el-button type="text" @click="reback">返回</el-button>
       </div>
 
 
@@ -114,7 +115,8 @@
           data: []
         },
         tableDataf: [],
-        tableDatat: {}
+        tableDatat: {},
+        project_id: ''
       }
     },
     components: {
@@ -143,6 +145,10 @@
             this.tableDataf = res.response.fudao_record
           }
         })
+      },
+      reback() {
+        this.project_id = this.$route.query.project_id
+        this.$router.push({ path: '/gainSchoolList', query: { 'project_id': this.project_id }})
       },
       // 跨行跨列处理
       arraySpanMethod({ row, column, rowIndex, columnIndex }) {

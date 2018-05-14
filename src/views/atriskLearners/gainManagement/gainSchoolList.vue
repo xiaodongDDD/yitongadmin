@@ -21,10 +21,27 @@
               </el-dropdown>
             </el-form-item>
             <el-form-item label="班级">
-              <el-input v-model="formInline.class" placeholder=""></el-input>
+              <el-dropdown @command="changeClass" trigger="click">
+                <span class="el-dropdown-link">
+                  <el-input v-model="formInline.class" placeholder=""></el-input>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item v-for="item in classData" :command="item">{{ item.class_name}}</el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
             </el-form-item>
             <el-form-item label="学科">
-              <el-input v-model="formInline.subject" placeholder=""></el-input>
+              <!--<el-input v-model="formInline.subject" placeholder=""></el-input>-->
+
+              <el-dropdown @command="changeSubject" trigger="click">
+                <span class="el-dropdown-link">
+                  <el-input v-model="formInline.subject" placeholder=""></el-input>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item v-for="item in subjectData" :command="item">{{ item.subject_name}}</el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="onSubmit">筛选</el-button>
@@ -156,7 +173,10 @@
           searched: false,
           listNum: 3
         },
-        gradeData: []
+        gradeData: [],
+        classData: [],
+        subjectData: [],
+        filterData: {}
       }
     },
     components: {
@@ -164,8 +184,8 @@
     },
     methods: {
       handleEdit(index, row) {
-        // console.log(index, row)
-        this.$router.push({ path: '/gainDetails', query: { 'p_t_id': row.p_t_id, 'student_id': row.student_id, 'p_e_id': row.p_e_id }})
+        const project_id = this.$route.query.project_id
+        this.$router.push({ path: '/gainDetails', query: { 'p_t_id': row.p_t_id, 'student_id': row.student_id, 'p_e_id': row.p_e_id, 'project_id': project_id }})
       },
       importGain() {
         if (this.formInline.grade === '' && this.formInline.class === '' && this.formInline.subject === '') {
@@ -174,9 +194,13 @@
           this.centerDialogVisible = true
         }
       },
-      onSubmit() {},
+      onSubmit() {
+        this.filterData.school_id = this.$route.query.school_id
+        this.getList(1, this.filterData.grade, this.filterData.class_id, this.filterData.subject_id)
+      },
       clearCondition() {
         this.formInline = { grade: '', class: '', subject: '' }
+        this.filterData = {}
       },
       getList(page, grade_id, class_id, subject_id) {
         const obj = {}
@@ -198,17 +222,34 @@
       changeGrade(item) {
         const obj = {}
         obj.grade_id = item.grade_id
+        obj.token = localStorage.getItem('TOKEN')
+        this.filterData.grade_id = item.grade_id
         this.formInline.grade = item.grade_name
+        this.classData = []
+        this.subjectData = []
+        this.formInline.class = ''
+        this.filterData.class_id = ''
+        this.formInline.subject = ''
+        this.filterData.subject_id = ''
         gainClassSubject(obj).then(res => {
-          console.log(res)
+          // console.log(res)
           if (res.hasOwnProperty('response')) {
-            this.gradeData = res.response.info
+            this.classData = res.response.class_info
+            this.subjectData = res.response.subject_info
           } else {
             this.$alert(res.error_response.msg, '提示', {
               confirmButtonText: '确定'
             })
           }
         })
+      },
+      changeClass(item) {
+        this.formInline.class = item.class_name
+        this.filterData.class_id = item.class_id
+      },
+      changeSubject(item) {
+        this.formInline.subject = item.subject_name
+        this.filterData.subject_id = item.subject_id
       },
       handleCurrentChange(val) {
         this.getList(val)
@@ -240,5 +281,9 @@
     li{
       cursor: pointer;
     }
+  }
+  .el-dropdown-menu{
+    height: 210px;
+    overflow-y: auto;
   }
 </style>

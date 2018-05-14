@@ -256,7 +256,7 @@ export function gainDetail(params) {
 // 成果列表筛选
 export function gainClassSubject(params) {
   return request({
-    url: '/evaluate/?v=0.1&method=getClassesSubjectst',
+    url: '/evaluate/?v=0.1&method=Evaluateresult.getClassesSubjects',
     method: 'post',
     data: qs.stringify(params)
   })
@@ -383,6 +383,16 @@ export function resultsave(datas) {
 export function getresultstu(datas) {
   return request({
     url: '/evaluate/?v=0.1&method=projectresult.getresultstu',
+    method: 'post',
+    data: qs.stringify(datas)
+  })
+}
+
+
+// 操作日志
+export function getLogList(datas) {
+  return request({
+    url: '/evaluate/?v=0.1&method=Projectlog.projectLogList',
     method: 'post',
     data: qs.stringify(datas)
   })

@@ -10,31 +10,45 @@
           style="width: 100%">
           <el-table-column
             align="center"
-            prop="name"
+            prop="teacher_name"
             label="操作人"
             width="">
           </el-table-column>
           <el-table-column
             align="center"
-            prop="type"
+            prop="type_name"
             label="类型"
             width="">
           </el-table-column>
           <el-table-column
             align="center"
-            prop="instruction"
-            label="内容"
+            prop="school_name"
+            label="学校"
             width="">
           </el-table-column>
           <el-table-column
             align="center"
-            prop="time"
+            prop="module_name"
+            label="操作模板"
+            width="">
+          </el-table-column>
+          <el-table-column
+            align="center"
+            prop="operator_str"
+            label="操作内容"
+            width="">
+          </el-table-column>
+          <el-table-column
+            align="center"
             label="时间"
             width="">
+            <template slot-scope="scope">
+              <span>{{ scope.row.update_time | formatTime }}</span>
+            </template>
           </el-table-column>
           <el-table-column
             align="center"
-            prop="IP"
+            prop="operator_host"
             label="IP"
             width="">
           </el-table-column>
@@ -54,6 +68,8 @@
 
 <script>
   import myHeader from '../myHeader/myHeader'
+  import { getLogList } from '@/api/eduAdmin'
+  import { parseTime } from '../../../utils/index'
   export default {
     name: 'logList',
     data() {
@@ -64,30 +80,34 @@
           flag: 0,
           path: '/itemList'
         },
-        tableData: [{
-          name: '2018年第二学期语文补差',
-          type: '学校',
-          square: '评价项目管理',
-          instruction: '2018年第二学期',
-          time: '2018/03/12 15:00',
-          IP: ''
-        }, {
-          name: '2018年第二学期语文补差',
-          type: '学校',
-          square: '评价项目管理',
-          instruction: '2018年第二学期',
-          time: '2018/03/12 15:00',
-          IP: ''
-        }]
+        tableData: []
       }
     },
     components: {
       myHeader
     },
+    filters: {
+      formatTime: parseTime
+    },
     methods: {
       handleCurrentChange(val) {
-        console.log(`当前页: ${val}`)
+        this.getList(val)
+      },
+      getList(page) {
+        const obj = {}
+        obj.page = page
+        obj.pagesize = 10
+        obj.token = localStorage.getItem('TOKEN')
+        getLogList(obj).then(res => {
+          // console.log(res)
+          if (res.hasOwnProperty('response')) {
+            this.tableData = res.response.list
+          }
+        })
       }
+    },
+    mounted() {
+      this.getList(1)
     }
   }
 </script>

@@ -12,7 +12,7 @@
           <el-checkbox-group v-model="form.checktype">
             <div class="item-list" v-for="(item, index) in form.signList">
               <el-checkbox :label="item.type"></el-checkbox>
-              <i class="el-icon-circle-close-outline type-icon" @click.prevent="removeDomain(index)"></i>
+              <i class="el-icon-circle-close-outline type-icon" @click.prevent="removeDomain(index, item.type)"></i>
               <span class="ratetxt">占比</span>
               <el-input class="rate" v-model="item.rate"></el-input>
             </div>
@@ -60,6 +60,24 @@
       </el-form>
      </div>
     </div>
+
+    <el-dialog
+      title="提示"
+      :visible.sync="centerDialogVisible"
+      width="30%"
+      center>
+      <div class="dialogContent">
+        <p>请确认是否要删除</p>
+        <p>{{ tinfo.tname }}评价维度</p>
+
+        <p>删除后，该维度相关的评价将彻底删除</p>
+      </div>
+      <span slot="footer" class="dialog-footer">
+          <el-button @click="centerDialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="signDelete()">确 定</el-button>
+        </span>
+    </el-dialog>
+
   </div>
 </template>
 
@@ -78,7 +96,9 @@
           path: '/templateList'
         },
         isAddSign: false,
-        addSignType: ''
+        tinfo: {},
+        addSignType: '',
+        centerDialogVisible: false
       }
     },
     components: {
@@ -140,8 +160,14 @@
           })
         }
       },
-      removeDomain(index) {
-        this.form.signList.splice(index, 1)
+      removeDomain(index, type) {
+        this.tinfo.index = index
+        this.tinfo.tname = type
+        this.centerDialogVisible = true
+      },
+      signDelete() {
+        this.form.signList.splice(this.tinfo.index, 1)
+        this.centerDialogVisible = false
       },
       addSignList() {
         const addSign = {

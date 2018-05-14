@@ -2,13 +2,13 @@
   <div class="center-content gain-list">
     <my-header :msg='msg'></my-header>
     <div class="content-detail">
-      <div class="schoolName"><span class='schools'>上海市普陀区武宁路小学</span>
-        <el-dropdown @command="handleCommand"  trigger="click" v-show="schoolChange">
+      <div class="schoolName"><span class='schools'>{{school.school_name}}</span>
+        <el-dropdown @command="handleCommand"  trigger="click" v-show="school_change">
           <span class="el-dropdown-link change">
             切换
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item v-for="(item, value) in schools" :key='value' :command="item">{{ item }}</el-dropdown-item>
+            <el-dropdown-item v-for="(item, value) in schools" :key='value' :command="item">{{ item.school_name }}</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -65,13 +65,14 @@
           flag: 0,
           path: ''
         },
-        schools: ['的饭卡士大夫'],
+        school: {},
+        schools: [],
         tableData: [],
         pageData: {
           page: '',
           allPage: 1
         },
-        schoolChange: true
+        school_change: false
       }
     },
     components: {
@@ -79,23 +80,30 @@
     },
     methods: {
       handleEdit(index, row) {
-        this.$router.push({ path: '/gainSchoolList', query: { 'project_id': row.project_id }})
+        this.$router.push({ path: '/gainSchoolList', query: { 'project_id': row.project_id, 'school_id': this.school.school_id }})
       },
       handleCurrentChange(val) {
-        // console.log(`当前页: ${val}`)
-        this.getList(val)
+        this.pageData.page = val
+        this.getList(val, this.school_id)
       },
-      handleCommand() {},
+      handleCommand(item) {
+        this.school_id = item.school_id
+        this.getList(this.pageData.page, this.school_id)
+      },
       getList(page, id) {
         const obj = {}
         obj.page = page
-        obj.id = id
+        obj.school_id = id
+        // obj.pagesize = 1
         obj.token = localStorage.getItem('TOKEN')
         gainList(obj).then(res => {
           // console.log(res)
           if (res.hasOwnProperty('response')) {
             this.tableData = res.response.info
             this.pageData.allPage = res.response.total_page
+            this.school_change = res.response.school_change
+            this.school = res.response.school_info[0]
+            this.schools = res.response.school_info
           } else {
             this.$alert(res.error_response.msg, '提示', {
               confirmButtonText: '确定'

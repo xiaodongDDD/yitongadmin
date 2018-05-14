@@ -2,13 +2,13 @@
   <div class="center-content template-list">
     <my-header :msg='msg'></my-header>
     <div class="content-detail">
-      <div class="schoolName"><span class='schools'>{{ school_info.school_name}}</span>
+      <div class="schoolName"><span class='schools'>{{ school.school_name}}</span>
         <el-dropdown @command="handleCommand"  trigger="click" v-show="schoolChange">
           <span class="el-dropdown-link change">
             切换
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item v-for="(item, value) in schools" :key='value' :command="item">{{ item }}</el-dropdown-item>
+            <el-dropdown-item v-for="(item, value) in schools" :key='value' :command="item">{{ item.school_name }}</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -56,7 +56,7 @@
           layout="prev, pager, next"
           :page-count	="pageData.allPage">
         </el-pagination>
-    </div>
+      </div>
 
       <el-dialog
         title="提示"
@@ -94,7 +94,8 @@
         form: {
           name: ''
         },
-        school_info: {},
+        school_info: [],
+        school: {},
         schools: [],
         msg: {
           title1: '评价模版管理',
@@ -121,7 +122,8 @@
         this.centerDialogVisible = true
       },
       handleCurrentChange(val) {
-        this.getList(val)
+        this.pageData.page = val
+        this.getList(val, this.school_id)
       },
       getSchoolList() {
         const obj = {}
@@ -147,10 +149,15 @@
           }
         })
       },
-      handleCommand() {},
-      getList(page) {
+      handleCommand(item) {
+        this.school_id = item.school_id
+        this.getList(this.pageData.page, item.school_id)
+      },
+      getList(page, school_id) {
         const obj = {}
         obj.page = page
+        obj.school_id = school_id
+        // obj.pagesize = 3
         this.pageData.page = page
         obj.token = localStorage.getItem('TOKEN')
         templateList(obj).then(res => {
@@ -159,7 +166,8 @@
             // console.log(res)
             const data = res.response
             this.tableData = data.info
-            this.school_info = data.school_info
+            this.schools = data.school_info
+            this.school = data.school_info[0]
             this.schoolChange = data.school_change
             this.pageData.allPage = data.total_page
           } else {
