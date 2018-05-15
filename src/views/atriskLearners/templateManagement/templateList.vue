@@ -46,9 +46,9 @@
       </el-table>
     </div>
     <div class="list-add">
-      <router-link to="/templateAdd">
-        <el-button icon="el-icon-plus">新增</el-button>
-      </router-link>
+      <!--<router-link to="/templateAdd">-->
+        <el-button icon="el-icon-plus" @click="templateAdd">新增</el-button>
+      <!--</router-link>-->
       <el-pagination
           style='display:inline-block;margin-left:30%;'
           @current-change="handleCurrentChange"
@@ -116,14 +116,17 @@
     },
     methods: {
       handleEdit(index, row) {
-        this.$router.push({ path: '/templateEdit', query: { template_id: row.template_id }})
+        this.$router.push({ path: '/templateEdit', query: { 'template_id': row.template_id, 'school_id': this.school.school_id }})
       },
       handleDelete(index) {
         this.centerDialogVisible = true
       },
       handleCurrentChange(val) {
         this.pageData.page = val
-        this.getList(val, this.school_id)
+        this.getList(val, this.school.school_id)
+      },
+      templateAdd() {
+        this.$router.push({ path: '/templateAdd', query: { 'school_id': this.school.school_id }})
       },
       getSchoolList() {
         const obj = {}
@@ -150,7 +153,7 @@
         })
       },
       handleCommand(item) {
-        this.school_id = item.school_id
+        this.school = item
         this.getList(this.pageData.page, item.school_id)
       },
       getList(page, school_id) {
@@ -161,9 +164,7 @@
         this.pageData.page = page
         obj.token = localStorage.getItem('TOKEN')
         templateList(obj).then(res => {
-          // console.log(res)
           if (res.hasOwnProperty('response')) {
-            // console.log(res)
             const data = res.response
             this.tableData = data.info
             this.schools = data.school_info
@@ -180,7 +181,7 @@
     },
     mounted() {
       this.getSchoolList()
-      this.getList(1)
+      this.getList(1, this.$route.query.school_id)
     }
   }
 </script>

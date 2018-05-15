@@ -84,11 +84,11 @@
       },
       handleCurrentChange(val) {
         this.pageData.page = val
-        this.getList(val, this.school_id)
+        this.getList(val, this.school.school_id)
       },
       handleCommand(item) {
-        this.school_id = item.school_id
-        this.getList(this.pageData.page, this.school_id)
+        this.school = item
+        this.getList(this.pageData.page, item.school_id)
       },
       getList(page, id) {
         const obj = {}
@@ -113,7 +113,7 @@
       }
     },
     mounted() {
-      this.getList(1)
+      this.getList(1, this.$route.query.school_id)
     }
   }
 </script>

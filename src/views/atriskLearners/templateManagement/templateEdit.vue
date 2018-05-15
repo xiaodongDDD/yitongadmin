@@ -54,29 +54,29 @@
         </div>
 
         <el-form-item>
-          <router-link to="/templateList"><el-button>取消</el-button></router-link>
+          <el-button @click="reback">取消</el-button>
           <el-button @click="saveUser()">保存</el-button>
         </el-form-item>
       </el-form>
      </div>
     </div>
 
-    <el-dialog
-      title="提示"
-      :visible.sync="centerDialogVisible"
-      width="30%"
-      center>
-      <div class="dialogContent">
-        <p>请确认是否要删除</p>
-        <p>{{ tinfo.tname }}评价维度</p>
+        <el-dialog
+          title="提示"
+          :visible.sync="centerDialogVisible"
+          width="30%"
+          center>
+          <div class="dialogContent">
+            <p>请确认是否要删除</p>
+            <p>{{ tinfo.tname }}评价维度</p>
 
-        <p>删除后，该维度相关的评价将彻底删除</p>
-      </div>
-      <span slot="footer" class="dialog-footer">
-          <el-button @click="centerDialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="signDelete()">确 定</el-button>
-        </span>
-    </el-dialog>
+            <p>删除后，该维度相关的评价将彻底删除</p>
+          </div>
+          <span slot="footer" class="dialog-footer">
+              <el-button @click="centerDialogVisible = false">取 消</el-button>
+              <el-button type="primary" @click="signDelete()">确 定</el-button>
+            </span>
+        </el-dialog>
 
   </div>
 </template>
@@ -147,7 +147,7 @@
           addTemplate(obj).then(res => {
             if (res.hasOwnProperty('response')) {
               this.$message('修改成功')
-              this.$router.push({ path: '/templateList' })
+              this.$router.push({ path: '/templateList', query: { school_id: this.$route.query.school_id }})
             } else {
               this.$alert(res.error_response.msg, '提示', {
                 confirmButtonText: '确定'
@@ -159,6 +159,10 @@
             confirmButtonText: '确定'
           })
         }
+      },
+      reback() {
+        const school_id = this.$route.query.school_id
+        this.$router.push({ path: '/templateList', query: { school_id: school_id }})
       },
       removeDomain(index, type) {
         this.tinfo.index = index

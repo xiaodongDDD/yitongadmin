@@ -5,7 +5,7 @@
         <p class="position"></p>
         <div class="function-btns">
           <el-button icon="el-icon-upload2" type="text" @click="importGain">导出</el-button>
-          <router-link to="/gainList"><el-button type="text">返回</el-button></router-link>
+          <el-button type="text" @click="reback">返回</el-button>
         </div>
 
         <div class="search-contaier">
@@ -31,8 +31,6 @@
               </el-dropdown>
             </el-form-item>
             <el-form-item label="学科">
-              <!--<el-input v-model="formInline.subject" placeholder=""></el-input>-->
-
               <el-dropdown @command="changeSubject" trigger="click">
                 <span class="el-dropdown-link">
                   <el-input v-model="formInline.subject" placeholder=""></el-input>
@@ -118,15 +116,15 @@
             <el-form ref="form" :model="form">
               <el-form-item label="">
                 <el-radio-group v-model="form.resource">
-                  <el-radio label="评价成果列表"></el-radio>
-                  <el-radio label="结果详情"></el-radio>
+                  <el-radio :label="1">评价成果列表</el-radio>
+                  <el-radio :label="2">结果详情</el-radio>
                 </el-radio-group>
               </el-form-item>
             </el-form>
           </div>
           <span slot="footer" class="dialog-footer">
             <el-button @click="centerDialogVisible = false">取 消</el-button>
-            <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
+            <el-button type="primary" @click="importResult">确 定</el-button>
          </span>
         </el-dialog>
 
@@ -143,7 +141,7 @@
 
 <script>
   import myHeader from '../myHeader/myHeader'
-  import { gainSchoolList, gainClassSubject } from '@/api/eduAdmin'
+  import { gainSchoolList, gainClassSubject, gainImport } from '@/api/eduAdmin'
   export default {
     name: 'gainSchoolList',
     data() {
@@ -151,7 +149,8 @@
         centerDialogVisible: false,
         tname: '',
         form: {
-          name: ''
+          name: '',
+          resource: 1
         },
         msg: {
           title1: '评价成果',
@@ -185,7 +184,7 @@
     methods: {
       handleEdit(index, row) {
         const project_id = this.$route.query.project_id
-        this.$router.push({ path: '/gainDetails', query: { 'p_t_id': row.p_t_id, 'student_id': row.student_id, 'p_e_id': row.p_e_id, 'project_id': project_id }})
+        this.$router.push({ path: '/gainDetails', query: { 'p_t_id': row.p_t_id, 'student_id': row.student_id, 'p_e_id': row.p_e_id, 'project_id': project_id, 'school_id': this.$route.query.school_id }})
       },
       importGain() {
         if (this.formInline.grade === '' && this.formInline.class === '' && this.formInline.subject === '') {
@@ -194,18 +193,43 @@
           this.centerDialogVisible = true
         }
       },
+      importResult() {
+        const obj = {}
+        obj.school_id = this.$route.query.school_id
+        obj.project_id = this.$route.query.project_id
+        obj.grade_id = this.filterData.grade_id
+        obj.class_id = this.filterData.class_id
+        obj.subject_id = this.filterData.subject_id
+        obj.type = this.form.resource
+        obj.token = localStorage.getItem('TOKEN')
+        gainImport(obj).then(res => {
+          console.log(res)
+          if (res.hasOwnProperty('response')) {
+            console.log('success')
+          } else {
+            this.$alert(res.error_response.msg, '提示', {
+              confirmButtonText: '确定'
+            })
+          }
+        })
+      },
       onSubmit() {
         this.filterData.school_id = this.$route.query.school_id
-        this.getList(1, this.filterData.grade, this.filterData.class_id, this.filterData.subject_id)
+        this.getList(1, this.filterData.school_id, this.filterData.grade_id, this.filterData.class_id, this.filterData.subject_id)
+      },
+      reback() {
+        const school_id = this.$route.query.school_id
+        this.$router.push({ path: '/gainList', query: { school_id: school_id }})
       },
       clearCondition() {
         this.formInline = { grade: '', class: '', subject: '' }
         this.filterData = {}
       },
-      getList(page, grade_id, class_id, subject_id) {
+      getList(page, school_id, grade_id, class_id, subject_id) {
         const obj = {}
         obj.project_id = this.$route.query.project_id
         obj.page = page
+        obj.school_id = school_id
         obj.grade_id = grade_id
         obj.class_id = class_id
         obj.subject_id = subject_id
@@ -220,13 +244,14 @@
         })
       },
       changeGrade(item) {
+        this.classData = []
+        this.subjectData = []
+
         const obj = {}
         obj.grade_id = item.grade_id
         obj.token = localStorage.getItem('TOKEN')
         this.filterData.grade_id = item.grade_id
         this.formInline.grade = item.grade_name
-        this.classData = []
-        this.subjectData = []
         this.formInline.class = ''
         this.filterData.class_id = ''
         this.formInline.subject = ''
@@ -256,7 +281,8 @@
       }
     },
     mounted() {
-      this.getList(1)
+      // console.log(this.$route.query.school_id)
+      this.getList(1, this.$route.query.school_id)
     }
   }
 </script>

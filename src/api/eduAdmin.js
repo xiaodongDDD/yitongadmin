@@ -271,6 +271,15 @@ export function gainClassSubject(params) {
   })
 }
 
+// 导出成果
+export function gainImport(params) {
+  return request({
+    url: '/evaluate/?v=0.1&method=Evaluateresult.exportEvaluateResult',
+    method: 'post',
+    data: qs.stringify(params)
+  })
+}
+
 // 权限列表
 export function getPowerList(datas) {
   return request({
