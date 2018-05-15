@@ -141,7 +141,7 @@
 
 <script>
   import myHeader from '../myHeader/myHeader'
-  import { gainSchoolList, gainClassSubject, gainImport } from '@/api/eduAdmin'
+  import { gainSchoolList, gainClasses, gainImport } from '@/api/eduAdmin'
   export default {
     name: 'gainSchoolList',
     data() {
@@ -181,6 +181,23 @@
     components: {
       myHeader
     },
+    watch: {
+      'formInline.grade': function(value, ovalue) {
+        if (value === '') {
+          this.filterData.grade_id = ''
+        }
+      },
+      'formInline.class': function(value, ovalue) {
+        if (value === '') {
+          this.filterData.class_id = ''
+        }
+      },
+      'formInline.subject': function(value, ovalue) {
+        if (value === '') {
+          this.filterData.subject_id = ''
+        }
+      }
+    },
     methods: {
       handleEdit(index, row) {
         const project_id = this.$route.query.project_id
@@ -202,20 +219,23 @@
         obj.subject_id = this.filterData.subject_id
         obj.type = this.form.resource
         obj.token = localStorage.getItem('TOKEN')
-        gainImport(obj).then(res => {
-          console.log(res)
-          if (res.hasOwnProperty('response')) {
-            console.log('success')
-          } else {
-            this.$alert(res.error_response.msg, '提示', {
-              confirmButtonText: '确定'
-            })
-          }
-        })
+        // http://jiaowu-test.xiaoheiban.cn/evaluate/?v=0.1&method=Evaluateresult.evaluateResultList
+        // gainImport(obj).then(res => {
+        //   console.log(res)
+        //   if (res.hasOwnProperty('response')) {
+        //     console.log('success')
+        //   } else {
+        //     this.$alert(res.error_response.msg, '提示', {
+        //       confirmButtonText: '确定'
+        //     })
+        //   }
+        // })
       },
       onSubmit() {
         this.filterData.school_id = this.$route.query.school_id
-        this.getList(1, this.filterData.school_id, this.filterData.grade_id, this.filterData.class_id, this.filterData.subject_id)
+        // console.log(this.filterData)
+        // return false
+        this.getList(1, this.filterData.school_id, this.filterData.grade_id, this.filterData.class_id, this.filterData.subject_id, 1)
       },
       reback() {
         const school_id = this.$route.query.school_id
@@ -225,7 +245,7 @@
         this.formInline = { grade: '', class: '', subject: '' }
         this.filterData = {}
       },
-      getList(page, school_id, grade_id, class_id, subject_id) {
+      getList(page, school_id, grade_id, class_id, subject_id, type) {
         const obj = {}
         obj.project_id = this.$route.query.project_id
         obj.page = page
@@ -233,6 +253,7 @@
         obj.grade_id = grade_id
         obj.class_id = class_id
         obj.subject_id = subject_id
+        obj.type = type
         obj.token = localStorage.getItem('TOKEN')
         gainSchoolList(obj).then(res => {
           // console.log(res)
@@ -240,12 +261,20 @@
             this.tableData = res.response.info
             this.gradeData = res.response.grade_list
             this.pageData.allPage = res.response.total_page
+            this.subjectData = res.response.subject_info
+            if (obj.type === 1) {
+              this.isSearch.searched = true
+              this.isSearch.listNum = res.response.count
+            }
+          } else {
+            this.$alert(res.error_response.msg, '提示', {
+              confirmButtonText: '确定'
+            })
           }
         })
       },
       changeGrade(item) {
         this.classData = []
-        this.subjectData = []
 
         const obj = {}
         obj.grade_id = item.grade_id
@@ -254,13 +283,10 @@
         this.formInline.grade = item.grade_name
         this.formInline.class = ''
         this.filterData.class_id = ''
-        this.formInline.subject = ''
-        this.filterData.subject_id = ''
-        gainClassSubject(obj).then(res => {
+        gainClasses(obj).then(res => {
           // console.log(res)
           if (res.hasOwnProperty('response')) {
             this.classData = res.response.class_info
-            this.subjectData = res.response.subject_info
           } else {
             this.$alert(res.error_response.msg, '提示', {
               confirmButtonText: '确定'
@@ -273,6 +299,7 @@
         this.filterData.class_id = item.class_id
       },
       changeSubject(item) {
+        // console.log(item)
         this.formInline.subject = item.subject_name
         this.filterData.subject_id = item.subject_id
       },

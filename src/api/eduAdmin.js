@@ -254,9 +254,9 @@ export function gainDetail(params) {
 }
 
 // 成果列表筛选
-export function gainClassSubject(params) {
+export function gainClasses(params) {
   return request({
-    url: '/evaluate/?v=0.1&method=Evaluateresult.getClassesSubjects',
+    url: '/evaluate/?v=0.1&method=Evaluateresult.getClasses',
     method: 'post',
     data: qs.stringify(params)
   })
@@ -266,8 +266,9 @@ export function gainClassSubject(params) {
 export function gainImport(params) {
   return request({
     url: '/evaluate/?v=0.1&method=Evaluateresult.exportEvaluateResult',
-    method: 'post',
-    data: qs.stringify(params)
+    method: 'get',
+    params
+    // data: params
   })
 }
 
