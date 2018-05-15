@@ -192,3 +192,21 @@ export function addEditUser(params) {
     data: params
   })
 }
+
+// 员工的管理接口 	批量导出文件
+export function user_export(params) {
+  return request({
+    url: '&v=0.1&method=Yi.user_export',
+    method: 'post',
+    data: params
+  })
+}
+
+// 员工的管理接口 	公司/部门详情
+export function companyDepartmentDetail(params) {
+  return request({
+    url: '&v=0.1&method=Yi.companyDepartmentDetail',
+    method: 'post',
+    data: params
+  })
+}

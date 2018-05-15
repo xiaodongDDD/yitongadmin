@@ -1,25 +1,25 @@
 <template>
   <div class="employeeUpdata">
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="ruleForm">
-      <el-form-item label="角色名称" prop="name">
-        <el-input v-model="ruleForm.name"></el-input>
+      <el-form-item label="角色名称" prop="role_name">
+        <el-input v-model="ruleForm.role_name"></el-input>
       </el-form-item>
-      <el-form-item label="角色编号" prop="code">
-        <el-input v-model="ruleForm.code"></el-input>
+      <el-form-item label="角色编号">
+        <el-input v-model="ruleForm.yt_r_m_id" :disabled="true"></el-input>
       </el-form-item>
-      <el-form-item label="备注" prop="desc">
-        <el-input type="textarea" v-model="ruleForm.desc"></el-input>
+      <el-form-item label="备注" prop="comment">
+        <el-input type="textarea" v-model="ruleForm.comment"></el-input>
       </el-form-item>
     </el-form>
     <div>权限控制</div>
     <div class="treeInfo">
       <el-tree
-        :data="data2"
+        :data="treeData"
         show-checkbox
         node-key="id"
+        default-expand-all
         :default-expanded-keys="[2, 3]"
-        :default-checked-keys="[5]"
-        :props="defaultProps">
+        :default-checked-keys="[5]">
       </el-tree>
     </div>
     <div class="buttonClass">
@@ -28,80 +28,73 @@
   </div>
 </template>
 <script>
-  import { addEditRole } from '@/api/organizationManagement'
+  import { addEditRole, menuList } from '@/api/organizationManagement'
   export default {
     data() {
       return {
         activeName: 'first',
         ruleForm: {
-          name: '',
-          code: '123',
-          desc: ''
         },
         rules: {
-          name: [
+          role_name: [
             { required: true, message: '请完善角色名称', trigger: 'blur' },
             { max: 20, message: '最多可输入20个汉字', trigger: 'blur' }
           ],
-          code: [
-            { required: true, message: '请输入活动名称', trigger: 'blur' }
-          ],
-          desc: [
+          comment: [
             { max: 50, message: '最多可输入50个汉字', trigger: 'blur' }
           ]
         },
-        data2: [{
-          id: 1,
-          label: '组织架构',
-          children: [{
-            id: 2,
-            label: '员工管理',
-            children: [{
-              id: 3,
-              label: '操作'
-            }, {
-              id: 4,
-              label: '查看',
-              children: [{
-                id: 5,
-                label: '所有'
-              }, {
-                id: 6,
-                label: '本分公司'
-              }, {
-                id: 7,
-                label: '本部门'
-              }]
-            }]
-          }, {
-            id: 8,
-            label: '角色管理',
-            children: [{
-              id: 9,
-              label: '操作'
-            }, {
-              id: 10,
-              label: '查看'
-            }]
-          }, {
-            id: 11,
-            label: '权限管理',
-            children: [{
-              id: 12,
-              label: '操作'
-            }, {
-              id: 13,
-              label: '查看'
-            }]
-          }]
-        }],
+        treeData: [],
         defaultProps: {
           children: 'children',
-          label: 'label'
-        }
+          label: 'menu_name'
+        },
+        module_id: 17
       }
     },
     methods: {
+      initData() {
+        const obj = {
+          'module_id': this.module_id,
+          'yt_r_m_id': this.ruleForm.yt_r_m_id,
+          'type': 1
+        }
+        menuList(obj).then(response => {
+          this.treeData = this.recursive(response.response.info)
+        }).catch()
+      },
+      recursive(data) {
+        var result = []
+        if (data.length === 0) {
+          return result
+        }
+        for (var i in data) {
+          result[i] = { 'label': '', 'id': '', 'children': [] }
+          result[i]['label'] = data[i]['menu_name'] + ' ' + data[i]['yt_m_id']
+          if (data[i]['children'].length !== 0) {
+            result[i]['children'] = this.recursive(data[i]['children'])
+          } else if (data[i]['function'].length !== 0) {
+            var tmp = []
+            var func = data[i]['function']
+            for (var j in func) {
+              tmp[j] = { 'label': '', 'children': [] }
+              tmp[j]['label'] = func[j]['name'] + ' ' + data[i]['yt_m_id'] + '-' + func[j]['yt_m_f_id']
+              if (func[j]['data'].length !== 0) {
+                var tmp1 = []
+                var fdata = func[j]['data']
+                for (var k in fdata) {
+                  tmp1[k] = { 'label': '', 'children': [] }
+                  tmp1[k]['label'] = fdata[k]['data_name'] + ' ' + data[i]['yt_m_id'] + '-' + func[j]['yt_m_f_id'] + '-' + fdata[k]['yt_m_d_id']
+                }
+              }
+              tmp[j]['children'] = tmp1
+            }
+            result[i]['children'] = tmp
+          }
+        }
+        console.log(result)
+        return result
+      },
       handleClick(tab, event) {
       },
       keepInfo() {
@@ -109,8 +102,10 @@
           if (valid) {
             const obj = {
               'module_id': this.module_id,
-              'pagesize': this.pagesize,
-              'now_page': this.currentPage
+              'comment': this.ruleForm.comment,
+              'role_name': this.currentPage,
+              'yt_r_m_id': this.ruleForm.yt_r_m_id,
+              'role_auth': ''
             }
             addEditRole(obj).then(response => {
             }).catch()
@@ -120,7 +115,23 @@
             return false
           }
         })
+      },
+      getCheckedKeys() {
+        console.log(this.$refs.tree.getCheckedKeys())
       }
+    },
+    created() {
+      if (this.$route.query.itemInfo === 'add') {
+        this.ruleForm = {
+          role_name: '',
+          yt_r_m_id: '',
+          comment: ''
+        }
+      } else {
+        this.ruleForm = this.$route.query.itemInfo
+      }
+      this.initData()
+      console.log(this.$route.query.itemInfo)
     }
   }
 </script>

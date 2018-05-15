@@ -1,7 +1,7 @@
 <template>
   <div class="roleMangement">
     <!--添加-->
-    <div class="buttonAdd">  <el-button @click="updateInfo(scope.row)">&nbsp;&nbsp;新&nbsp;增&nbsp;&nbsp;</el-button>
+    <div class="buttonAdd">  <el-button @click="updateInfo('add')">&nbsp;&nbsp;新&nbsp;增&nbsp;&nbsp;</el-button>
     </div>
     <!--表格-->
     <el-table
@@ -95,9 +95,16 @@
           this.total = response.response.count
         }).catch()
       },
-      updateInfo: function() {
-        console.log()
-        this.$router.push('authorityMangementSp')
+      updateInfo: function(item) {
+        console.log(item)
+        this.$router.push(
+          {
+            path: 'authorityMangementsp',
+            query: {
+              itemInfo: item
+            }
+          }
+        )
       },
       deleteInfo: function(item) {
         console.log('qwqwqw')
