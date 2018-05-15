@@ -5,10 +5,10 @@
       <p class="position">新增评价项目</p>
         <div class="add-form">
         <el-form ref="form" :model="form" label-width="100px">
-          <el-form-item label="项目名称：">
+          <el-form-item label="项目名称：" id='project-name'>
             <el-input v-model="form.name"></el-input>
           </el-form-item>
-          <el-form-item label="项目说明：">
+          <el-form-item label="项目说明：" id='project-remark'>
             <el-input type="textarea" :rows="10" v-model="form.remark"></el-input>
           </el-form-item>
           <el-form-item label="项目状态：">
@@ -80,8 +80,15 @@
        saveProject(obj)
          .then(res => {
            console.log(res)
+           if (res.hasOwnProperty('response')) {
+             this.$router.push({ path: '/itemList' })
+           } else {
+             this.$message.error(res.error_response.msg)
+           }
          })
-       this.$router.push({ path: '/itemList' })
+         .catch(err => {
+           console.log(err)
+         })
      }
    }
  }
@@ -89,5 +96,13 @@
 
 <style scoped>
 
+</style>
+<style type="text/css">
+.main-content #project-name .el-input {
+  width: 457px;
+}
+.main-content #project-remark .el-textarea {
+  width: 457px;
+}
 </style>
 

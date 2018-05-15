@@ -9,25 +9,25 @@
         background-color="#304156"
         text-color="#fff"
         active-text-color="#ffd04b">
-        <router-link to="/userList">
+        <router-link to="/userList" v-if='menu1'>
           <el-menu-item index="/userList">
             <i class="el-icon-menu"></i>
             <span slot="title">学校用户管理</span>
           </el-menu-item>
         </router-link>
-        <router-link to="/accountList">
+        <router-link to="/accountList" v-if='menu2'>
           <el-menu-item index="/accountList">
             <i class="el-icon-menu"></i>
             <span slot="title">账户管理</span>
           </el-menu-item>
         </router-link>
-        <router-link to="/powerList">
+        <router-link to="/powerList" v-if='menu3'>
           <el-menu-item index="/powerList">
             <i class="el-icon-menu"></i>
             <span slot="title">权限管理</span>
           </el-menu-item>
         </router-link>
-        <router-link to="/itemList">
+        <router-link to="/itemList" v-if='menu4'>
           <el-submenu index="/itemList">
             <template slot="title">
               <i class="el-icon-menu"></i>
@@ -35,34 +35,36 @@
             </template>
             <el-menu-item-group>
               <router-link to="/officialList"><el-menu-item index="/officialList">负责人管理</el-menu-item></router-link>
-              <router-link to="/transactorList"><el-menu-item index="/transactorList">执行人管理</el-menu-item></router-link>
-              <router-link to="/objectList"><el-menu-item index="/objectList">评价对象管理</el-menu-item></router-link>
+              <router-link to="/transactorList" v-if='menu6'><el-menu-item index="/transactorList">执行人管理</el-menu-item></router-link>
+              <router-link to="/objectList" v-if='menu7'><el-menu-item index="/objectList">评价对象管理</el-menu-item></router-link>
             </el-menu-item-group>
           </el-submenu>
         </router-link>
-       <!--  <el-submenu index="/itemList">
-            <template slot="title">
-              <i class="el-icon-menu"></i>
-              <span>评价项目管理</span>
-            </template>
-            <el-menu-item-group>
-              <router-link to="/transactorList"><el-menu-item index="/transactorList">执行人管理</el-menu-item></router-link>
-              <router-link to="/objectList"><el-menu-item index="/objectList">评价对象管理</el-menu-item></router-link>
-            </el-menu-item-group>
-          </el-submenu> -->
-        <router-link to="/templateList">
+        <div v-if='menu11'>
+          <el-submenu index="/itemList" >
+              <template slot="title">
+                <i class="el-icon-menu"></i>
+                <span>评价项目管理</span>
+              </template>
+              <el-menu-item-group>
+                <router-link to="/transactorList" v-if='menu6'><el-menu-item index="/transactorList">执行人管理</el-menu-item></router-link>
+                <router-link to="/objectList" v-if='menu7'><el-menu-item index="/objectList">评价对象管理</el-menu-item></router-link>
+              </el-menu-item-group>
+            </el-submenu>
+          </div>
+        <router-link to="/templateList" v-if='menu8'>
           <el-menu-item index="/templateList">
             <i class="el-icon-menu"></i>
             <span slot="title">评价模板管理</span>
           </el-menu-item>
         </router-link>
-        <router-link to="/gainList">
+        <router-link to="/gainList" v-if='menu9'>
           <el-menu-item index="/gainList">
             <i class="el-icon-menu"></i>
             <span slot="title">评价成果</span>
           </el-menu-item>
         </router-link>
-        <router-link to="/logList">
+        <router-link to="/logList" v-if='menu10'>
           <el-menu-item index="/logList">
             <i class="el-icon-menu"></i>
             <span slot="title">操作日志</span>
@@ -85,11 +87,24 @@
 <script>
   import ScrollBar from '@/components/ScrollBar'
   import myHeader from './myHeader/myHeader'
+  import { getUserAuth } from '@/api/eduAdmin'
   export default {
     name: 'index',
     data() {
       return {
         index: this.$route.path,
+        auth_list: [],
+        menu1: false,
+        menu2: false,
+        menu3: false,
+        menu4: false,
+        menu5: false,
+        menu6: false,
+        menu7: false,
+        menu8: false,
+        menu9: false,
+        menu10: false,
+        menu11: false,
         msg: {
           title1: '',
           title2: '',
@@ -99,6 +114,7 @@
       }
     },
     mounted() {
+      this.checkAuth()
       if (this.$route.path === '/userEdit' || this.$route.path === '/userAdd') {
         this.index = '/userList'
       } else if (this.$route.path === '/accountEdit' || this.$route.path === '/accountAdd') {
@@ -128,6 +144,78 @@
     methods: {
       changeindex(index, indexPath) {
         // console.log(index)
+      },
+      checkAuth() {
+        const obj = {
+          token: localStorage.getItem('TOKEN')
+        }
+        getUserAuth(obj)
+          .then(res => {
+            console.log(res)
+            if (res.hasOwnProperty('response')) {
+              this.auth_list = res.response.auth_id
+              this.addAuth()
+            } else {
+              this.$message.error(res.error_response.msg)
+            }
+          })
+          .catch(err => {
+            console.log(err)
+          })
+      },
+      addAuth() {
+        const auth = this.auth_list
+        console.log(auth)
+        if (auth.indexOf('1') !== -1) {
+          this.menu1 = true
+        }
+        if (auth.indexOf('2') != -1) {
+          this.menu2 = true
+        }
+        if (auth.indexOf('3') != -1) {
+          this.menu3 = true
+        }
+        if (auth.indexOf('4') != -1) {
+          this.menu4 = true
+        }
+        if (auth.indexOf('5') != -1) {
+          this.menu5 = true
+        }
+        if (auth.indexOf('6') != -1) {
+          this.menu6 = true
+        }
+        if (auth.indexOf('7') != -1) {
+          this.menu7 = true
+        }
+        if (auth.indexOf('8') != -1) {
+          this.menu8 = true
+        }
+        if (auth.indexOf('9') != -1) {
+          this.menu9 = true
+        }
+        if (auth.indexOf('10') != -1) {
+          this.menu10 = true
+        }
+        if (auth.indexOf('4') == -1 && auth.indexOf('6') != -1) {
+          this.menu11 = true
+          this.menu4 = false
+          this.menu6 = true
+        }
+        if (auth.indexOf('4') == -1 && auth.indexOf('7') != -1) {
+          this.menu11 = true
+          this.menu4 = false
+          this.menu7 = true
+        }
+        if (auth.indexOf('4') != -1 && auth.indexOf('6') == -1) {
+          this.menu11 = false
+          this.menu4 = true
+          this.menu6 = false
+        }
+        if (auth.indexOf('4') != -1 && auth.indexOf('7') == -1) {
+          this.menu11 = false
+          this.menu4 = true
+          this.menu7 = false
+        }
       }
     },
     watch: {

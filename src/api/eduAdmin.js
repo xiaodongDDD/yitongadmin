@@ -181,6 +181,15 @@ export function showExecutorManager(datas) {
   })
 }
 
+// 编辑执行人管理
+export function saveExecutorManager(datas) {
+  return request({
+    url: '/evaluate/?v=0.1&method=Projecteexecutor.saveExecutorManager',
+    method: 'post',
+    data: qs.stringify(datas)
+  })
+}
+
 // 负责人下执行人列表
 export function leaderExecutorList(datas) {
   return request({
@@ -392,6 +401,24 @@ export function getresultstu(datas) {
 export function getLogList(datas) {
   return request({
     url: '/evaluate/?v=0.1&method=Projectlog.projectLogList',
+    method: 'post',
+    data: qs.stringify(datas)
+  })
+}
+
+// 获取用户菜单权限
+export function getUserAuth(datas) {
+  return request({
+    url: '/evaluate/?v=0.1&method=projectebase.getUserAuth',
+    method: 'post',
+    data: qs.stringify(datas)
+  })
+}
+
+// 判断是否运营账号
+export function isOperate(datas) {
+  return request({
+    url: '/evaluate/?v=0.1&method=Projectbase.isOperate',
     method: 'post',
     data: qs.stringify(datas)
   })

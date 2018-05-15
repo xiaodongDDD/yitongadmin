@@ -196,7 +196,31 @@
           })
       },
       saveUser() {
-        this.$router.push({ path: '/poorStudentEdit' })
+        console.log(this.value3, this.value2, this.value1)
+        const obj = {
+          project_id: this.project_id,
+          leader_id: this.leader_id,
+          school_id: this.school_id,
+          executor_id: this.value,
+          template_id: this.value3,
+          grade_id: this.grade_id,
+          subject_id: this.value1,
+          class_id: this.value2,
+          token: localStorage.getItem('TOKEN')
+        }
+        saveExecutor(obj)
+          .then(res => {
+            if (res.hasOwnProperty('response')) {
+              this.$router.push({ path: '/poorStudentEdit' })
+              console.log(res)
+            } else {
+              this.$message.error(res.error_response.msg)
+              console.log(res)
+            }
+          })
+          .catch(err => {
+            console.log(err)
+          })
       }
     }
   }

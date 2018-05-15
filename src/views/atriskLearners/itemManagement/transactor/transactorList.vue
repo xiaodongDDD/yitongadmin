@@ -67,7 +67,7 @@
           @current-change="handleCurrentChange" 
           background
           layout="prev, pager, next"
-          :total="total"
+          :page-count="total"
           :pageSize='10'>
         </el-pagination>
 
@@ -129,7 +129,13 @@
            if (res.hasOwnProperty('response')) {
              console.log(res)
              this.tableData = res.response.list
+             this.total = res.response.total_page 
+           } else {
+             this.$message.error(res.error_response.msg)
            }
+         })
+         .catch(err => {
+           console.log(err)
          })
      },
      handleEdit(val1, val2) {

@@ -4,15 +4,31 @@
     <div class="icon-div">
       <span></span><span></span><span></span>
     </div>
-    <el-breadcrumb v-if='msg.flag == 1' class="header-bread" separator="/">
+    <el-breadcrumb v-if="msg.flag == 1 && msg.title1 != '项目评价管理'" class="header-bread" separator="/">
       <el-breadcrumb-item class="link-item" :to="{ path: msg.path }">{{ msg.title1 }}</el-breadcrumb-item>
       <el-breadcrumb-item class="step-item">{{ msg.title2 }}</el-breadcrumb-item>
     </el-breadcrumb>
+
+    <el-breadcrumb v-if="msg.flag == 1 && msg.title1 == '项目评价管理' && flags == 1" class="header-bread" separator="/">
+      <el-breadcrumb-item class="link-item">{{ msg.title1 }}</el-breadcrumb-item>
+      <el-breadcrumb-item class="step-item">{{ msg.title2 }}</el-breadcrumb-item>
+    </el-breadcrumb>
+
+    <el-breadcrumb v-if="msg.flag == 1 && msg.title1 == '项目评价管理' && flags == 0" class="header-bread" separator="/">
+      <el-breadcrumb-item class="link-item" :to="{ path: msg.path }">{{ msg.title1 }}</el-breadcrumb-item>
+      <el-breadcrumb-item class="step-item">{{ msg.title2 }}</el-breadcrumb-item>
+    </el-breadcrumb>
+
     <el-breadcrumb v-if='msg.flag == 0' class="header-bread" separator="/">
       <el-breadcrumb-item class="link-item">{{ msg.title1 }}</el-breadcrumb-item>
     </el-breadcrumb>
-     <el-breadcrumb v-if='msg.flag == 2' class="header-bread" separator="/">
+     <el-breadcrumb v-if='msg.flag == 2 && flags == 0' class="header-bread" separator="/">
       <el-breadcrumb-item class="link-item" :to="{ path: msg.path1 }">{{ msg.title1 }}</el-breadcrumb-item>
+      <el-breadcrumb-item class="step-item" :to="{ path: msg.path2 }">{{ msg.title2 }}</el-breadcrumb-item>
+      <el-breadcrumb-item class="step-item">{{ msg.title3 }}</el-breadcrumb-item>
+    </el-breadcrumb>
+    <el-breadcrumb v-if='msg.flag == 2 && flags == 1' class="header-bread" separator="/">
+      <el-breadcrumb-item class="link-item">{{ msg.title1 }}</el-breadcrumb-item>
       <el-breadcrumb-item class="step-item" :to="{ path: msg.path2 }">{{ msg.title2 }}</el-breadcrumb-item>
       <el-breadcrumb-item class="step-item">{{ msg.title3 }}</el-breadcrumb-item>
     </el-breadcrumb>
@@ -33,20 +49,43 @@
   import Breadcrumb from '@/components/Breadcrumb'
   import { removeToken } from '@/utils/auth.js'
   import Hamburger from '@/components/Hamburger'
+  import { getUserAuth } from '@/api/eduAdmin'
   export default {
     name: 'myHeader',
     props: ['msg'],
     data() {
       return {
         activeIndex: '1',
-        activeIndex2: '1'
+        activeIndex2: '1',
+        flags: 0
       }
     },
     components: {
       Breadcrumb,
       Hamburger
     },
+    mounted() {
+      this.getData()
+    },
     methods: {
+      getData() {
+        const obj = {
+          token: localStorage.getItem('TOKEN')
+        }
+        getUserAuth(obj)
+          .then(res => {
+            if (res.hasOwnProperty('response')) {
+              this.auth_list = res.response.auth_id
+              this.checkAuth()
+            }
+          })
+      },
+      checkAuth() {
+        const auth = this.auth_list
+        if (auth.indexOf('4') == -1) {
+          this.flags = 1
+        } 
+      },
       handleSelect(key, keyPath) {
         console.log(key, keyPath)
       },

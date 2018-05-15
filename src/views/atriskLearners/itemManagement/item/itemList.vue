@@ -3,7 +3,7 @@
     <my-header :msg='msg'></my-header>
     <div class="content-detail">
     	<div class="schoolName"><span class='schools'>上海市普陀区武宁路小学</span>
-          <el-dropdown @command="handleCommand"  trigger="click">
+          <el-dropdown @command="handleCommand"  trigger="click" v-if='chooseShow'>
           <span class="el-dropdown-link change">
             切换
           </span>
@@ -104,7 +104,7 @@
 
 <script>
 import myHeader from '../../myHeader/myHeader'
-import { getProjectList, deleteProject, statusProject, showSchools } from '@/api/eduAdmin'
+import { getProjectList, deleteProject, statusProject, showSchools, isOperate } from '@/api/eduAdmin'
 export default {
   name: 'itemList',
   data() {
@@ -113,9 +113,10 @@ export default {
       userName: '',
       total: 0,
       current_page: 1,
+      chooseShow: false,
       form: {
         name: '',
-        options: [{ value: '1', label: '启用' }, { value: '0', label: '停用' }]
+        options: [{ value: '0', label: '启用' }, { value: '1', label: '停用' }]
       },
       msg: {
         title1: '项目评价管理',
@@ -142,6 +143,7 @@ export default {
   mounted() {
     this.getData(1)
     this.getSchoolList()
+    this.checkId()
   },
   methods: {
     getData(pages) {
@@ -166,6 +168,24 @@ export default {
             //   }
             // }
           }
+        })
+    },
+    checkId() {
+      const obj = {
+        token: localStorage.getItem('TOKEN')
+      }
+      isOperate(obj)
+        .then(res => {
+          if (res.hasOwnProperty('response')) {
+            if (res.response.is_operate) {
+              this.chooseShow = true
+            }
+          } else {
+              this.$message.error(res.error_response.msg)
+          } 
+        })
+        .catch(err => {
+          console.log(err)
         })
     },
     handleEdit(val) {

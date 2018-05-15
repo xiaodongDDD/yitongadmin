@@ -227,7 +227,6 @@
 .title {
   width: 100%;
   height: 30px;
-  overflow: hidden;
   margin-bottom: 30px;
   margin-top: 20px;
 }

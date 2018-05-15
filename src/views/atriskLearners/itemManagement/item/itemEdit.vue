@@ -39,77 +39,77 @@
   </div>
 </template>
 <script>
- import myHeader from '../../myHeader/myHeader'
- import { getProjectInfo, saveProject } from '@/api/eduAdmin'
- export default {
-   name: 'itemEdit',
-   data() {
-     return {
-       form: {
-         project_name: '石选晓',
-         schoolName: '武宁路小学',
-         semester_id: 'shixiuan',
-         project_id: '',
-         school_id: '',
-         create_time: '',
-         project_remark: '134752398@348.cn',
-         project_status: '0'
-       },
-       msg: {
-         title1: '评价项目管理',
-         title2: '编辑评价项目管理',
-         flag: 1,
-         path: '/itemList'
-       }
-     }
-   },
-   mounted() {
-     this.getData()
-   },
-   components: {
-     myHeader
-   },
-   methods: {
-     getData() {
-       const obj = {
-         project_id: this.$route.query.project_id,
-         token: localStorage.getItem('TOKEN')
-       }
-       getProjectInfo(obj)
-         .then(res => {
-           console.log(res)
-           if (res.hasOwnProperty('response')) {
-             this.form = res.response.info
-           } else {
-             this.$alert('系统出错！', '提示', {
-               confirmButtonText: '确定'
-             })
-           }
-         })
-     },
-     handleCommand(command) {
-       if (command === 'b') {
-         this.form.project_status = '0'
-       } else if (command === 'a') {
-         this.form.project_status = '1'
-       }
-     },
-     saveUser() {
-       const obj = {
-         project_id: this.$route.query.project_id,
-         project_name: this.form.project_name,
-         project_remark: this.form.project_remark,
-         school_id: localStorage.getItem('school_id'),
-         project_status: this.form.project_status
-       }
-       saveProject(obj)
-         .then(res => {
-           console.log(res)
-           this.$router.push({ path: '/itemList' })
-         })
-     }
-   }
- }
+import myHeader from '../../myHeader/myHeader'
+import { getProjectInfo, saveProject } from '@/api/eduAdmin'
+export default {
+  name: 'itemEdit',
+  data() {
+    return {
+      form: {
+        project_name: '石选晓',
+        schoolName: '武宁路小学',
+        semester_id: 'shixiuan',
+        project_id: '',
+        school_id: '',
+        create_time: '',
+        project_remark: '134752398@348.cn',
+        project_status: '0'
+      },
+      msg: {
+        title1: '评价项目管理',
+        title2: '编辑评价项目管理',
+        flag: 1,
+        path: '/itemList'
+      }
+    }
+  },
+  mounted() {
+    this.getData()
+  },
+  components: {
+    myHeader
+  },
+  methods: {
+    getData() {
+      const obj = {
+        project_id: this.$route.query.project_id,
+        token: localStorage.getItem('TOKEN')
+      }
+      getProjectInfo(obj)
+        .then(res => {
+          console.log(res)
+          if (res.hasOwnProperty('response')) {
+            this.form = res.response.info
+          } else {
+            this.$alert('系统出错！', '提示', {
+              confirmButtonText: '确定'
+            })
+          }
+        })
+    },
+    handleCommand(command) {
+      if (command === 'b') {
+        this.form.project_status = '0'
+      } else if (command === 'a') {
+        this.form.project_status = '1'
+      }
+    },
+    saveUser() {
+      const obj = {
+        project_id: this.$route.query.project_id,
+        project_name: this.form.project_name,
+        project_remark: this.form.project_remark,
+        school_id: localStorage.getItem('school_id'),
+        project_status: this.form.project_status
+      }
+      saveProject(obj)
+        .then(res => {
+          console.log(res)
+          this.$router.push({ path: '/itemList' })
+        })
+    }
+  }
+}
 </script>
 
 <style scoped>

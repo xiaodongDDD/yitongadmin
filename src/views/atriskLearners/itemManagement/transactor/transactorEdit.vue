@@ -20,8 +20,8 @@
           <el-form-item label="负责年级：">
             <span>{{form.grade_name}}</span>
           </el-form-item>
-         <el-form-item label="项目评语：">
-            <el-input type="textarea" :rows="5" v-model="form.phone"></el-input>
+         <el-form-item label="项目评语：" id='project-comment'>
+            <el-input type="textarea" :rows="5" v-model="form.project_comment"></el-input>
           </el-form-item>
           <el-form-item>
             <router-link to="/powerList"><el-button>取消</el-button></router-link>
@@ -35,7 +35,7 @@
 
 <script>
   import myHeader from '../../myHeader/myHeader'
-  import { showExecutorManager } from '@/api/eduAdmin'
+  import { showExecutorManager, saveExecutorManager } from '@/api/eduAdmin'
   export default {
     name: 'transactorEdit',
     data() {
@@ -62,26 +62,47 @@
       myHeader
     },
     mounted() {
+      this.project_id = this.$route.query.project_id
+      this.teacher_id = this.$route.query.teacher_id
       this.getData()
     },
     methods: {
       getData() {
         const obj = {
-          project_id: 1,
-          teacher_id: 10220,
+          project_id: this.project_id,
+          teacher_id: this.teacher_id,
           token: localStorage.getItem('TOKEN')
         }
         showExecutorManager(obj)
           .then(res => {
-            console.log(res)
-            this.form = res.response.info
+            if (res.hasOwnProperty('response')) {
+              this.form = res.response.info
+            } else {
+              this.$message.error(res.error_response.msg)
+            }  
           })
           .catch(err => {
             console.log(err)
           })
       },
       saveUser() {
-        this.$router.push({ path: '/userList' })
+        const obj = {
+          project_id: this.project_id,
+          leader_id: this.teacher_id,
+          project_comment: this.form.project_comment,
+          token: localStorage.getItem('TOKEN')
+        }
+        saveExecutorManager(obj)
+          .then(res => {
+            if (res.hasOwnProperty('response')) {
+              this.$router.push({ path: '/transactorList' })
+            } else {
+              this.$message.error(res.error_response.msg)
+            }
+          })
+          .catch(err => {
+            console.log(err)
+          })
       }
     }
   }
@@ -91,4 +112,9 @@
 .title {
   margin-bottom: 30px;
 }
+</style>
+<style type="text/css">
+.main-content #project-comment .el-textarea {
+  width: 457px;
+}  
 </style>
