@@ -154,9 +154,9 @@
       },
       handleCommand(item) {
         this.school = item
-        this.getList(this.pageData.page, item.school_id)
+        this.getList(this.pageData.page, item.school_id, 2)
       },
-      getList(page, school_id) {
+      getList(page, school_id, type) {
         const obj = {}
         obj.page = page
         obj.school_id = school_id
@@ -168,7 +168,9 @@
             const data = res.response
             this.tableData = data.info
             this.schools = data.school_info
-            this.school = data.school_info[0]
+            if (type !== 2) {
+              this.school = data.school_info[0]
+            }
             this.schoolChange = data.school_change
             this.pageData.allPage = data.total_page
           } else {
