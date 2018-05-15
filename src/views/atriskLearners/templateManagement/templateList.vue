@@ -122,8 +122,9 @@
         this.centerDialogVisible = true
       },
       handleCurrentChange(val) {
+        // console.log(this.school)
         this.pageData.page = val
-        this.getList(val, this.school.school_id)
+        this.getList(val, this.school.school_id, 2)
       },
       templateAdd() {
         this.$router.push({ path: '/templateAdd', query: { 'school_id': this.school.school_id }})
@@ -155,6 +156,7 @@
       handleCommand(item) {
         this.school = item
         this.getList(this.pageData.page, item.school_id, 2)
+        // console.log(this.school)
       },
       getList(page, school_id, type) {
         const obj = {}
@@ -170,6 +172,13 @@
             this.schools = data.school_info
             if (type !== 2) {
               this.school = data.school_info[0]
+            }
+            if (school_id !== '') {
+              for (let i = 0; i < data.school_info.length; i++) {
+                if (data.school_info[i].school_id === school_id) {
+                  this.school = data.school_info[i]
+                }
+              }
             }
             this.schoolChange = data.school_change
             this.pageData.allPage = data.total_page

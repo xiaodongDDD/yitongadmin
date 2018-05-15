@@ -150,7 +150,7 @@
         this.$router.push({ path: '/gainSchoolList', query: { 'project_id': this.project_id, 'school_id': this.$route.query.school_id }})
       },
       importResult() {
-        const str1 = 'p_e_id=' + this.$route.query.p_t_id + '&p_t_id=' + this.$route.query.p_t_id
+        const str1 = 'p_e_id=' + this.$route.query.p_e_id + '&p_t_id=' + this.$route.query.p_t_id
         const str2 = '&student_id=' + this.$route.query.student_id + '&type=3' + '&token=' + localStorage.getItem('TOKEN')
         const url = process.env.BASE_API + '/evaluate/?v=0.1&method=Evaluateresult.exportEvaluateResult&' + str1 + str2
         // console.log(url)

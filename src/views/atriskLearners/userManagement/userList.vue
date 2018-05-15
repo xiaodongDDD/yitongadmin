@@ -159,9 +159,11 @@
         this.centerDialogVisible = true
       },
       deleteUser() {
+        this.deleteInfo.token = localStorage.getItem('TOKEN')
         deleteUser(this.deleteInfo).then(res => {
           if (res.hasOwnProperty('response')) {
             this.$message('删除成功')
+            this.centerDialogVisible = false
             this.getList(this.pageData.page)
           } else {
             this.$alert(res.error_response.msg, '提示', {
@@ -177,6 +179,7 @@
         const obj = {}
         obj.token = localStorage.getItem('TOKEN')
         obj.page = page
+        // obj.pagesize = 1
         this.pageData.page = page
         getUserList(obj).then(res => {
           if (res.hasOwnProperty('response')) {
