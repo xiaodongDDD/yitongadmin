@@ -40,7 +40,7 @@
             <el-button
               size="mini"
               type="danger"
-              @click="handleDelete(scope.$index, tinfo.tname = scope.row.template_name, tinfo.template_id = scope.row.template_id)">删除</el-button>
+              @click="handleDelete(scope.$index, tinfo.tname = scope.row.template_name, tinfo.template_id = scope.row.template_id, tinfo.school_id = scope.row.school_id)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -144,7 +144,7 @@
           // console.log(res)
           if (res.hasOwnProperty('response')) {
             this.$message('删除成功！')
-            this.getList(this.pageData.page)
+            this.getList(this.pageData.page, this.tinfo.school_id)
             this.centerDialogVisible = false
           } else {
             this.$alert(res.error_response.msg, '提示', {

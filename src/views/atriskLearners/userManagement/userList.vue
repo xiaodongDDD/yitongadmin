@@ -137,7 +137,7 @@
         obj.token = localStorage.getItem('TOKEN')
         // console.log(status)
         changeUserStatus(obj).then(res => {
-          console.log(res)
+          // console.log(res)
           if (res.hasOwnProperty('response')) {
             this.$message('修改成功')
           } else {
@@ -155,7 +155,6 @@
         this.token = localStorage.getItem('TOKEN')
         this.deleteInfo.school_name = row.school_name
         this.deleteInfo.school_id = row.school_id
-        // console.log(this.deleteInfo)
         this.centerDialogVisible = true
       },
       deleteUser() {

@@ -6,8 +6,6 @@
       <div class="edit-form">
         <el-form ref="form" :model="form" label-width="100px">
           <el-form-item label="学校名称：">
-            <!--<el-input v-model="form.name"></el-input>-->
-
             <el-dropdown @command="changeSubject" trigger="click">
                 <span class="el-dropdown-link">
                   <el-input v-model="form.school_name"></el-input>
@@ -16,7 +14,6 @@
                 <el-dropdown-item v-for="item in schoolData" :command="item">{{ item.school_name}}</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
-
           </el-form-item>
           <el-form-item label="管理员：">
             <span>{{form.teacher_name}}</span>
