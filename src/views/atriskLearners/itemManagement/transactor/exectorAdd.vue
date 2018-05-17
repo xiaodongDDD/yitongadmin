@@ -152,6 +152,7 @@
         const obj = {
           project_id: this.project_id,
           leader_id: this.leader_id,
+          school_id: this.school_id,
           subject_id: this.value1,
           token: localStorage.getItem('TOKEN')
         }
@@ -195,7 +196,7 @@
           leader_id: this.leader_id,
           school_id: this.school_id,
           subject_id: this.value1,
-          executor_id: this.value,
+          // executor_id: this.value,
           token: localStorage.getItem('TOKEN')
         }
         if (obj.executor_id === '') {

@@ -104,8 +104,8 @@
         form: {
           name: ''
         },
-        manName: 'ray',
-        manNum: '111',
+        manName: '',
+        manNum: 0,
         current_project_id: '',
         current_subject_id: '',
         current_teacher_id: '',
@@ -142,6 +142,8 @@
             if (res.hasOwnProperty('response')) {
               this.tableData = res.response.list
               this.total = res.response.total_page
+              this.manName = res.response.leader_name
+              this.manNum = res.response.teacher_count
             }
           })
       },
@@ -232,6 +234,7 @@
   height: 30px;
   margin-bottom: 30px;
   margin-top: 20px;
+  color: #333;
 }
 .officialMan {
    float: left;
@@ -257,6 +260,6 @@
   font-size: 14px;
 }
 .manNum {
-    font-size: 14px;
+  font-size: 14px;
 }
 </style>
