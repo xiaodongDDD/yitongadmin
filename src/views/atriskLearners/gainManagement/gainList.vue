@@ -122,7 +122,7 @@
       }
     },
     mounted() {
-      console.log(this.$route.query.school_id)
+      // console.log(this.$route.query.school_id)
       this.getList(1, this.$route.query.school_id)
     }
   }
