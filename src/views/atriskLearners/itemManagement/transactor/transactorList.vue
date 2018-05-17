@@ -165,7 +165,8 @@
 </script>
 
 <style scoped>
-.title{
+.position {
+  text-indent: 0px;
   margin-bottom: 30px;
 }
 </style>

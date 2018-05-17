@@ -2,7 +2,6 @@
   <div class="center-content official-Edit">
       <my-header :msg='msg'></my-header>
       <div class="content-detail">
-        <div class='content-detail'>
         <p class="position">编辑负责人</p>
         <div class="edit-form">
         <el-form ref="form" :model="form" label-width="100px">
@@ -46,7 +45,6 @@
         </el-form>
       </div>
      </div>
-    </div>
   </div>
 </template>
 <script>

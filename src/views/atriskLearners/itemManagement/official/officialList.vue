@@ -216,7 +216,7 @@
   margin-top: 20px;
   color: #333;
   /*font-size: 18px;*/
-  padding: 0px 20px;
+  padding: 0px 1px;
 }
 .officialMan {
    float: left;
@@ -237,7 +237,7 @@
 }
 .smallTitle {
   margin-bottom: 10px;
-  padding: 0px 20px;
+  padding: 0px 1px;
 }
 .manName {
   font-size: 14px;

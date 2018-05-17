@@ -93,7 +93,7 @@
     methods: {
       getData() {
         const obj = {
-          teacher_id: 10220,
+          teacher_id: this.teacher_id,
           token: localStorage.getItem('TOKEN')
         }
         getPowerDetail(obj)

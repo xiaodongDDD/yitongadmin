@@ -168,4 +168,8 @@ export default {
 .title {
   margin-bottom: 30px;
 }
+.position {
+   margin-bottom: 30px;
+   text-indent: 0px;
+}
 </style>
