@@ -111,6 +111,7 @@
         const token = localStorage.getItem('TOKEN')
         obj.token = token
         obj.is_update = 1
+        obj.school_id = this.$route.query.school_id
 
         const len = this.form.signList.length
         let signSum = 0
@@ -125,6 +126,7 @@
             oneSum++
           }
         }
+        console.log(JSON.stringify(obj))
 
         if (signSum === 100 && oneSum === 0) {
           addTemplate(obj).then(res => {

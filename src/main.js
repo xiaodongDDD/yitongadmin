@@ -21,6 +21,7 @@ Vue.use(ElementUI, { locale })
 Vue.config.productionTip = false
 
 // Vue.prototype.eduData = eduData
+Vue.prototype.HOST = 'http://jiaowu-test.xiaoheiban.cn/'
 
 new Vue({
   el: '#app',

@@ -40,7 +40,7 @@
             <el-button
               size="mini"
               type="danger"
-              @click="handleDelete(scope.$index, tinfo.tname = scope.row.template_name, tinfo.template_id = scope.row.template_id)">删除</el-button>
+              @click="handleDelete(scope.$index, tinfo.tname = scope.row.template_name, tinfo.template_id = scope.row.template_id, tinfo.school_id = scope.row.school_id)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -122,8 +122,9 @@
         this.centerDialogVisible = true
       },
       handleCurrentChange(val) {
+        // console.log(this.school)
         this.pageData.page = val
-        this.getList(val, this.school.school_id)
+        this.getList(val, this.school.school_id, 2)
       },
       templateAdd() {
         this.$router.push({ path: '/templateAdd', query: { 'school_id': this.school.school_id }})
@@ -143,7 +144,7 @@
           // console.log(res)
           if (res.hasOwnProperty('response')) {
             this.$message('删除成功！')
-            this.getList(this.pageData.page)
+            this.getList(this.pageData.page, this.tinfo.school_id)
             this.centerDialogVisible = false
           } else {
             this.$alert(res.error_response.msg, '提示', {
@@ -154,9 +155,10 @@
       },
       handleCommand(item) {
         this.school = item
-        this.getList(this.pageData.page, item.school_id)
+        this.getList(this.pageData.page, item.school_id, 2)
+        // console.log(this.school)
       },
-      getList(page, school_id) {
+      getList(page, school_id, type) {
         const obj = {}
         obj.page = page
         obj.school_id = school_id
@@ -168,7 +170,16 @@
             const data = res.response
             this.tableData = data.info
             this.schools = data.school_info
-            this.school = data.school_info[0]
+            if (type !== 2) {
+              this.school = data.school_info[0]
+            }
+            if (school_id !== '') {
+              for (let i = 0; i < data.school_info.length; i++) {
+                if (data.school_info[i].school_id === school_id) {
+                  this.school = data.school_info[i]
+                }
+              }
+            }
             this.schoolChange = data.school_change
             this.pageData.allPage = data.total_page
           } else {

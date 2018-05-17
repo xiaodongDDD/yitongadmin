@@ -39,7 +39,6 @@
                   <el-dropdown-item v-for="item in subjectData" :command="item">{{ item.subject_name}}</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
-
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="onSubmit">筛选</el-button>
@@ -141,7 +140,7 @@
 
 <script>
   import myHeader from '../myHeader/myHeader'
-  import { gainSchoolList, gainClasses, gainImport } from '@/api/eduAdmin'
+  import { gainSchoolList, gainClasses } from '@/api/eduAdmin'
   export default {
     name: 'gainSchoolList',
     data() {
@@ -203,6 +202,7 @@
         const project_id = this.$route.query.project_id
         this.$router.push({ path: '/gainDetails', query: { 'p_t_id': row.p_t_id, 'student_id': row.student_id, 'p_e_id': row.p_e_id, 'project_id': project_id, 'school_id': this.$route.query.school_id }})
       },
+      // 导出提示
       importGain() {
         if (this.formInline.grade === '' && this.formInline.class === '' && this.formInline.subject === '') {
           this.$message('由于数据量很大，请您先筛选学科或年级班级后导出')
@@ -210,31 +210,17 @@
           this.centerDialogVisible = true
         }
       },
+      // 导出成果
       importResult() {
-        const obj = {}
-        obj.school_id = this.$route.query.school_id
-        obj.project_id = this.$route.query.project_id
-        obj.grade_id = this.filterData.grade_id
-        obj.class_id = this.filterData.class_id
-        obj.subject_id = this.filterData.subject_id
-        obj.type = this.form.resource
-        obj.token = localStorage.getItem('TOKEN')
-        // http://jiaowu-test.xiaoheiban.cn/evaluate/?v=0.1&method=Evaluateresult.evaluateResultList
-        // gainImport(obj).then(res => {
-        //   console.log(res)
-        //   if (res.hasOwnProperty('response')) {
-        //     console.log('success')
-        //   } else {
-        //     this.$alert(res.error_response.msg, '提示', {
-        //       confirmButtonText: '确定'
-        //     })
-        //   }
-        // })
+        const str1 = 'school_id=' + this.$route.query.school_id + '&project_id=' + this.$route.query.project_id + '&token=' + localStorage.getItem('TOKEN')
+        const str2 = '&grade_id=' + this.filterData.grade_id + '&class_id=' + this.filterData.class_id + '&subject_id=' + this.filterData.subject_id + '&type=' + this.form.resource
+        const url = process.env.BASE_API + '/evaluate/?v=0.1&method=Evaluateresult.exportEvaluateResult&' + str1 + str2
+        // console.log(url)
+        window.location.href = url
+        this.centerDialogVisible = false
       },
       onSubmit() {
         this.filterData.school_id = this.$route.query.school_id
-        // console.log(this.filterData)
-        // return false
         this.getList(1, this.filterData.school_id, this.filterData.grade_id, this.filterData.class_id, this.filterData.subject_id, 1)
       },
       reback() {

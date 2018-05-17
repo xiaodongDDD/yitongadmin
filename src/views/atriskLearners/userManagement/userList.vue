@@ -20,11 +20,11 @@
           style="width: 100%">
           <el-table-column
             align="center"
-            prop="onOff"
+            prop="enabled_status"
             label="产品状态"
             width="100">
             <template slot-scope="scope">
-              <el-select size="mini" v-model="scope.row.onOff" @change="statusProject(scope.row.project_id, scope.row.project_status)" placeholder="请选择">
+              <el-select size="mini" v-model="scope.row.enabled_status" @change="changeStatus(scope.row.school_id, scope.row.enabled_status)" placeholder="请选择">
                 <el-option
                   v-for="item in form.options"
                   :key="item.value"
@@ -35,18 +35,18 @@
             </template>
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="school_name"
             label="学校名称"
             width="">
           </el-table-column>
           <el-table-column
             align="center"
-            prop="official"
+            prop="teacher_name"
             label="管理员">
           </el-table-column>
           <el-table-column
             align="center"
-            prop="telephone"
+            prop="phone"
             label="手机号">
           </el-table-column>
 
@@ -59,7 +59,7 @@
               <el-button
                 size="mini"
                 type="danger"
-                @click="handleDelete(scope.$index, schoolName = scope.row.name)">删除</el-button>
+                @click="handleDelete(scope.row)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -75,7 +75,7 @@
           @current-change="handleCurrentChange"
           background
           layout="prev, pager, next"
-          :total="1000">
+          :page-count="pageData.allPage">
         </el-pagination>
       </div>
 
@@ -86,13 +86,13 @@
         center>
         <div class="dialogContent">
           <p>请确认是否要删除</p>
-          <p>{{ schoolName }}学校账户</p>
+          <p>{{ deleteInfo.school_name }}学校账户</p>
 
           <p>删除后，该学校所有账户将无法登录</p>
         </div>
         <span slot="footer" class="dialog-footer">
           <el-button @click="centerDialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
+          <el-button type="primary" @click="deleteUser">确 定</el-button>
         </span>
       </el-dialog>
     </div>
@@ -101,7 +101,7 @@
 
 <script>
   import myHeader from '../myHeader/myHeader'
-  import { statusProject } from '@/api/eduAdmin'
+  import { changeUserStatus, getUserList, deleteUser } from '@/api/eduAdmin'
   export default {
     name: 'userList',
     data() {
@@ -118,45 +118,78 @@
           flag: 0,
           path: '/userList'
         },
-        tableData: [{
-          onOff: '启用',
-          name: '上海育才小学',
-          official: '诗小轩',
-          telephone: '13533790697'
-        }, {
-          onOff: '停用',
-          name: '上海育才小学',
-          official: '诗小轩',
-          telephone: '13533790697'
-        }, {
-          onOff: '停用',
-          name: '上海育才小学',
-          official: '诗小轩',
-          telephone: '13533790697'
-        }]
+        tableData: [],
+        pageData: {
+          page: '',
+          allPage: 1
+        },
+        deleteInfo: {}
       }
     },
     components: {
       myHeader
     },
     methods: {
-      statusProject(id, status) {
+      changeStatus(id, status) {
         const obj = {}
-        obj.project_id = id
+        obj.school_id = id
         obj.project_status = status
-        statusProject(obj).then(res => {
-          console.log(res)
+        obj.token = localStorage.getItem('TOKEN')
+        // console.log(status)
+        changeUserStatus(obj).then(res => {
+          // console.log(res)
+          if (res.hasOwnProperty('response')) {
+            this.$message('修改成功')
+          } else {
+            this.$alert(res.error_response.msg, '提示', {
+              confirmButtonText: '确定'
+            })
+            this.getList(this.pageData.page)
+          }
         })
       },
       handleEdit(index, row) {
-        this.$router.push({ path: '/userEdit' })
+        this.$router.push({ path: '/userEdit', query: { 'school_id': row.school_id }})
       },
-      handleDelete(index, row) {
+      handleDelete(row) {
+        this.token = localStorage.getItem('TOKEN')
+        this.deleteInfo.school_name = row.school_name
+        this.deleteInfo.school_id = row.school_id
         this.centerDialogVisible = true
       },
+      deleteUser() {
+        this.deleteInfo.token = localStorage.getItem('TOKEN')
+        deleteUser(this.deleteInfo).then(res => {
+          if (res.hasOwnProperty('response')) {
+            this.$message('删除成功')
+            this.centerDialogVisible = false
+            this.getList(this.pageData.page)
+          } else {
+            this.$alert(res.error_response.msg, '提示', {
+              confirmButtonText: '确定'
+            })
+          }
+        })
+      },
       handleCurrentChange(val) {
-        // console.log(`当前页: ${val}`)
+        this.getList(val)
+      },
+      getList(page) {
+        const obj = {}
+        obj.token = localStorage.getItem('TOKEN')
+        obj.page = page
+        // obj.pagesize = 1
+        this.pageData.page = page
+        getUserList(obj).then(res => {
+          if (res.hasOwnProperty('response')) {
+            this.tableData = res.response.list
+            this.pageData.allPage = res.response.total_page
+          }
+        })
       }
+    },
+    mounted() {
+      this.getList(1)
     }
   }
 </script>

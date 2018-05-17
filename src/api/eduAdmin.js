@@ -433,3 +433,54 @@ export function isOperate(datas) {
     data: qs.stringify(datas)
   })
 }
+
+// 获取学校用户列表
+export function getUserList(datas) {
+  return request({
+    url: '/evaluate/?v=0.1&method=Schooluser.getSchoolUserList',
+    method: 'post',
+    data: qs.stringify(datas)
+  })
+}
+
+// 删除学校用户
+export function deleteUser(datas) {
+  return request({
+    url: '/evaluate/?v=0.1&method=Schooluser.deleteSchoolUser',
+    method: 'post',
+    data: qs.stringify(datas)
+  })
+}
+
+// 获取学校用户详情
+export function getUserDetail(datas) {
+  return request({
+    url: '/evaluate/?v=0.1&method=Schooluser.getSchoolUser',
+    method: 'post',
+    data: qs.stringify(datas)
+  })
+}
+// 切换学校用户状态
+export function changeUserStatus(datas) {
+  return request({
+    url: '/evaluate/?v=0.1&method=Schooluser.saveSchoolUser',
+    method: 'post',
+    data: qs.stringify(datas)
+  })
+}
+// 搜索学校
+export function checkSchoolList(datas) {
+  return request({
+    url: '/evaluate/?v=0.1&method=Schooluser.screenSchoolUser',
+    method: 'post',
+    data: qs.stringify(datas)
+  })
+}
+// 新增学校用户
+export function addSchoolUser(datas) {
+  return request({
+    url: '/evaluate/?v=0.1&method=Schooluser.insertSchoolUser',
+    method: 'post',
+    data: qs.stringify(datas)
+  })
+}

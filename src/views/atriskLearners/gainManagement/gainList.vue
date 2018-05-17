@@ -84,13 +84,13 @@
       },
       handleCurrentChange(val) {
         this.pageData.page = val
-        this.getList(val, this.school.school_id)
+        this.getList(val, this.school.school_id, 2)
       },
       handleCommand(item) {
         this.school = item
-        this.getList(this.pageData.page, item.school_id)
+        this.getList(this.pageData.page, item.school_id, 2)
       },
-      getList(page, id) {
+      getList(page, id, type) {
         const obj = {}
         obj.page = page
         obj.school_id = id
@@ -102,7 +102,16 @@
             this.tableData = res.response.info
             this.pageData.allPage = res.response.total_page
             this.school_change = res.response.school_change
-            this.school = res.response.school_info[0]
+            if (type !== 2) {
+              this.school = res.response.school_info[0]
+            }
+            if (id !== '') {
+              for (let i = 0; i < res.response.school_info.length; i++) {
+                if (res.response.school_info[i].school_id === id) {
+                  this.school = res.response.school_info[i]
+                }
+              }
+            }
             this.schools = res.response.school_info
           } else {
             this.$alert(res.error_response.msg, '提示', {
@@ -113,6 +122,7 @@
       }
     },
     mounted() {
+      console.log(this.$route.query.school_id)
       this.getList(1, this.$route.query.school_id)
     }
   }

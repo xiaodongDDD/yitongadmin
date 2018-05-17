@@ -127,6 +127,7 @@
         obj.token = token
         obj.is_update = 2
         obj.type = this.form.checktype
+        obj.school_id = this.$route.query.school_id
 
         const len = this.form.signList.length
         let signSum = 0
@@ -142,7 +143,6 @@
           }
         }
         // console.log(JSON.stringify(obj))
-        // return false
         if (signSum === 100 && oneSum === 0) {
           addTemplate(obj).then(res => {
             if (res.hasOwnProperty('response')) {
@@ -170,7 +170,10 @@
         this.centerDialogVisible = true
       },
       signDelete() {
+        // console.log(this.tinfo.index)
         this.form.signList.splice(this.tinfo.index, 1)
+        this.form.type.splice(this.tinfo.index, 1)
+        this.form.checktype.splice(this.tinfo.index, 1)
         this.centerDialogVisible = false
       },
       addSignList() {
