@@ -85,7 +85,7 @@ export function deleteLeader(datas) {
 // 显示切换学校列表
 export function showSchools(datas) {
   return request({
-    url: '/evaluate/?v=0.1&method=Projectbase.showSchools',
+    url: '/evaluate/?v=0.1&method=Projectebase.showSchools',
     method: 'post',
     data: qs.stringify(datas)
   })
@@ -428,7 +428,7 @@ export function getUserAuth(datas) {
 // 判断是否运营账号
 export function isOperate(datas) {
   return request({
-    url: '/evaluate/?v=0.1&method=Projectbase.isOperate',
+    url: '/evaluate/?v=0.1&method=Projectebase.isOperate',
     method: 'post',
     data: qs.stringify(datas)
   })

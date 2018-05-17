@@ -102,10 +102,26 @@ export default {
         school_id: localStorage.getItem('school_id'),
         project_status: this.form.project_status
       }
+      if (obj.project_name.length > 50) {
+        this.$message.error('项目名称不超过50字')
+        return false
+      }
+      if (obj.project_remark.length > 200) {
+        this.$message.error('项目说明不超过200字')
+        return false
+      }
       saveProject(obj)
         .then(res => {
           console.log(res)
-          this.$router.push({ path: '/itemList' })
+          if (res.hasOwnProperty('response')) {
+            this.$message.success('保存成功')
+            this.$router.push({ path: '/itemList' })
+          } else {
+            this.$message.error(res.error_response.msg)
+          }
+        })
+        .catch(err => {
+          console.log(err)
         })
     }
   }

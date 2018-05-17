@@ -2,7 +2,7 @@
   <div class="center-content student-list">
       <my-header :msg='msg'></my-header>
       <div class="content-detail">
-        <div class="title"><span class="officialMan">学困生辅导执行人管理</span><span class="goback">返回</span></div>
+        <div class="title"><span class="officialMan">学困生辅导执行人管理</span><span @click='goback' class="goback">返回</span></div>
       <div class="smallTitle">
         <span class='manName'>管理员 {{ manName }}&nbsp&nbsp</span>
         <span class="manNum">执行人 {{ manNum }}</span>
@@ -192,6 +192,9 @@
         }
         this.$router.push({ path: '/exectorAdd', query: datas })
       },
+      goback() {
+        this.$router.push({ path: '/transactorList' })
+      },
       handleCurrentChange(val) {
         this.current_page = val
         this.getData(val)
@@ -239,8 +242,13 @@
 .goback {
   float: right;
   height: 30px;
-  line-height: 30px;
+  line-height: 26px;
+  font-size: 15px;
   display: inline-block;
+  cursor: pointer;
+  padding: 3px;
+  background-color: #f4f4f4;
+  border-radius: 5px;
 }
 .smallTitle {
   margin-bottom: 10px;

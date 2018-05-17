@@ -82,9 +82,9 @@
       },
       checkAuth() {
         const auth = this.auth_list
-        if (auth.indexOf('4') == -1) {
+        if (auth.indexOf('4') === -1) {
           this.flags = 1
-        } 
+        }
       },
       handleSelect(key, keyPath) {
         console.log(key, keyPath)

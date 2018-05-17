@@ -79,7 +79,7 @@
               this.form = res.response.info
             } else {
               this.$message.error(res.error_response.msg)
-            }  
+            }
           })
           .catch(err => {
             console.log(err)
@@ -92,10 +92,15 @@
           project_comment: this.form.project_comment,
           token: localStorage.getItem('TOKEN')
         }
+        if (obj.project_comment.length > 200) {
+          this.$message.error('项目评语超过200字')
+          return false
+        }
         saveExecutorManager(obj)
           .then(res => {
             if (res.hasOwnProperty('response')) {
               this.$router.push({ path: '/transactorList' })
+              this.$message.success('保存成功')
             } else {
               this.$message.error(res.error_response.msg)
             }

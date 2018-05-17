@@ -41,17 +41,17 @@
           </el-submenu>
         </router-link>
         <div v-if='menu11'>
-          <el-submenu index="/itemList" >
-              <template slot="title">
-                <i class="el-icon-menu"></i>
-                <span>评价项目管理</span>
-              </template>
-              <el-menu-item-group>
-                <router-link to="/transactorList" v-if='menu6'><el-menu-item index="/transactorList">执行人管理</el-menu-item></router-link>
-                <router-link to="/objectList" v-if='menu7'><el-menu-item index="/objectList">评价对象管理</el-menu-item></router-link>
-              </el-menu-item-group>
-            </el-submenu>
-          </div>
+          <el-submenu index="/itemList">
+            <template slot="title">
+              <i class="el-icon-menu"></i>
+              <span>评价项目管理</span>
+            </template>
+            <el-menu-item-group>
+              <router-link to="/transactorList" v-if='menu6'><el-menu-item index="/transactorList">执行人管理</el-menu-item></router-link>
+              <router-link to="/objectList" v-if='menu7'><el-menu-item index="/objectList">评价对象管理</el-menu-item></router-link>
+            </el-menu-item-group>
+          </el-submenu>
+        </div>
         <router-link to="/templateList" v-if='menu8'>
           <el-menu-item index="/templateList">
             <i class="el-icon-menu"></i>
@@ -169,49 +169,49 @@
         if (auth.indexOf('1') !== -1) {
           this.menu1 = true
         }
-        if (auth.indexOf('2') != -1) {
+        if (auth.indexOf('2') !== -1) {
           this.menu2 = true
         }
-        if (auth.indexOf('3') != -1) {
+        if (auth.indexOf('3') !== -1) {
           this.menu3 = true
         }
-        if (auth.indexOf('4') != -1) {
+        if (auth.indexOf('4') !== -1) {
           this.menu4 = true
         }
-        if (auth.indexOf('5') != -1) {
+        if (auth.indexOf('5') !== -1) {
           this.menu5 = true
         }
-        if (auth.indexOf('6') != -1) {
+        if (auth.indexOf('6') !== -1) {
           this.menu6 = true
         }
-        if (auth.indexOf('7') != -1) {
+        if (auth.indexOf('7') !== -1) {
           this.menu7 = true
         }
-        if (auth.indexOf('8') != -1) {
+        if (auth.indexOf('8') !== -1) {
           this.menu8 = true
         }
-        if (auth.indexOf('9') != -1) {
+        if (auth.indexOf('9') !== -1) {
           this.menu9 = true
         }
-        if (auth.indexOf('10') != -1) {
+        if (auth.indexOf('10') !== -1) {
           this.menu10 = true
         }
-        if (auth.indexOf('4') == -1 && auth.indexOf('6') != -1) {
+        if (auth.indexOf('4') === -1 && auth.indexOf('6') !== -1) {
           this.menu11 = true
           this.menu4 = false
           this.menu6 = true
         }
-        if (auth.indexOf('4') == -1 && auth.indexOf('7') != -1) {
+        if (auth.indexOf('4') === -1 && auth.indexOf('7') !== -1) {
           this.menu11 = true
           this.menu4 = false
           this.menu7 = true
         }
-        if (auth.indexOf('4') != -1 && auth.indexOf('6') == -1) {
+        if (auth.indexOf('4') !== -1 && auth.indexOf('6') === -1) {
           this.menu11 = false
           this.menu4 = true
           this.menu6 = false
         }
-        if (auth.indexOf('4') != -1 && auth.indexOf('7') == -1) {
+        if (auth.indexOf('4') !== -1 && auth.indexOf('7') === -1) {
           this.menu11 = false
           this.menu4 = true
           this.menu7 = false

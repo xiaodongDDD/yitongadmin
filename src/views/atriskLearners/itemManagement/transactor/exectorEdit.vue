@@ -6,18 +6,11 @@
         <div class="edit-form">
         <el-form ref="form" :model="form" label-width="100px">
           <el-form-item label="执行人姓名：" id='names'>
-            <el-select
-              v-model="value"
-              collapse-tags
-              @change="chooseName"
-              placeholder="请选择">
-              <el-option
-                v-for="item in options"
-                :key="item.teacher_id"
-                :label="item.teacher_name"
-                :value="item.teacher_id">
-              </el-option>
-            </el-select>
+            <el-col >
+              <el-form-item>
+                <span>{{'ghaha'}}</span>
+              </el-form-item>
+            </el-col>
           </el-form-item>
           <el-form-item label="执行学科：" id='subject'>
             <el-select
@@ -152,12 +145,7 @@
         this.value2 = this.class_list
         this.value3 = this.template_id
       },
-      chooseName() {
-        this.getSubjectData()
-        this.getClassData()
-      },
       chooseSubject() {
-        this.getNameData()
         this.getClassData()
       },
       chooseGrade() {
