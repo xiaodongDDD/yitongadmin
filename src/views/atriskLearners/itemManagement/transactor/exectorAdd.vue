@@ -9,6 +9,7 @@
             <el-select
               v-model="value"
               collapse-tags
+              @change="chooseName"
               placeholder="请选择">
               <el-option
                 v-for="item in options"
@@ -22,6 +23,7 @@
             <el-select
               v-model="value1"
               collapse-tags
+              @change="chooseSubject"
               placeholder="请选择">
               <el-option
                 v-for="item in options1"
@@ -66,7 +68,7 @@
 </template>
 <script>
   import myHeader from '../../myHeader/myHeader'
-  import { getExecutor } from '@/api/eduAdmin'
+  import { getExecutor, getExecutorSubject, getExecutorTeacher, getExecutorClass, saveExecutor } from '@/api/eduAdmin'
   export default {
     name: 'exectorEdit',
     data() {
@@ -83,80 +85,20 @@
         leader_id: '',
         school_id: '',
         project_id: '',
-        subject_id: '',
+        subject_id: [],
         msg: {
           title1: '项目评价管理',
           title2: '新增执行人',
           flag: 1,
           path: '/itemList'
         },
-        options: [{
-          value: '选项1',
-          label: '黄金糕'
-        }, {
-          value: '选项2',
-          label: '双皮奶'
-        }, {
-          value: '选项3',
-          label: '蚵仔煎'
-        }, {
-          value: '选项4',
-          label: '龙须面'
-        }, {
-          value: '选项5',
-          label: '北京烤鸭'
-        }],
-        options1: [{
-          value: '选项1',
-          label: '黄金糕'
-        }, {
-          value: '选项2',
-          label: '双皮奶'
-        }, {
-          value: '选项3',
-          label: '蚵仔煎'
-        }, {
-          value: '选项4',
-          label: '龙须面'
-        }, {
-          value: '选项5',
-          label: '北京烤鸭'
-        }],
-        options2: [{
-          value: '选项1',
-          label: '黄金糕1'
-        }, {
-          value: '选项2',
-          label: '双皮奶1'
-        }, {
-          value: '选项3',
-          label: '蚵仔煎1'
-        }, {
-          value: '选项4',
-          label: '龙须面1'
-        }, {
-          value: '选项5',
-          label: '北京烤鸭1'
-        }],
-        options3: [{
-          value: '选项1',
-          label: '黄金糕'
-        }, {
-          value: '选项2',
-          label: '双皮奶'
-        }, {
-          value: '选项3',
-          label: '蚵仔煎'
-        }, {
-          value: '选项4',
-          label: '龙须面'
-        }, {
-          value: '选项5',
-          label: '北京烤鸭'
-        }],
+        options: [],
+        options1: [],
+        options2: [],
+        options3: [],
         value3: '',
         value2: [],
-        value1: [],
+        value1: '',
         value: ''
       }
     },
@@ -185,10 +127,87 @@
               console.log(res)
               this.options = res.response.executor_list
               this.options1 = res.response.subject_list
+              if (this.options1.length === 1) {
+                this.value1 = res.response.subject_list[0].subject_id
+              }
               this.options2 = res.response.class_list
               this.options3 = res.response.template_list
             } else {
               console.log(res)
+            }
+          })
+          .catch(err => {
+            console.log(err)
+          })
+      },
+      chooseSubject() {
+        this.getClassData()
+        this.getNameData()
+      },
+      chooseName() {
+        this.getClassData()
+        this.getSubjectData()
+      },
+      getNameData() {
+        const obj = {
+          project_id: this.project_id,
+          leader_id: this.leader_id,
+          subject_id: this.value1,
+          token: localStorage.getItem('TOKEN')
+        }
+        getExecutorTeacher(obj)
+          .then(res => {
+            if (res.hasOwnProperty('response')) {
+              this.options = res.response.executor_list
+            } else {
+              this.$message.error(res.error_response.msg)
+            }
+          })
+          .catch(err => {
+            console.log(err)
+          })
+      },
+      getSubjectData() {
+        const obj = {
+          project_id: this.project_id,
+          leader_id: this.leader_id,
+          school_id: this.school_id,
+          token: localStorage.getItem('TOKEN')
+        }
+        getExecutorSubject(obj)
+          .then(res => {
+            if (res.hasOwnProperty('response')) {
+              this.options1 = res.response.executor_list
+              if (this.options1.length === 1) {
+                this.value1 = res.response.subject_list[0].subject_id
+              }
+            } else {
+              this.$message.error(res.error_response.msg)
+            }
+          })
+          .catch(err => {
+            console.log(err)
+          })
+      },
+      getClassData() {
+        const obj = {
+          project_id: this.project_id,
+          leader_id: this.leader_id,
+          school_id: this.school_id,
+          subject_id: this.value1,
+          executor_id: this.value,
+          token: localStorage.getItem('TOKEN')
+        }
+        if (obj.executor_id === '') {
+          this.$message.error('请先选择执行人姓名')
+          return false
+        }
+        getExecutorClass(obj)
+          .then(res => {
+            if (res.hasOwnProperty('response')) {
+              this.options2 = res.response.subject_list
+            } else {
+              this.$message.error(res.error_response.msg)
             }
           })
           .catch(err => {

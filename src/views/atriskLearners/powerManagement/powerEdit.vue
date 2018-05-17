@@ -101,12 +101,12 @@
             console.log(res)
             if (res.hasOwnProperty('response')) {
               this.form = res.response.detail
-              // const nowList = res.response.detail.auth_list
-              const nowList = ['2','3','6','7','9','10']
+              const nowList = res.response.detail.auth_list
+              // const nowList = ['2','3','6','7','9','10']
               if (nowList.indexOf('4') !== -1) {
                 this.checked1 = true
               }
-              this.powerlist = ['2','3','6','7','9','10']
+              this.powerlist = nowList
             } else {
               console.log(res.error_response.msg)
             }
@@ -116,28 +116,29 @@
           })
       },
       saveUser() {
-        if (this.checked1 && this.powerlist.indexOf('4') === -1 && this.powerlist.indexOf('5') !== -1) {
+        if (this.powerlist.indexOf('4') === -1 && this.powerlist.indexOf('5') !== -1) {
           this.powerlist.push('4')
-        } else if (this.checked1 && this.powerlist.indexOf('4') !== -1) {
+        } else if (this.powerlist.indexOf('4') !== -1 && this.powerlist.indexOf('5') === -1) {
           const num = this.powerlist.indexOf('4')
           this.powerlist.splice(num, 1)
         }
-        // const obj = {
-        //   teacher_id: this.teacher_id,
-        //   auth_list: this.powerlist,
-        //   token: localStorage.getItem('TOKEN')
-        // }
-        // authSave(obj)
-        //   .then(res => {
-        //     if (res.hasOwnProperty('response')) {
-        //       console.log(res)
-        //     } else {
-        //       console.log(res.error_response.msg)
-        //     }
-        //   })
-        //   .catch(err => {
-        //     console.log(err)
-        //   })
+        const obj = {
+          teacher_id: this.teacher_id,
+          auth_list: this.powerlist,
+          token: localStorage.getItem('TOKEN')
+        }
+        authSave(obj)
+          .then(res => {
+            if (res.hasOwnProperty('response')) {
+              console.log(res)
+              this.$message.success(res.response.msg)
+            } else {
+              this.$message.error(res.error_response.msg)
+            }
+          })
+          .catch(err => {
+            console.log(err)
+          })
         console.log(this.powerlist)
         console.log(this.checked1)
 

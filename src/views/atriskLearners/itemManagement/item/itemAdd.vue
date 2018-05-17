@@ -39,59 +39,68 @@
   </div>
 </template>
 <script>
- import myHeader from '../../myHeader/myHeader'
- import { saveProject } from '@/api/eduAdmin'
- export default {
-   name: 'itemAdd',
-   data() {
-     return {
-       form: {
-         name: '',
-         remark: '',
-         status: 1
-       },
-       msg: {
-         title1: '评价项目管理',
-         title2: '新增评价项目管理',
-         flag: 1,
-         path: '/itemList'
-       }
-     }
-   },
-   components: {
-     myHeader
-   },
-   methods: {
-     handleCommand(command) {
-       if (command === 'b') {
-         this.form.status = 0
-       } else if (command === 'a') {
-         this.form.status = 1
-       }
-     },
-     saveUser() {
-       const obj = {
-         project_name: this.form.name,
-         project_remark: this.form.remark,
-         school_id: localStorage.getItem('school_id'),
-         project_status: this.form.status,
-         token: localStorage.getItem('TOKEN')
-       }
-       saveProject(obj)
-         .then(res => {
-           console.log(res)
-           if (res.hasOwnProperty('response')) {
-             this.$router.push({ path: '/itemList' })
-           } else {
-             this.$message.error(res.error_response.msg)
-           }
-         })
-         .catch(err => {
-           console.log(err)
-         })
-     }
-   }
- }
+import myHeader from '../../myHeader/myHeader'
+import { saveProject } from '@/api/eduAdmin'
+export default {
+  name: 'itemAdd',
+  data() {
+    return {
+      form: {
+        name: '',
+        remark: '',
+        status: 1
+      },
+      msg: {
+        title1: '评价项目管理',
+        title2: '新增评价项目管理',
+        flag: 1,
+        path: '/itemList'
+      }
+    }
+  },
+  components: {
+    myHeader
+  },
+  methods: {
+    handleCommand(command) {
+      if (command === 'b') {
+        this.form.status = 0
+      } else if (command === 'a') {
+        this.form.status = 1
+      }
+    },
+    saveUser() {
+      const obj = {
+        project_name: this.form.name,
+        project_remark: this.form.remark,
+        school_id: this.$route.query.school_id,
+        project_status: this.form.status,
+        token: localStorage.getItem('TOKEN')
+      }
+      if (obj.project_name.length > 50) {
+        this.$message.error('项目名称不超过50字')
+        return false
+      }
+      if (obj.project_remark.length > 200) {
+        this.$message.error('项目说明不超过200字')
+        return false
+      }
+      saveProject(obj)
+        .then(res => {
+          console.log(res)
+          if (res.hasOwnProperty('response')) {
+            this.$router.push({ path: '/itemList' })
+            this.$message.success('保存成功')
+          } else {
+            this.$message.error(res.error_response.msg)
+          }
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    }
+  }
+}
 </script>
 
 <style scoped>

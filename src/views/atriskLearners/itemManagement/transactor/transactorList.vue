@@ -38,12 +38,12 @@
           </el-table-column>
           <el-table-column
             align="center"
-            prop="telephone"
-            label="评语"
-            width="110">
+            prop="project_comment"
+            label="评语">
           </el-table-column>
           <el-table-column
             align="center"
+            width="110"
             label="执行人">
              <template slot-scope="scope">
               <span v-if='scope.row.count != 0' @click='go(scope.row.teacher_id, scope.row.school_id, scope.row.project_id, scope.row.subject_id)' style='cursor: pointer;'>{{ scope.row.count }}</span>
@@ -129,7 +129,7 @@
            if (res.hasOwnProperty('response')) {
              console.log(res)
              this.tableData = res.response.list
-             this.total = res.response.total_page 
+             this.total = res.response.total_page
            } else {
              this.$message.error(res.error_response.msg)
            }

@@ -8,7 +8,7 @@
             切换
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item v-for="(item, value) in schools" :key='value' :command="item">{{ item }}</el-dropdown-item>
+            <el-dropdown-item v-for="(item, value) in schools" :key='value' :command="item.school_id">{{ item.school_name }}</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -70,9 +70,7 @@
       </div>
 
       <div class="list-add">
-        <router-link to="/itemAdd">
-          <el-button icon="el-icon-plus">新增</el-button>
-        </router-link>
+          <el-button icon="el-icon-plus" @click='addItem'>新增</el-button>
         <el-pagination
           style='display:inline-block;margin-left:30%;'
           @current-change="handleCurrentChange"
@@ -124,7 +122,8 @@ export default {
         flag: 0,
         path: '/itemList'
       },
-      schools: ['哈哈哈中学', '呵呵呵中学', '醉了小学'],
+      schools: [],
+      schoolId: '',
       // options: [{
       //   value: '选项1',
       //   label: '启用'
@@ -141,14 +140,15 @@ export default {
     myHeader
   },
   mounted() {
-    this.getData(1)
+    this.schoolId = localStorage.getItem('school_id')
+    this.getData(1, this.schoolId)
     this.getSchoolList()
     this.checkId()
   },
   methods: {
-    getData(pages) {
+    getData(pages, schoolId) {
       const obj = {
-        school_id: localStorage.getItem('school_id'),
+        school_id: schoolId,
         page: pages,
         pagesize: 10,
         token: localStorage.getItem('TOKEN')
@@ -179,10 +179,12 @@ export default {
           if (res.hasOwnProperty('response')) {
             if (res.response.is_operate) {
               this.chooseShow = true
+            } else {
+              this.chooseShow = false
             }
           } else {
-              this.$message.error(res.error_response.msg)
-          } 
+            this.$message.error(res.error_response.msg)
+          }
         })
         .catch(err => {
           console.log(err)
@@ -200,9 +202,15 @@ export default {
     handleCommand(index) {
       // console.log(command)
       console.log(index)
+      this.schoolId = index
+      this.getData(1, this.schoolId)
     },
     change() {
       console.log('change')
+    },
+    addItem() {
+      const val = this.schoolId
+      this.$router.push({ path: '/itemAdd', query: { school_id: val }})
     },
     getSchoolList() {
       const obj = {
@@ -211,6 +219,9 @@ export default {
       showSchools(obj)
         .then(res => {
           console.log(res)
+          if (res.hasOwnProperty('response')) {
+            this.schools = res.response.schools
+          }
         })
     },
     go(val) {
@@ -233,15 +244,16 @@ export default {
       statusProject(obj)
         .then(res => {
           console.log(res)
-          this.getData(this.current_page)
+          this.getData(this.current_page, this.schoolId)
         })
     },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`)
       this.current_page = val
-      this.getData(val)
+      this.getData(val, this.schoolId)
     },
     confirmDelete() {
+      this.centerDialogVisible = false
       const obj = {
         project_id: this.current_proID,
         token: localStorage.getItem('TOKEN')
@@ -249,8 +261,12 @@ export default {
       deleteProject(obj)
         .then(res => {
           console.log(res)
-          this.getData()
-          this.centerDialogVisible = false
+          if (res.hasOwnProperty('response')) {
+            this.getData(this.current_page, this.schoolId)
+            this.$message.success('删除成功')
+          } else {
+            this.$message.error(res.error_response.msg)
+          }
         })
     }
   }
