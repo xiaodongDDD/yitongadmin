@@ -1,7 +1,7 @@
 <template>
   <div class="roleMangement">
     <!--添加-->
-    <div class="buttonAdd">  <el-button @click="updateInfo('add')">&nbsp;&nbsp;新&nbsp;增&nbsp;&nbsp;</el-button>
+    <div class="buttonAdd">  <el-button @click="updateInfo('add')" v-if="!disabledFlag">&nbsp;&nbsp;新&nbsp;增&nbsp;&nbsp;</el-button>
     </div>
     <!--表格-->
     <el-table
@@ -40,7 +40,7 @@
       <el-table-column
         label="操作"
         align="center"
-        width="200">
+        width="200" v-if="!disabledFlag">
         <template slot-scope="scope">
           <el-button type="" size="mini" @click="updateInfo(scope.row)" >修改</el-button>
           <el-button type="danger" size="mini" @click="deleteInfo(scope.row)" :disabled="!scope.row.is_delete">删除</el-button>
@@ -65,6 +65,7 @@
 
 <script>
   import { roleList, delRole } from '@/api/organizationManagement'
+  import store from '@/store'
 
   export default {
     name: 'roleMangement',
@@ -77,10 +78,16 @@
         total: 0,
         listLoading: false,
         tableData: [],
-        module_id: 17
+        module_id: store.getters.roles.yt_m_id || localStorage.module_id,
+        functionFlag: localStorage.function,
+        disabledFlag: true // 默认的是不能操作的
       }
     },
     created() {
+      console.log(this.functionFlag)
+      if (this.functionFlag.indexOf('O') > 0) {
+        this.disabledFlag = false
+      }
       this.initData()
     },
     methods: {

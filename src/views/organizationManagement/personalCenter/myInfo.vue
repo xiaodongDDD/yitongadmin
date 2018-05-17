@@ -5,14 +5,14 @@
         <img :src="form.avatar" height="100" class="imgStyle" width="100"/>
       </el-form-item>
       <el-form-item label="姓名" prop="user_name">
-        <el-input v-model="form.user_name" ></el-input>
+        <el-input v-model="form.user_name" :disabled="disabledFlag"></el-input>
       </el-form-item>
       <el-form-item label="英文名" prop="english_name">
-        <el-input v-model="form.english_name" ></el-input>
+        <el-input v-model="form.english_name" :disabled="disabledFlag"></el-input>
       </el-form-item>
       <el-form-item label="性别" prop="sex">
-        <el-radio-group v-model="form.sex" >
-          <el-radio label="男"></el-radio>
+        <el-radio-group v-model="form.sex" :disabled="disabledFlag">
+          <el-radio label="男" ></el-radio>
           <el-radio label="女"></el-radio>
         </el-radio-group>
       </el-form-item>
@@ -21,15 +21,15 @@
       </el-form-item>
       <el-form-item label="手机"  prop="mobile_phone">
         <div>
-          <el-input v-model="form.phoneNUm" style="width: 20%"></el-input>
-          <el-input v-model="form.mobile_phone" style="width: 79%"></el-input>
+          <el-input v-model="form.phoneNUm" style="width: 20%" :disabled="disabledFlag"></el-input>
+          <el-input v-model="form.mobile_phone" style="width: 79%" :disabled="disabledFlag"></el-input>
         </div>
       </el-form-item>
       <el-form-item label="座机"  prop="special_plane">
-        <el-input v-model="form.special_plane"></el-input>
+        <el-input v-model="form.special_plane" :disabled="disabledFlag"></el-input>
       </el-form-item>
       <el-form-item label="邮箱"  prop="email">
-        <el-input v-model="form.email"></el-input>
+        <el-input v-model="form.email" :disabled="disabledFlag"></el-input>
       </el-form-item>
       <el-form-item label="公司">
         <span class="fontClass">{{form.company_info.name}}</span>
@@ -58,7 +58,7 @@
       <el-form-item label="专属邀请码">
         <span class="fontClass">{{form.invited_code}}</span>
       </el-form-item>
-      <el-form-item class="text-center">
+      <el-form-item class="text-center" v-if="!disabledFlag">
         <el-button>取消</el-button>
         <el-button type="primary" @click="onSubmit">保存</el-button>
       </el-form-item>
@@ -66,15 +66,15 @@
   </div>
 </template>
 <script>
-  import { userDetail } from '@/api/organizationManagement'
-
+  import { userDetail, addEditUser } from '@/api/organizationManagement'
+  import store from '@/store'
   export default {
     data() {
       return {
         form: {
           name: '',
           english_name: '',
-          sex: '男',
+          sex: '1',
           phoneNUm: '+86',
           phone: '',
           telphone: '',
@@ -109,10 +109,16 @@
             { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur' }
           ]
         },
-        module_id: 19
+        module_id: store.getters.roles.yt_m_id || localStorage.module_id,
+        functionFlag: localStorage.function,
+        disabledFlag: true // 默认的是不能操作的
       }
     },
     created() {
+      console.log(this.functionFlag)
+      if (this.functionFlag.indexOf('O') > 0) {
+        this.disabledFlag = false
+      }
       const obj = {
         'module_id': this.module_id,
         'type': 1
@@ -121,6 +127,8 @@
         if (!response.hasOwnProperty('error_response')) {
           this.form = response.response.info
           this.form.phoneNUm = '+86'
+          this.form.module_id = this.module_id
+          this.form.type = 1
         } else {
           this.$message({
             message: response.error_response.msg,
@@ -133,7 +141,21 @@
       onSubmit() {
         this.$refs['form'].validate((valid) => {
           if (valid) {
-            alert('submit!')
+            // const obj = {
+            //   'module_id': this.module_id,
+            //   'type': 1
+            // }
+            if (this.form.sex === '男') {
+              this.form.sex = '1'
+            } else if (this.form.sex === '女') {
+              this.form.sex = '2'
+            }
+            addEditUser(this.form).then(response => {
+              this.$message({
+                message: response.response.msg,
+                type: 'error'
+              })
+            })
           } else {
             console.log('error submit!!')
             return false

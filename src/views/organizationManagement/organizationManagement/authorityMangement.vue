@@ -4,7 +4,7 @@
       <div class="blockTree">
         <el-row :gutter="20">
           <el-col :span="12"><p>一统管理系统</p></el-col>
-          <el-col :span="12" class="buttonAlign"><el-button size="mini" type="text" icon="el-icon-plus" @click="addMenu('','')"></el-button></el-col>
+          <el-col :span="12" class="buttonAlign"><el-button size="mini" type="text" icon="el-icon-plus" @click="addMenu('','')" v-if="!disabledFlag"></el-button></el-col>
         </el-row>
         <el-tree
           :data="dataList"
@@ -15,7 +15,7 @@
           @node-click="handleNodeClick">
           <span class="custom-tree-node" slot-scope="{ node, data }">
             <span>{{ node.label }}</span>
-            <span class="operatingList">
+            <span class="operatingList"  v-if="!disabledFlag">
               <el-dropdown trigger="click">
                 <span class="el-dropdown-link">
                   <i class="el-icon-more"></i>
@@ -35,7 +35,7 @@
       </el-row>
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
         <el-form-item label="菜单名称" prop="menu_name">
-          <el-input v-model="ruleForm.menu_name"></el-input>
+          <el-input v-model="ruleForm.menu_name" :disabled="disabledFlagSp"></el-input>
         </el-form-item>
         <el-form-item label="上级菜单" >
           <el-input v-model="ruleForm.parent_info" disabled></el-input>
@@ -44,10 +44,10 @@
           <el-input v-model="ruleForm.yt_m_id" disabled></el-input>
         </el-form-item>
         <el-form-item label="菜单标识" >
-          <el-input v-model="ruleForm.menu_url" ></el-input>
+          <el-input v-model="ruleForm.menu_url" :disabled="disabledFlagSp"></el-input>
         </el-form-item>
         <el-form-item label="备注" prop="comment">
-          <el-input type="textarea" v-model="ruleForm.comment"></el-input>
+          <el-input type="textarea" v-model="ruleForm.comment" :disabled="disabledFlagSp"></el-input>
         </el-form-item>
       </el-form>
 
@@ -60,7 +60,7 @@
       <div v-show="addShow">
         <el-row :gutter="20">
           <el-col :span="12"><p>功能权限</p></el-col>
-          <el-col :span="12" class="buttonAlign"><el-button type="primary" plain icon="el-icon-plus" size="small" @click="functionAny('',2)">添加功能</el-button></el-col>
+          <el-col :span="12" class="buttonAlign"><el-button type="primary" plain icon="el-icon-plus" size="small" @click="functionAny('',2)" v-if="!disabledFlagSp">添加功能</el-button></el-col>
         </el-row>
         <el-table
           :data="tableFunction"
@@ -92,7 +92,7 @@
           <el-table-column
             label="操作"
             align="center"
-            width="230" >
+            width="230"  v-if="!disabledFlagSp">
             <template slot-scope="scope">
               <el-button type="" size="mini" @click="functionAny(scope.row,1)">详情</el-button>
               <el-button type="danger" size="mini" @click="deleteFunction(scope.row)">删除</el-button>
@@ -101,7 +101,7 @@
         </el-table>
         <el-row :gutter="20" class="rowMargin">
           <el-col :span="12"><p>数据权限</p></el-col>
-          <el-col :span="12" class="buttonAlign"><el-button type="primary" plain icon="el-icon-plus" size="small" @click="dataAny('',2)">添加数据</el-button></el-col>
+          <el-col :span="12" class="buttonAlign"><el-button type="primary" plain icon="el-icon-plus" size="small" @click="dataAny('',2)" v-if="!disabledFlagSp">添加数据</el-button></el-col>
         </el-row>
         <el-table
           :data="tableData"
@@ -133,14 +133,14 @@
           <el-table-column
             label="操作"
             align="center"
-            width="230">
+            width="230" v-if="!disabledFlagSp">
             <template slot-scope="scope">
               <el-button type="" size="mini" @click="dataAny(scope.row,1)">详情</el-button>
               <el-button type="danger" size="mini" @click="deleteData(scope.row)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
-        <div class="submitButton" >
+        <div class="submitButton" v-if="!disabledFlagSp">
           <el-button @click="cancleForm()">取 消</el-button>
           <el-button type="primary" @click="submitForm('ruleForm')">保 存</el-button>
         </div>
@@ -197,6 +197,8 @@
 
 <script>
   import { menuList, moveMenu, delMenu, menuDetail, menu, menuFunctionAuth, menuDataAuth, delMenuFunction, delMenuData } from '@/api/organizationManagement'
+  import store from '@/store'
+
   export default {
     data() {
       return {
@@ -262,10 +264,16 @@
         },
         addShow: true,
         yt_m_id: '',
-        module_id: 18
+        module_id: store.getters.roles.yt_m_id || localStorage.module_id,
+        functionFlag: localStorage.function,
+        disabledFlag: true, // 默认的是不能操作的
+        disabledFlagSp: true
       }
     },
     created() {
+      if (this.functionFlag.indexOf('O') > 0) {
+        this.disabledFlag = false
+      }
       this.initTree('init')
     },
     methods: {
@@ -287,6 +295,7 @@
         if (item.id === 1) {
           this.addMenu('1', data)
         } else if (item.id === 2) {
+          this.disabledFlagSp = this.disabledFlag
           this.menuDetail(data.yt_m_id)
           this.yt_m_id = data.yt_m_id
         } else if (item.id === 3) {
@@ -485,6 +494,9 @@
       },
       // 取消操作
       cancleForm() {
+        this.addShow = true
+        this.disabledFlagSp = true
+        this.initTree('init')
         this.$message({
           type: 'info',
           message: '已取消操作'
@@ -538,7 +550,9 @@
       },
       // 点击tree的节点
       handleNodeClick(data) {
-        // this.menuDetail(data.yt_m_id)
+        this.addShow = true
+        this.disabledFlagSp = true
+        this.menuDetail(data.yt_m_id)
       },
       // 调用菜单详情接口
       menuDetail(item) {
@@ -554,6 +568,7 @@
       },
       addMenu(item, data) {
         console.log(data)
+        this.disabledFlagSp = this.disabledFlag
         if (item === '') {
           this.ruleForm = {}
           this.ruleForm.parent_id = 0

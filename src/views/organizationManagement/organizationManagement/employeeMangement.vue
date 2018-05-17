@@ -56,7 +56,7 @@
       <div class="right">
         <el-row class="headStyle">
           <el-col :span="12"><div class="text-left">{{headName}} ({{numPeople}})</div></el-col>
-          <el-col :span="12"><div class="text-right"><span style="cursor: pointer;">添加员工</span></div></el-col>
+          <el-col :span="12"><div class="text-right"><span style="cursor: pointer;" @click="operating('add','')">添加员工</span></div></el-col>
         </el-row>        <el-table
           :data="tableData"
           v-loading.body="listLoading" element-loading-text="加载中..." border fit highlight-current-row
@@ -269,6 +269,8 @@
 
 <script>
   import { companyList, moveCompanyDepartment, delCompanyDepartment, freezeStart, user_export, addCompanyDepartment, companyDepartmentDetail, delPosition } from '@/api/organizationManagement'
+  import store from '@/store'
+
   export default {
     name: 'employeeMangement',
     computed: {},
@@ -395,7 +397,7 @@
         headName: '',
         numPeople: '',
         showPostionData: '',
-        module_id: 16
+        module_id: store.getters.roles.yt_m_id || localStorage.module_id
       }
     },
     methods: {
@@ -429,7 +431,6 @@
         companyList(obj).then(response => {
           this.tableData = response.response.list.category.rows
           this.total = response.response.list.category.count
-          this.currentPage = response.response.list.category.page
         })
       },
       onSubmit() {
@@ -634,7 +635,14 @@
             })
           })
         } else {
-          this.$router.push('employeeMangementsp')
+          console.log(item)
+          if (item === 'add') {
+            localStorage.u_id_emp = 'add'
+            this.$router.push('employeeMangementsp')
+          } else {
+            localStorage.u_id_emp = item.u_id
+            this.$router.push('employeeMangementsp')
+          }
         }
       },
       showPostion(data) {
@@ -804,7 +812,6 @@
     },
     filters: {
       statusFilter(status) {
-        console.log(status)
         const statusMap = {
           '1': '待启用',
           '2': '已启用',

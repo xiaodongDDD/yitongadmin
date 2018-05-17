@@ -3,7 +3,7 @@ import Router from 'vue-router'
 const _import = require('./_import_' + process.env.NODE_ENV)
 // in development-env not use lazy-loading, because lazy-loading too many pages will cause webpack hot update too slow. so only in production use lazy-loading;
 // detail: https://panjiachen.github.io/vue-element-admin-site/#/lazy-loading
-
+// 这边做个特殊说明   这个路由不能乱改的 否则权限出问题  添加的路由往下面接
 Vue.use(Router)
 
 /* Layout */
@@ -33,6 +33,76 @@ export const constantRouterMap = [
       component: _import('dashboard/index')
     }]
   },
+  {
+    path: '/organizationManagement',
+    component: Layout,
+    redirect: '/organizationManagement/employeeMangement',
+    name: 'framework',
+    meta: { title: '组织架构管理', icon: 'table' },
+    hidden: true,
+    children: [
+      {
+        path: 'employeeMangement',
+        name: 'work',
+        component: _import('organizationManagement/organizationManagement/employeeMangement'),
+        meta: { title: '员工管理', icon: 'table' },
+        hidden: true
+      },
+      {
+        path: 'employeeMangementsp',
+        name: '员工管理sp',
+        component: _import('organizationManagement/organizationManagement/employeeUpdate'),
+        meta: { title: '员工管理', icon: 'table' },
+        hidden: true
+      },
+      {
+        path: 'roleMangement',
+        name: 'role',
+        component: _import('organizationManagement/organizationManagement/roleMangement'),
+        meta: { title: '角色管理', icon: 'table' },
+        hidden: true
+      },
+      {
+        path: 'authorityMangementsp',
+        name: '角色管理sp',
+        component: _import('organizationManagement/organizationManagement/roleUpdate'),
+        meta: { title: '角色管理', icon: 'table' },
+        hidden: true
+      },
+      {
+        path: 'authorityMangement',
+        name: 'auth',
+        component: _import('organizationManagement/organizationManagement/authorityMangement'),
+        meta: { title: '权限管理', icon: 'table' },
+        hidden: true
+      }
+    ]
+  },
+  {
+    path: '/organizationManagementInfo',
+    component: Layout,
+    redirect: '/organizationManagementInfo/myInfo',
+    name: 'center',
+    meta: { title: '个人中心', icon: 'table' },
+    hidden: true,
+    children: [
+      {
+        path: 'myInfo',
+        name: 'myself',
+        component: _import('organizationManagement/personalCenter/myInfo'),
+        meta: { title: '我的资料', icon: 'table' },
+        hidden: true
+      },
+      {
+        path: 'updatePassword',
+        name: '修改密码',
+        component: _import('organizationManagement/personalCenter/updatePassword'),
+        meta: { title: '修改密码', icon: 'table' },
+        hidden: true
+      }
+    ]
+  },
+  { path: '*', redirect: '/404', hidden: true }
   // {
   //   path: '/example',
   //   component: Layout,
@@ -82,70 +152,6 @@ export const constantRouterMap = [
   //     }
   //   ]
   // },
-  {
-    path: '/organizationManagement',
-    component: Layout,
-    redirect: '/organizationManagement/employeeMangement',
-    name: '组织架构管理',
-    meta: { title: '组织架构管理', icon: 'table' },
-    children: [
-      {
-        path: 'employeeMangement',
-        name: '员工管理',
-        component: _import('organizationManagement/organizationManagement/employeeMangement'),
-        meta: { title: '员工管理', icon: 'table' }
-      },
-      {
-        path: 'employeeMangementsp',
-        name: '员工管理sp',
-        component: _import('organizationManagement/organizationManagement/employeeUpdate'),
-        meta: { title: '员工管理', icon: 'table' },
-        hidden: true
-      },
-      {
-        path: 'roleMangement',
-        name: '角色管理',
-        component: _import('organizationManagement/organizationManagement/roleMangement'),
-        meta: { title: '角色管理', icon: 'table' }
-      },
-      {
-        path: 'authorityMangementsp',
-        name: '角色管理sp',
-        component: _import('organizationManagement/organizationManagement/roleUpdate'),
-        meta: { title: '角色管理', icon: 'table' },
-        hidden: true
-      },
-      {
-        path: 'authorityMangement',
-        name: '权限管理',
-        component: _import('organizationManagement/organizationManagement/authorityMangement'),
-        meta: { title: '权限管理', icon: 'table' }
-      }
-    ]
-  },
-  {
-    path: '/organizationManagementInfo',
-    component: Layout,
-    redirect: '/organizationManagementInfo/myInfo',
-    name: '个人中心',
-    meta: { title: '个人中心', icon: 'table' },
-    children: [
-      {
-        path: 'myInfo',
-        name: '我的资料',
-        component: _import('organizationManagement/personalCenter/myInfo'),
-        meta: { title: '我的资料', icon: 'table' }
-      },
-      {
-        path: 'updatePassword',
-        name: '修改密码',
-        component: _import('organizationManagement/personalCenter/updatePassword'),
-        meta: { title: '修改密码', icon: 'table' },
-        hidden: true
-      }
-    ]
-  },
-  { path: '*', redirect: '/404', hidden: true }
 ]
 
 export default new Router({

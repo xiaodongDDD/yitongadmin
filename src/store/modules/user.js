@@ -65,7 +65,7 @@ const user = {
     // 获取用户信息
     GetInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
-        commit('SET_ROLES', 'admin')
+        // commit('SET_ROLES', 'admin')
         commit('SET_NAME', 'admin')
         commit('SET_AVATAR', '----------------')
         resolve()

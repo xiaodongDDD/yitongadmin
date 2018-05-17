@@ -210,3 +210,12 @@ export function companyDepartmentDetail(params) {
     data: params
   })
 }
+
+// 员工的管理接口 	新增员工（公司/部门/职务/职级列表）
+export function companyDepartmentList(params) {
+  return request({
+    url: '&v=0.1&method=Yi.companyDepartmentList',
+    method: 'post',
+    data: params
+  })
+}
