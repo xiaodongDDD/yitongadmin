@@ -39,10 +39,10 @@
             <!--</el-col>-->
           </el-form-item>
           <el-form-item label="姓名：" prop="teacher_name">
-            <el-input v-model="form.teacher_name"></el-input>
+            <el-input v-model="form.teacher_name" max-length="28"></el-input>
           </el-form-item>
           <el-form-item label="用户名：" prop="username">
-            <el-input v-model="form.username"></el-input>
+            <el-input v-model="form.username" max-length="28"></el-input>
           </el-form-item>
           <el-form-item label="手机号：" prop="telephone">
             <el-input v-model="form.telephone"></el-input>
@@ -77,8 +77,11 @@
     name: 'accountEdit',
     data() {
       const checkPwd = (rule, value, callback) => {
-        if (!(/[a-zA-Z0-9]/.test(value))) {
+        const reg = /^[0-9a-zA-Z]+$/
+        if (!(reg.test(value))) {
           return callback(new Error('包含非法字符'))
+        } else if (value.length > 28) {
+          return callback(new Error('用户名过长'))
         }
       }
       const checkEmail = (rule, value, callback) => {
@@ -104,7 +107,7 @@
         schoolList: [],
         rules: {
           teacher_name: [
-            { max: 28, message: '不得超过28个字符', trigger: 'blur' }
+            { max: 28, message: '姓名过长', trigger: 'blur' }
           ],
           username: [
             { validator: checkPwd, trigger: 'blur' }

@@ -75,14 +75,18 @@ export default {
         if (valid) {
           // this.loading = true
           getLogin(obj).then((res) => {
-            console.log(res)
+            // console.log(res)
             if (res.hasOwnProperty('response')) {
               // this.loading = false
               setToken(res.response.token)
               localStorage.setItem('TOKEN', res.response.token)
               localStorage.setItem('school_id', res.response.school.school_id)
               localStorage.setItem('teacher_id', res.response.teacher_info.teacher_id)
-              this.$router.push({ path: '/' })
+              if (res.response.teacher_info.teacher_type === '1') {
+                this.$router.push({ path: '/' })
+              } else {
+                this.$router.push({ path: '/accountList' })
+              }
             } else {
               this.$alert(res.error_response.msg, '提示', {
                 confirmButtonText: '确定'

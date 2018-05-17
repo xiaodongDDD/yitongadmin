@@ -61,8 +61,11 @@
     data() {
       const checkName = (rule, value, callback) => {
         if (value !== '') {
-          if (!(/[a-zA-Z0-9]/.test(value))) {
+          const reg = /^[0-9a-zA-Z]+$/
+          if (!(reg.test(value))) {
             return callback(new Error('包含非法字符'))
+          } else if (value.length > 28) {
+            return callback(new Error('用户名过长'))
           }
         }
       }
@@ -94,7 +97,7 @@
         },
         rules: {
           teacher_name: [
-            { max: 28, message: '不得超过28个字符', trigger: 'blur' }
+            { max: 28, message: '姓名过长', trigger: 'blur' }
           ],
           username: [
             { validator: checkName, trigger: 'blur' }
@@ -106,11 +109,7 @@
             { validator: checkEmail, trigger: 'blur' }
           ]
         },
-        userInfo: {
-          teacher_type: '1',
-          school_id: '10008',
-          school_name: '上海市普陀区武宁路小学'
-        },
+        userInfo: {},
         msg: {
           title1: '账户管理',
           title2: '新增账户',
