@@ -140,7 +140,6 @@ export default {
     myHeader
   },
   mounted() {
-    this.schoolId = localStorage.getItem('school_id')
     this.getData(1, this.schoolId)
     this.getSchoolList()
     this.checkId()

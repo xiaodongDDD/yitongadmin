@@ -58,7 +58,7 @@
             </el-select>
           </el-form-item>
           <el-form-item>
-            <router-link to="/itmeList"><el-button>取消</el-button></router-link>
+            <router-link to="/poorStudentEdit"><el-button>取消</el-button></router-link>
             <el-button @click="saveUser()">保存</el-button>
           </el-form-item>
         </el-form>
@@ -201,6 +201,9 @@
         }
         if (obj.executor_id === '') {
           this.$message.error('请先选择执行人姓名')
+          return false
+        }
+        if (obj.subject_id === '') {
           return false
         }
         getExecutorClass(obj)

@@ -14,7 +14,7 @@
           style="width: 100%">
           <el-table-column
             align="center"
-            prop="teacher_name"
+            prop="executor_name"
             label="执行人"
             width="100">
           </el-table-column>
@@ -46,7 +46,7 @@
             <template slot-scope="scope">
               <el-button
                 size="mini"
-                @click="handleEdit(scope.row.school_id, scope.row.project_id, scope.row.teacher_id,scope.row.subject_id, scope.row.executor_id, scope.row.class_list, scope.row.template_id, scope.row.grade_id, scope.row.teacher_name, scope.row.teacher_id)">编辑</el-button>
+                @click="handleEdit(scope.row.school_id, scope.row.project_id, scope.row.teacher_id,scope.row.subject_id, scope.row.executor_id, scope.row.class_list, scope.row.template_id, scope.row.grade_id, scope.row.executor_name)">编辑</el-button>
               <el-button
                 size="mini"
                 type="danger"
@@ -147,7 +147,7 @@
             }
           })
       },
-      handleEdit(val1, val2, val3, val4, val5, val6, val7, val8, val9, val10) {
+      handleEdit(val1, val2, val3, val4, val5, val6, val7, val8, val9) {
         console.log(val1, val2, val3, val4, val5, val6, val7)
         const datas = {
           school_id: val1,
@@ -158,8 +158,7 @@
           class_list: val6,
           template_id: val7,
           grade_id: val8,
-          teacher_name: val9,
-          teacher_id: val10
+          executor_name: val9,
         }
         const obj = {
           school_id: val1,
