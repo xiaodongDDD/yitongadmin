@@ -109,8 +109,7 @@
       this.class_list = this.$route.query.class_list
       this.template_id = this.$route.query.template_id
       this.grade_id = this.$route.query.grade_id
-      this.teacher_name = this.$route.query.teacher_name
-      this.teacher_name = this.$route.query.teacher_name
+      this.teacher_name = this.$route.query.executor_name
       this.getData()
       this.showData()
     },
@@ -195,7 +194,7 @@
           leader_id: this.leader_id,
           school_id: this.school_id,
           subject_id: this.value1,
-          executor_id: this.value,
+          executor_id: this.executor_id,
           token: localStorage.getItem('TOKEN')
         }
         getExecutorClass(obj)

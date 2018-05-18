@@ -99,7 +99,7 @@ export default {
         project_id: this.$route.query.project_id,
         project_name: this.form.project_name,
         project_remark: this.form.project_remark,
-        school_id: localStorage.getItem('school_id'),
+        school_id: this.$route.query.school_id,
         project_status: this.form.project_status
       }
       if (obj.project_name.length > 50) {

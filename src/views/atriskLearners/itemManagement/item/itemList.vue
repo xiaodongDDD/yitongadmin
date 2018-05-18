@@ -2,7 +2,7 @@
   <div class="center-content item-list">
     <my-header :msg='msg'></my-header>
     <div class="content-detail">
-    	<div class="schoolName"><span class='schools'>上海市普陀区武宁路小学</span>
+    	<div class="schoolName"><span class='schools'>{{ schoolName }}</span>
           <el-dropdown @command="handleCommand"  trigger="click" v-if='chooseShow'>
           <span class="el-dropdown-link change">
             切换
@@ -59,7 +59,7 @@
             <template slot-scope="scope">
               <el-button
                 size="mini"
-                @click="handleEdit(scope.row.project_id)">编辑</el-button>
+                @click="handleEdit(scope.row.project_id, scope.row.school_id)">编辑</el-button>
               <el-button
                 size="mini"
                 type="danger"
@@ -124,6 +124,7 @@ export default {
       },
       schools: [],
       schoolId: '',
+      schoolName: '',
       // options: [{
       //   value: '选项1',
       //   label: '启用'
@@ -159,6 +160,7 @@ export default {
           if (res.hasOwnProperty('response')) {
             this.tableData = res.response.list
             this.total = res.response.total_page
+            this.schoolName = res.response.list[0].school_name
             // for (let i = 0; i < res.response.list.length; i++) {
             //   if (res.response.list[i].project_status === "0") {
             //     res.response.list[i].status = '启用'
@@ -166,7 +168,12 @@ export default {
             //     res.response.list[i].status = '停用'
             //   }
             // }
+          } else {
+            this.$message.error(res.error_response.msg)
           }
+        })
+        .catch(err => {
+          console.log(err)
         })
     },
     checkId() {
@@ -189,9 +196,9 @@ export default {
           console.log(err)
         })
     },
-    handleEdit(val) {
+    handleEdit(val, val2) {
       console.log(val)
-      this.$router.push({ path: '/itemEdit', query: { project_id: val }})
+      this.$router.push({ path: '/itemEdit', query: { project_id: val, school_id: val2 }})
     },
     handleDelete(val) {
       console.log(val)
