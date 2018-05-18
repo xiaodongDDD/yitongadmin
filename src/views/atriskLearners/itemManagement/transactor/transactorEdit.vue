@@ -24,7 +24,7 @@
             <el-input type="textarea" :rows="5" v-model="form.project_comment"></el-input>
           </el-form-item>
           <el-form-item>
-            <router-link to="/powerList"><el-button>取消</el-button></router-link>
+            <router-link to="/transactorList"><el-button>取消</el-button></router-link>
             <el-button @click="saveUser()">保存</el-button>
           </el-form-item>
         </el-form>
