@@ -152,6 +152,5 @@
     padding: 2px;
     background-color: #f4f4f4;
     cursor: pointer;
-
   }
 </style>

@@ -4,5 +4,5 @@ const prodEnv = require('./prod.env')
 
 module.exports = merge(prodEnv, {
   NODE_ENV: '"development"',
-  BASE_API: '"http://jiaowu-test.xiaoheiban.cn"',
+  BASE_API: '"https://jiaowu-test.xiaoheiban.cn"',
 })

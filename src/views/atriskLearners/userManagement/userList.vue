@@ -133,7 +133,7 @@
       changeStatus(id, status) {
         const obj = {}
         obj.school_id = id
-        obj.project_status = status
+        obj.enabled_status = status
         obj.token = localStorage.getItem('TOKEN')
         // console.log(status)
         changeUserStatus(obj).then(res => {

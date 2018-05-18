@@ -350,4 +350,8 @@
       font-weight: 400!important;
     }
   }
+  .el-dropdown-menu{
+    max-height: 210px;
+    overflow-y: auto;
+  }
 </style>
