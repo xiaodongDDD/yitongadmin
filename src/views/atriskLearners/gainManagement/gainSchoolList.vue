@@ -210,10 +210,14 @@
       },
       // 导出提示
       importGain() {
-        if (this.formInline.grade === '' && this.formInline.class === '' && this.formInline.subject === '') {
-          this.$message('由于数据量很大，请您先筛选学科或年级班级后导出')
+        if (this.formInline.class !== '请先选择年级') {
+          if (this.formInline.grade === '' && this.formInline.class === '' && this.formInline.subject === '') {
+            this.$message('由于数据量很大，请您先筛选学科或年级班级后导出')
+          } else {
+            this.centerDialogVisible = true
+          }
         } else {
-          this.centerDialogVisible = true
+          this.$message('由于数据量很大，请您先筛选学科或年级班级后导出')
         }
       },
       // 导出成果
@@ -237,7 +241,8 @@
       clearCondition() {
         this.formInline = { grade: '', class: '', subject: '' }
         this.filterData = {}
-        this.classData = []
+        this.classData = [{ class_name: '请先选择年级' }]
+        this.getList(1, this.$route.query.school_id)
       },
       getList(page, school_id, grade_id, class_id, subject_id, type) {
         const obj = {}

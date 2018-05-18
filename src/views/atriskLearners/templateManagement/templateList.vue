@@ -221,6 +221,9 @@
     padding: 2px;
     background-color: #f4f4f4;
     cursor: pointer;
-
+  }
+  .el-dropdown-menu{
+    max-height: 210px;
+    overflow-y: auto;
   }
 </style>
