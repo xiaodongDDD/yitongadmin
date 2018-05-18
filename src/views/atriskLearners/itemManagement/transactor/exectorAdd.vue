@@ -125,7 +125,7 @@
           .then(res => {
             if (res.hasOwnProperty('response')) {
               console.log(res)
-              this.options = res.response.executor_list
+              this.options = res.response.subjectTeachers
               this.options1 = res.response.subject_list
               if (this.options1.length === 1) {
                 this.value1 = res.response.subject_list[0].subject_id
@@ -141,7 +141,7 @@
           })
       },
       chooseSubject() {
-        this.getClassData()
+        // this.getClassData()
         this.getNameData()
       },
       chooseName() {
@@ -196,7 +196,7 @@
           leader_id: this.leader_id,
           school_id: this.school_id,
           subject_id: this.value1,
-          // executor_id: this.value,
+          executor_id: this.value,
           token: localStorage.getItem('TOKEN')
         }
         if (obj.executor_id === '') {

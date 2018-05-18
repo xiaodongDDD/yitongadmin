@@ -46,7 +46,7 @@
             <template slot-scope="scope">
               <el-button
                 size="mini"
-                @click="handleEdit(scope.row.school_id, scope.row.project_id, scope.row.teacher_id,scope.row.subject_id, scope.row.executor_id, scope.row.class_list, scope.row.template_id, scope.row.grade_id)">编辑</el-button>
+                @click="handleEdit(scope.row.school_id, scope.row.project_id, scope.row.teacher_id,scope.row.subject_id, scope.row.executor_id, scope.row.class_list, scope.row.template_id, scope.row.grade_id, scope.row.teacher_name, scope.row.teacher_id)">编辑</el-button>
               <el-button
                 size="mini"
                 type="danger"
@@ -147,7 +147,7 @@
             }
           })
       },
-      handleEdit(val1, val2, val3, val4, val5, val6, val7, val8) {
+      handleEdit(val1, val2, val3, val4, val5, val6, val7, val8, val9, val10) {
         console.log(val1, val2, val3, val4, val5, val6, val7)
         const datas = {
           school_id: val1,
@@ -157,7 +157,9 @@
           executor_id: val5,
           class_list: val6,
           template_id: val7,
-          grade_id: val8
+          grade_id: val8,
+          teacher_name: val9,
+          teacher_id: val10
         }
         const obj = {
           school_id: val1,

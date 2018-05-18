@@ -8,7 +8,7 @@
           <el-form-item label="执行人姓名：" id='names'>
             <el-col >
               <el-form-item>
-                <span>{{'ghaha'}}</span>
+                <span>{{ teacher_name }}</span>
               </el-form-item>
             </el-col>
           </el-form-item>
@@ -81,20 +81,19 @@
         leader_id: '',
         subject_id: '',
         executor_id: '',
+        teacher_name: '',
         msg: {
           title1: '项目评价管理',
           title2: '编辑执行人',
           flag: 1,
           path: '/itemList'
         },
-        options: [],
         options1: [],
         options2: [],
         options3: [],
         value3: '',
         value2: [],
         value1: '',
-        value: '',
         class_list: []
       }
     },
@@ -110,6 +109,8 @@
       this.class_list = this.$route.query.class_list
       this.template_id = this.$route.query.template_id
       this.grade_id = this.$route.query.grade_id
+      this.teacher_name = this.$route.query.teacher_name
+      this.teacher_name = this.$route.query.teacher_name
       this.getData()
       this.showData()
     },
@@ -127,7 +128,7 @@
           .then(res => {
             if (res.hasOwnProperty('response')) {
               console.log(res)
-              this.options = res.response.executor_list
+              // this.options = res.response.esubjectTeachers
               this.options1 = res.response.subject_list
               this.options2 = res.response.class_list
               this.options3 = res.response.template_list
@@ -140,7 +141,6 @@
           })
       },
       showData() {
-        this.value = this.executor_id
         this.value1 = this.subject_id
         this.value2 = this.class_list
         this.value3 = this.template_id

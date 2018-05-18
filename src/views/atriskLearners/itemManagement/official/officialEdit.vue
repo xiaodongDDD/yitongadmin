@@ -6,7 +6,11 @@
         <div class="edit-form">
         <el-form ref="form" :model="form" label-width="100px">
           <el-form-item label="负责人姓名：">
-            <el-input v-model="teacher_name"></el-input>
+            <el-col >
+              <el-form-item>
+                <span>{{ teacher_name }}</span>
+              </el-form-item>
+            </el-col>
           </el-form-item>
           <el-form-item label="负责学科：" id='official'>
             <el-select
