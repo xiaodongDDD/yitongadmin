@@ -56,11 +56,11 @@
         </el-table>
       </div>
 
-      <div class="list-add">      
+      <div class="list-add">
           <el-button icon="el-icon-plus" @click="add()">新增</el-button>
         <el-pagination
-          style='display:inline-block;margin-left:30%;' 
-          @current-change="handleCurrentChange" 
+          style='display:inline-block;margin-left:30%;'
+          @current-change="handleCurrentChange"
           background
           layout="prev, pager, next"
           :total="total">
@@ -82,7 +82,7 @@
           <el-button type="primary" @click="confirmDelete">确 定</el-button>
         </span>
       </el-dialog>
-    </div>  
+    </div>
   </div>
 </template>
 
