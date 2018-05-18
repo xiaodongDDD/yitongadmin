@@ -158,7 +158,7 @@
           class_list: val6,
           template_id: val7,
           grade_id: val8,
-          executor_name: val9,
+          executor_name: val9
         }
         const obj = {
           school_id: val1,
