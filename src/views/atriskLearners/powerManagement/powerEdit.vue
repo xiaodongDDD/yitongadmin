@@ -131,7 +131,8 @@
           .then(res => {
             if (res.hasOwnProperty('response')) {
               console.log(res)
-              this.$message.success(res.response.msg)
+              this.$message.success('保存成功')
+              this.$router.push({ path: '/powerList' })
             } else {
               this.$message.error(res.error_response.msg)
             }
