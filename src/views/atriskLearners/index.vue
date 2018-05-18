@@ -92,7 +92,7 @@
     name: 'index',
     data() {
       return {
-        index: this.$route.path,
+        index: '',
         auth_list: [],
         menu1: false,
         menu2: false,
@@ -114,6 +114,7 @@
       }
     },
     mounted() {
+      console.log(this.$route.path)
       this.checkAuth()
       if (this.$route.path === '/userEdit' || this.$route.path === '/userAdd') {
         this.index = '/userList'
