@@ -81,10 +81,10 @@ export default {
               setToken(res.response.token)
               localStorage.setItem('TOKEN', res.response.token)
               localStorage.setItem('teacher_id', res.response.teacher_info.teacher_id)
-              if (res.response.teacher_info.teacher_type === '1') {
-                this.$router.push({ path: '/' })
-              } else {
+              if (res.response.teacher_info.teacher_type !== '3') {
                 this.$router.push({ path: '/accountList' })
+              } else {
+                this.$router.push({ path: '/' })
               }
             } else {
               this.$alert(res.error_response.msg, '提示', {
@@ -92,7 +92,7 @@ export default {
               })
             }
           }).catch(() => {
-            this.loading = false
+            // this.loading = false
           })
         } else {
           console.log('error submit!!')
