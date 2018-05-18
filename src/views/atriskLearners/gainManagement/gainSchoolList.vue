@@ -13,7 +13,7 @@
             <el-form-item label="年级">
               <el-dropdown @command="changeGrade" trigger="click">
                 <span class="el-dropdown-link">
-                  <el-input v-model="formInline.grade" placeholder=""></el-input>
+                  <el-input v-model="formInline.grade" disabled placeholder=""></el-input>
                 </span>
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item v-for="item in gradeData" :command="item">{{ item.grade_name}}</el-dropdown-item>
@@ -23,7 +23,7 @@
             <el-form-item label="班级">
               <el-dropdown @command="changeClass" trigger="click">
                 <span class="el-dropdown-link">
-                  <el-input v-model="formInline.class" placeholder=""></el-input>
+                  <el-input v-model="formInline.class" disabled placeholder="" @focus="inClass"></el-input>
                 </span>
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item v-for="item in classData" :command="item">{{ item.class_name}}</el-dropdown-item>
@@ -33,7 +33,7 @@
             <el-form-item label="学科">
               <el-dropdown @command="changeSubject" trigger="click">
                 <span class="el-dropdown-link">
-                  <el-input v-model="formInline.subject" placeholder=""></el-input>
+                  <el-input v-model="formInline.subject" disabled placeholder=""></el-input>
                 </span>
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item v-for="item in subjectData" :command="item">{{ item.subject_name}}</el-dropdown-item>
@@ -172,7 +172,7 @@
           listNum: 3
         },
         gradeData: [],
-        classData: [],
+        classData: [{ class_name: '请先选择年级' }],
         subjectData: [],
         filterData: {}
       }
@@ -202,6 +202,12 @@
         const project_id = this.$route.query.project_id
         this.$router.push({ path: '/gainDetails', query: { 'p_t_id': row.p_t_id, 'student_id': row.student_id, 'p_e_id': row.p_e_id, 'project_id': project_id, 'school_id': this.$route.query.school_id }})
       },
+      // 选班前先选年级
+      inClass() {
+        if (this.formInline.grade === '') {
+          this.$message('请先选择年级')
+        }
+      },
       // 导出提示
       importGain() {
         if (this.formInline.grade === '' && this.formInline.class === '' && this.formInline.subject === '') {
@@ -227,9 +233,11 @@
         const school_id = this.$route.query.school_id
         this.$router.push({ path: '/gainList', query: { school_id: school_id }})
       },
+      // 清除筛选条件
       clearCondition() {
         this.formInline = { grade: '', class: '', subject: '' }
         this.filterData = {}
+        this.classData = []
       },
       getList(page, school_id, grade_id, class_id, subject_id, type) {
         const obj = {}
@@ -322,7 +330,14 @@
     }
   }
   .el-dropdown-menu{
-    height: 210px;
+    max-height: 210px;
     overflow-y: auto;
+  }
+</style>
+<style>
+  .el-dropdown .el-input.is-disabled .el-input__inner{
+    background: none!important;
+    cursor: pointer!important;
+    color: #606266;
   }
 </style>
