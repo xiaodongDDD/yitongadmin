@@ -121,5 +121,8 @@
 <style type="text/css">
 .main-content #project-comment .el-textarea {
   width: 457px;
-}  
+}
+.el-form-item{
+  width: 100%;
+}
 </style>
