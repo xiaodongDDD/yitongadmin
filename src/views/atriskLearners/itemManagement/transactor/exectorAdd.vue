@@ -155,15 +155,17 @@
         //   return false
         // }
         this.getNameData()
-        this.optionArr1 = []
-        this.clearName()
+        this.value = ''
+        this.value2 = []
+        // this.optionArr1 = []
+        // this.clearName()
         // this.getClassData()
       },
       chooseName() {
         this.getClassData()
         this.getSubjectData()
-        this.optionArr = []
-        this.clearData()
+        // this.optionArr = []
+        // this.clearData()
       },
       getNameData() {
         const obj = {
@@ -247,27 +249,27 @@
       cancels() {
         this.$router.go(-1)
       },
-      clearName() {
-        if (this.options.length > 0) {
-          for (var i = 0; i < this.options.length; i++) { 
-            this.optionArr1.push(this.options[i].teacher_id)
-          }
-          console.log(this.optionArr)
-          if(this.optionArr1.indexOf(this.value) === -1) {
-            this.value = ''
-          }
-        }
-      },
-      clearData() {
-        console.log(this.optionArr)
-        for (var i = 0; i < this.options1.length; i++) { 
-          this.optionArr.push(this.options1[i].subject_id)
-        }
-        console.log(this.optionArr)
-        if(this.optionArr.indexOf(this.value1) === -1) {
-          this.value1 = ''
-        }
-      },
+      // clearName() {
+      //   if (this.options.length > 0) {
+      //     for (var i = 0; i < this.options.length; i++) { 
+      //       this.optionArr1.push(this.options[i].teacher_id)
+      //     }
+      //     console.log(this.optionArr)
+      //     if(this.optionArr1.indexOf(this.value) === -1) {
+      //       this.value = ''
+      //     }
+      //   }
+      // },
+      // clearData() {
+      //   console.log(this.optionArr)
+      //   for (var i = 0; i < this.options1.length; i++) { 
+      //     this.optionArr.push(this.options1[i].subject_id)
+      //   }
+      //   console.log(this.optionArr)
+      //   if(this.optionArr.indexOf(this.value1) === -1) {
+      //     this.value1 = ''
+      //   }
+      // },
       saveUser() {
         console.log(this.value3, this.value2, this.value1)
         const obj = {
