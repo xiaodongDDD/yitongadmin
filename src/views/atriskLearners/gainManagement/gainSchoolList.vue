@@ -229,6 +229,7 @@
         window.location.href = url
         this.centerDialogVisible = false
       },
+      // 筛选
       onSubmit() {
         this.filterData.school_id = this.$route.query.school_id
         if (this.formInline.class !== '请先选择年级') {
@@ -280,6 +281,7 @@
       changeGrade(item) {
         this.classData = []
 
+        this.isSearch.searched = false
         const obj = {}
         obj.grade_id = item.grade_id
         obj.token = localStorage.getItem('TOKEN')
@@ -299,11 +301,13 @@
         })
       },
       changeClass(item) {
+        this.isSearch.searched = false
         this.formInline.class = item.class_name
         this.filterData.class_id = item.class_id
       },
       changeSubject(item) {
         // console.log(item)
+        this.isSearch.searched = false
         this.formInline.subject = item.subject_name
         this.filterData.subject_id = item.subject_id
       },
@@ -342,6 +346,9 @@
   .el-dropdown-menu{
     max-height: 210px;
     overflow-y: auto;
+  }
+  .el-form-item{
+    width: auto!important;
   }
 </style>
 <style>
