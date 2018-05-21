@@ -249,22 +249,22 @@
       },
       clearName() {
         if (this.options.length > 0) {
-          for (var i = 0; i < this.options.length; i++) { 
+          for (var i = 0; i < this.options.length; i++) {
             this.optionArr1.push(this.options[i].teacher_id)
           }
           console.log(this.optionArr)
-          if(this.optionArr1.indexOf(this.value) === -1) {
+          if (this.optionArr1.indexOf(this.value) === -1) {
             this.value = ''
           }
         }
       },
       clearData() {
         console.log(this.optionArr)
-        for (var i = 0; i < this.options1.length; i++) { 
+        for (var i = 0; i < this.options1.length; i++) {
           this.optionArr.push(this.options1[i].subject_id)
         }
         console.log(this.optionArr)
-        if(this.optionArr.indexOf(this.value1) === -1) {
+        if (this.optionArr.indexOf(this.value1) === -1) {
           this.value1 = ''
         }
       },
