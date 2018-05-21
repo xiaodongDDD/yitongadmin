@@ -178,6 +178,9 @@
   cursor: pointer;
   color: #606266;
 }
+.el-form-item{
+  width: 100%;
+}
 </style>
 
 
