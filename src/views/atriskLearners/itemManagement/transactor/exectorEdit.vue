@@ -52,7 +52,7 @@
             </el-select>
           </el-form-item>
           <el-form-item>
-            <router-link to="/poorStudentEdit"><el-button>取消</el-button></router-link>
+            <el-button @click='cancels'>取消</el-button>
             <el-button @click="saveUser()">保存</el-button>
           </el-form-item>
         </el-form>
@@ -209,23 +209,27 @@
             console.log(err)
           })
       },
+      cancels() {
+        this.$router.go(-1)
+      },
       saveUser() {
         console.log(this.value3, this.value2, this.value1)
         const obj = {
           project_id: this.project_id,
           leader_id: this.leader_id,
           school_id: this.school_id,
-          executor_id: this.value,
+          executor_id: this.executor_id,
           template_id: this.value3,
           grade_id: this.grade_id,
           subject_id: this.value1,
-          class_id: this.value2,
+          class_ids: this.value2,
           token: localStorage.getItem('TOKEN')
         }
         saveExecutor(obj)
           .then(res => {
             if (res.hasOwnProperty('response')) {
-              this.$router.push({ path: '/poorStudentEdit' })
+              // this.$router.push({ path: '/poorStudentEdit' })
+              this.$router.go(-1)
               this.$message.success('保存成功')
               console.log(res)
             } else {

@@ -50,7 +50,7 @@
               <el-button
                 size="mini"
                 type="danger"
-                @click="handleDelete(scope.row.project_id, scope.row.subject_id, scope.row.teacher_id, scope.row.executor_name)">删除</el-button>
+                @click="handleDelete(scope.row.project_id, scope.row.subject_id, scope.row.executor_id, scope.row.executor_name)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -102,6 +102,7 @@
         school_id: '',
         project_id: '',
         subject_id: '',
+        grade_id: '',
         form: {
           name: ''
         },
@@ -127,6 +128,7 @@
       this.school_id = this.$route.query.school_id
       this.project_id = this.$route.query.project_id
       this.subject_id = this.$route.query.subject_id
+      this.grade_id = this.$route.query.grade_id
       this.getData(1)
     },
     methods: {
@@ -193,7 +195,8 @@
           school_id: this.school_id,
           project_id: this.project_id,
           leader_id: this.leader_id,
-          subject_id: this.subject_id
+          subject_id: this.subject_id,
+          grade_id: this.grade_id
         }
         this.$router.push({ path: '/exectorAdd', query: datas })
       },

@@ -67,6 +67,7 @@
       return {
         centerDialogVisible: false,
         userName: '',
+        teacherType: '',
         form: {
           name: ''
         },
@@ -98,6 +99,13 @@
             if (res.hasOwnProperty('response')) {
               this.tableData = res.response.list
               this.total = res.response.allPage
+              for (var i=0; i < this.tableData.length; i++) {
+                if (this.tableData[i].teacher_type !== '3') {
+                  this.tableData[i].teacher_type = '学校'
+                } else {
+                  this.tableData[i].teacher_type = '运营'
+                }
+              }
             } else {
               console.log(res.error_response.msg)
             }

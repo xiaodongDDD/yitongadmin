@@ -115,7 +115,7 @@ export default {
       curren_project_name: '',
       form: {
         name: '',
-        options: [{ value: '0', label: '启用' }, { value: '1', label: '停用' }]
+        options: [{ value: '0', label: '停用' }, { value: '1', label: '启用' }]
       },
       msg: {
         title1: '评价项目管理',

@@ -5,20 +5,6 @@
       <p class="position">新增执行人</p>
         <div class="edit-form">
         <el-form ref="form" :model="form" label-width="100px">
-          <el-form-item label="执行人姓名：" id='names'>
-            <el-select
-              v-model="value"
-              collapse-tags
-              @change="chooseName"
-              placeholder="请选择">
-              <el-option
-                v-for="item in options"
-                :key="item.teacher_id"
-                :label="item.teacher_name"
-                :value="item.teacher_id">
-              </el-option>
-            </el-select>
-          </el-form-item>
           <el-form-item label="执行学科：" id='subject'>
             <el-select
               v-model="value1"
@@ -33,6 +19,20 @@
               </el-option>
             </el-select>
           </el-form-item>
+          <el-form-item label="执行人姓名：" id='names'>
+            <el-select
+              v-model="value"
+              collapse-tags
+              @change="chooseName"
+              placeholder="请选择">
+              <el-option
+                v-for="item in options"
+                :key="item.teacher_id"
+                :label="item.teacher_name"
+                :value="item.teacher_id">
+              </el-option>
+            </el-select>
+          </el-form-item>
           <el-form-item label="执行班级：" id='grade'>
             <el-select
               v-model="value2"
@@ -41,9 +41,9 @@
               placeholder="请选择">
               <el-option
                 v-for="item in options2"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
+                :key="item.class_id"
+                :label="item.c_name"
+                :value="item.class_id">
               </el-option>
             </el-select>
           </el-form-item>
@@ -58,7 +58,7 @@
             </el-select>
           </el-form-item>
           <el-form-item>
-            <router-link to="/poorStudentEdit"><el-button>取消</el-button></router-link>
+            <el-button @click="cancels">取消</el-button>
             <el-button @click="saveUser()">保存</el-button>
           </el-form-item>
         </el-form>
@@ -86,6 +86,7 @@
         school_id: '',
         project_id: '',
         subject_id: [],
+        grade_id: '',
         msg: {
           title1: '评价项目管理',
           title2: '新增执行人',
@@ -110,6 +111,7 @@
       this.school_id = this.$route.query.school_id
       this.project_id = this.$route.query.project_id
       this.subject_id = this.$route.query.subject_id
+      this.grade_id = this.$route.query.grade_id
       this.getData()
     },
     methods: {
@@ -120,6 +122,9 @@
           leader_id: this.leader_id,
           subject_id: this.subject_id,
           token: localStorage.getItem('TOKEN')
+        }
+        if (obj.subject_id.indexOf(',') !== -1) {
+          obj.subject_id = ''
         }
         getExecutor(obj)
           .then(res => {
@@ -146,7 +151,6 @@
         //   this.value1 = ''
         //   return false
         // }
-        this.getClassData()
         this.getNameData()
       },
       chooseName() {
@@ -206,18 +210,19 @@
           token: localStorage.getItem('TOKEN')
         }
         if (obj.executor_id === '') {
-          this.$message.error('请先选择执行人姓名')
-          this.value2 = []
+          this.$message.error('请选择执行人姓名')
+          this.value1 = ''
           return false
         }
         if (obj.subject_id === '') {
-          this.value1 = ''
+          this.value2 = []
+          this.$message.error('请选择执行学科')
           return false
         }
         getExecutorClass(obj)
           .then(res => {
             if (res.hasOwnProperty('response')) {
-              this.options2 = res.response.subject_list
+              this.options2 = res.response.class_list
             } else {
               this.$message.error(res.error_response.msg)
             }
@@ -225,6 +230,9 @@
           .catch(err => {
             console.log(err)
           })
+      },
+      cancels () {
+        this.$router.go(-1)
       },
       saveUser() {
         console.log(this.value3, this.value2, this.value1)
@@ -236,13 +244,14 @@
           template_id: this.value3,
           grade_id: this.grade_id,
           subject_id: this.value1,
-          class_id: this.value2,
+          class_ids: this.value2,
           token: localStorage.getItem('TOKEN')
         }
         saveExecutor(obj)
           .then(res => {
             if (res.hasOwnProperty('response')) {
-              this.$router.push({ path: '/poorStudentEdit' })
+              // this.$router.push({ path: '/poorStudentEdit' })
+              this.$router.go(-1)
               console.log(res)
             } else {
               this.$message.error(res.error_response.msg)

@@ -59,12 +59,6 @@
     data() {
       return {
         form: {
-          auth_list: [],
-          teacher_name: '石选晓',
-          teacher_type: 0,
-          school_name: '石选晓可代发集齐啊小花',
-          status: 'on',
-          telephone: '13535790897'
         },
         powerlist: [],
         checked1: false,

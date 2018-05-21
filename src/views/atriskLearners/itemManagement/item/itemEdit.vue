@@ -89,9 +89,9 @@ export default {
     },
     handleCommand(command) {
       if (command === 'b') {
-        this.form.project_status = '0'
-      } else if (command === 'a') {
         this.form.project_status = '1'
+      } else if (command === 'a') {
+        this.form.project_status = '0'
       }
     },
     saveUser() {

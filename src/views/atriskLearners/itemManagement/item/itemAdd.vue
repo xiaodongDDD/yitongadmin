@@ -12,7 +12,7 @@
             <el-input type="textarea" :rows="10" v-model="form.remark"></el-input>
           </el-form-item>
           <el-form-item label="项目状态：">
-            <el-dropdown @command="handleCommand" v-if="form.status === 0" trigger="click">
+            <el-dropdown @command="handleCommand" v-if="form.status === 1" trigger="click">
               <el-button>
                 启用<i class="el-icon-caret-bottom el-icon--right"></i>
               </el-button>
@@ -48,7 +48,7 @@ export default {
       form: {
         name: '',
         remark: '',
-        status: 1
+        status: 0
       },
       msg: {
         title1: '评价项目管理',
@@ -64,9 +64,9 @@ export default {
   methods: {
     handleCommand(command) {
       if (command === 'b') {
-        this.form.status = 0
-      } else if (command === 'a') {
         this.form.status = 1
+      } else if (command === 'a') {
+        this.form.status = 0
       }
     },
     saveUser() {
