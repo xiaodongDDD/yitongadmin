@@ -209,10 +209,11 @@
       width: 180px;
     }
     td{
-      text-indent: 30px;
+      text-indent: 18px;
+      line-height: 22px;
     }
     th, td{
-      padding: 12px 0;
+      padding: 12px;
       font-size: 14px;
       border:1px solid #ebeef5;
     }
