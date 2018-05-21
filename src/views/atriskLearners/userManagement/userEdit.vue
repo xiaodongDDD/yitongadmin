@@ -41,7 +41,7 @@
         form: {},
         msg: {
           title1: '学校用户管理',
-          title2: '编辑学校用户管理',
+          title2: '编辑学校用户',
           flag: 1,
           path: '/userList'
         }

@@ -122,7 +122,7 @@
         options: [{ value: '1', label: '启用' }, { value: '0', label: '停用' }],
         msg: {
           title1: '账户管理',
-          title2: '编辑账户管理',
+          title2: '编辑账户信息',
           flag: 1,
           path: '/accountList'
         }
