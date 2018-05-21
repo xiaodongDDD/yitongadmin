@@ -5,7 +5,7 @@
       <p class="position">编辑执行人</p>
         <div class="edit-form">
         <el-form ref="form" :model="form" label-width="100px">
-          <el-form-item label="执行人姓名：" id='names'>
+          <el-form-item label="执行人姓名：" id='name'>
             <el-col >
               <el-form-item>
                 <span>{{ teacher_name }}</span>
@@ -68,13 +68,6 @@
     data() {
       return {
         form: {
-          name: '石选晓',
-          schoolName: '武宁路小学',
-          userName: 'shixiuan',
-          type: '0',
-          telephone: '13535790897',
-          email: '134752398@348.cn',
-          status: 0
         },
         school_id: '',
         project_id: '',
@@ -249,7 +242,7 @@
 
 </style>
 <style type="text/css">
-.main-content .edit-form #names .el-input {
+.main-content .edit-form #name .el-input {
   width: 300px;
 }
 .main-content .edit-form #subject .el-input {
