@@ -83,7 +83,7 @@
         executor_id: '',
         teacher_name: '',
         msg: {
-          title1: '项目评价管理',
+          title1: '评价项目管理',
           title2: '编辑执行人',
           flag: 1,
           path: '/itemList'
@@ -179,7 +179,7 @@
         getExecutorSubject(obj)
           .then(res => {
             if (res.hasOwnProperty('response')) {
-              this.options1 = res.response.executor_list
+              this.options1 = res.response.subject_list
             } else {
               this.$message.error(res.error_response.msg)
             }
@@ -200,7 +200,7 @@
         getExecutorClass(obj)
           .then(res => {
             if (res.hasOwnProperty('response')) {
-              this.options2 = res.response.subject_list
+              this.options2 = res.response.class_list
             } else {
               this.$message.error(res.error_response.msg)
             }

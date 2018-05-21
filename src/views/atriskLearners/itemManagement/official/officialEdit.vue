@@ -68,9 +68,9 @@
           status: 0
         },
         msg: {
-          title1: '项目评价管理',
+          title1: '评价项目管理',
           title2: '负责人管理',
-          title3: '编辑负责人管理',
+          title3: '编辑负责人',
           flag: 2,
           path1: '/itemList',
           path2: '/officialList'

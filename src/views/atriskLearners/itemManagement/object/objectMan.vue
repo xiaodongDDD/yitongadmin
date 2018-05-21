@@ -123,6 +123,7 @@ export default {
    float: left;
    height: 30px;
    line-height: 30px;
+   color: #333;
    display: inline-block;
 }
 .goback {
@@ -136,8 +137,10 @@ export default {
 }
 .manName {
   font-size: 14px;
+  color: #333;
 }
 .num {
     font-size: 14px;
+    color: #333;
 }
 </style>

@@ -102,7 +102,7 @@ export default {
         name: ''
       },
       msg: {
-        title1: '项目评价管理',
+        title1: '评价项目管理',
         title2: '评价对象管理',
         flag: 1,
         path: '/itemList'

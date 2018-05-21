@@ -27,7 +27,7 @@
               placeholder="请选择">
               <el-option
                 v-for="item in options1"
-                :key="item.value"
+                :key="item.subject_id"
                 :label="item.subject_name"
                 :value="item.subject_id">
               </el-option>
@@ -87,7 +87,7 @@
         project_id: '',
         subject_id: [],
         msg: {
-          title1: '项目评价管理',
+          title1: '评价项目管理',
           title2: '新增执行人',
           flag: 1,
           path: '/itemList'
@@ -141,7 +141,12 @@
           })
       },
       chooseSubject() {
-        // this.getClassData()
+        // if (this.value === '') {
+        //   this.$message.error('请先选择执行人姓名')
+        //   this.value1 = ''
+        //   return false
+        // }
+        this.getClassData()
         this.getNameData()
       },
       chooseName() {
@@ -178,8 +183,9 @@
         getExecutorSubject(obj)
           .then(res => {
             if (res.hasOwnProperty('response')) {
-              this.options1 = res.response.executor_list
+              this.options1 = res.response.subject_list
               if (this.options1.length === 1) {
+                this.options1 = res.response.subject_list
                 this.value1 = res.response.subject_list[0].subject_id
               }
             } else {
@@ -201,9 +207,11 @@
         }
         if (obj.executor_id === '') {
           this.$message.error('请先选择执行人姓名')
+          this.value2 = []
           return false
         }
         if (obj.subject_id === '') {
+          this.value1 = ''
           return false
         }
         getExecutorClass(obj)

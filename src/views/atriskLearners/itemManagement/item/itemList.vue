@@ -63,7 +63,7 @@
               <el-button
                 size="mini"
                 type="danger"
-                @click="handleDelete(scope.row.project_id)">删除</el-button>
+                @click="handleDelete(scope.row.project_id, scope.row.project_name)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -88,7 +88,7 @@
         center>
         <div class="dialogContent">
           <p>请确认是否要删除</p>
-          <p>{{ userName }}账户</p>
+          <p>{{ curren_project_name }}评价项目</p>
           <p>删除后，该账户将无法登录</p>
         </div>
         <span slot="footer" class="dialog-footer">
@@ -112,12 +112,13 @@ export default {
       total: 0,
       current_page: 1,
       chooseShow: false,
+      curren_project_name: '',
       form: {
         name: '',
         options: [{ value: '0', label: '启用' }, { value: '1', label: '停用' }]
       },
       msg: {
-        title1: '项目评价管理',
+        title1: '评价项目管理',
         title2: '',
         flag: 0,
         path: '/itemList'
@@ -200,10 +201,11 @@ export default {
       console.log(val)
       this.$router.push({ path: '/itemEdit', query: { project_id: val, school_id: val2 }})
     },
-    handleDelete(val) {
+    handleDelete(val, projectName) {
       console.log(val)
       this.current_proID = val
       this.centerDialogVisible = true
+      this.curren_project_name = projectName
     },
     handleCommand(index) {
       // console.log(command)
@@ -288,6 +290,7 @@ export default {
 .schools {
   display: inline-block;
   margin-right: 30px;
+  color: #333;
 }
 .change {
   display: inline-block;

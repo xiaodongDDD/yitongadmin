@@ -50,7 +50,7 @@
               <el-button
                 size="mini"
                 type="danger"
-                @click="handleDelete(scope.row.project_id, scope.row.subject_id, scope.row.teacher_id)">删除</el-button>
+                @click="handleDelete(scope.row.project_id, scope.row.subject_id, scope.row.teacher_id, scope.row.executor_name)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -74,8 +74,8 @@
         center>
         <div class="dialogContent">
           <p>请确认是否要删除</p>
-          <p>{{ userName }}执行人</p>
-          <p>删除后，该执行人及其执行范围讲彻底删除</p>
+          <p>{{ current_executor_name }}执行人</p>
+          <p>删除后，该执行人及其执行范围将彻底删除</p>
         </div>
         <span slot="footer" class="dialog-footer">
           <el-button @click="centerDialogVisible = false">取 消</el-button>
@@ -97,6 +97,7 @@
         userName: '',
         total: 0,
         current_page: 1,
+        current_executor_name: '',
         leader_id: '',
         school_id: '',
         project_id: '',
@@ -110,7 +111,7 @@
         current_subject_id: '',
         current_teacher_id: '',
         msg: {
-          title1: '项目评价管理',
+          title1: '评价项目管理',
           title2: '执行人管理',
           flag: 1,
           path: '/itemList'
@@ -132,8 +133,8 @@
       getData(pages) {
         const obj = {
           page: pages,
-          project_id: 1,
-          teacher_id: 10220,
+          project_id: this.project_id,
+          teacher_id: this.leader_id,
           token: localStorage.getItem('TOKEN')
         }
         leaderExecutorList(obj)
@@ -180,11 +181,12 @@
             console.log(err)
           })
       },
-      handleDelete(val1, val2, val3) {
+      handleDelete(val1, val2, val3, val4) {
         this.current_project_id = val1
         this.current_subject_id = val2
         this.current_executor_id = val3
         this.centerDialogVisible = true
+        this.current_executor_name = val4
       },
       add() {
         const datas = {
@@ -204,6 +206,7 @@
         console.log(`当前页: ${val}`)
       },
       confirmDelete() {
+        this.centerDialogVisible = false
         const obj = {
           project_id: this.current_project_id,
           subject_id: this.current_subject_id,
@@ -214,11 +217,10 @@
           .then(res => {
             console.log(res)
             if (res.hasOwnProperty('response')) {
-              this.centerDialogVisible = false
               console.log(res)
               this.getData(this.current_page)
             } else {
-              console.log(res.error_response.msg)
+              this.$message.error(res.error_response.msg)
             }
           })
           .catch(err => {

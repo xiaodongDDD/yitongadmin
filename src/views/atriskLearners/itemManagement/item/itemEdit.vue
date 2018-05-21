@@ -2,7 +2,7 @@
   <div class="center-content item-edit">
     <my-header :msg='msg'></my-header>
     <div class="content-detail">
-      <p class="position">评价项目修改</p>
+      <p class="position">编辑评价项目</p>
         <div class="edit-form">
         <el-form ref="form" :model="form" label-width="100px">
           <el-form-item label="项目名称：">
@@ -57,7 +57,7 @@ export default {
       },
       msg: {
         title1: '评价项目管理',
-        title2: '编辑评价项目管理',
+        title2: '编辑评价项目',
         flag: 1,
         path: '/itemList'
       }

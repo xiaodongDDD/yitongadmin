@@ -2,7 +2,7 @@
   <div class="center-content transactor-edit">
     <my-header :msg='msg'></my-header>
     <div class="content-detail">
-      <p class="position">编辑权限管理</p>
+      <p class="position">编辑评价对象管理</p>
       <div class="edit-form">
         <el-form ref="form" :model="form" label-width="100px">
           <el-form-item label="项目名称：">
@@ -50,7 +50,7 @@
          project_comment: ''
        },
        msg: {
-         title1: '项目评价管理',
+         title1: '评价项目管理',
          title2: '评价对象管理',
          title3: '编辑评价对象管理',
          flag: 2,

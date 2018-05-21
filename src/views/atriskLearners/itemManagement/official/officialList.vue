@@ -50,7 +50,7 @@
               <el-button
                 size="mini"
                 type="danger"
-                @click="handleDelete(scope.row.teacher_id, scope.row.project_id)">删除</el-button>
+                @click="handleDelete(scope.row.teacher_id, scope.row.project_id, scope.row.teacher_name)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -74,8 +74,8 @@
         center>
         <div class="dialogContent">
           <span>请确认是否要删除</span>
-          <span>{{ userName }}账户</span>
-          <span>删除后，该账户将无法登录</span>
+          <span>{{ current_teacher_name }}账户</span>
+          <span>删除后，该负责人及其负责范围将彻底 删除</span>
         </div>
         <span slot="footer" class="dialog-footer">
           <el-button @click="centerDialogVisible = false">取 消</el-button>
@@ -99,11 +99,12 @@
         manNum: 0,
         total: 0,
         current_page: 0,
+        current_teacher_name: '',
         form: {
           name: ''
         },
         msg: {
-          title1: '项目评价管理',
+          title1: '评价项目管理',
           title2: '负责人管理',
           flag: 1,
           path: '/itemList'
@@ -169,11 +170,12 @@
         this.$router.push({ path: '/officialEdit', query: datas })
       },
       // 删除负责人
-      handleDelete(index, row) {
+      handleDelete(index, row, teacherName) {
         console.log(index, row)
         this.current_teacher_id = index
         this.current_project_id = row
         this.centerDialogVisible = true
+        this.current_teacher_name = teacherName
       },
       // 确认删除
       confirmeDelete() {
