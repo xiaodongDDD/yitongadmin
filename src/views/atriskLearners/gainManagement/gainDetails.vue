@@ -203,6 +203,7 @@
     border:1px solid #ebeef5;
     border-collapse:collapse;
     margin-top: -1px;
+    word-break: break-all;
 
     th{
       width: 180px;
