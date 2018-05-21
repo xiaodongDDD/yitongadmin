@@ -100,7 +100,9 @@
         value3: '',
         value2: [],
         value1: '',
-        value: ''
+        value: '',
+        optionArr: [],
+        optionArr1: []
       }
     },
     components: {
@@ -121,6 +123,7 @@
           project_id: this.project_id,
           leader_id: this.leader_id,
           subject_id: this.subject_id,
+          grade_ids: this.grade_id,
           token: localStorage.getItem('TOKEN')
         }
         if (obj.subject_id.indexOf(',') !== -1) {
@@ -152,10 +155,15 @@
         //   return false
         // }
         this.getNameData()
+        this.optionArr1 = []
+        this.clearName()
+        // this.getClassData()
       },
       chooseName() {
         this.getClassData()
         this.getSubjectData()
+        this.optionArr = []
+        this.clearData()
       },
       getNameData() {
         const obj = {
@@ -163,12 +171,15 @@
           leader_id: this.leader_id,
           school_id: this.school_id,
           subject_id: this.value1,
+          grade_ids: this.grade_id,
           token: localStorage.getItem('TOKEN')
         }
         getExecutorTeacher(obj)
           .then(res => {
             if (res.hasOwnProperty('response')) {
               this.options = res.response.executor_list
+              this.optionArr1 = []
+              this.clearName()
             } else {
               this.$message.error(res.error_response.msg)
             }
@@ -219,9 +230,11 @@
           this.$message.error('请选择执行学科')
           return false
         }
+
         getExecutorClass(obj)
           .then(res => {
             if (res.hasOwnProperty('response')) {
+              this.value2 = []
               this.options2 = res.response.class_list
             } else {
               this.$message.error(res.error_response.msg)
@@ -233,6 +246,27 @@
       },
       cancels () {
         this.$router.go(-1)
+      },
+      clearName() {
+        if (this.options.length > 0) {
+          for (var i = 0; i < this.options.length; i++) { 
+            this.optionArr1.push(this.options[i].teacher_id)
+          }
+          console.log(this.optionArr)
+          if(this.optionArr1.indexOf(this.value) === -1) {
+            this.value = ''
+          }
+        }
+      },
+      clearData() {
+        console.log(this.optionArr)
+        for (var i = 0; i < this.options1.length; i++) { 
+          this.optionArr.push(this.options1[i].subject_id)
+        }
+        console.log(this.optionArr)
+        if(this.optionArr.indexOf(this.value1) === -1) {
+          this.value1 = ''
+        }
       },
       saveUser() {
         console.log(this.value3, this.value2, this.value1)

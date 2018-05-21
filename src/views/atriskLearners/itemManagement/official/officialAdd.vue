@@ -113,8 +113,8 @@
           project_id: this.project_id,
           add_flag: 1,
           teacher_name: this.teacher_name,
-          grade_select: this.value1,
-          subject_select: this.value2,
+          subject_select: this.value1,
+          grade_select: this.value2,
           token: localStorage.getItem('TOKEN')
         }
         saveLeader(obj)

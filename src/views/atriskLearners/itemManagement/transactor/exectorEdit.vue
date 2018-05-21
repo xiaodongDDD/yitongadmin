@@ -120,7 +120,7 @@
           project_id: this.project_id,
           leader_id: this.leader_id,
           subject_id: this.subject_id,
-          // executor_id: this.executor_id,
+          executor_id: this.executor_id,
           token: localStorage.getItem('TOKEN')
         }
         getExecutor(obj)

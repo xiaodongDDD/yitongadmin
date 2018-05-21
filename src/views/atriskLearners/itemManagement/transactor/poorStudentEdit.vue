@@ -264,8 +264,10 @@
 }
 .manName {
   font-size: 14px;
+  color: #333;
 }
 .manNum {
   font-size: 14px;
+  color: #333;
 }
 </style>
