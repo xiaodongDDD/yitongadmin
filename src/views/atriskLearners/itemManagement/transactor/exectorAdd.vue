@@ -5,7 +5,7 @@
       <p class="position">新增执行人</p>
         <div class="edit-form">
         <el-form ref="form" :model="form" label-width="100px">
-          <el-form-item label="执行学科：" id='subject'>
+          <el-form-item label="执行学科：" id='subjects'>
             <el-select
               v-model="value1"
               collapse-tags
@@ -33,7 +33,7 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="执行班级：" id='grade'>
+          <el-form-item label="执行班级：" id='grades'>
             <el-select
               v-model="value2"
               multiple
@@ -47,7 +47,7 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="评价项目：" id='project'>
+          <el-form-item label="评价项目：" id='projects'>
             <el-select v-model="value3" placeholder="请选择">
               <el-option
                 v-for="item in options3"
@@ -266,6 +266,7 @@
           .then(res => {
             if (res.hasOwnProperty('response')) {
               // this.$router.push({ path: '/poorStudentEdit' })
+              this.$message.success('保存成功')
               this.$router.go(-1)
               console.log(res)
             } else {
@@ -297,13 +298,13 @@
 .main-content .edit-form #names .el-input {
   width: 195px;
 }
-.main-content .edit-form #subject .el-input {
+.main-content .edit-form #subjects .el-input {
   width: 195px;
 }
-.main-content .edit-form #grade .el-input {
+.main-content .edit-form #grades .el-input {
   width: 195px;
 }
-.main-content .edit-form #project .el-input {
+.main-content .edit-form #projects .el-input {
   width: 375px;
 }
 </style>
