@@ -231,7 +231,7 @@
             console.log(err)
           })
       },
-      cancels () {
+      cancels() {
         this.$router.go(-1)
       },
       saveUser() {

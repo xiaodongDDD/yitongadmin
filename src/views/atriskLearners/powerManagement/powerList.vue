@@ -47,7 +47,7 @@
 
         <el-pagination
           style='display:inline-block;margin-left:37%;margin-top:20px'
-          @current-change="handleCurrentChange"  
+          @current-change="handleCurrentChange"
           background
           layout="prev, pager, next"
           :page-count="total"
@@ -99,7 +99,7 @@
             if (res.hasOwnProperty('response')) {
               this.tableData = res.response.list
               this.total = res.response.allPage
-              for (var i=0; i < this.tableData.length; i++) {
+              for (var i = 0; i < this.tableData.length; i++) {
                 if (this.tableData[i].teacher_type !== '3') {
                   this.tableData[i].teacher_type = '学校'
                 } else {
