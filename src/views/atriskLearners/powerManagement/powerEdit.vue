@@ -182,4 +182,7 @@
   .checkbox-menu{
     margin-left: 20px;
   }
+  .el-form-item{
+    width: 100%;
+  }
 </style>
