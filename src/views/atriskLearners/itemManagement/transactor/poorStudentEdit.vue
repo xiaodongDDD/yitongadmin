@@ -183,7 +183,7 @@
       handleDelete(val1, val2, val3) {
         this.current_project_id = val1
         this.current_subject_id = val2
-        this.current_executor_id = val3、
+        this.current_executor_id = val3
         this.centerDialogVisible = true
       },
       add() {

@@ -231,7 +231,11 @@
       },
       onSubmit() {
         this.filterData.school_id = this.$route.query.school_id
-        this.getList(1, this.filterData.school_id, this.filterData.grade_id, this.filterData.class_id, this.filterData.subject_id, 1)
+        if (this.formInline.class !== '请先选择年级') {
+          this.getList(1, this.filterData.school_id, this.filterData.grade_id, this.filterData.class_id, this.filterData.subject_id, 1)
+        } else {
+          this.$message('请先选择年级')
+        }
       },
       reback() {
         const school_id = this.$route.query.school_id
@@ -243,6 +247,7 @@
         this.filterData = {}
         this.classData = [{ class_name: '请先选择年级' }]
         this.getList(1, this.$route.query.school_id)
+        this.isSearch.searched = false
       },
       getList(page, school_id, grade_id, class_id, subject_id, type) {
         const obj = {}
