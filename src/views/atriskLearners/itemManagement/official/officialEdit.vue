@@ -43,7 +43,7 @@
             </el-select>
           </el-form-item>
           <el-form-item>
-            <router-link to="/officialList"><el-button>取消</el-button></router-link>
+            <el-button @click='cancels'>取消</el-button>
             <el-button @click="saveUser()">保存</el-button>
           </el-form-item>
         </el-form>
@@ -132,6 +132,9 @@
             console.log(err)
           })
       },
+      cancels() {
+        this.$router.push({ path: '/officialList', query: { project_id: this.project_id }})
+      },
       saveUser() {
         console.log(this.value1)
         console.log(this.value2)
@@ -149,7 +152,7 @@
           .then(res => {
             if (res.hasOwnProperty('response')) {
               this.$message.success('保存成功')
-              this.$router.push({ path: '/officialList' })
+              this.$router.push({ path: '/officialList', query: { project_id: this.project_id }})
               console.log(res)
             } else {
               this.$message.error(res.error_response.msg)
