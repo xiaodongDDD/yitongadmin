@@ -129,7 +129,6 @@ export default {
    float: left;
    height: 30px;
    line-height: 30px;
-   color: #333;
    display: inline-block;
 }
 .goback {

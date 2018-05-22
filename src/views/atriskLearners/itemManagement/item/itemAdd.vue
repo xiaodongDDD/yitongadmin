@@ -30,7 +30,7 @@
             </el-dropdown>
           </el-form-item>
           <el-form-item>
-            <router-link to="/itmeList"><el-button>取消</el-button></router-link>
+            <router-link to="/itemList"><el-button>取消</el-button></router-link>
             <el-button @click="saveUser()">保存</el-button>
           </el-form-item>
         </el-form>
