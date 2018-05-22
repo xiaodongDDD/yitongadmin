@@ -2,7 +2,7 @@
   <div class="center-content object-man">
       <my-header :msg='msg'></my-header>
       <div class="content-detail">
-        <div class="title"><span class="officialMan">学困生辅导评价管理</span><span class="goback">返回</span></div>
+        <div class="title"><span class="officialMan">学困生辅导评价管理</span><span @click="goback" class="goback">返回</span></div>
       <div class="smallTitle">
         <span class='manName'>管理员 {{ teacher_name }}&nbsp&nbsp</span>
         <span class="num">负责人 {{ num }}</span>
@@ -39,13 +39,13 @@
         </el-table>
       </div>
       <el-pagination
-          style='display:inline-block;margin-left:37%;margin-top:20px' 
-          @current-change="handleCurrentChange" 
+          style='display:inline-block;margin-left:37%;margin-top:20px'
+          @current-change="handleCurrentChange"
           background
           layout="prev, pager, next"
           :page-count="total">
       </el-pagination>
-    </div> 
+    </div>
   </div>
 </template>
 
@@ -103,6 +103,9 @@ export default {
           console.log(err)
         })
     },
+    goback() {
+      this.$router.push({ path: '/objectList' })
+    },
     handleCurrentChange(val) {
       this.getData(val)
       console.log(`当前页: ${val}`)
@@ -116,8 +119,11 @@ export default {
   width: 100%;
   height: 30px;
   overflow: hidden;
-  margin-bottom: 30px;
-  margin-top: 10px;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  color: #333;
+  /*font-size: 18px;*/
+  padding: 0px 1px;
 }
 .officialMan {
    float: left;
@@ -129,8 +135,13 @@ export default {
 .goback {
   float: right;
   height: 30px;
-  line-height: 30px;
+  line-height: 26px;
+  font-size: 15px;
   display: inline-block;
+  cursor: pointer;
+  padding: 3px;
+  background-color: #f4f4f4;
+  border-radius: 5px;
 }
 .smallTitle {
   margin-bottom: 10px;

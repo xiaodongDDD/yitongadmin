@@ -149,7 +149,7 @@
           .then(res => {
             if (res.hasOwnProperty('response')) {
               this.$message.success('保存成功')
-              this.$router.push({ path: '/officialList' })
+              this.$router.push({ path: '/officialList', qurey:{ project_id: this.project_id } })
               console.log(res)
             } else {
               this.$message.error(res.error_response.msg)

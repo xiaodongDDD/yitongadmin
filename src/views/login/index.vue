@@ -81,6 +81,7 @@ export default {
               setToken(res.response.token)
               localStorage.setItem('TOKEN', res.response.token)
               localStorage.setItem('teacher_id', res.response.teacher_info.teacher_id)
+              localStorage.setItem('teacher_name', res.response.teacher_info.teacher_name)
               if (res.response.teacher_info.teacher_type !== '3') {
                 this.$router.push({ path: '/accountList' })
               } else {

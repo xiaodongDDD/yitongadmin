@@ -354,4 +354,8 @@
     max-height: 210px;
     overflow-y: auto;
   }
+  .teacher_name{
+    display: inline-block;
+    line-height: 60px;
+  }
 </style>
