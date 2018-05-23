@@ -48,6 +48,7 @@
     },
     methods: {
       saveData(item) {
+        console.log('======')
         console.log(item)
         let url
         if (item.path === '/') {
@@ -58,9 +59,6 @@
         this.$router.push({ path: url })
       },
       saveDataSp(item, child) {
-        console.log(item)
-        console.log(child)
-        console.log(child.yt_m_id)
         localStorage.module_id = child.yt_m_id
         localStorage.function = child.function
         store.commit('SET_ROLES', child)
@@ -69,7 +67,6 @@
         const showingChildren = children.filter(item => {
           return !item.hidden
         })
-        console.log(showingChildren)
         if (showingChildren.length === 1) {
           return true
         }

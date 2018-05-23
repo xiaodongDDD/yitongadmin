@@ -65,7 +65,7 @@ export const constantRouterMap = [
         hidden: true
       },
       {
-        path: 'authorityMangementsp',
+        path: 'roleUpdatesp',
         name: '角色管理sp',
         component: _import('organizationManagement/organizationManagement/roleUpdate'),
         meta: { title: '角色管理', icon: 'table' },
@@ -105,7 +105,7 @@ export const constantRouterMap = [
       }
     ]
   },
-  { path: '*', redirect: '/404', hidden: true }
+  { path: '*', redirect: '/404', hidden: true },
   // {
   //   path: '/example',
   //   component: Layout,
@@ -143,18 +143,19 @@ export const constantRouterMap = [
   //     }
   //   ]
   // },
-  // {
-  //   path: '/eventManagement',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: 'worksManagement',
-  //       name: 'worksManagement',
-  //       component: _import('eventManagement/worksManagement'),
-  //       meta: { title: '作品管理', icon: 'table' }
-  //     }
-  //   ]
-  // },
+  {
+    path: '/eventManagement',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: 'worksManagement',
+        name: 'worksManagement',
+        component: _import('eventManagement/worksManagement'),
+        meta: { title: '作品管理', icon: 'table' }
+      }
+    ]
+  }
 ]
 
 export default new Router({

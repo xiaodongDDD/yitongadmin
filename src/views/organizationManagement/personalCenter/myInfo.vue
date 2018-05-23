@@ -12,8 +12,8 @@
       </el-form-item>
       <el-form-item label="性别" prop="sex">
         <el-radio-group v-model="form.sex" :disabled="disabledFlag">
-          <el-radio label="男" ></el-radio>
-          <el-radio label="女"></el-radio>
+          <el-radio label="1">男</el-radio>
+          <el-radio label="2">女</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item label="员工编号">
@@ -164,11 +164,6 @@
             //   'module_id': this.module_id,
             //   'type': 1
             // }
-            if (this.form.sex === '男') {
-              this.form.sex = '1'
-            } else if (this.form.sex === '女') {
-              this.form.sex = '2'
-            }
             this.form.parent_id = this.form.parent_info.u_id
             addEditUser(this.form).then(response => {
               this.$message({

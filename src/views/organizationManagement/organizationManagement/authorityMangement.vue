@@ -39,10 +39,10 @@
           <el-input v-model="ruleForm.menu_name" :disabled="disabledFlagSp"></el-input>
         </el-form-item>
         <el-form-item label="上级菜单" >
-          <el-input v-model="ruleForm.parent_info" disabled></el-input>
+          <el-input v-model="ruleForm.parent_info" disabled placeholder="无"></el-input>
         </el-form-item>
         <el-form-item label="菜单编号" >
-          <el-input v-model="ruleForm.yt_m_id" disabled></el-input>
+          <el-input v-model="ruleForm.yt_m_id" disabled placeholder="系统生成"></el-input>
         </el-form-item>
         <el-form-item label="菜单标识" >
           <el-input v-model="ruleForm.menu_url" :disabled="disabledFlagSp"></el-input>

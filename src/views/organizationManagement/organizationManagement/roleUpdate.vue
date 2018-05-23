@@ -5,7 +5,7 @@
         <el-input v-model="ruleForm.role_name"></el-input>
       </el-form-item>
       <el-form-item label="角色编号">
-        <el-input v-model="ruleForm.yt_r_m_id" :disabled="true"></el-input>
+        <el-input v-model="ruleForm.yt_r_m_id" :disabled="true" placeholder="系统生成"></el-input>
       </el-form-item>
       <el-form-item label="备注" prop="comment">
         <el-input type="textarea" v-model="ruleForm.comment"></el-input>
@@ -88,6 +88,9 @@
               tmp[j]['id'] = data[i]['yt_m_id'] + '-' + func[j]['yt_m_f_id']
               tmp[j]['yt_m_id'] = func[j]['yt_m_id']
               tmp[j]['remark'] = func[j]['remark']
+              if (func[j]['select'] && func[j]['remark'] !== 'R') {
+                this.defaultChecked.push(data[i]['yt_m_id'] + '-' + func[j]['yt_m_f_id'])
+              }
               if (func[j]['remark'] === 'R') {
                 if (func[j]['data'].length !== 0) {
                   var tmp1 = []
@@ -154,8 +157,11 @@
       keepInfo() {
         this.getCheckedNodes()
         for (let i = 0; i < this.role_auth.length; i++) {
+          if (this.role_auth[i].data.length > 0 && this.role_auth[i].function.join().indexOf('R') < 0) {
+            this.role_auth[i].function.push('R')
+          }
           if (this.role_auth[i].function.join().indexOf('R') < 0 && this.role_auth[i].function.join().indexOf('O') >= 0) {
-            console.log(this.role_auth[i].function)
+            console.log(this.role_auth[i])
             console.log(this.role_auth[i].function.join().indexOf('R'))
             console.log(this.role_auth[i].function.join().indexOf('O'))
             this.$message({
@@ -163,9 +169,6 @@
               message: '请选择您所需的查看权限'
             })
             return
-          }
-          if (this.role_auth[i].data.length > 0 && this.role_auth[i].function.join().indexOf('R') < 0) {
-            this.role_auth[i].function.push('R')
           }
         }
         this.$refs['ruleForm'].validate((valid) => {

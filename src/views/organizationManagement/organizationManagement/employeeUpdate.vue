@@ -12,20 +12,20 @@
       </el-form-item>
       <el-form-item label="性别" prop="sex">
         <el-radio-group v-model="form.sex" :disabled="disabledFlag">
-          <el-radio label="男"></el-radio>
-          <el-radio label="女"></el-radio>
+          <el-radio label="1">男</el-radio>
+          <el-radio label="2">女</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item label="员工编号" v-if="addFlag">
         <span>{{form.u_id}}</span>
       </el-form-item>
       <el-form-item label="手机"  prop="mobile_phone">
-        <el-col :span="2">
-          <el-input v-model="form.phoneNUm" style="width: 100%" :disabled="disabledFlag"></el-input>
+        <el-col :span="4">
+          <el-input v-model="form.phoneNUm" style="width: 100%" :disabled="true"></el-input>
         </el-col>
         <el-col :span="1" class="line">-
         </el-col>
-        <el-col :span="21">
+        <el-col :span="19">
           <el-input v-model="form.mobile_phone" style="width: 100%" :disabled="disabledFlag"></el-input>
         </el-col>
       </el-form-item>
@@ -51,7 +51,7 @@
       </el-form-item>
       <el-form-item label="分管辖区">
         <div >
-          <el-button v-if="!form.xiaqu" @click="whereSelect()">选择</el-button>
+          <el-button v-if="!form.xiaqu" @click="whereSelect()" v-show="!disabledFlag">选择</el-button>
           {{form.xiaqu}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<el-button v-if="form.xiaqu" @click="whereSelect()" v-show="!disabledFlag">修改</el-button>
         </div>
       </el-form-item>
@@ -85,7 +85,7 @@
         </div>
       </el-form-item>
       <el-form-item label="是否启用">
-        <el-radio-group v-model="form.use_flag" :disabled="flagStart" @change="userChange">
+        <el-radio-group v-model="form.use_flag" :disabled="flagStart && disabledFlag" @change="userChange">
           <el-radio label="1">是</el-radio>
           <el-radio label="0">否</el-radio>
         </el-radio-group>
@@ -249,6 +249,8 @@
           callback()
         } else if (!a.test(value)) {
           callback(new Error('请输入正确的座机'))
+        } else {
+          callback()
         }
       }
       var validateName = (rule, value, callback) => {
@@ -257,13 +259,15 @@
           callback()
         } else if (!a.test(value)) {
           callback(new Error('请输入正确的英文名'))
+        } else {
+          callback()
         }
       }
       return {
         form: {
           name: '',
           english_name: '',
-          sex: '男',
+          sex: '1',
           phoneNUm: '+86',
           mobile_phone: '',
           special_plane: '',
@@ -430,15 +434,8 @@
         this.$refs['formUpdate'].validate((valid) => {
           console.log(valid)
           if (valid) {
-            if (this.form.sex === '男') {
-              this.form.sex = '1'
-            } else if (this.form.sex === '女') {
-              this.form.sex = '2'
-            }
             this.form.module_id = this.module_id
             this.form.yt_r_m_id = this.yt_r_m_idArr
-            console.log(this.entry_timeSp)
-            console.log(this.leave_timeSp)
             if (this.entry_timeSp === null || this.entry_timeSp === '') {
               this.$message({
                 message: '请选择入职时间',
@@ -687,9 +684,9 @@
     },
     created() {
       console.log(this.dataProvinces)
-      if (this.functionFlag.indexOf('O') >= 0) {
-        this.disabledFlag = false
-      }
+      // if (this.functionFlag.indexOf('O') >= 0) {
+      //   this.disabledFlag = false
+      // }
       if (localStorage.u_id_emp !== 'add') {
         this.addFlag = true
         this.initForm()

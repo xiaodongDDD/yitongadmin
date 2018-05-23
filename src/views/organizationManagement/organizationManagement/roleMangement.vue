@@ -42,7 +42,7 @@
         align="center"
         width="200" v-if="!disabledFlag">
         <template slot-scope="scope">
-          <el-button type="" size="mini" @click="updateInfo(scope.row)" >修改</el-button>
+          <el-button type="" size="mini" @click="updateInfo(scope.row)" :disabled="scope.row.yt_r_m_id === '1'">修改</el-button>
           <el-button type="danger" size="mini" @click="deleteInfo(scope.row)" :disabled="!scope.row.is_delete">删除</el-button>
         </template>
       </el-table-column>
@@ -109,7 +109,7 @@
         localStorage.role_name = item.role_name
         localStorage.yt_r_m_id = item.yt_r_m_id
         localStorage.comment = item.comment
-        this.$router.push('authorityMangementsp')
+        this.$router.push('roleUpdatesp')
       },
       deleteInfo: function(item) {
         console.log('qwqwqw')

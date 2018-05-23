@@ -201,12 +201,14 @@
           <el-form-item
             label="包含职务"
             :key="domain.key"
+            :prop="'domains.' + index + '.value'"
             :rules="{max: 20, message: '最多可输入 20 个字符', trigger: 'blur'}">
             <el-col :span="20"> <el-input v-model="domain.work_position"></el-input></el-col>
           </el-form-item>
           <el-form-item
             label="对应职级"
             :key="domain.keySp"
+            :prop="'zhi.' + index + '.value'"
             :rules="{max: 20, message: '最多可输入 20 个字符', trigger: 'blur'}">
             <el-col :span="20"><el-input v-model="domain.work_level"></el-input></el-col>
             <el-col :span="1" >&nbsp;</el-col>
@@ -412,7 +414,6 @@
           this.yt_c_id = this.dataTree[0].yt_c_id
           this.headName = this.dataTree[0].name
           this.numPeople = this.dataTree[0].count
-          console.log(this.yt_c_id)
           this.initTable()
         })
       },
@@ -454,16 +455,14 @@
         return this.$confirm(`确定移除 ${file.name} ？`)
       },
       goDialog(item, data) {
-        console.log(item.id)
         console.log(data)
         if (item.id === 1) {
           this.formAddepartment = {
             titleName: '添加子部门',
             label: '上级部门',
             name: '',
-            parent_id: '',
+            parent_id: data.yt_c_id,
             upName: data.name,
-            yt_c_id: data.yt_c_id,
             module_id: this.module_id,
             type: '2',
             position_data: [{ work_level: '', work_position: '', showButton: true, key: Date.now(), keySp: Date.now() + 1 }]
@@ -560,7 +559,6 @@
           } else {
             this.formCompany.label = '上级分公司'
           }
-          console.log(data)
         } else if (item.id === 7) {
           this.formAddepartment = {
             titleName: '添加部门',
@@ -574,9 +572,7 @@
             position_data: [{ work_level: '', work_position: '', showButton: true, key: Date.now(), keySp: Date.now() + 1 }]
           }
           this.dialogFormAddepartment = true
-          console.log(data)
         } else if (item.id === 8) {
-          console.log(data)
           this.dialogFormCompanyUpdate = true
           this.formCompanyUpdate = {
             name: data.name,
@@ -642,7 +638,6 @@
             })
           })
         } else {
-          console.log(item)
           if (item === 'add') {
             localStorage.u_id_emp = 'add'
             this.$router.push('employeeMangementsp')
@@ -814,10 +809,9 @@
         const fileObj = document.getElementById('FileUpload').files[0] // js 获取文件对象
         var formFile = new FormData()
         formFile.append('filename', fileObj) // 加入文件对象
-        console.log(fileObj)
         var data = formFile
         $.ajax({
-          url: process.env.BASE_API + '/?token=' + getToken() + '&v=0.1&method=Yi.batchAddEditUser',
+          url: process.env.BASE_API + '/?token=' + getToken() + '&v=0.1&method=Yi.batchAddEditUser' + '&module_id=' + this.module_id,
           data: data,
           type: 'Post',
           dataType: 'json',
@@ -825,7 +819,6 @@
           processData: false, // 用于对data参数进行序列化处理 这里必须false
           contentType: false, // 必须
           success: function(result) {
-            console.log(result)
             if (result.hasOwnProperty('error_response')) {
               alert(result.error_response.msg)
             } else {
@@ -836,7 +829,7 @@
         // this.$refs.upload.submit()
       },
       uploadExcle() {
-        window.open(process.env.BASE_API + '/?token=' + getToken() + '&v=0.1&method=Yi.doload_tmp')
+        window.open(process.env.BASE_API + '/?token=' + getToken() + '&v=0.1&method=Yi.doload_tmp' + '&module_id=' + this.module_id)
       },
       uploadMore() {
         this.$confirm('批量导出?', '确认操作', {
@@ -859,7 +852,6 @@
         this.yt_c_id = data.yt_c_id
         this.headName = data.name
         this.numPeople = data.count
-        console.log(this.yt_c_id)
         this.initTable()
       }
     },
@@ -897,6 +889,8 @@
       width: 30%;
       .block {
         width: 85%;
+        border: 1px solid lightgrey;
+        padding: 10px 15px;
       }
     }
     .right {
