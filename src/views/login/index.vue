@@ -23,7 +23,7 @@
         </el-button>
       </el-form-item>
       <div class="tips">
-        <span style="margin-right:20px;text-align: center">若忘记密码，请联系人事部王可可</span>
+        <span style="margin-right:20px;text-align: center">若忘记密码，请至晓黑板APP端找回密码！</span>
         <!--</span> password: admin</span>-->
       </div>
     </el-form>
@@ -86,7 +86,7 @@ export default {
                 type: 'success',
                 message: response.data.response.msg
               })
-              this.$router.push({ path: '/' })
+              this.$router.push({ path: '/dashboard' })
             }
           }).catch(() => {
             this.loading = false

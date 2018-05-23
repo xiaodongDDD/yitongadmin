@@ -219,3 +219,12 @@ export function companyDepartmentList(params) {
     data: params
   })
 }
+
+// 员工的管理接口 	下载模板
+export function doload_tmp(params) {
+  return request({
+    url: '&v=0.1&method=Yi.doload_tmp',
+    method: 'post',
+    data: params
+  })
+}

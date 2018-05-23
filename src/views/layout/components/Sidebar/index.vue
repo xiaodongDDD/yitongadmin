@@ -58,7 +58,9 @@ export default {
           }
         }
         if (flag === 1) {
-          data[az].children.push(list[i].children)
+          if (list[i].hasOwnProperty('children')) {
+            data[az].children.push(list[i].children)
+          }
           flag = 0
         } else if (flag === 0) {
           const wdy = {
@@ -67,10 +69,13 @@ export default {
             'menu_url': list[i].menu_url,
             'children': []
           }
-          wdy.children.push(list[i].children)
+          if (list[i].hasOwnProperty('children')) {
+            wdy.children.push(list[i].children)
+          }
           data.push(wdy)
         }
       }
+      console.log(data)
       for (let i = 0; i < data.length; i++) {
         for (let j = 0; j < this.routesSp.length; j++) {
           if (data[i].menu_url === this.routesSp[j].name) {

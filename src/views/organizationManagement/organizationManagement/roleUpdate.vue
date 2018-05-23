@@ -14,6 +14,7 @@
     <div>权限控制</div>
     <div class="treeInfo">
       <el-tree
+        :highlight-current="true"
         :data="treeData"
         show-checkbox
         node-key="id"
@@ -76,9 +77,6 @@
           result[i]['label'] = data[i]['menu_name']
           result[i]['id'] = data[i]['yt_m_id']
           result[i]['yt_m_id'] = data[i]['yt_m_id']
-          if (data[i]['select']) {
-            this.defaultChecked.push(data[i]['yt_m_id'])
-          }
           if (data[i]['children'].length !== 0) {
             result[i]['children'] = this.recursive(data[i]['children'])
           } else if (data[i]['function'].length !== 0) {
@@ -90,9 +88,6 @@
               tmp[j]['id'] = data[i]['yt_m_id'] + '-' + func[j]['yt_m_f_id']
               tmp[j]['yt_m_id'] = func[j]['yt_m_id']
               tmp[j]['remark'] = func[j]['remark']
-              if (func[j]['select']) {
-                this.defaultChecked.push(data[i]['yt_m_id'] + '-' + func[j]['yt_m_f_id'])
-              }
               if (func[j]['remark'] === 'R') {
                 if (func[j]['data'].length !== 0) {
                   var tmp1 = []
@@ -104,6 +99,7 @@
                     tmp1[k]['yt_m_id'] = fdata[k]['yt_m_id']
                     tmp1[k]['remark'] = fdata[k]['remark']
                     if (fdata[k]['select']) {
+                      console.log(fdata[k]['select'])
                       this.defaultChecked.push(data[i]['yt_m_id'] + '-' + func[j]['yt_m_f_id'] + '-' + fdata[k]['yt_m_d_id'])
                     }
                   }
@@ -114,6 +110,7 @@
             result[i]['children'] = tmp
           }
         }
+        console.log(this.defaultChecked)
         return result
       },
       getCheckedNodes() {
@@ -156,6 +153,21 @@
       },
       keepInfo() {
         this.getCheckedNodes()
+        for (let i = 0; i < this.role_auth.length; i++) {
+          if (this.role_auth[i].function.join().indexOf('R') < 0 && this.role_auth[i].function.join().indexOf('O') >= 0) {
+            console.log(this.role_auth[i].function)
+            console.log(this.role_auth[i].function.join().indexOf('R'))
+            console.log(this.role_auth[i].function.join().indexOf('O'))
+            this.$message({
+              type: 'error',
+              message: '请选择您所需的查看权限'
+            })
+            return
+          }
+          if (this.role_auth[i].data.length > 0 && this.role_auth[i].function.join().indexOf('R') < 0) {
+            this.role_auth[i].function.push('R')
+          }
+        }
         this.$refs['ruleForm'].validate((valid) => {
           if (valid) {
             const obj = {
@@ -165,6 +177,7 @@
               'yt_r_m_id': this.ruleForm.yt_r_m_id,
               'role_auth': this.role_auth
             }
+            console.log(obj)
             addEditRole(obj).then(response => {
               this.$message({
                 type: 'success',
@@ -180,14 +193,18 @@
       }
     },
     created() {
-      if (this.$route.query.itemInfo === 'add') {
+      if (localStorage.itemInfo === 'add') {
         this.ruleForm = {
           role_name: '',
           yt_r_m_id: '',
           comment: ''
         }
       } else {
-        this.ruleForm = this.$route.query.itemInfo
+        this.ruleForm = {
+          role_name: localStorage.role_name,
+          yt_r_m_id: localStorage.yt_r_m_id,
+          comment: localStorage.comment
+        }
       }
       this.initData()
     }

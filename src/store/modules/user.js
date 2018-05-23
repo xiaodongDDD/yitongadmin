@@ -36,8 +36,8 @@ const user = {
       return new Promise((resolve, reject) => {
         axios.post(process.env.BASE_API + '/?v=0.1&method=Yi.backgroundLogin', userInfo)
           .then((response) => {
-            console.log(response)
-            if (!response.hasOwnProperty('error_response')) {
+            if (!response.data.hasOwnProperty('error_response')) {
+              console.log('-------')
               setToken(response.data.response.token)
               setXhbToken(response.data.response.xhb_user_token)
               commit('SET_TOKEN', response.data.response.token)
@@ -47,18 +47,6 @@ const user = {
           }).catch((err) => {
             reject(err)
           })
-        // login(userInfo).then(response => {
-        //   console.log(response)
-        //   if (!response.hasOwnProperty('error_response')) {
-        //     setToken(response.response.token)
-        //     setXhbToken(response.response.xhb_user_token)
-        //     commit('SET_TOKEN', response.response.token)
-        //     commit('SET_XHBTOKEN', response.response.xhb_user_token)
-        //   }
-        //   resolve(response)
-        // }).catch(error => {
-        //   reject(error)
-        // })
       })
     },
 

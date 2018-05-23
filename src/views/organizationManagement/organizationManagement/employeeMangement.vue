@@ -30,14 +30,16 @@
       <div class="left">
         <div class="block">
           <el-tree
+            :highlight-current="true"
             :data="dataTree"
             node-key="id"
             :props="defaultProps"
             default-expand-all
-            :expand-on-click-node="false">
+            :expand-on-click-node="false"
+            @node-click="handleNodeClick">
               <span class="custom-tree-node" slot-scope="{ node, data }">
-                <span>{{ node.label }}</span>
-                <span class="operatingList">
+                <span><i class="el-icon-message"></i>&nbsp;&nbsp;{{ node.label }}</span>
+                <span class="operatingList" v-if="!disabledFlag">
                   <el-dropdown trigger="click" >
                     <span class="el-dropdown-link">
                       <i class="el-icon-more"></i>
@@ -56,7 +58,7 @@
       <div class="right">
         <el-row class="headStyle">
           <el-col :span="12"><div class="text-left">{{headName}} ({{numPeople}})</div></el-col>
-          <el-col :span="12"><div class="text-right"><span style="cursor: pointer;" @click="operating('add','')">添加员工</span></div></el-col>
+          <el-col :span="12"><div class="text-right"><span style="cursor: pointer;" @click="operating('add','')" v-if="!disabledFlag">添加员工</span></div></el-col>
         </el-row>        <el-table
           :data="tableData"
           v-loading.body="listLoading" element-loading-text="加载中..." border fit highlight-current-row
@@ -115,30 +117,19 @@
             align="center"
             width="160">
             <template slot-scope="scope">
-              <el-button type="" size="mini" v-if="scope.row.status === '3'" @click="operating(scope.row,2)">启用</el-button>
+              <span v-if="!disabledFlag">
+              <el-button type="" size="mini" v-if="scope.row.status === '3' || scope.row.status === '1'" @click="operating(scope.row,2)">启用</el-button>
               <el-button type="" size="mini" v-if="scope.row.status === '2'" @click="operating(scope.row,3)">冻结</el-button>
+              </span>
               <el-button type="" size="mini" @click="operating(scope.row,'')">详情</el-button>
             </template>
           </el-table-column>
         </el-table>
-        <el-row :gutter="20" class="buttonClass">
-          <el-col :span="8">
-            <el-upload
-              class="upload-demo"
-              ref="upload"
-              action="https://jsonplaceholder.typicode.com/posts/"
-              :on-preview="handlePreview"
-              :on-remove="handleRemove"
-              :on-exceed="limit"
-              :file-list="fileList"
-              :show-file-list="true"
-              :auto-upload="false"
-              :limit="1">
-              <el-button slot="trigger" size="small" type="">选择附件</el-button>
-              <el-button style="margin-left: 10px;" size="small" type="" @click="submitUpload">批量导入</el-button>
-            </el-upload>
-          </el-col>
-          <el-col :span="16">
+        <el-row :gutter="20" class="buttonClass" v-if="!disabledFlag">
+          <el-col :span="24">
+            <el-button size="small" type="text" disabled>批量上传</el-button>
+              <input  type="file" name="FileUpload" id="FileUpload" style="width: 200px"/>
+            <el-button size="small"  @click="submitUpload">上传</el-button>
             <el-button size="small"  @click="uploadExcle">下载导入模板</el-button>
             <el-button size="small"  @click="uploadMore">批量导出</el-button>
           </el-col>
@@ -203,7 +194,7 @@
         </el-form-item>
         <el-form-item label="" >
           <template slot-scope="scope">
-            <el-button type="" v-for="postionItem in formAddepartmentUpdate.postion" :key="postionItem.yt_d_p_id">{{postionItem.work_position}} {{postionItem.work_level}}&nbsp;&nbsp;<i class="el-icon-circle-close" @click="delPosition(postionItem)"></i></el-button>
+            <el-button type="" v-for="postionItem in formAddepartmentUpdate.postion" :key="postionItem.yt_d_p_id" style="margin-left: 10px;margin-top: 10px;">{{postionItem.work_position}} {{postionItem.work_level}}&nbsp;&nbsp;<i class="el-icon-circle-close" @click="delPosition(postionItem)"></i></el-button>
           </template>
         </el-form-item>
         <div v-for="(domain, index) in formAddepartmentUpdate.position_data">
@@ -219,7 +210,7 @@
             :rules="{max: 20, message: '最多可输入 20 个字符', trigger: 'blur'}">
             <el-col :span="20"><el-input v-model="domain.work_level"></el-input></el-col>
             <el-col :span="1" >&nbsp;</el-col>
-            <el-col :span="3" ><el-button @click.prevent="addDomain(domain)" icon="el-icon-plus" v-if="domain.showButton"></el-button></el-col>
+            <el-col :span="3" ><el-button @click.prevent="addEditDomain(domain)" icon="el-icon-plus" v-if="domain.showButton"></el-button></el-col>
           </el-form-item>
         </div>
       </el-form>
@@ -237,7 +228,7 @@
             <el-input v-model="formCompany.name"></el-input>
           </el-col>
         </el-form-item>
-        <el-form-item label="上级分公司" prop="menuname">
+        <el-form-item :label="formCompany.label" prop="menuname">
           <el-col :span="20"><el-input v-model="formCompany.upName" :disabled="true"></el-input></el-col>
         </el-form-item>
       </el-form>
@@ -268,8 +259,10 @@
 </template>
 
 <script>
-  import { companyList, moveCompanyDepartment, delCompanyDepartment, freezeStart, user_export, addCompanyDepartment, companyDepartmentDetail, delPosition } from '@/api/organizationManagement'
+  import { companyList, moveCompanyDepartment, delCompanyDepartment, freezeStart, addCompanyDepartment, companyDepartmentDetail, delPosition } from '@/api/organizationManagement'
   import store from '@/store'
+  import { getToken } from '@/utils/auth'
+  import $ from 'jquery'
 
   export default {
     name: 'employeeMangement',
@@ -371,7 +364,9 @@
         dialogFormCompany: false,
         formCompany: {
           name: '',
-          parent_id: ''
+          parent_id: '',
+          titleName: '添加分公司',
+          label: '上级分公司'
         },
         rulesCompany: {
           name: [
@@ -397,7 +392,9 @@
         headName: '',
         numPeople: '',
         showPostionData: '',
-        module_id: store.getters.roles.yt_m_id || localStorage.module_id
+        module_id: store.getters.roles.yt_m_id || localStorage.module_id,
+        functionFlag: localStorage.function,
+        disabledFlag: true
       }
     },
     methods: {
@@ -426,7 +423,9 @@
           'department': this.formInline.department,
           'user_name': this.formInline.user_name,
           'status': this.formInline.status,
-          'id': this.yt_c_id
+          'id': this.yt_c_id,
+          'page_size': this.pagesize,
+          'now_page': this.currentPage
         }
         companyList(obj).then(response => {
           this.tableData = response.response.list.category.rows
@@ -556,6 +555,11 @@
             module_id: this.module_id,
             type: '1'
           }
+          if (data.parent_id === '0') {
+            this.formCompany.label = '上级公司'
+          } else {
+            this.formCompany.label = '上级分公司'
+          }
           console.log(data)
         } else if (item.id === 7) {
           this.formAddepartment = {
@@ -584,7 +588,10 @@
         }
       },
       operating(item, id) {
-        if (id === 2) {
+        if (item.status === '1') {
+          localStorage.u_id_emp = item.u_id
+          this.$router.push('employeeMangementsp')
+        } else if (id === 2) {
           this.$confirm('确认启用?', '确认操作', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
@@ -695,6 +702,18 @@
           showButton: true
         })
       },
+      addEditDomain() {
+        for (let i = 0; i < this.formAddepartmentUpdate.position_data.length; i++) {
+          this.formAddepartmentUpdate.position_data[i].showButton = false
+        }
+        this.formAddepartmentUpdate.position_data.push({
+          work_position: '',
+          work_level: '',
+          key: Date.now(),
+          keySp: Date.now() + 1,
+          showButton: true
+        })
+      },
       submitFormCompanyUpdate(item) {
         this.$refs[item].validate((valid) => {
           if (valid) {
@@ -730,6 +749,20 @@
         })
       },
       submitFormAddepartment(item) {
+        const arr = []
+        for (let i = 0; i < this.formAddepartment.position_data.length; i++) {
+          if (this.formAddepartment.position_data[i].work_position !== '' && this.formAddepartment.position_data[i].work_level === '') {
+            this.$message({
+              type: 'error',
+              message: '请输入职务' + this.formAddepartment.position_data[i].work_position + '对应的职级'
+            })
+            return
+          }
+          if (this.formAddepartment.position_data[i].work_position !== '' && this.formAddepartment.position_data[i].work_level !== '') {
+            arr.push(this.formAddepartment.position_data[i])
+          }
+        }
+        this.formAddepartment.position_data = arr
         this.$refs[item].validate((valid) => {
           if (valid) {
             addCompanyDepartment(this.formAddepartment).then(response => {
@@ -747,6 +780,20 @@
         })
       },
       submitFormAddepartmentUpdate(item) {
+        const arr = []
+        for (let i = 0; i < this.formAddepartmentUpdate.position_data.length; i++) {
+          if (this.formAddepartmentUpdate.position_data[i].work_position !== '' && this.formAddepartmentUpdate.position_data[i].work_level === '') {
+            this.$message({
+              type: 'error',
+              message: '请输入职务' + this.formAddepartmentUpdate.position_data[i].work_position + '对应的职级'
+            })
+            return
+          }
+          if (this.formAddepartmentUpdate.position_data[i].work_position !== '' && this.formAddepartmentUpdate.position_data[i].work_level !== '') {
+            arr.push(this.formAddepartmentUpdate.position_data[i])
+          }
+        }
+        this.formAddepartmentUpdate.position_data = arr
         this.$refs[item].validate((valid) => {
           if (valid) {
             addCompanyDepartment(this.formAddepartmentUpdate).then(response => {
@@ -764,20 +811,32 @@
         })
       },
       submitUpload() {
-        this.$refs.upload.submit()
-      },
-      handleRemove(file, fileList) {
-        console.log(file, fileList)
-      },
-      limit(files, fileList) {
-        console.log(files)
-        console.log(fileList)
-      },
-      handlePreview(file) {
-        console.log(file)
+        const fileObj = document.getElementById('FileUpload').files[0] // js 获取文件对象
+        var formFile = new FormData()
+        formFile.append('filename', fileObj) // 加入文件对象
+        console.log(fileObj)
+        var data = formFile
+        $.ajax({
+          url: process.env.BASE_API + '/?token=' + getToken() + '&v=0.1&method=Yi.batchAddEditUser',
+          data: data,
+          type: 'Post',
+          dataType: 'json',
+          cache: false, // 上传文件无需缓存
+          processData: false, // 用于对data参数进行序列化处理 这里必须false
+          contentType: false, // 必须
+          success: function(result) {
+            console.log(result)
+            if (result.hasOwnProperty('error_response')) {
+              alert(result.error_response.msg)
+            } else {
+              alert(result.response.msg)
+            }
+          }
+        })
+        // this.$refs.upload.submit()
       },
       uploadExcle() {
-        console.log()
+        window.open(process.env.BASE_API + '/?token=' + getToken() + '&v=0.1&method=Yi.doload_tmp')
       },
       uploadMore() {
         this.$confirm('批量导出?', '确认操作', {
@@ -786,16 +845,8 @@
           type: 'warning',
           center: true
         }).then(() => {
-          const obj = {
-            'module_id': this.module_id,
-            'company': this.formInline.company,
-            'department': this.formInline.department,
-            'user_name': this.formInline.user_name,
-            'status': this.formInline.status,
-            'id': this.yt_c_id
-          }
-          user_export(obj).then(response => {
-          })
+          const obj = process.env.BASE_API + '/?token=' + getToken() + '&v=0.1&method=Yi.user_export' + '&module_id=' + this.module_id + '&company=' + this.formInline.company + '&department=' + this.formInline.department + '&user_name=' + this.formInline.user_name + '&status' + this.formInline.status + '&id=' + this.yt_c_id
+          window.open(obj)
         }).catch(() => {
           this.$message({
             type: 'info',
@@ -803,11 +854,19 @@
           })
         })
       },
-      uploadClick() {
-        console.log()
+      // 点击tree的节点
+      handleNodeClick(data) {
+        this.yt_c_id = data.yt_c_id
+        this.headName = data.name
+        this.numPeople = data.count
+        console.log(this.yt_c_id)
+        this.initTable()
       }
     },
     created() {
+      if (this.functionFlag.indexOf('O') >= 0) {
+        this.disabledFlag = false
+      }
       this.initTree()
     },
     filters: {
@@ -887,5 +946,22 @@
       text-align: right;
       color: gray;
     }
+    .upload{
+      padding: 4px 10px;
+      height: 20px;
+      line-height: 20px;
+      position: relative;
+      border: 1px solid #999;
+      text-decoration: none;
+      color: #666;
+    }
+    .change{
+      position: absolute;
+      overflow: hidden;
+      right: 0;
+      top: 0;
+      opacity: 0;
+    }
+
   }
 </style>

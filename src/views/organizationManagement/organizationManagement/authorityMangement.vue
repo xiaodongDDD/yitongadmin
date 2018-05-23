@@ -8,6 +8,7 @@
         </el-row>
         <el-tree
           :data="dataList"
+          :highlight-current="true"
           node-key="id"
           default-expand-all
           :props="defaultProps"
@@ -271,7 +272,7 @@
       }
     },
     created() {
-      if (this.functionFlag.indexOf('O') > 0) {
+      if (this.functionFlag.indexOf('O') >= 0) {
         this.disabledFlag = false
       }
       this.initTree('init')

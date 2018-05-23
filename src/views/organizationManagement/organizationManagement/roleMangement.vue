@@ -85,7 +85,7 @@
     },
     created() {
       console.log(this.functionFlag)
-      if (this.functionFlag.indexOf('O') > 0) {
+      if (this.functionFlag.indexOf('O') >= 0) {
         this.disabledFlag = false
       }
       this.initData()
@@ -95,7 +95,8 @@
         const obj = {
           'module_id': this.module_id,
           'pagesize': this.pagesize,
-          'now_page': this.currentPage
+          'now_page': this.currentPage,
+          'type': 0
         }
         roleList(obj).then(response => {
           this.tableData = response.response.list
@@ -104,14 +105,11 @@
       },
       updateInfo: function(item) {
         console.log(item)
-        this.$router.push(
-          {
-            path: 'authorityMangementsp',
-            query: {
-              itemInfo: item
-            }
-          }
-        )
+        localStorage.itemInfo = item
+        localStorage.role_name = item.role_name
+        localStorage.yt_r_m_id = item.yt_r_m_id
+        localStorage.comment = item.comment
+        this.$router.push('authorityMangementsp')
       },
       deleteInfo: function(item) {
         console.log('qwqwqw')
@@ -130,6 +128,7 @@
               type: 'success',
               message: response.response.msg
             })
+            this.initData()
           }).catch()
         }).catch(() => {
           this.$message({

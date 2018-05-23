@@ -21,16 +21,17 @@ import Layout from '../views/layout/Layout'
 export const constantRouterMap = [
   { path: '/login', component: _import('login/index'), hidden: true },
   { path: '/404', component: _import('404'), hidden: true },
-
   {
     path: '/',
     component: Layout,
-    redirect: '/dashboard',
-    name: 'Dashboard',
+    name: 'home',
+    meta: { title: '首页', icon: 'table' },
     hidden: true,
     children: [{
       path: 'dashboard',
-      component: _import('dashboard/index')
+      component: _import('dashboard/index'),
+      meta: { title: '首页', icon: 'table' },
+      hidden: false
     }]
   },
   {
@@ -40,6 +41,7 @@ export const constantRouterMap = [
     name: 'framework',
     meta: { title: '组织架构管理', icon: 'table' },
     hidden: true,
+    alwaysShow: true,
     children: [
       {
         path: 'employeeMangement',
@@ -85,6 +87,7 @@ export const constantRouterMap = [
     name: 'center',
     meta: { title: '个人中心', icon: 'table' },
     hidden: true,
+    alwaysShow: true,
     children: [
       {
         path: 'myInfo',
