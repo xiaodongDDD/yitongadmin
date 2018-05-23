@@ -85,13 +85,13 @@
         </div>
       </el-form-item>
       <el-form-item label="是否启用">
-        <el-radio-group v-model="form.use_flag" :disabled="flagStart && disabledFlag" @change="userChange">
+        <el-radio-group v-model="form.use_flag" :disabled="flagStart || disabledFlag" @change="userChange">
           <el-radio label="1">是</el-radio>
           <el-radio label="0">否</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item label="是否生成邀请码"  >
-        <el-radio-group v-model="form.code_flag" @change="codeChange" :disabled="flagCode">
+        <el-radio-group v-model="form.code_flag" @change="codeChange" :disabled="flagCode || disabledFlag">
           <el-radio label="1">是</el-radio>
           <el-radio label="0">否</el-radio>
         </el-radio-group>
@@ -112,7 +112,7 @@
       </el-form-item>
       <el-form-item label="角色">
         <el-checkbox-group v-model="yt_r_m_idArr">
-          <el-checkbox v-for="item in form.role_info" :label="item.yt_r_m_id" :key="item.yt_r_m_id" :disabled="item.yt_r_m_id === '1'">{{item.role_name}}</el-checkbox>
+          <el-checkbox v-for="item in form.role_info" :label="item.yt_r_m_id" :key="item.yt_r_m_id" :disabled="item.yt_r_m_id === '1' || disabledFlag">{{item.role_name}}</el-checkbox>
         </el-checkbox-group>
       </el-form-item>
       <el-form-item class="line">
@@ -684,9 +684,9 @@
     },
     created() {
       console.log(this.dataProvinces)
-      // if (this.functionFlag.indexOf('O') >= 0) {
-      //   this.disabledFlag = false
-      // }
+      if (this.functionFlag.indexOf('O') >= 0) {
+        this.disabledFlag = false
+      }
       if (localStorage.u_id_emp !== 'add') {
         this.addFlag = true
         this.initForm()
