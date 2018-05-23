@@ -58,7 +58,7 @@
         <el-button type="primary" @click="submitForm('next')">保存，下一步</el-button>
       </div>
       <!--数据和功能权限-->
-      <div v-show="addShow">
+      <div v-show="addShow" v-if="treeFlag">
         <el-row :gutter="20">
           <el-col :span="12"><p>功能权限</p></el-col>
           <el-col :span="12" class="buttonAlign"><el-button type="primary" plain icon="el-icon-plus" size="small" @click="functionAny('',2)" v-if="!disabledFlagSp">添加功能</el-button></el-col>
@@ -268,7 +268,8 @@
         module_id: store.getters.roles.yt_m_id || localStorage.module_id,
         functionFlag: localStorage.function,
         disabledFlag: true, // 默认的是不能操作的
-        disabledFlagSp: true
+        disabledFlagSp: true,
+        treeFlag: true
       }
     },
     created() {
@@ -551,6 +552,11 @@
       },
       // 点击tree的节点
       handleNodeClick(data) {
+        if (data.children.length > 0) {
+          this.treeFlag = false
+        } else {
+          this.treeFlag = true
+        }
         this.addShow = true
         this.disabledFlagSp = true
         this.menuDetail(data.yt_m_id)
