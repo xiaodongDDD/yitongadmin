@@ -58,89 +58,91 @@
         <el-button type="primary" @click="submitForm('next')">保存，下一步</el-button>
       </div>
       <!--数据和功能权限-->
-      <div v-show="addShow" v-if="treeFlag">
-        <el-row :gutter="20">
-          <el-col :span="12"><p>功能权限</p></el-col>
-          <el-col :span="12" class="buttonAlign"><el-button type="primary" plain icon="el-icon-plus" size="small" @click="functionAny('',2)" v-if="!disabledFlagSp">添加功能</el-button></el-col>
-        </el-row>
-        <el-table
-          :data="tableFunction"
-          element-loading-text="加载中..." border fit highlight-current-row
-          style="width: 100%">
-          <el-table-column
-            prop="yt_m_f_id"
-            align="center"
-            label="编号"
-            width="120">
-          </el-table-column>
-          <el-table-column
-            prop="name"
-            label="功能名称"
-            align="center"
-            width="120">
-          </el-table-column>
-          <el-table-column
-            prop="remark"
-            label="标识"
-            align="center"
-            width="120">
-          </el-table-column>
-          <el-table-column
-            prop="comment"
-            label="备注"
-            align="center">
-          </el-table-column>
-          <el-table-column
-            label="操作"
-            align="center"
-            width="230"  v-if="!disabledFlagSp">
-            <template slot-scope="scope">
-              <el-button type="" size="mini" @click="functionAny(scope.row,1)">详情</el-button>
-              <el-button type="danger" size="mini" @click="deleteFunction(scope.row)">删除</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-        <el-row :gutter="20" class="rowMargin">
-          <el-col :span="12"><p>数据权限</p></el-col>
-          <el-col :span="12" class="buttonAlign"><el-button type="primary" plain icon="el-icon-plus" size="small" @click="dataAny('',2)" v-if="!disabledFlagSp">添加数据</el-button></el-col>
-        </el-row>
-        <el-table
-          :data="tableData"
-          element-loading-text="加载中..." border fit highlight-current-row
-          style="width: 100%">
-          <el-table-column
-            prop="yt_m_d_id"
-            align="center"
-            label="编号"
-            width="120">
-          </el-table-column>
-          <el-table-column
-            prop="data_name"
-            label="数据名称"
-            align="center"
-            width="120">
-          </el-table-column>
-          <el-table-column
-            prop="remark"
-            label="标识"
-            align="center"
-            width="120">
-          </el-table-column>
-          <el-table-column
-            prop="comment"
-            label="备注"
-            align="center">
-          </el-table-column>
-          <el-table-column
-            label="操作"
-            align="center"
-            width="230" v-if="!disabledFlagSp">
-            <template slot-scope="scope">
-              <el-button type="" size="mini" @click="dataAny(scope.row,1)">详情</el-button>
-              <el-button type="danger" size="mini" @click="deleteData(scope.row)">删除</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
+      <div v-show="addShow" >
+        <div v-if="treeFlag">
+          <el-row :gutter="20">
+            <el-col :span="12"><p>功能权限</p></el-col>
+            <el-col :span="12" class="buttonAlign"><el-button type="primary" plain icon="el-icon-plus" size="small" @click="functionAny('',2)" v-if="!disabledFlagSp">添加功能</el-button></el-col>
+          </el-row>
+          <el-table
+            :data="tableFunction"
+            element-loading-text="加载中..." border fit highlight-current-row
+            style="width: 100%">
+            <el-table-column
+              prop="yt_m_f_id"
+              align="center"
+              label="编号"
+              width="120">
+            </el-table-column>
+            <el-table-column
+              prop="name"
+              label="功能名称"
+              align="center"
+              width="120">
+            </el-table-column>
+            <el-table-column
+              prop="remark"
+              label="标识"
+              align="center"
+              width="120">
+            </el-table-column>
+            <el-table-column
+              prop="comment"
+              label="备注"
+              align="center">
+            </el-table-column>
+            <el-table-column
+              label="操作"
+              align="center"
+              width="230"  v-if="!disabledFlagSp">
+              <template slot-scope="scope">
+                <el-button type="" size="mini" @click="functionAny(scope.row,1)">详情</el-button>
+                <el-button type="danger" size="mini" @click="deleteFunction(scope.row)">删除</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+          <el-row :gutter="20" class="rowMargin">
+            <el-col :span="12"><p>数据权限</p></el-col>
+            <el-col :span="12" class="buttonAlign"><el-button type="primary" plain icon="el-icon-plus" size="small" @click="dataAny('',2)" v-if="!disabledFlagSp">添加数据</el-button></el-col>
+          </el-row>
+          <el-table
+            :data="tableData"
+            element-loading-text="加载中..." border fit highlight-current-row
+            style="width: 100%">
+            <el-table-column
+              prop="yt_m_d_id"
+              align="center"
+              label="编号"
+              width="120">
+            </el-table-column>
+            <el-table-column
+              prop="data_name"
+              label="数据名称"
+              align="center"
+              width="120">
+            </el-table-column>
+            <el-table-column
+              prop="remark"
+              label="标识"
+              align="center"
+              width="120">
+            </el-table-column>
+            <el-table-column
+              prop="comment"
+              label="备注"
+              align="center">
+            </el-table-column>
+            <el-table-column
+              label="操作"
+              align="center"
+              width="230" v-if="!disabledFlagSp">
+              <template slot-scope="scope">
+                <el-button type="" size="mini" @click="dataAny(scope.row,1)">详情</el-button>
+                <el-button type="danger" size="mini" @click="deleteData(scope.row)">删除</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
         <div class="submitButton" v-if="!disabledFlagSp">
           <el-button @click="cancleForm()">取 消</el-button>
           <el-button type="primary" @click="submitForm('ruleForm')">保 存</el-button>
