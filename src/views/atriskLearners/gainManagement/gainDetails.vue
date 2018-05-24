@@ -107,7 +107,7 @@
           title3: '评价成果详情',
           flag: 2,
           path1: '/gainList',
-          path2: '/gainSchoolList'
+          path2: '/gainSchoolList?school_id=' + this.$route.query.school_id + '&project_id=' + this.$route.query.project_id
         },
         tableData: {
           column: [],

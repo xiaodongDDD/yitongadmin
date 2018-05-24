@@ -97,7 +97,7 @@
         },
         rules: {
           teacher_name: [
-            { max: 28, message: '姓名过长', trigger: 'blur' }
+            { max: 28, message: '姓名不能超过28个字符', trigger: 'blur' }
           ],
           username: [
             { validator: checkName, trigger: 'blur' }
@@ -142,17 +142,19 @@
           this.form.enabled_status = 1
         }
         this.form.token = localStorage.getItem('TOKEN')
-        accountSave(this.form).then(res => {
-          // console.log(res)
-          if (res.hasOwnProperty('response')) {
-            this.$message('添加成功！')
-            this.$router.push({ path: '/powerEdit' })
-          } else {
-            this.$alert(res.error_response.msg, '提示', {
-              confirmButtonText: '确定'
-            })
-          }
-        })
+        if (this.form.teacher_name.length <= 28) {
+          accountSave(this.form).then(res => {
+            // console.log(res)
+            if (res.hasOwnProperty('response')) {
+              this.$message('添加成功！')
+              this.$router.push({ path: '/powerEdit' })
+            } else {
+              this.$alert(res.error_response.msg, '提示', {
+                confirmButtonText: '确定'
+              })
+            }
+          })
+        }
       }
     },
     mounted() {

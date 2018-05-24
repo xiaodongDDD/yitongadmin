@@ -71,7 +71,7 @@
         </div>
         <span slot="footer" class="dialog-footer">
           <el-button @click="centerDialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="templateDelete()">确 定</el-button>
+          <el-button type="primary" @click.once="templateDelete()">确 定</el-button>
         </span>
       </el-dialog>
     </div>
@@ -116,7 +116,14 @@
     },
     methods: {
       handleEdit(index, row) {
-        this.$router.push({ path: '/templateEdit', query: { 'template_id': row.template_id, 'school_id': this.school.school_id }})
+        console.log(row.edit_status)
+        if (row.edit_status === 1) {
+          this.$alert('此模板已被使用，不可编辑', '提示', {
+            confirmButtonText: '确定'
+          })
+        } else {
+          this.$router.push({ path: '/templateEdit', query: { 'template_id': row.template_id, 'school_id': this.school.school_id }})
+        }
       },
       handleDelete(index) {
         this.centerDialogVisible = true

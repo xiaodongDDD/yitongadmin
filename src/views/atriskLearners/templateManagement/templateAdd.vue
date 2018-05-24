@@ -116,31 +116,61 @@
         const len = this.form.signList.length
         let signSum = 0
         let oneSum = 0
+        let soSum = 0
+        let flag = true
         for (let i = 0; i < len; i++) {
-          signSum += parseInt(this.form.signList[i].rate)
-          let targetSum = 0
-          for (let k = 0; k < this.form.signList[i].target.length; k++) {
-            targetSum += parseInt(this.form.signList[i].target[k].rate)
+          // 判断评价维度的占比总和
+          if (this.form.signList[i].rate !== '') {
+            signSum += parseInt(this.form.signList[i].rate)
+          } else {
+            soSum++
           }
-          if (targetSum !== 100) {
-            oneSum++
+          if (soSum === len) {
+            signSum = 100
+          }
+
+          // 判断评价维度下的指标占比总和
+          let targetSum = 0
+          let oSum = 0
+          if (this.form.signList[i].target.length !== 0) {
+            for (let k = 0; k < this.form.signList[i].target.length; k++) {
+              if (this.form.signList[i].target[k].rate !== '') {
+                targetSum += parseInt(this.form.signList[i].target[k].rate)
+              } else {
+                oSum++
+              }
+              if (oSum === this.form.signList[i].target.length) {
+                targetSum = 100
+              }
+            }
+            if (targetSum !== 100) {
+              oneSum++
+            }
+          } else {
+            flag = false
           }
         }
         console.log(JSON.stringify(obj))
-
-        if (signSum === 100 && oneSum === 0) {
-          addTemplate(obj).then(res => {
-            if (res.hasOwnProperty('response')) {
-              this.$message('添加成功')
-              this.$router.push({ path: '/templateList', query: { school_id: this.$route.query.school_id }})
-            } else {
-              this.$alert(res.error_response.msg, '提示', {
-                confirmButtonText: '确定'
-              })
-            }
-          })
+        // return false
+        if (flag) {
+          if (signSum === 100 && oneSum === 0) {
+            addTemplate(obj).then(res => {
+              if (res.hasOwnProperty('response')) {
+                this.$message('修改成功')
+                this.$router.push({ path: '/templateList', query: { school_id: this.$route.query.school_id }})
+              } else {
+                this.$alert(res.error_response.msg, '提示', {
+                  confirmButtonText: '确定'
+                })
+              }
+            })
+          } else {
+            this.$alert('请确认占比总和！', '提示', {
+              confirmButtonText: '确定'
+            })
+          }
         } else {
-          this.$alert('请确认占比总和！', '提示', {
+          this.$alert('评价维度下指标条数不能为零！', '提示', {
             confirmButtonText: '确定'
           })
         }

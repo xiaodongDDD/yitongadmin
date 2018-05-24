@@ -155,7 +155,7 @@
           title1: '评价成果',
           title2: '评价成果列表',
           flag: 1,
-          path: '/gainList'
+          path: '/gainList?school_id=' + this.$route.query.school_id
         },
         formInline: {
           grade: '',
