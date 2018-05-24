@@ -34,7 +34,7 @@
     </el-breadcrumb>
     <el-dropdown @command="handleCommand" class="avatar-container" trigger="click">
       <div class="avatar-wrapper">
-        <img class="user-avatar" src="../../../assets/images/64451924_p3.jpg">
+        <img class="user-avatar" src="../../../assets/images/64451924_p3.jpg">{{ teacher_name }}
         <i class="el-icon-caret-bottom"></i>
       </div>
       <el-dropdown-menu slot="dropdown" class="user-dropdown">
@@ -57,7 +57,8 @@
       return {
         activeIndex: '1',
         activeIndex2: '1',
-        flags: 0
+        flags: 0,
+        teacher_name: localStorage.getItem('teacher_name')
       }
     },
     components: {
@@ -130,10 +131,12 @@
         cursor: pointer;
         margin-top: 5px;
         position: relative;
+        line-height: 35px;
         .user-avatar {
           width: 40px;
           height: 40px;
           border-radius: 40px;
+          vertical-align: middle;
         }
         .el-icon-caret-bottom {
           position: absolute;

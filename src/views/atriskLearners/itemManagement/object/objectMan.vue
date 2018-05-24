@@ -2,7 +2,7 @@
   <div class="center-content object-man">
       <my-header :msg='msg'></my-header>
       <div class="content-detail">
-        <div class="title"><span class="officialMan">学困生辅导评价管理</span><span @click='goback' class="goback">返回</span></div>
+        <div class="title"><span class="officialMan">学困生辅导评价管理</span><span @click="goback" class="goback">返回</span></div>
       <div class="smallTitle">
         <span class='manName'>管理员 {{ teacher_name }}&nbsp&nbsp</span>
         <span class="num">负责人 {{ num }}</span>
@@ -39,13 +39,13 @@
         </el-table>
       </div>
       <el-pagination
-          style='display:inline-block;margin-left:37%;margin-top:20px' 
-          @current-change="handleCurrentChange" 
+          style='display:inline-block;margin-left:37%;margin-top:20px'
+          @current-change="handleCurrentChange"
           background
           layout="prev, pager, next"
           :page-count="total">
       </el-pagination>
-    </div> 
+    </div>
   </div>
 </template>
 
