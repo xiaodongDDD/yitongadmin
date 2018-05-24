@@ -100,7 +100,8 @@ export default {
         project_name: this.form.project_name,
         project_remark: this.form.project_remark,
         school_id: this.$route.query.school_id,
-        project_status: this.form.project_status
+        project_status: this.form.project_status,
+        token: localStorage.getItem('TOKEN')
       }
       if (obj.project_name.length > 50) {
         this.$message.error('项目名称不超过50字')

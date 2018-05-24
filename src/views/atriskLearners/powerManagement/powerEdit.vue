@@ -21,7 +21,7 @@
 
           <el-form-item label="菜单：" prop="powerlist">
             <el-checkbox-group v-model="powerlist">
-              <el-checkbox label="1" name="powerlist" v-if="form.teacher_type == '3'">学校用户管理</el-checkbox>
+              <el-checkbox label="1" name="powerlist" v-if="is_operate">学校用户管理</el-checkbox>
               <el-checkbox label="2" name="powerlist">账户管理</el-checkbox>
               <el-checkbox label="3" name="powerlist">权限管理</el-checkbox>
               </el-checkbox-group>
@@ -37,7 +37,7 @@
               <el-checkbox label="7" style='margin-left:20px' name="powerlist">评价对象管理</el-checkbox>
               <el-checkbox label="8" name="powerlist">评价模板管理</el-checkbox>
               <el-checkbox label="9" name="powerlist">评价成果</el-checkbox>
-              <el-checkbox label="10" name="powerlist" v-if="form.teacher_type == '3'">操作日志</el-checkbox>
+              <el-checkbox label="10" name="powerlist" v-if="is_operate">操作日志</el-checkbox>
             </el-checkbox-group>
           </el-form-item>
 
@@ -53,7 +53,7 @@
 
 <script>
   import myHeader from '../myHeader/myHeader'
-  import { getPowerDetail, authSave } from '@/api/eduAdmin'
+  import { getPowerDetail, authSave, isOperate } from '@/api/eduAdmin'
   export default {
     name: 'powerEdit',
     data() {
@@ -63,6 +63,7 @@
         powerlist: [],
         checked1: false,
         disabled: true,
+        is_operate: false,
         msg: {
           title1: '权限管理',
           title2: '编辑权限管理',
@@ -81,6 +82,7 @@
     mounted() {
       // this.checked1 = true
       this.teacher_id = this.$route.query.teacher_id
+      this.getAuth()
       this.getData()
       console.log(this.$route.path)
     },
@@ -107,6 +109,18 @@
           })
           .catch(err => {
             console.log(err)
+          })
+      },
+      getAuth() {
+        const obj = {
+          token: localStorage.getItem('TOKEN')
+        }
+        isOperate(obj)
+          .then(res => {
+            if (res.hasOwnProperty('response')) {
+              console.log(res)
+              this.is_operate = res.response.is_operate
+            }
           })
       },
       saveUser() {

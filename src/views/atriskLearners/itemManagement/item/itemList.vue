@@ -161,7 +161,7 @@ export default {
           if (res.hasOwnProperty('response')) {
             this.tableData = res.response.list
             this.total = res.response.total_page
-            this.schoolName = res.response.list[0].school_name
+            this.schoolName = res.response.school_name
             // for (let i = 0; i < res.response.list.length; i++) {
             //   if (res.response.list[i].project_status === "0") {
             //     res.response.list[i].status = '启用'

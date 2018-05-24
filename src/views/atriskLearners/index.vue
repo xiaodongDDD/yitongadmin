@@ -155,6 +155,7 @@
             console.log(res)
             if (res.hasOwnProperty('response')) {
               this.auth_list = res.response.auth_id
+              // this.auth_list = ['2','3','6','7','8','9']
               this.addAuth()
             } else {
               this.$message.error(res.error_response.msg)
