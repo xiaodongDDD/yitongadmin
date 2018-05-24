@@ -4,17 +4,17 @@
     <div class="icon-div">
       <span></span><span></span><span></span>
     </div>
-    <el-breadcrumb v-if="msg.flag == 1 && msg.title1 != '项目评价管理'" class="header-bread" separator="/">
+    <el-breadcrumb v-if="msg.flag == 1 && msg.title1 != '评价项目管理'" class="header-bread" separator="/">
       <el-breadcrumb-item class="link-item" :to="{ path: msg.path }">{{ msg.title1 }}</el-breadcrumb-item>
       <el-breadcrumb-item class="step-item">{{ msg.title2 }}</el-breadcrumb-item>
     </el-breadcrumb>
 
-    <el-breadcrumb v-if="msg.flag == 1 && msg.title1 == '项目评价管理' && flags == 1" class="header-bread" separator="/">
+    <el-breadcrumb v-if="msg.flag == 1 && msg.title1 == '评价项目管理' && flags == 1" class="header-bread" separator="/">
       <el-breadcrumb-item class="link-item">{{ msg.title1 }}</el-breadcrumb-item>
       <el-breadcrumb-item class="step-item">{{ msg.title2 }}</el-breadcrumb-item>
     </el-breadcrumb>
 
-    <el-breadcrumb v-if="msg.flag == 1 && msg.title1 == '项目评价管理' && flags == 0" class="header-bread" separator="/">
+    <el-breadcrumb v-if="msg.flag == 1 && msg.title1 == '评价项目管理' && flags == 0" class="header-bread" separator="/">
       <el-breadcrumb-item class="link-item" :to="{ path: msg.path }">{{ msg.title1 }}</el-breadcrumb-item>
       <el-breadcrumb-item class="step-item">{{ msg.title2 }}</el-breadcrumb-item>
     </el-breadcrumb>
@@ -77,6 +77,7 @@
           .then(res => {
             if (res.hasOwnProperty('response')) {
               this.auth_list = res.response.auth_id
+              // this.auth_list = ['2','3','6','7','8','9']
               this.checkAuth()
             }
           })
