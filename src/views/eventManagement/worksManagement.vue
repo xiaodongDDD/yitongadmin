@@ -395,7 +395,7 @@
           console.log()
         } else {
           obj.startTime = this.formInline.dateValue[0].getTime()
-          obj.endime = this.formInline.dateValue[1].getTime()
+          obj.endTime = this.formInline.dateValue[1].getTime()
         }
         if (this.formInline.timeSort !== 0) {
           obj.timeSort = this.formInline.timeSort
