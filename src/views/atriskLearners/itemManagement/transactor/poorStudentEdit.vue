@@ -4,8 +4,8 @@
       <div class="content-detail">
         <div class="title"><span class="officialMan">学困生辅导执行人管理</span><span @click='goback' class="goback">返回</span></div>
       <div class="smallTitle">
-        <span class='manName'>管理员 {{ manName }}&nbsp&nbsp</span>
-        <span class="manNum">执行人 {{ manNum }}</span>
+        <span class='manName'>负责人 {{ manName }}&nbsp&nbsp</span>
+        <span class="manNum">执行人 {{ manNum }}人</span>
       </div>
       <div class="list-table">
         <el-table
