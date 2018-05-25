@@ -147,7 +147,7 @@
             // console.log(res)
             if (res.hasOwnProperty('response')) {
               this.$message('添加成功！')
-              this.$router.push({ path: '/powerEdit' })
+              this.$router.push({ path: '/powerEdit', query: { teacher_id: res.response.teacher_id }})
             } else {
               this.$alert(res.error_response.msg, '提示', {
                 confirmButtonText: '确定'

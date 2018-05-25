@@ -29,7 +29,7 @@
 <script>
 // import { isvalidUsername } from '@/utils/validate'
 import { setToken } from '@/utils/auth'
-import { getLogin } from '@/api/eduAdmin'
+import { getLogin, getUserAuth } from '@/api/eduAdmin'
 
 export default {
   name: 'login',
@@ -58,7 +58,8 @@ export default {
       //   password: [{ required: true, trigger: 'blur', validator: validatePass }]
       // },
       loading: false,
-      pwdType: 'password'
+      pwdType: 'password',
+      powers: ''
     }
   },
   methods: {
@@ -68,6 +69,14 @@ export default {
       } else {
         this.pwdType = 'password'
       }
+    },
+    getPower(obj) {
+      getUserAuth(obj).then(res => {
+        console.log(res)
+        if (res.hasOwnProperty('response')) {
+          this.powers = parseInt(res.response.auth_id[0])
+        }
+      })
     },
     handleLogin() {
       const obj = this.loginForm
@@ -82,11 +91,34 @@ export default {
               localStorage.setItem('TOKEN', res.response.token)
               localStorage.setItem('teacher_id', res.response.teacher_info.teacher_id)
               localStorage.setItem('teacher_name', res.response.teacher_info.teacher_name)
-              if (res.response.teacher_info.teacher_type !== '3') {
-                this.$router.push({ path: '/accountList' })
-              } else {
-                this.$router.push({ path: '/' })
-              }
+              const obj1 = {}
+              obj1.token = res.response.token
+              getUserAuth(obj1).then(result => {
+                if (result.hasOwnProperty('response')) {
+                  const powers = parseInt(result.response.auth_id[0])
+                  if (powers === 1) {
+                    this.$router.push({ path: '/userList' })
+                  } else if (powers === 2) {
+                    this.$router.push({ path: '/accountList' })
+                  } else if (powers === 3) {
+                    this.$router.push({ path: '/powerList' })
+                  } else if (powers === 4) {
+                    this.$router.push({ path: '/itemList' })
+                  } else if (powers === 5) {
+                    this.$router.push({ path: '/officialList' })
+                  } else if (powers === 6) {
+                    this.$router.push({ path: '/transactorList' })
+                  } else if (powers === 7) {
+                    this.$router.push({ path: '/objectList' })
+                  } else if (powers === 8) {
+                    this.$router.push({ path: '/templateList' })
+                  } else if (powers === 9) {
+                    this.$router.push({ path: '/gainList' })
+                  } else if (powers === 10) {
+                    this.$router.push({ path: '/logList' })
+                  }
+                }
+              })
             } else {
               this.$alert(res.error_response.msg, '提示', {
                 confirmButtonText: '确定'

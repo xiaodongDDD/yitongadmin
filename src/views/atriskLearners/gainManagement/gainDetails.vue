@@ -2,7 +2,7 @@
   <div class="center-content gain-details">
     <my-header :msg='msg'></my-header>
     <div class="content-detail">
-      <p class="position">道达尔学困生辅导记录表</p>
+      <p class="position">{{tableDatat.student_name}}学困生辅导记录表</p>
       <div class="function-btns">
         <el-button icon="el-icon-upload2" type="text" @click="importResult">导出</el-button>
         <el-button type="text" @click="reback">返回</el-button>
@@ -191,8 +191,8 @@
     float: left;
   }
   .function-btns{
-    float: right;
-    margin-top: -10px;
+    position: absolute;
+    right: 30px;
   }
   .el-table thead{
     color: #606266;

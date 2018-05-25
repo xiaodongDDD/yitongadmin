@@ -181,7 +181,7 @@
               }
             })
           } else {
-            this.$alert('请确认占比总和！', '提示', {
+            this.$alert('请确认填写项是否正确', '提示', {
               confirmButtonText: '确定'
             })
           }
@@ -192,7 +192,7 @@
         }
       },
       reback() {
-        const school_id = this.$route.query.school_id``
+        const school_id = this.$route.query.school_id
         this.$router.push({ path: '/templateList', query: { school_id: school_id }})
       },
       removeDomain(index, type) {
@@ -222,14 +222,22 @@
         if (this.addSignType !== '' && this.addSignType.length <= 20) {
           addSign.type = this.addSignType
           addSign.sign = this.addSignType + '维度：'
-          this.form.signList.push(addSign)
-          this.isAddSign = false
-          this.addSignType = ''
-          this.form.checktype.push(addSign.type)
 
-          addType.rank = addSign.type
-          addType.rate = addSign.rate
-          this.form.type.push(addType)
+          const aindex = this.form.checktype.indexOf(addSign.type)
+          if (aindex > -1) {
+            this.$alert('已存在同名评价维度', '提示', {
+              confirmButtonText: '确定'
+            })
+          } else {
+            this.form.signList.push(addSign)
+            this.isAddSign = false
+            this.addSignType = ''
+            this.form.checktype.push(addSign.type)
+
+            addType.rank = addSign.type
+            addType.rate = addSign.rate
+            this.form.type.push(addType)
+          }
         }
       },
       addItem1(index) {
