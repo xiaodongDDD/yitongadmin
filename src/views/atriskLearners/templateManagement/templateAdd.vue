@@ -199,6 +199,10 @@
         if (this.addSignType !== '' && this.addSignType.length <= 20) {
           addSign.type = this.addSignType
           addSign.sign = this.addSignType + '维度：'
+
+          const aindex = this.form.type.indexOf(addSign.type)
+          console.log(aindex)
+
           this.form.signList.push(addSign)
           this.isAddSign = false
           this.addSignType = ''

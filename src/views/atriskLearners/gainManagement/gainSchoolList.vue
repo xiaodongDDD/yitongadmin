@@ -312,7 +312,7 @@
         this.filterData.subject_id = item.subject_id
       },
       handleCurrentChange(val) {
-        this.getList(val)
+        this.getList(val, this.$route.query.school_id)
       }
     },
     mounted() {
