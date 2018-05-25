@@ -309,6 +309,8 @@
       color: #333;
       text-indent: 18px;
       margin-top: 20px;
+      width: 100%;
+      display: block;
     }
   }
 

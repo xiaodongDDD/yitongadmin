@@ -11,34 +11,34 @@
         <div class="search-contaier">
           <el-form :inline="true" :model="formInline" class="demo-form-inline">
             <el-form-item label="年级">
-              <el-dropdown @command="changeGrade" trigger="click">
-                <span class="el-dropdown-link">
-                  <el-input v-model="formInline.grade" disabled placeholder=""></el-input>
-                </span>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item v-for="item in gradeData" :command="item">{{ item.grade_name}}</el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
+              <el-select v-model="formInline.grade" @change="changeGrade" placeholder="请选择年级">
+                <el-option
+                  v-for="item in gradeData"
+                  :key="item.grade_id"
+                  :label="item.grade_name"
+                  :value="item.grade_id">
+                </el-option>
+              </el-select>
             </el-form-item>
             <el-form-item label="班级">
-              <el-dropdown @command="changeClass" trigger="click">
-                <span class="el-dropdown-link">
-                  <el-input v-model="formInline.class" disabled placeholder="" @focus="inClass"></el-input>
-                </span>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item v-for="item in classData" :command="item">{{ item.class_name}}</el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
+              <el-select v-model="formInline.class" @change="changeClass" placeholder="请选择班级">
+                <el-option
+                  v-for="item in classData"
+                  :key="item.class_id"
+                  :label="item.class_name"
+                  :value="item.class_id">
+                </el-option>
+              </el-select>
             </el-form-item>
             <el-form-item label="学科">
-              <el-dropdown @command="changeSubject" trigger="click">
-                <span class="el-dropdown-link">
-                  <el-input v-model="formInline.subject" disabled placeholder=""></el-input>
-                </span>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item v-for="item in subjectData" :command="item">{{ item.subject_name}}</el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
+              <el-select v-model="formInline.subject" @change="changeSubject" placeholder="请选择学科">
+                <el-option
+                  v-for="item in subjectData"
+                  :key="item.subject_id"
+                  :label="item.subject_name"
+                  :value="item.subject_id">
+                </el-option>
+              </el-select>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="onSubmit">筛选</el-button>
@@ -47,9 +47,9 @@
           </el-form>
 
           <p class="search-result" v-show="isSearch.searched">
-            <span>{{formInline.grade}}</span>
-            <span>{{formInline.class}}</span>
-            <span>{{formInline.subject}}</span>
+            <span>{{searchData.grade_name}}</span>
+            <span>{{searchData.class_name}}</span>
+            <span>{{searchData.subject_name}}</span>
             <span>共{{isSearch.listNum}}条</span>
           </p>
         </div>
@@ -162,6 +162,7 @@
           class: '',
           subject: ''
         },
+        searchData: {},
         tableData: [],
         pageData: {
           page: '',
@@ -179,23 +180,6 @@
     },
     components: {
       myHeader
-    },
-    watch: {
-      'formInline.grade': function(value, ovalue) {
-        if (value === '') {
-          this.filterData.grade_id = ''
-        }
-      },
-      'formInline.class': function(value, ovalue) {
-        if (value === '') {
-          this.filterData.class_id = ''
-        }
-      },
-      'formInline.subject': function(value, ovalue) {
-        if (value === '') {
-          this.filterData.subject_id = ''
-        }
-      }
     },
     methods: {
       handleEdit(index, row) {
@@ -278,15 +262,20 @@
           }
         })
       },
-      changeGrade(item) {
+      changeGrade(val) {
         this.classData = []
-
         this.isSearch.searched = false
         const obj = {}
-        obj.grade_id = item.grade_id
+        obj.grade_id = val
         obj.token = localStorage.getItem('TOKEN')
-        this.filterData.grade_id = item.grade_id
-        this.formInline.grade = item.grade_name
+        this.filterData.grade_id = val
+
+        for (let i = 0; i < this.gradeData.length; i++) {
+          if (this.gradeData[i].grade_id === val) {
+            this.searchData.grade_name = this.gradeData[i].grade_name
+          }
+        }
+
         this.formInline.class = ''
         this.filterData.class_id = ''
         gainClasses(obj).then(res => {
@@ -300,16 +289,23 @@
           }
         })
       },
-      changeClass(item) {
+      changeClass(val) {
         this.isSearch.searched = false
-        this.formInline.class = item.class_name
-        this.filterData.class_id = item.class_id
+        this.filterData.class_id = val
+        for (let i = 0; i < this.classData.length; i++) {
+          if (this.classData[i].class_id === val) {
+            this.searchData.class_name = this.classData[i].class_name
+          }
+        }
       },
       changeSubject(item) {
-        // console.log(item)
         this.isSearch.searched = false
-        this.formInline.subject = item.subject_name
-        this.filterData.subject_id = item.subject_id
+        this.filterData.subject_id = item
+        for (let i = 0; i < this.subjectData.length; i++) {
+          if (this.subjectData[i].subject_id === item) {
+            this.searchData.subject_name = this.subjectData[i].subject_name
+          }
+        }
       },
       handleCurrentChange(val) {
         this.getList(val, this.$route.query.school_id)

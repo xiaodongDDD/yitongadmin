@@ -156,7 +156,7 @@
           if (signSum === 100 && oneSum === 0) {
             addTemplate(obj).then(res => {
               if (res.hasOwnProperty('response')) {
-                this.$message('修改成功')
+                this.$message('新增成功')
                 this.$router.push({ path: '/templateList', query: { school_id: this.$route.query.school_id }})
               } else {
                 this.$alert(res.error_response.msg, '提示', {
@@ -165,7 +165,7 @@
               }
             })
           } else {
-            this.$alert('请确认占比总和！', '提示', {
+            this.$alert('请确认填写项是否正确', '提示', {
               confirmButtonText: '确定'
             })
           }
@@ -194,19 +194,24 @@
           sign: '',
           rate: '',
           target: [{ type: '', rate: '' }],
-          rank: [{ type: '', rate: '' }]
+          rank: [{ type: '', remark: '' }]
         }
         if (this.addSignType !== '' && this.addSignType.length <= 20) {
           addSign.type = this.addSignType
           addSign.sign = this.addSignType + '维度：'
 
           const aindex = this.form.type.indexOf(addSign.type)
-          console.log(aindex)
-
-          this.form.signList.push(addSign)
-          this.isAddSign = false
-          this.addSignType = ''
-          this.form.type.push(addSign.type)
+          // console.log(aindex)
+          if (aindex > -1) {
+            this.$alert('已存在同名评价维度', '提示', {
+              confirmButtonText: '确定'
+            })
+          } else {
+            this.form.signList.push(addSign)
+            this.isAddSign = false
+            this.addSignType = ''
+            this.form.type.push(addSign.type)
+          }
         }
       },
       addItem1(index) {
