@@ -4,8 +4,8 @@
       <div class="content-detail">
         <div class="title"><span class="officialMan">学困生辅导评价管理</span><span @click="goback" class="goback">返回</span></div>
       <div class="smallTitle">
-        <span class='manName'>管理员 {{ teacher_name }}&nbsp&nbsp</span>
-        <span class="num">负责人 {{ num }}</span>
+        <span class='manName'>执行人 {{ teacher_name }}&nbsp&nbsp</span>
+        <span class="num">评价对象 {{ num }}人</span>
       </div>
       <div class="list-table">
         <el-table

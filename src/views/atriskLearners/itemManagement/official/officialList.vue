@@ -5,7 +5,7 @@
     	<div class="title"><span class="officialMan">负责人管理</span><span @click='goback' class="goback">返回</span></div>
       <div class="smallTitle">
         <span class='manName'>管理员 {{ manName }}&nbsp&nbsp</span>
-        <span class="manNum">负责人 {{ manNum }}</span>
+        <span class="manNum">负责人 {{ manNum }}人</span>
       </div>
       <div class="list-table">
         <el-table
