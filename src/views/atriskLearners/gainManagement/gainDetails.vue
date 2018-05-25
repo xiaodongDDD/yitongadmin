@@ -191,8 +191,8 @@
     float: left;
   }
   .function-btns{
-    float: right;
-    margin-top: -10px;
+    position: absolute;
+    right: 30px;
   }
   .el-table thead{
     color: #606266;
