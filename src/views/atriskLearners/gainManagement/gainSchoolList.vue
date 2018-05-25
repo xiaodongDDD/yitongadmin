@@ -196,12 +196,12 @@
       importGain() {
         if (this.formInline.class !== '请先选择年级') {
           if (this.formInline.grade === '' && this.formInline.class === '' && this.formInline.subject === '') {
-            this.$message('由于数据量很大，请您先筛选学科或年级班级后导出')
+            this.$message('请您先筛选学科或年级班级后导出')
           } else {
             this.centerDialogVisible = true
           }
         } else {
-          this.$message('由于数据量很大，请您先筛选学科或年级班级后导出')
+          this.$message('请您先筛选学科或年级班级后导出')
         }
       },
       // 导出成果
