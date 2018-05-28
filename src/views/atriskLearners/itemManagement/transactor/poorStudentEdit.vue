@@ -50,7 +50,7 @@
               <el-button
                 size="mini"
                 type="danger"
-                @click="handleDelete(scope.row.project_id, scope.row.subject_id, scope.row.executor_id, scope.row.executor_name)">删除</el-button>
+                @click="handleDelete(scope.row.project_id, scope.row.subject_id, scope.row.executor_id, scope.row.executor_name, scope.row.teacher_id)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -183,10 +183,11 @@
             console.log(err)
           })
       },
-      handleDelete(val1, val2, val3, val4) {
+      handleDelete(val1, val2, val3, val4, val5) {
         this.current_project_id = val1
         this.current_subject_id = val2
         this.current_executor_id = val3
+        this.current_teacher_id = val5
         this.centerDialogVisible = true
         this.current_executor_name = val4
       },
@@ -214,6 +215,7 @@
           project_id: this.current_project_id,
           subject_id: this.current_subject_id,
           executor_id: this.current_executor_id,
+          leader_id: this.current_teacher_id,
           token: localStorage.getItem('TOKEN')
         }
         deleteExecutor(obj)
