@@ -2,15 +2,13 @@
   <div class="center-content gain-details">
     <my-header :msg='msg'></my-header>
     <div class="content-detail">
-      <p class="position">{{tableDatat.student_name}}学困生辅导记录表</p>
       <div class="function-btns">
         <el-button icon="el-icon-upload2" type="text" @click="importResult">导出</el-button>
         <el-button type="text" @click="reback">返回</el-button>
       </div>
-
+      <p class="position" style="margin-top: 0px;">{{tableDatat.student_name}}学困生辅导记录表</p>
 
       <div class="details-table">
-
         <table class="mock-table">
           <tr>
             <th>时间</th>
@@ -54,7 +52,6 @@
             :width="item.width">
           </el-table-column>
         </el-table>
-
 
         <el-table
           :data="tableDataf"
@@ -189,10 +186,6 @@
   }
   .position{
     float: left;
-  }
-  .function-btns{
-    position: absolute;
-    right: 30px;
   }
   .el-table thead{
     color: #606266;
