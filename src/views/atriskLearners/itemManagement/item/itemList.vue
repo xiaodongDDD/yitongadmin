@@ -89,7 +89,7 @@
         <div class="dialogContent">
           <p>请确认是否要删除</p>
           <p>{{ curren_project_name }}评价项目</p>
-          <p>删除后，该账户将无法登录</p>
+          <p>删除后，该板块将彻底删除</p>
         </div>
         <span slot="footer" class="dialog-footer">
           <el-button @click="centerDialogVisible = false">取 消</el-button>
