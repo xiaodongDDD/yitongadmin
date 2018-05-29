@@ -20,7 +20,6 @@ import { getToken } from '@/utils/auth'
 export default {
   data() {
     return {
-      arr: [],
       routesSp: []
     }
   },
@@ -39,7 +38,6 @@ export default {
   created() {
     this.routesSp = this.$router.options.routes
     // this.routes.splice(3, 2)
-    console.log(this.$router.options.routes)
     const token = getToken()
     const obj = {
       'token': token

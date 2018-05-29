@@ -48,8 +48,6 @@
     },
     methods: {
       saveData(item) {
-        console.log('======')
-        console.log(item)
         let url
         if (item.path === '/') {
           url = item.path + item.children[0].path

@@ -65,7 +65,6 @@
 
 <script>
   import { roleList, delRole } from '@/api/organizationManagement'
-  import store from '@/store'
 
   export default {
     name: 'roleMangement',
@@ -78,7 +77,7 @@
         total: 0,
         listLoading: false,
         tableData: [],
-        module_id: store.getters.roles.yt_m_id || localStorage.module_id,
+        module_id: localStorage.module_id,
         functionFlag: localStorage.function,
         disabledFlag: true // 默认的是不能操作的
       }

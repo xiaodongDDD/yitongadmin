@@ -237,8 +237,8 @@
 </template>
 <script>
   import { userDetail, companyDepartmentList, addEditUser, roleList } from '@/api/organizationManagement'
-  import store from '@/store'
   import dataProvinces from '@/staticData/provinces.json'
+  import pic from '@/assets/index/admin.jpg'
 
   export default {
     data() {
@@ -259,6 +259,17 @@
           callback()
         } else if (!a.test(value)) {
           callback(new Error('请输入正确的英文名'))
+        } else {
+          callback()
+        }
+      }
+      var validatePhone = (rule, value, callback) => {
+        var a = /^[1][3,4,5,7,8][0-9]{9}$/
+        console.log()
+        if (value === '') {
+          callback()
+        } else if (!a.test(value)) {
+          callback(new Error('请输入正确的手机号'))
         } else {
           callback()
         }
@@ -314,7 +325,8 @@
           ],
           mobile_phone: [
             { required: true, message: '请输入手机号', trigger: 'blur' },
-            { min: 11, max: 11, message: '手机号长度在 11 个字符之内', trigger: 'blur' }
+            { min: 11, max: 11, message: '手机号长度在 11 个字符之内', trigger: 'blur' },
+            { validator: validatePhone, trigger: 'blur' }
           ],
           special_plane: [
             { max: 20, message: '座机长度在 20 个字符之内', trigger: 'blur' },
@@ -366,7 +378,7 @@
         whereProvinces: '',
         provincesArr: '',
         addFlag: false,
-        module_id: store.getters.roles.yt_m_id || localStorage.module_id,
+        module_id: localStorage.module_id,
         functionFlag: localStorage.function,
         disabledFlag: true
       }
@@ -399,8 +411,6 @@
           } else {
             this.leave_timeSp = new Date(this.form.leave_time.replace(/-/g, '/'))
           }
-          console.log(this.entry_timeSp)
-          console.log(this.leave_timeSp)
           this.form.company_id = this.form.company_info.yt_c_id
           this.form.bumen = this.form.department_info.name
           this.form.department_id = this.form.department_info.yt_c_id
@@ -424,6 +434,9 @@
           }
           if (this.form.code_flag === '1') {
             this.flagCode = true
+          }
+          if (this.form.avatar === '') {
+            this.form.avatar = pic
           }
           this.listSelect(3)
           this.listSelect(5, 'init')
@@ -474,7 +487,8 @@
           'yt_c_id': '', // 公司/部门id
           'name': '',
           'yt_d_p_id': '',
-          'user_name': ''
+          'user_name': '',
+          'u_id': ''
         }
         if (type === 1) {
           obj.name = this.selectName
@@ -515,6 +529,9 @@
           obj.yt_c_id = this.form.department_id
           obj.yt_d_p_id = this.form.yt_d_p_id
           obj.user_name = this.upName
+          if (localStorage.u_id_emp !== 'add') {
+            obj.u_id = this.form.u_id
+          }
         }
         companyDepartmentList(obj).then(response => {
           switch (type) {

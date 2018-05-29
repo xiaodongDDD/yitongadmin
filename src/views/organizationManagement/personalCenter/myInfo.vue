@@ -41,7 +41,7 @@
         <span class="fontClass">{{form.province_city | arrayFilter}}</span>
       </el-form-item>
       <el-form-item label="入离日期">
-        <span class="fontClass">{{form.entry_time}}--{{form.leave_time}}</span>
+        <span class="fontClass">{{form.entry_time}}<span v-if="form.leave_time">——</span>{{form.leave_time}}</span>
       </el-form-item>
       <el-form-item label="职务">
         <span class="fontClass">{{form.position_info.work_position}}</span>

@@ -200,7 +200,6 @@
 
 <script>
   import { menuList, moveMenu, delMenu, menuDetail, menu, menuFunctionAuth, menuDataAuth, delMenuFunction, delMenuData } from '@/api/organizationManagement'
-  import store from '@/store'
 
   export default {
     data() {
@@ -267,7 +266,7 @@
         },
         addShow: true,
         yt_m_id: '',
-        module_id: store.getters.roles.yt_m_id || localStorage.module_id,
+        module_id: localStorage.module_id,
         functionFlag: localStorage.function,
         disabledFlag: true, // 默认的是不能操作的
         disabledFlagSp: true,

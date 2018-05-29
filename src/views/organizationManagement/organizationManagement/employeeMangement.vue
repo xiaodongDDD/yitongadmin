@@ -38,7 +38,7 @@
             :expand-on-click-node="false"
             @node-click="handleNodeClick">
               <span class="custom-tree-node" slot-scope="{ node, data }">
-                <span><i class="el-icon-message"></i>&nbsp;&nbsp;{{ node.label }}</span>
+                <span><i class="el-icon-message" v-if="data.company_flag === '2'"></i><i class="el-icon-goods" v-if="data.company_flag === '1'"></i>&nbsp;&nbsp;{{ node.label }}</span>
                 <span class="operatingList" v-if="!disabledFlag">
                   <el-dropdown trigger="click" >
                     <span class="el-dropdown-link">
@@ -57,9 +57,10 @@
       <!--右侧表-->
       <div class="right">
         <el-row class="headStyle">
-          <el-col :span="12"><div class="text-left">{{headName}} ({{numPeople}})</div></el-col>
+          <el-col :span="12"><div class="text-left">{{headName}}&nbsp;<span v-if="numPeople!==''">({{numPeople}})</span></div></el-col>
           <el-col :span="12"><div class="text-right"><span style="cursor: pointer;" @click="operating('add','')" v-if="!disabledFlag">添加员工</span></div></el-col>
-        </el-row>        <el-table
+        </el-row>
+        <el-table
           :data="tableData"
           v-loading.body="listLoading" element-loading-text="加载中..." border fit highlight-current-row
           style="width: 100%">
@@ -201,14 +202,12 @@
           <el-form-item
             label="包含职务"
             :key="domain.key"
-            :prop="'domains.' + index + '.value'"
             :rules="{max: 20, message: '最多可输入 20 个字符', trigger: 'blur'}">
             <el-col :span="20"> <el-input v-model="domain.work_position"></el-input></el-col>
           </el-form-item>
           <el-form-item
             label="对应职级"
             :key="domain.keySp"
-            :prop="'zhi.' + index + '.value'"
             :rules="{max: 20, message: '最多可输入 20 个字符', trigger: 'blur'}">
             <el-col :span="20"><el-input v-model="domain.work_level"></el-input></el-col>
             <el-col :span="1" >&nbsp;</el-col>
@@ -262,7 +261,6 @@
 
 <script>
   import { companyList, moveCompanyDepartment, delCompanyDepartment, freezeStart, addCompanyDepartment, companyDepartmentDetail, delPosition } from '@/api/organizationManagement'
-  import store from '@/store'
   import { getToken } from '@/utils/auth'
   import $ from 'jquery'
 
@@ -394,9 +392,11 @@
         headName: '',
         numPeople: '',
         showPostionData: '',
-        module_id: store.getters.roles.yt_m_id || localStorage.module_id,
+        module_id: localStorage.module_id,
         functionFlag: localStorage.function,
-        disabledFlag: true
+        disabledFlag: true,
+        result: [],
+        resultSp: []
       }
     },
     methods: {
@@ -411,11 +411,60 @@
         }
         companyList(obj).then(response => {
           this.dataTree = response.response.list
-          this.yt_c_id = this.dataTree[0].yt_c_id
-          this.headName = this.dataTree[0].name
-          this.numPeople = this.dataTree[0].count
+          if (this.dataTree.length < 1) {
+            this.headName = ''
+            this.numPeople = ''
+            this.tableData = []
+            this.total = 0
+            return
+          }
+          if (this.formInline.user_name !== '' || this.formInline.department !== '') {
+            const arr = this.recursive(this.dataTree, 'department')
+            console.log(arr)
+            this.yt_c_id = arr.yt_c_id
+            this.headName = arr.name
+            this.numPeople = arr.count
+          } else if (this.formInline.company !== '') {
+            const arr = this.recursive(this.dataTree, 'company')
+            console.log(arr)
+            this.yt_c_id = arr.yt_c_id
+            this.headName = arr.name
+            this.numPeople = arr.count
+          } else {
+            this.yt_c_id = this.dataTree[0].yt_c_id
+            this.headName = this.dataTree[0].name
+            this.numPeople = this.dataTree[0].count
+          }
           this.initTable()
         })
+      },
+      recursive(data, type) {
+        console.log(type)
+        for (var i in data) {
+          if (data[i].hasOwnProperty('children')) {
+            if (type !== 'department') {
+              this.resultSp = data[i]
+            }
+            this.recursive(data[i]['children'], type)
+          } else {
+            if (type === 'department') {
+              this.result = data[i]
+              return
+            } else {
+              if (data[i].company_flag === '1') {
+                this.result = data[i]
+                return
+              }
+            }
+          }
+        }
+        if (type === 'company' && this.result.hasOwnProperty('name') && this.result.name.indexOf(this.formInline.company) > -1) {
+          return this.result
+        } else if (type === 'company') {
+          return this.resultSp
+        } else {
+          return this.result
+        }
       },
       initTable(item) {
         const obj = {
@@ -607,10 +656,10 @@
               this.initTable()
             })
           }).catch(() => {
-            this.$message({
-              type: 'info',
-              message: '已取消启用'
-            })
+            // this.$message({
+            //   type: 'info',
+            //   message: '已取消启用'
+            // })
           })
         } else if (id === 3) {
           this.$confirm('确认冻结?', '确认操作', {
@@ -632,10 +681,10 @@
               this.initTable()
             })
           }).catch(() => {
-            this.$message({
-              type: 'info',
-              message: '已取消冻结'
-            })
+            // this.$message({
+            //   type: 'info',
+            //   message: '已取消冻结'
+            // })
           })
         } else {
           if (item === 'add') {
