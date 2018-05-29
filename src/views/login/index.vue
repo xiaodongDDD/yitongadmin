@@ -19,7 +19,7 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" style="width:100%;" :loading="loading" @click.native.prevent="handleLogin">
-           登 录  测试版本号: v1.0.1
+           登 录  测试版本号: v1.0.2
         </el-button>
       </el-form-item>
     </el-form>
@@ -219,5 +219,8 @@ export default {
       right: 35px;
       bottom: 28px;
     }
+  }
+  .login-container .show-pwd{
+    display: none;
   }
 </style>
