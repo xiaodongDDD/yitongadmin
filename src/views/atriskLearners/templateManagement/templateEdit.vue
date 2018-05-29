@@ -219,7 +219,8 @@
           rank: '',
           rate: ''
         }
-        if (this.addSignType !== '' && this.addSignType.length <= 20) {
+        const reg = /^[\u4e00-\u9fa5a-zA-Z\d]+$/
+        if (this.addSignType !== '' && this.addSignType.length <= 20 && reg.test(this.addSignType)) {
           addSign.type = this.addSignType
           addSign.sign = this.addSignType + '维度：'
 
@@ -238,6 +239,10 @@
             addType.rate = addSign.rate
             this.form.type.push(addType)
           }
+        } else {
+          this.$alert('请确认评价维度名是否正确', '提示', {
+            confirmButtonText: '确定'
+          })
         }
       },
       addItem1(index) {

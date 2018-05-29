@@ -155,6 +155,7 @@
       },
       saveUser() {
         this.form.token = localStorage.getItem('TOKEN')
+        this.form.enabled_status = this.form.status
         if (this.form.teacher_name.length <= 28) {
           accountSave(this.form).then(res => {
             // console.log(res)

@@ -220,4 +220,7 @@ export default {
       bottom: 28px;
     }
   }
+  .login-container .show-pwd{
+    display: none;
+  }
 </style>
