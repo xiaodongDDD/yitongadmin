@@ -198,7 +198,7 @@
       }
     },
     mounted() {
-      this.getSchoolList()
+      // this.getSchoolList()
       this.getList(1, this.$route.query.school_id)
     }
   }
