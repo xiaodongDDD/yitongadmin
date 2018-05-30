@@ -61,6 +61,7 @@ export default {
       total: 0,
       num: 0,
       teacher_name: '',
+      p_e_ids: '',
       form: {
         name: ''
       },
@@ -77,15 +78,13 @@ export default {
     myHeader
   },
   mounted() {
-    this.teacher_id = this.$route.query.teacher_id
-    this.subject_id = this.$route.query.subject_id
+    this.p_e_ids = this.$route.query.p_e_ids
     this.getData(1)
   },
   methods: {
     getData(pages) {
       const obj = {
-        teacher_id: this.teacher_id,
-        subject_id: this.subject_id,
+        p_e_ids: this.p_e_ids,
         page: pages,
         token: localStorage.getItem('TOKEN')
       }

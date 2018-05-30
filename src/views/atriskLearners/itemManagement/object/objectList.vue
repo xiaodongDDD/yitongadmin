@@ -45,8 +45,8 @@
             label="评价对象"
             width='100'>
              <template slot-scope="scope">
-              <span v-if='scope.row.num != 0'  @click='go(scope.row.executor_id, scope.row.subject_id)' style='cursor: pointer;'>{{ scope.row.num }}</span>
-              <span @click='go(scope.row.executor_id, scope.row.subject_id)' v-if='scope.row.num == 0' style='cursor: pointer;'><i class="el-icon-edit-outline"></i></span>
+              <span v-if='scope.row.num != 0'  @click='go(scope.row.p_e_ids)' style='cursor: pointer;'>{{ scope.row.num }}</span>
+              <span @click='go(scope.row.p_e_ids)' v-if='scope.row.num == 0' style='cursor: pointer;'><i class="el-icon-edit-outline"></i></span>
             </template>
           </el-table-column>
 
@@ -152,9 +152,9 @@ export default {
       console.log(index, row)
       this.centerDialogVisible = true
     },
-    go(val1, val2) {
-      console.log(val1, val2)
-      this.$router.push({ path: '/objectMan', query: { teacher_id: val1, subject_id: val2 }})
+    go(val1) {
+      console.log(val1)
+      this.$router.push({ path: '/objectMan', query: { p_e_ids: val1 }})
     },
     handleCurrentChange(val) {
       this.getData(val)
