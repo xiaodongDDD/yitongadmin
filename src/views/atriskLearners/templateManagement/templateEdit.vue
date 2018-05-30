@@ -55,7 +55,7 @@
 
         <el-form-item>
           <el-button @click="reback">取消</el-button>
-          <el-button @click="saveUser()">保存</el-button>
+          <el-button v-show="editStatus === 0" @click="saveUser()">保存</el-button>
         </el-form-item>
       </el-form>
      </div>
@@ -98,7 +98,8 @@
         isAddSign: false,
         tinfo: {},
         addSignType: '',
-        centerDialogVisible: false
+        centerDialogVisible: false,
+        editStatus: 0
       }
     },
     components: {
@@ -261,6 +262,7 @@
       }
     },
     mounted() {
+      this.editStatus = this.$route.query.edit_status
       this.getDetail()
     }
   }

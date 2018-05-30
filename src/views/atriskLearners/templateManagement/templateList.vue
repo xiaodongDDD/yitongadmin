@@ -98,7 +98,7 @@
         school: {},
         schools: [],
         msg: {
-          title1: '评价模版管理',
+          title1: '评价模板管理',
           title2: '',
           flag: 0,
           path: '/itemList'
@@ -117,13 +117,13 @@
     methods: {
       handleEdit(index, row) {
         console.log(row.edit_status)
-        if (row.edit_status === 1) {
-          this.$alert('此模板已被使用，不可编辑', '提示', {
-            confirmButtonText: '确定'
-          })
-        } else {
-          this.$router.push({ path: '/templateEdit', query: { 'template_id': row.template_id, 'school_id': this.school.school_id }})
-        }
+        // if (row.edit_status === 1) {
+        //   this.$alert('此模板已被使用，不可编辑', '提示', {
+        //     confirmButtonText: '确定'
+        //   })
+        // } else {
+        this.$router.push({ path: '/templateEdit', query: { 'template_id': row.template_id, 'school_id': this.school.school_id, edit_status: row.edit_status }})
+        // }
       },
       handleDelete(index) {
         this.centerDialogVisible = true
