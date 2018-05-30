@@ -4,17 +4,17 @@
     <div class="icon-div">
       <span></span><span></span><span></span>
     </div>
-    <el-breadcrumb v-if="msg.flag == 1 && msg.title1 != '评价项目管理'" class="header-bread" separator="/">
+    <el-breadcrumb v-if="msg.flag == 1 && msg.title1 !== '评价项目管理'" class="header-bread" separator="/">
       <el-breadcrumb-item class="link-item" :to="{ path: msg.path }">{{ msg.title1 }}</el-breadcrumb-item>
       <el-breadcrumb-item class="step-item">{{ msg.title2 }}</el-breadcrumb-item>
     </el-breadcrumb>
 
-    <el-breadcrumb v-if="msg.flag == 1 && msg.title1 == '评价项目管理' && flags == 1" class="header-bread" separator="/">
+    <el-breadcrumb v-if="msg.flag === 1 && msg.title1 === '评价项目管理' && flags === '1'" class="header-bread" separator="/">
       <el-breadcrumb-item class="link-item">{{ msg.title1 }}</el-breadcrumb-item>
       <el-breadcrumb-item class="step-item">{{ msg.title2 }}</el-breadcrumb-item>
     </el-breadcrumb>
 
-    <el-breadcrumb v-if="msg.flag == 1 && msg.title1 == '评价项目管理' && flags == 0" class="header-bread" separator="/">
+    <el-breadcrumb v-if="msg.flag === 1 && msg.title1 === '评价项目管理' && flags === '0'" class="header-bread" separator="/">
       <el-breadcrumb-item class="link-item" :to="{ path: msg.path }">{{ msg.title1 }}</el-breadcrumb-item>
       <el-breadcrumb-item class="step-item">{{ msg.title2 }}</el-breadcrumb-item>
     </el-breadcrumb>
@@ -22,12 +22,12 @@
     <el-breadcrumb v-if='msg.flag == 0' class="header-bread" separator="/">
       <el-breadcrumb-item class="link-item">{{ msg.title1 }}</el-breadcrumb-item>
     </el-breadcrumb>
-     <el-breadcrumb v-if='msg.flag == 2 && flags == 0' class="header-bread" separator="/">
+     <el-breadcrumb v-if="msg.flag == 2 && flags == '0'" class="header-bread" separator="/">
       <el-breadcrumb-item class="link-item" :to="{ path: msg.path1 }">{{ msg.title1 }}</el-breadcrumb-item>
       <el-breadcrumb-item class="step-item" :to="{ path: msg.path2 }">{{ msg.title2 }}</el-breadcrumb-item>
       <el-breadcrumb-item class="step-item">{{ msg.title3 }}</el-breadcrumb-item>
     </el-breadcrumb>
-    <el-breadcrumb v-if='msg.flag == 2 && flags == 1' class="header-bread" separator="/">
+    <el-breadcrumb v-if="msg.flag == 2 && flags == '1'" class="header-bread" separator="/">
       <el-breadcrumb-item class="link-item">{{ msg.title1 }}</el-breadcrumb-item>
       <el-breadcrumb-item class="step-item" :to="{ path: msg.path2 }">{{ msg.title2 }}</el-breadcrumb-item>
       <el-breadcrumb-item class="step-item">{{ msg.title3 }}</el-breadcrumb-item>
@@ -57,7 +57,7 @@
       return {
         activeIndex: '1',
         activeIndex2: '1',
-        flags: 0,
+        flags: '',
         teacher_name: localStorage.getItem('teacher_name')
       }
     },
@@ -77,15 +77,18 @@
           .then(res => {
             if (res.hasOwnProperty('response')) {
               this.auth_list = res.response.auth_id
-              // this.auth_list = ['2','3','6','7','8','9']
               this.checkAuth()
             }
           })
       },
       checkAuth() {
         const auth = this.auth_list
+        console.log(this.auth_list)
+        console.log(auth.indexOf('4') === -1)
         if (auth.indexOf('4') === -1) {
-          this.flags = 1
+          this.flags = '1'
+        } else {
+          this.flags = '0'
         }
       },
       handleSelect(key, keyPath) {
@@ -96,6 +99,7 @@
           removeToken()
           localStorage.removeItem('TOKEN')
           localStorage.removeItem('teacher_id')
+          localStorage.removeItem('flags')
           this.$router.push({ path: '/login' })
         } else if (command === 'a') {
           this.$router.push({ path: '/' })

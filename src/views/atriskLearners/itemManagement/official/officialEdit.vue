@@ -133,7 +133,8 @@
           })
       },
       cancels() {
-        this.$router.push({ path: '/officialList', query: { project_id: this.project_id }})
+        // this.$router.push({ path: '/officialList', query: { project_id: this.project_id }})
+        this.$router.go(-1)
       },
       saveUser() {
         console.log(this.value1)
@@ -152,7 +153,8 @@
           .then(res => {
             if (res.hasOwnProperty('response')) {
               this.$message.success('保存成功')
-              this.$router.push({ path: '/officialList', qurey: { project_id: this.project_id }})
+              // this.$router.push({ path: '/officialList', qurey: w{ project_id: this.project_id }})
+              this.$router.go(-1)
               console.log(res)
             } else {
               this.$message.error(res.error_response.msg)

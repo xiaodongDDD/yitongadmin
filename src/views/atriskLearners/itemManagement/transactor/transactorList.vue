@@ -46,8 +46,8 @@
             width="110"
             label="执行人">
              <template slot-scope="scope">
-              <span v-if='scope.row.count != 0' @click='go(scope.row.teacher_id, scope.row.school_id, scope.row.project_id, scope.row.subject_id, scope.row.grade_id)' style='cursor: pointer;'>{{ scope.row.count }}</span>
-              <span @click='go(scope.row.teacher_id, scope.row.school_id, scope.row.project_id, scope.row.subject_id, scope.row.grade_id)' v-if='scope.row.count == 0' style='cursor: pointer;'><i class="el-icon-edit-outline"></i></span>
+              <span v-if='scope.row.count != 0' @click='go(scope.row.teacher_id, scope.row.school_id, scope.row.project_id, scope.row.subject_id, scope.row.grade_id, scope.row.project_name)' style='cursor: pointer;'>{{ scope.row.count }}</span>
+              <span @click='go(scope.row.teacher_id, scope.row.school_id, scope.row.project_id, scope.row.subject_id, scope.row.grade_id, scope.row.project_name)' v-if='scope.row.count == 0' style='cursor: pointer;'><i class="el-icon-edit-outline"></i></span>
             </template>
           </el-table-column>
 
@@ -146,14 +146,15 @@
        console.log(index, row)
        this.centerDialogVisible = true
      },
-     go(val1, val2, val3, val4, val5) {
+     go(val1, val2, val3, val4, val5, val6) {
        console.log(val1, val2, val3, val4)
        const datas = {
          teacher_id: val1,
          school_id: val2,
          project_id: val3,
          subject_id: val4,
-         grade_id: val5
+         grade_id: val5,
+         project_name: val6
        }
        this.$router.push({ path: '/poorStudentEdit', query: datas })
      },

@@ -2,7 +2,7 @@
   <div class="center-content student-list">
       <my-header :msg='msg'></my-header>
       <div class="content-detail">
-        <div class="title"><span class="officialMan">学困生辅导执行人管理</span><span @click='goback' class="goback">返回</span></div>
+        <div class="title"><span class="officialMan">{{ project_name }}执行人管理</span><span @click='goback' class="goback">返回</span></div>
       <div class="smallTitle">
         <span class='manName'>负责人 {{ manName }}&nbsp&nbsp</span>
         <span class="manNum">执行人 {{ manNum }}人</span>
@@ -87,153 +87,155 @@
 </template>
 
 <script>
-  import myHeader from '../../myHeader/myHeader'
-  import { leaderExecutorList, deleteExecutor, getExecutor } from '@/api/eduAdmin'
-  export default {
-    name: 'poorStudent',
-    data() {
-      return {
-        centerDialogVisible: false,
-        userName: '',
-        total: 0,
-        current_page: 1,
-        current_executor_name: '',
-        leader_id: '',
-        school_id: '',
-        project_id: '',
-        subject_id: '',
-        grade_id: '',
-        form: {
-          name: ''
-        },
-        manName: '',
-        manNum: 0,
-        current_project_id: '',
-        current_subject_id: '',
-        current_teacher_id: '',
-        msg: {
-          title1: '评价项目管理',
-          title2: '执行人管理',
-          flag: 1,
-          path: '/itemList'
-        },
-        tableData: []
+import myHeader from '../../myHeader/myHeader'
+import { leaderExecutorList, deleteExecutor, getExecutor } from '@/api/eduAdmin'
+export default {
+  name: 'poorStudent',
+  data() {
+    return {
+      centerDialogVisible: false,
+      userName: '',
+      total: 0,
+      current_page: 1,
+      current_executor_name: '',
+      leader_id: '',
+      school_id: '',
+      project_id: '',
+      subject_id: '',
+      grade_id: '',
+      form: {
+        name: ''
+      },
+      manName: '',
+      manNum: 0,
+      project_name: '',
+      current_project_id: '',
+      current_subject_id: '',
+      current_teacher_id: '',
+      msg: {
+        title1: '评价项目管理',
+        title2: '执行人管理',
+        flag: 1,
+        path: '/itemList'
+      },
+      tableData: []
+    }
+  },
+  components: {
+    myHeader
+  },
+  mounted() {
+    this.leader_id = this.$route.query.teacher_id
+    this.school_id = this.$route.query.school_id
+    this.project_id = this.$route.query.project_id
+    this.subject_id = this.$route.query.subject_id
+    this.grade_id = this.$route.query.grade_id
+    this.project_name = this.$route.query.project_name
+    this.getData(1)
+  },
+  methods: {
+    getData(pages) {
+      const obj = {
+        page: pages,
+        project_id: this.project_id,
+        teacher_id: this.leader_id,
+        token: localStorage.getItem('TOKEN')
       }
+      leaderExecutorList(obj)
+        .then(res => {
+          console.log(res)
+          if (res.hasOwnProperty('response')) {
+            this.tableData = res.response.list
+            this.total = res.response.total_page
+            this.manName = res.response.leader_name
+            this.manNum = res.response.teacher_count
+          }
+        })
     },
-    components: {
-      myHeader
-    },
-    mounted() {
-      this.leader_id = this.$route.query.teacher_id
-      this.school_id = this.$route.query.school_id
-      this.project_id = this.$route.query.project_id
-      this.subject_id = this.$route.query.subject_id
-      this.grade_id = this.$route.query.grade_id
-      this.getData(1)
-    },
-    methods: {
-      getData(pages) {
-        const obj = {
-          page: pages,
-          project_id: this.project_id,
-          teacher_id: this.leader_id,
-          token: localStorage.getItem('TOKEN')
-        }
-        leaderExecutorList(obj)
-          .then(res => {
-            console.log(res)
-            if (res.hasOwnProperty('response')) {
-              this.tableData = res.response.list
-              this.total = res.response.total_page
-              this.manName = res.response.leader_name
-              this.manNum = res.response.teacher_count
-            }
-          })
-      },
-      handleEdit(val1, val2, val3, val4, val5, val6, val7, val8, val9) {
-        console.log(val1, val2, val3, val4, val5, val6, val7)
-        const datas = {
-          school_id: val1,
-          project_id: val2,
-          leader_id: val3,
-          subject_id: val4,
-          executor_id: val5,
-          class_list: val6,
-          template_id: val7,
-          grade_id: val8,
-          executor_name: val9
-        }
-        const obj = {
-          school_id: val1,
-          project_id: val2,
-          leader_id: val3,
-          subject_id: val4,
-          executor_id: val5,
-          token: localStorage.getItem('TOKEN')
-        }
-        getExecutor(obj)
-          .then(res => {
-            if (res.hasOwnProperty('response')) {
-              this.$router.push({ path: '/exectorEdit', query: datas })
-            } else {
-              this.$message.error(res.error_response.msg)
-            }
-          })
-          .catch(err => {
-            console.log(err)
-          })
-      },
-      handleDelete(val1, val2, val3, val4, val5) {
-        this.current_project_id = val1
-        this.current_subject_id = val2
-        this.current_executor_id = val3
-        this.current_teacher_id = val5
-        this.centerDialogVisible = true
-        this.current_executor_name = val4
-      },
-      add() {
-        const datas = {
-          school_id: this.school_id,
-          project_id: this.project_id,
-          leader_id: this.leader_id,
-          subject_id: this.subject_id,
-          grade_id: this.grade_id
-        }
-        this.$router.push({ path: '/exectorAdd', query: datas })
-      },
-      goback() {
-        this.$router.push({ path: '/transactorList' })
-      },
-      handleCurrentChange(val) {
-        this.current_page = val
-        this.getData(val)
-        console.log(`当前页: ${val}`)
-      },
-      confirmDelete() {
-        this.centerDialogVisible = false
-        const obj = {
-          project_id: this.current_project_id,
-          subject_id: this.current_subject_id,
-          executor_id: this.current_executor_id,
-          leader_id: this.current_teacher_id,
-          token: localStorage.getItem('TOKEN')
-        }
-        deleteExecutor(obj)
-          .then(res => {
-            console.log(res)
-            if (res.hasOwnProperty('response')) {
-              console.log(res)
-              this.getData(this.current_page)
-            } else {
-              this.$message.error(res.error_response.msg)
-            }
-          })
-          .catch(err => {
-            console.log(err)
-          })
+    handleEdit(val1, val2, val3, val4, val5, val6, val7, val8, val9) {
+      console.log(val1, val2, val3, val4, val5, val6, val7)
+      const datas = {
+        school_id: val1,
+        project_id: val2,
+        leader_id: val3,
+        subject_id: val4,
+        executor_id: val5,
+        class_list: val6,
+        template_id: val7,
+        grade_id: val8,
+        executor_name: val9
       }
+      const obj = {
+        school_id: val1,
+        project_id: val2,
+        leader_id: val3,
+        subject_id: val4,
+        executor_id: val5,
+        token: localStorage.getItem('TOKEN')
+      }
+      getExecutor(obj)
+        .then(res => {
+          if (res.hasOwnProperty('response')) {
+            this.$router.push({ path: '/exectorEdit', query: datas })
+          } else {
+            this.$message.error(res.error_response.msg)
+          }
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
+    handleDelete(val1, val2, val3, val4, val5) {
+      this.current_project_id = val1
+      this.current_subject_id = val2
+      this.current_executor_id = val3
+      this.current_teacher_id = val5
+      this.centerDialogVisible = true
+      this.current_executor_name = val4
+    },
+    add() {
+      const datas = {
+        school_id: this.school_id,
+        project_id: this.project_id,
+        leader_id: this.leader_id,
+        subject_id: this.subject_id,
+        grade_id: this.grade_id
+      }
+      this.$router.push({ path: '/exectorAdd', query: datas })
+    },
+    goback() {
+      this.$router.push({ path: '/transactorList' })
+    },
+    handleCurrentChange(val) {
+      this.current_page = val
+      this.getData(val)
+      console.log(`当前页: ${val}`)
+    },
+    confirmDelete() {
+      this.centerDialogVisible = false
+      const obj = {
+        project_id: this.current_project_id,
+        subject_id: this.current_subject_id,
+        executor_id: this.current_executor_id,
+        leader_id: this.current_teacher_id,
+        token: localStorage.getItem('TOKEN')
+      }
+      deleteExecutor(obj)
+        .then(res => {
+          console.log(res)
+          if (res.hasOwnProperty('response')) {
+            console.log(res)
+            this.getData(this.current_page)
+          } else {
+            this.$message.error(res.error_response.msg)
+          }
+        })
+        .catch(err => {
+          console.log(err)
+        })
     }
   }
+}
 </script>
 
 <style scoped>

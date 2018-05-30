@@ -74,8 +74,8 @@
         center>
         <div class="dialogContent">
           <span>请确认是否要删除</span>
-          <span>{{ current_teacher_name }}账户</span>
-          <span>删除后，该负责人及其负责范围将彻底 删除</span>
+          <span>{{ current_teacher_name }}负责人</span>
+          <span>删除后，该负责人及其负责范围将彻底删除</span>
         </div>
         <span slot="footer" class="dialog-footer">
           <el-button @click="centerDialogVisible = false">取 消</el-button>
