@@ -149,6 +149,7 @@
             <el-button type="" size="mini" @click="operating(scope.row,1)" v-if="scope.row.activity.status !== 3">入围</el-button>
             <el-button type="" size="mini" @click="operating(scope.row,2)" v-if="scope.row.activity.status === 3">取消</el-button>
             <el-button type="" size="mini" @click="goMark(scope.row)" v-if="scope.row.activity.status === 3">专家打分</el-button>
+            <el-button type="danger" size="mini" @click="deleteData(scope.row)" v-if="scope.row.activity.status !== 3">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -210,8 +211,10 @@
 </template>
 
 <script>
-  import { getWorkManagementList, updataWorkManagementInfo } from '@/api/workManagement'
+  import { getWorkManagementList, updataWorkManagementInfo, deleteWorkManagementInfo } from '@/api/workManagement'
+  import { dateFormat } from '@/utils/validate'
   import dataProvinces from '@/staticData/provinces.json'
+  import md5 from 'js-md5'
   export default {
     data() {
       return {
@@ -439,9 +442,11 @@
                   this.total = response.response.info[0].data.pageInfo.totalNum
                 } else {
                   this.list = []
+                  this.total = 0
                 }
               } else {
                 this.list = []
+                this.total = 0
               }
               for (let i = 0; i < this.list.length; i++) {
                 if (!this.list[i].hasOwnProperty('extraContent')) {
@@ -551,14 +556,15 @@
                 'createTime': createTime,
                 'status': status,
                 'expertScore': this.listAll[i].activity.expertScore,
-                'webScore': this.listAll[i].activity.webScore
+                'webScore': this.listAll[i].activity.webScore,
+                'img': this.listAll[i].extraContent.images[0].original
               }
             )
           }
           console.log(list)
           import('@/vendor/Export2Excel').then(excel => {
-            const tHeader = ['作品编号', '晓黑板账号', '手机归属地', '作品说明', '用户角色', '提交时间', '入围状态', '专家打分', '网络票']
-            const filterVal = ['recordId', 'mobile', 'province', 'content', 'role', 'createTime', 'status', 'expertScore', 'webScore']
+            const tHeader = ['作品编号', '晓黑板账号', '手机归属地', '作品说明', '用户角色', '提交时间', '入围状态', '专家打分', '网络票', '图片']
+            const filterVal = ['recordId', 'mobile', 'province', 'content', 'role', 'createTime', 'status', 'expertScore', 'webScore', 'img']
             const data = this.formatJson(filterVal, list)
             excel.export_json_to_excel(tHeader, data, this.filename)
             this.downloadLoading = false
@@ -698,6 +704,45 @@
       timeFilter(item) {
         const time = new Date(item)
         return time.getFullYear() + '/' + (time.getMonth() + 1) + '/' + time.getDate() + '/' + time.getHours() + ':' + time.getMinutes() + ':' + time.getSeconds()
+      },
+      deleteData(item) {
+        console.log(item)
+        const time = new Date()
+        const date = dateFormat(time)
+        console.log('===' + date + '---')
+        console.log(md5('2018-05-03'))
+        const obj = {
+          'recordId': item.activity.recordId,
+          'salt': md5(date)
+        }
+        this.$confirm('此操作将永久删除该数据, 是否继续?', '警告', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+          center: true
+        }).then(() => {
+          deleteWorkManagementInfo(obj).then(response => {
+            if (response.response.info[0].status === '1') {
+              this.$message({
+                type: 'success',
+                message: '删除成功!'
+              })
+              this.dialogFormVisible = false
+              this.currentPage = 1
+              this.fetchData()
+            } else {
+              this.$message({
+                message: response.response.info[0].msg,
+                type: 'error'
+              })
+            }
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
       }
     }
   }
