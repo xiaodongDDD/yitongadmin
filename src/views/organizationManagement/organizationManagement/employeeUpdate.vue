@@ -244,7 +244,6 @@
     data() {
       var validatePass = (rule, value, callback) => {
         var a = /0\d{2}-\d{7,8}/
-        console.log()
         if (value === '') {
           callback()
         } else if (!a.test(value)) {
@@ -349,7 +348,7 @@
             { trigger: 'blur', required: true, message: '请选择上级' }
           ]
         },
-        optionsList: [{ label: '请选择', value: '' }, { label: '运营人员', value: 'MARKET' }, { label: '培训师', value: 'OPERATION' }],
+        optionsList: [{ label: '请选择', value: '' }, { label: '运营人员', value: 'OPERATION' }, { label: '培训师', value: 'MARKET' }],
         dialogFormVisibleCompany: false,
         dialogFormVisibleDepartment: false,
         companyList: [],
@@ -461,6 +460,13 @@
               this.form.leave_time = 0
             } else {
               this.form.leave_time = new Date(this.leave_timeSp).getTime() / 1000
+              if (this.form.entry_time > this.form.leave_time) {
+                this.$message({
+                  message: '离职日期不能早于入职日期！',
+                  type: 'success'
+                })
+                return
+              }
             }
             addEditUser(this.form).then(response => {
               this.$message({

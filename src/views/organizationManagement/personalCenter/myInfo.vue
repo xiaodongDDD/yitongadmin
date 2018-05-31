@@ -73,6 +73,8 @@
           callback()
         } else if (!a.test(value)) {
           callback(new Error('请输入正确的座机'))
+        } else {
+          callback()
         }
       }
       var validateName = (rule, value, callback) => {
@@ -81,6 +83,8 @@
           callback()
         } else if (!a.test(value)) {
           callback(new Error('请输入正确的英文名'))
+        } else {
+          callback()
         }
       }
       return {
