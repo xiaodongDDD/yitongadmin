@@ -97,6 +97,13 @@ export const constantRouterMap = [
         hidden: true
       },
       {
+        path: 'myMessage',
+        name: 'myMessage',
+        component: _import('organizationManagement/personalCenter/myInfo'),
+        meta: { title: '我的消息', icon: 'table' },
+        hidden: false
+      },
+      {
         path: 'updatePassword',
         name: '修改密码',
         component: _import('organizationManagement/personalCenter/updatePassword'),
@@ -106,43 +113,29 @@ export const constantRouterMap = [
     ]
   },
   { path: '*', redirect: '/404', hidden: true },
-  // {
-  //   path: '/example',
-  //   component: Layout,
-  //   // redirect: '/example/table',
-  //   // name: 'Example',
-  //   // meta: { title: 'Example', icon: 'example' },
-  //   children: [
-  //     {
-  //       path: 'table',
-  //       name: 'Table',
-  //       component: _import('table/index'),
-  //       meta: { title: '列表', icon: 'table' }
-  //     }
-  //   ]
-  // },
-  // {
-  //   path: '/feedbackQuestion',
-  //   component: Layout,
-  //   redirect: '/feedbackQuestion/schoolH5',
-  //   name: '反馈问题',
-  //   meta: { title: '反馈问题', icon: 'table' },
-  //   children: [
-  //     {
-  //       path: 'schoolH5',
-  //       name: '整校h5',
-  //       component: _import('feedbackQuestion/schoolH5'),
-  //       meta: { title: '整校h5', icon: 'table' }
-  //     },
-  //     {
-  //       path: 'schoolPC',
-  //       name: '整校pc',
-  //       component: _import('form/index'),
-  //       meta: { title: '整校pc', icon: 'table' },
-  //       hidden: true
-  //     }
-  //   ]
-  // },
+  {
+    path: '/feedbackQuestion',
+    component: Layout,
+    redirect: '/feedbackQuestion/schoolH5',
+    name: '反馈问题',
+    meta: { title: '反馈问题', icon: 'table' },
+    hidden: true,
+    children: [
+      {
+        path: 'schoolH5',
+        name: '整校h5',
+        component: _import('feedbackQuestion/schoolH5'),
+        meta: { title: '整校h5', icon: 'table' }
+      },
+      {
+        path: 'schoolPC',
+        name: '整校pc',
+        component: _import('form/index'),
+        meta: { title: '整校pc', icon: 'table' },
+        hidden: true
+      }
+    ]
+  },
   {
     path: '/eventManagement',
     component: Layout,
@@ -153,6 +146,48 @@ export const constantRouterMap = [
         name: 'worksManagement',
         component: _import('eventManagement/worksManagement'),
         meta: { title: '作品管理', icon: 'table' }
+      }
+    ]
+  },
+  {
+    path: '/example',
+    component: Layout,
+    redirect: '/example/table',
+    name: 'Example',
+    meta: { title: '晓黑板', icon: 'table' },
+    alwaysShow: true,
+    children: [
+      {
+        path: 'table',
+        name: 'Table1',
+        component: _import('table/index'),
+        meta: { title: '用户管理SP', icon: 'table' },
+        children: [
+          {
+            path: 'table',
+            name: 'Table2',
+            component: _import('table/index'),
+            meta: { title: '用户管理ddd', icon: 'table' }
+          },
+          {
+            path: 'table',
+            name: 'Table3',
+            component: _import('table/index'),
+            meta: { title: '用户申请', icon: 'table' }
+          }
+          // {
+          //   path: 'table',
+          //   name: 'Table4',
+          //   component: _import('table/index'),
+          //   meta: { title: '分派配置', icon: 'table' }
+          // }
+        ]
+      },
+      {
+        path: 'table',
+        name: 'Table5',
+        component: _import('table/index'),
+        meta: { title: '列表', icon: 'table' }
       }
     ]
   }
