@@ -92,7 +92,7 @@
         },
         isAddSign: false,
         msg: {
-          title1: '评价模版管理',
+          title1: '评价模板管理',
           title2: '新增评价模版管理',
           flag: 1,
           path: '/templateList'

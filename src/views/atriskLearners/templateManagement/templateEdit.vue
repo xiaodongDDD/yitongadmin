@@ -90,7 +90,7 @@
       return {
         form: {},
         msg: {
-          title1: '评价模版管理',
+          title1: '评价模板管理',
           title2: '编辑评价模板',
           flag: 1,
           path: '/templateList?template_id=' + this.$route.query.template_id + '&school_id=' + this.$route.query.school_id
