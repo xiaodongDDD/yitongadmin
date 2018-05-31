@@ -556,14 +556,15 @@
                 'createTime': createTime,
                 'status': status,
                 'expertScore': this.listAll[i].activity.expertScore,
-                'webScore': this.listAll[i].activity.webScore
+                'webScore': this.listAll[i].activity.webScore,
+                'img': this.listAll[i].extraContent.images[0].original
               }
             )
           }
           console.log(list)
           import('@/vendor/Export2Excel').then(excel => {
-            const tHeader = ['作品编号', '晓黑板账号', '手机归属地', '作品说明', '用户角色', '提交时间', '入围状态', '专家打分', '网络票']
-            const filterVal = ['recordId', 'mobile', 'province', 'content', 'role', 'createTime', 'status', 'expertScore', 'webScore']
+            const tHeader = ['作品编号', '晓黑板账号', '手机归属地', '作品说明', '用户角色', '提交时间', '入围状态', '专家打分', '网络票', '图片']
+            const filterVal = ['recordId', 'mobile', 'province', 'content', 'role', 'createTime', 'status', 'expertScore', 'webScore', 'img']
             const data = this.formatJson(filterVal, list)
             excel.export_json_to_excel(tHeader, data, this.filename)
             this.downloadLoading = false
