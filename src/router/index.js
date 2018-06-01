@@ -140,7 +140,7 @@ export const constantRouterMap = [
   {
     path: '/eventManagement',
     component: Layout,
-    hidden: true,
+    hidden: false,
     children: [
       {
         path: 'worksManagement',

@@ -14,6 +14,9 @@
         <el-cascader
           :options="options2"
           :props="props"
+          clearable
+          filterable
+          v-model="formInline.selectedOptions"
         ></el-cascader>
       </el-form-item>
       <el-form-item label="渠道">
@@ -74,6 +77,52 @@
         <el-button type="primary" @click="onSubmit">查询</el-button>
       </el-form-item>
     </el-form>
+    <div class="nowClass">
+      <el-row :gutter="20" class="headNow">
+        <el-col :span="6" class="contentClass">今日收到 &nbsp;
+          <el-popover
+            placement="top-start"
+            width="200"
+            trigger="hover"
+            content="所有今日分派给我的任务进行计数">
+            <i class="el-icon-question" slot="reference"></i>
+          </el-popover>
+        </el-col>
+        <el-col :span="6" class="contentClass">今日遗失 &nbsp;
+          <el-popover
+            placement="top-start"
+            width="200"
+            trigger="hover"
+            content="所有今日因未及时处理的任务进行计数">
+            <i class="el-icon-question" slot="reference"></i>
+          </el-popover>
+        </el-col>
+        <el-col :span="6" class="contentClass">今日成功 &nbsp;
+          <el-popover
+            placement="top-start"
+            width="200"
+            trigger="hover"
+            content="跟进记录中标记为成功的任务进行计数">
+            <i class="el-icon-question" slot="reference"></i>
+          </el-popover>
+        </el-col>
+        <el-col :span="6" class="contentClass">今日失败 &nbsp;
+          <el-popover
+            placement="top-start"
+            width="200"
+            trigger="hover"
+            content="跟进记录中标记为失败的任务进行计数">
+            <i class="el-icon-question" slot="reference"></i>
+          </el-popover>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20" class="headNow">
+        <el-col :span="6" class="contentClass">100</el-col>
+        <el-col :span="6" class="contentClass">10</el-col>
+        <el-col :span="6" class="contentClass">70</el-col>
+        <el-col :span="6" class="contentClass">20</el-col>
+      </el-row>
+    </div>
     <el-row :gutter="20" class="infoHeadTable">
       <el-col :span="12" style="line-height: 40px">
         已为您搜索到<span>{{this.total}}</span>条作品
@@ -154,14 +203,14 @@
           <el-button type="" size="mini" @click="operating(scope.row,2)" >调换</el-button>
           <el-button type="" size="mini" @click="operating(scope.row,3)" >跟进</el-button>
           <el-button type="" size="mini" @click="operating(scope.row,4)" >返回</el-button>
-          <el-button type="" size="mini" @click="operating(scope.row,4)" >操作日志</el-button>
+          <el-button type="" size="mini" @click="operating(scope.row,5)" >操作日志</el-button>
         </template>
       </el-table-column>
     </el-table>
     <!--分页-->
     <div class="block" v-if="pageFlag">
-      <el-button class="buttonSelect" type="" icon="document" @click="operating('',3)" >批量分派</el-button>
-      <el-button class="buttonSelect" type="" icon="document" @click="operating('',4)" >批量调换</el-button>
+      <el-button class="buttonSelect" type="" icon="document" @click="operating('',6)" >批量分派</el-button>
+      <el-button class="buttonSelect" type="" icon="document" @click="operating('',7)" >批量调换</el-button>
       <el-pagination
         background
         @size-change="handleSizeChange"
@@ -173,6 +222,114 @@
         :total="total">
       </el-pagination>
     </div>
+    <!--分派-->
+    <el-dialog
+      title="任务分派"
+      :visible.sync="taskDialogVisible"
+      width="30%"
+      center>
+      <el-form :label-position="labelPosition" :model="formTask" label-width="80px">
+        <el-form-item label="分配给">
+          <el-input placeholder="请输入姓名" v-model="formTask.selectName" class="input-with-select" style="width: 100%">
+            <el-button slot="append" icon="el-icon-search"></el-button>
+          </el-input>
+        </el-form-item>
+        <el-form-item label="">
+          <template>
+            <div>
+              <el-radio v-model="selectTask" label="1" border class="marginStyle">备选项1</el-radio>
+              <el-radio v-model="selectTask" label="2" border class="marginStyle">备选项2</el-radio>
+            </div>
+          </template>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer el-dialog-top">
+        <el-button @click="taskDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="taskDialogVisible = false">保 存</el-button>
+      </div>
+    </el-dialog>
+    <!--调换-->
+    <el-dialog
+      title="任务调换"
+      :visible.sync="exchangeDialogVisible"
+      width="30%"
+      center>
+      <el-form :model="formExchange" label-width="80px" :label-position="labelPosition">
+        <el-form-item label="归属地">
+          <el-cascader
+            :options="options2"
+            :props="props"
+            clearable
+            filterable
+            v-model="formExchange.selectedOptions" style="width: 100%"
+          ></el-cascader>
+        </el-form-item>
+        <el-form-item label="调换给">
+          <el-input placeholder="请输入姓名" v-model="formExchange.selectName" class="input-with-select">
+            <el-button slot="append" icon="el-icon-search"></el-button>
+          </el-input>
+        </el-form-item>
+        <el-form-item label="">
+          <template>
+            <div>
+              <el-radio v-model="selectTask" label="1" border class="marginStyle">备选项1</el-radio>
+              <el-radio v-model="selectTask" label="2" border class="marginStyle">备选项2</el-radio>
+            </div>
+          </template>
+        </el-form-item>
+        <el-form-item label="调换缘由">
+          <el-input
+            type="textarea"
+            :rows="3"
+            placeholder="最多输入300个汉字"
+            v-model="formExchange.textarea">
+          </el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer el-dialog-top">
+        <el-button @click="exchangeDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="exchangeDialogVisible = false">保 存</el-button>
+      </div>
+    </el-dialog>
+    <!--跟进-->
+    <el-dialog
+      title="任务调换"
+      :visible.sync="followDialogVisible"
+      width="30%"
+      center>
+      <el-tabs v-model="activeName2" type="card" @tab-click="handleClick">
+        <el-tab-pane label="联系成功" name="first">
+          <el-form :model="formExchange" label-width="80px" :label-position="labelPosition">
+            <el-form-item label="调换缘由">
+              <el-input
+                type="textarea"
+                :rows="3"
+                placeholder="最多输入300个汉字"
+                v-model="formExchange.textarea">
+              </el-input>
+            </el-form-item>
+          </el-form>
+        </el-tab-pane>
+        <el-tab-pane label="联系失败" name="second">
+          <el-form :model="formExchange" label-width="80px" :label-position="labelPosition">
+            <el-form-item label="调换缘由">
+              <el-input
+                type="textarea"
+                :rows="3"
+                placeholder="最多输入300个汉字"
+                v-model="formExchange.textarea">
+              </el-input>
+            </el-form-item>
+          </el-form>
+        </el-tab-pane>
+      </el-tabs>
+      <div slot="footer" class="dialog-footer el-dialog-top">
+        <el-button @click="followDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="followDialogVisible = false">保 存</el-button>
+      </div>
+    </el-dialog>
+    <!--返回-->
+    <!--操作日志-->
   </div>
 </template>
 
@@ -185,18 +342,20 @@ export default {
     return {
       list: null,
       listLoading: true,
+      labelPosition: 'left',
       formInline: {
         name: '',
         school: '',
         phone: '',
-        selectedOptions: '',
+        selectedOptions: null,
         channel: '',
         principal: '',
         dateValue: ''
       },
       options2: [],
       props: {
-        value: 'label',
+        value: 'value',
+        label: 'label',
         children: 'cities'
       },
       channelList: [
@@ -237,7 +396,25 @@ export default {
       pagesize: 10,
       currentPage: 1,
       pageFlag: true,
-      downloadLoading: false
+      downloadLoading: false,
+      taskDialogVisible: false,
+      formTask: {
+        selectName: ''
+      },
+      selectTask: '',
+      exchangeDialogVisible: false,
+      formExchange: {
+        selectName: '',
+        selectedOptions: null
+      },
+      selectExchange: '',
+      followDialogVisible: false,
+      formFollow: {
+        selectName: '',
+        selectedOptions: null
+      },
+      selectFollow: '',
+      activeName2: 'first'
     }
   },
   filters: {
@@ -259,14 +436,24 @@ export default {
         this.options2[i].cities.push({ label: dataProvinces.provinces[i].citys[j], value: dataProvinces.provinces[i].citys[j] })
       }
     }
-    // console.log(this.options2)
     this.fetchData()
   },
   methods: {
     fetchData() {
+      // let province = ''
+      // let city = ''
+      // if (this.formInline.selectedOptions === '' || this.formInline.selectedOptions == null) {
+      //   province = ''
+      //   city = ''
+      // } else {
+      //   province = this.formInline.selectedOptions[0]
+      //   city = this.formInline.selectedOptions[1]
+      //   if (city === '北京' || city === '上海' || city === '广州' || city === '天津' || city === '重庆') {
+      //     city = ''
+      //   }
+      // }
       this.listLoading = true
       getList(this.listQuery).then(response => {
-        console.log(response)
         this.list = response.response.user_list
         this.listLoading = false
       })
@@ -284,6 +471,31 @@ export default {
       this.currentPage = val
       this.fetchData()
       console.log(`当前页: ${val}`)
+    },
+    operating(item, type) {
+      switch (type) {
+        case 1:
+          this.taskDialogVisible = true
+          break
+        case 2:
+          this.exchangeDialogVisible = true
+          break
+        case 3:
+          this.followDialogVisible = true
+          break
+        case 4:
+          break
+        case 5:
+          break
+        case 6:
+          break
+        case 7:
+          break
+        default:
+      }
+    },
+    handleClick(tab, event) {
+      console.log()
     }
   }
 }
@@ -313,6 +525,22 @@ export default {
         top: -40px;
         float: right;
       }
+    }
+    .nowClass{
+      width: 75%;
+      text-align: center;
+      background-color: #F0F0F0;
+      .headNow{
+        height: 30px;
+        line-height: 30px;
+      }
+    }
+    .marginStyle{
+      margin-top: 10px;
+      margin-left: 10px;
+    }
+    .el-dialog-top{
+      margin-top: -30px;
     }
   }
 </style>
