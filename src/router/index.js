@@ -8,6 +8,7 @@ Vue.use(Router)
 
 /* Layout */
 import Layout from '../views/layout/Layout'
+import threeMain from '../views/layout/threeMain'
 
 /**
 * hidden: true                   if `hidden:true` will not show in the sidebar(default is false)
@@ -47,35 +48,35 @@ export const constantRouterMap = [
         path: 'employeeMangement',
         name: 'work',
         component: _import('organizationManagement/organizationManagement/employeeMangement'),
-        meta: { title: '员工管理', icon: 'table' },
+        meta: { title: '员工管理' },
         hidden: true
       },
       {
         path: 'employeeMangementsp',
         name: '员工管理sp',
         component: _import('organizationManagement/organizationManagement/employeeUpdate'),
-        meta: { title: '员工管理', icon: 'table' },
+        meta: { title: '员工管理' },
         hidden: true
       },
       {
         path: 'roleMangement',
         name: 'role',
         component: _import('organizationManagement/organizationManagement/roleMangement'),
-        meta: { title: '角色管理', icon: 'table' },
+        meta: { title: '角色管理' },
         hidden: true
       },
       {
         path: 'roleUpdatesp',
         name: '角色管理sp',
         component: _import('organizationManagement/organizationManagement/roleUpdate'),
-        meta: { title: '角色管理', icon: 'table' },
+        meta: { title: '角色管理' },
         hidden: true
       },
       {
         path: 'authorityMangement',
         name: 'auth',
         component: _import('organizationManagement/organizationManagement/authorityMangement'),
-        meta: { title: '权限管理', icon: 'table' },
+        meta: { title: '权限管理' },
         hidden: true
       }
     ]
@@ -93,21 +94,21 @@ export const constantRouterMap = [
         path: 'myInfo',
         name: 'myself',
         component: _import('organizationManagement/personalCenter/myInfo'),
-        meta: { title: '我的资料', icon: 'table' },
+        meta: { title: '我的资料' },
         hidden: true
       },
       {
         path: 'myMessage',
         name: 'myMessage',
         component: _import('organizationManagement/personalCenter/myInfo'),
-        meta: { title: '我的消息', icon: 'table' },
+        meta: { title: '我的消息' },
         hidden: false
       },
       {
         path: 'updatePassword',
         name: '修改密码',
         component: _import('organizationManagement/personalCenter/updatePassword'),
-        meta: { title: '修改密码', icon: 'table' },
+        meta: { title: '修改密码' },
         hidden: true
       }
     ]
@@ -150,44 +151,39 @@ export const constantRouterMap = [
     ]
   },
   {
-    path: '/example',
+    path: '/xiaoHeiBan',
     component: Layout,
-    redirect: '/example/table',
+    redirect: '/xiaoHeiBan/user/userApplication',
     name: 'Example',
     meta: { title: '晓黑板', icon: 'table' },
     alwaysShow: true,
     children: [
       {
-        path: 'table',
+        path: '/user',
         name: 'Table1',
-        component: _import('table/index'),
-        meta: { title: '用户管理SP', icon: 'table' },
+        component: threeMain,
+        redirect: '/xiaoHeiBan/user/userApplication',
+        meta: { title: '用户管理', icon: 'table' },
         children: [
           {
-            path: 'table',
-            name: 'Table2',
-            component: _import('table/index'),
-            meta: { title: '用户管理ddd', icon: 'table' }
+            path: 'userApplication',
+            name: 'Table3',
+            component: _import('xiaoHeiBan/userManagement/userApplication'),
+            meta: { title: '用户申请' }
           },
           {
-            path: 'table',
-            name: 'Table3',
-            component: _import('table/index'),
-            meta: { title: '用户申请', icon: 'table' }
+            path: 'taskAssignment',
+            name: 'Table4',
+            component: _import('xiaoHeiBan/userManagement/taskAssignment'),
+            meta: { title: '分派配置' }
           }
-          // {
-          //   path: 'table',
-          //   name: 'Table4',
-          //   component: _import('table/index'),
-          //   meta: { title: '分派配置', icon: 'table' }
-          // }
         ]
       },
       {
         path: 'table',
         name: 'Table5',
         component: _import('table/index'),
-        meta: { title: '列表', icon: 'table' }
+        meta: { title: '列表' }
       }
     ]
   }
