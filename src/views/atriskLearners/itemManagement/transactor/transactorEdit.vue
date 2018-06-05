@@ -54,7 +54,7 @@
           title3: '编辑执行人管理',
           flag: 2,
           path1: '/itemList',
-          path2: '/officialList'
+          path2: '/transactorList'
         }
       }
     },

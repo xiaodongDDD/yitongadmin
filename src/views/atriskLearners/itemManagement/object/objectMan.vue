@@ -2,7 +2,7 @@
   <div class="center-content object-man">
       <my-header :msg='msg'></my-header>
       <div class="content-detail">
-        <div class="title"><span class="officialMan">学困生辅导评价管理</span><span @click="goback" class="goback">返回</span></div>
+        <div class="title"><span class="officialMan">{{ project_name }}评价项目管理</span><span @click="goback" class="goback">返回</span></div>
       <div class="smallTitle">
         <span class='manName'>执行人 {{ teacher_name }}&nbsp&nbsp</span>
         <span class="num">评价对象 {{ num }}人</span>
@@ -65,6 +65,7 @@ export default {
       form: {
         name: ''
       },
+      project_name: '',
       msg: {
         title1: '评价项目管理',
         title2: '评价对象管理',
@@ -79,6 +80,8 @@ export default {
   },
   mounted() {
     this.p_e_ids = this.$route.query.p_e_ids
+    this.project_name = this.$route.query.project_name
+    this.teacher_name = this.$route.query.teacher_name
     this.getData(1)
   },
   methods: {
@@ -95,7 +98,7 @@ export default {
             this.tableData = res.response.list
             this.total = res.response.allPage
             this.num = res.response.num
-            this.teacher_name = res.response.teacher_name
+            // this.teacher_name = res.response.teacher_name
           }
         })
         .catch(err => {

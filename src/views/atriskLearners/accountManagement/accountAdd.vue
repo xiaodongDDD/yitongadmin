@@ -34,7 +34,7 @@
             <el-input v-model="form.e_mail"></el-input>
           </el-form-item>
           <el-form-item label="账户状态：">
-            <el-select v-model="form.status" placeholder="请选择">
+            <el-select v-model="form.status" placeholder="请选择" @change="cstatus">
               <el-option
                 v-for="item in options"
                 :key="item.value"
@@ -110,6 +110,7 @@
           ]
         },
         userInfo: {},
+        sValue: '0',
         msg: {
           title1: '账户管理',
           title2: '新增账户',
@@ -135,12 +136,11 @@
           }
         })
       },
+      cstatus(val) {
+        this.sValue = val
+      },
       saveUser() {
-        if (this.form.status === '停用') {
-          this.form.enabled_status = 0
-        } else {
-          this.form.enabled_status = 1
-        }
+        this.form.enabled_status = this.sValue
         this.form.token = localStorage.getItem('TOKEN')
         if (this.form.teacher_name.length <= 28) {
           accountSave(this.form).then(res => {

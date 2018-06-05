@@ -51,7 +51,7 @@
             <el-input v-model="form.e_mail"></el-input>
           </el-form-item>
           <el-form-item label="账户状态：">
-            <el-select v-model="form.status" placeholder="请选择">
+            <el-select v-model="form.status" placeholder="请选择" @change="cstatus">
               <el-option
                 v-for="item in options"
                 :key="item.value"
@@ -104,6 +104,7 @@
           status: '',
           telephone: ''
         },
+        sValue: '0',
         schoolList: [],
         rules: {
           teacher_name: [
@@ -155,7 +156,7 @@
       },
       saveUser() {
         this.form.token = localStorage.getItem('TOKEN')
-        this.form.enabled_status = this.form.status
+        this.form.enabled_status = this.sValue
         if (this.form.teacher_name.length <= 28) {
           accountSave(this.form).then(res => {
             // console.log(res)
@@ -170,6 +171,9 @@
           })
         }
       },
+      cstatus(val) {
+        this.sValue = val
+      },
       getDetail() {
         const obj = {}
         obj.teacher_id = this.$route.query.teacher_id
@@ -181,9 +185,11 @@
             if (data.info.enabled_status === true) {
               data.info.status = '启用'
               data.info.enabled_status = 1
+              this.sValue = 1
             } else {
               data.info.status = '停用'
               data.info.enabled_status = 0
+              this.sValue = 0
             }
             this.form = data.info
             // this.form.teacher_type = data.teacher_type
