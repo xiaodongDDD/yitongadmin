@@ -53,7 +53,7 @@
 
 <script>
   import myHeader from '../myHeader/myHeader'
-  import { getPowerDetail, authSave, } from '@/api/eduAdmin'
+  import { getPowerDetail, authSave } from '@/api/eduAdmin'
   export default {
     name: 'powerEdit',
     data() {
