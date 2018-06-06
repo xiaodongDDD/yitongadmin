@@ -55,7 +55,7 @@
             <template slot-scope="scope">
               <el-button
                 size="mini"
-                @click="handleEdit(scope.row.executor_id, scope.row.subject_id, scope.row.project_id)">编辑</el-button>
+                @click="handleEdit(scope.row.executor_id, scope.row.subject_id, scope.row.project_id, scope.row.leader_id)">编辑</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -136,9 +136,9 @@ export default {
           console.log(err)
         })
     },
-    handleEdit(val1, val2, val3) {
+    handleEdit(val1, val2, val3, val4) {
       console.log(val3)
-      this.$router.push({ path: '/objectEdit', query: { teacher_id: val1, subject_id: val2, project_id: val3 }})
+      this.$router.push({ path: '/objectEdit', query: { teacher_id: val1, subject_id: val2, project_id: val3, leader_id: val4 }})
     },
     handleDelete(index, row) {
       console.log(index, row)

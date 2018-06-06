@@ -40,14 +40,7 @@
     name: 'transactorEdit',
     data() {
       return {
-        form: {
-          project_name: '',
-          teacher_name: '石选晓',
-          schoolName: '石选晓可代发集齐啊小花',
-          subject_name: '',
-          grade_name: '13535790897',
-          project_comment: ''
-        },
+        form: {},
         msg: {
           title1: '评价项目管理',
           title2: '执行人管理',

@@ -42,6 +42,7 @@
      return {
        project_id: '',
        form: {},
+       leader_id: '',
        msg: {
          title1: '评价项目管理',
          title2: '评价对象管理',
@@ -59,6 +60,7 @@
      this.teacher_id = this.$route.query.teacher_id
      this.subject_id = this.$route.query.subject_id
      this.project_id = this.$route.query.project_id
+     this.leader_id = this.$route.query.leader_id
      this.getData()
    },
    methods: {
@@ -67,6 +69,7 @@
          teacher_id: this.teacher_id,
          subject_id: this.subject_id,
          project_id: this.project_id,
+         leader_id: this.leader_id,
          token: localStorage.getItem('TOKEN')
        }
        getObjectDetail(obj)

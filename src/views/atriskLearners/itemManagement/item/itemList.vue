@@ -69,7 +69,7 @@
         </el-table>
       </div>
 
-      <div class="list-add">
+      <div class="list-add" v-if="addShow !== '1'">
           <el-button icon="el-icon-plus" @click='addItem'>新增</el-button>
         <el-pagination
           style='display:inline-block;margin-left:30%;'
@@ -135,7 +135,8 @@ export default {
       // }],
       // value: '选项1',
       tableData: [],
-      current_proID: ''
+      current_proID: '',
+      addShow: ''
     }
   },
   components: {
@@ -162,6 +163,7 @@ export default {
             this.tableData = res.response.list
             this.total = res.response.total_page
             this.schoolName = res.response.school_name
+            this.addShow = res.response.teacher_type
             // for (let i = 0; i < res.response.list.length; i++) {
             //   if (res.response.list[i].project_status === "0") {
             //     res.response.list[i].status = '启用'
