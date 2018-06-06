@@ -194,7 +194,8 @@
       },
       // 导出提示
       importGain() {
-        if (this.formInline.class !== '请先选择年级') {
+        console.log(this.formInline)
+        if (this.formInline.class !== '请先选择年级' && this.formInline.class !== undefined) {
           if (this.formInline.grade === '' && this.formInline.class === '' && this.formInline.subject === '') {
             this.$message('请您先筛选学科或年级班级后导出')
           } else {
@@ -216,7 +217,8 @@
       // 筛选
       onSubmit() {
         this.filterData.school_id = this.$route.query.school_id
-        if (this.formInline.class !== '请先选择年级') {
+        // console.log(this.formInline.class)
+        if (this.formInline.class !== '请先选择年级' && this.formInline.class !== undefined) {
           this.getList(1, this.filterData.school_id, this.filterData.grade_id, this.filterData.class_id, this.filterData.subject_id, 1)
         } else {
           this.$message('请先选择年级')
@@ -230,6 +232,8 @@
       clearCondition() {
         this.formInline = { grade: '', class: '', subject: '' }
         this.filterData = {}
+        // console.log(this.searchData)
+        this.searchData = {}
         this.classData = [{ class_name: '请先选择年级' }]
         this.getList(1, this.$route.query.school_id)
         this.isSearch.searched = false
@@ -264,6 +268,7 @@
       },
       changeGrade(val) {
         this.classData = []
+        this.searchData.class_name = ''
         this.isSearch.searched = false
         const obj = {}
         obj.grade_id = val

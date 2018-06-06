@@ -45,8 +45,8 @@
             label="评价对象"
             width='100'>
              <template slot-scope="scope">
-              <span v-if='scope.row.num != 0'  @click='go(scope.row.p_e_ids)' style='cursor: pointer;'>{{ scope.row.num }}</span>
-              <span @click='go(scope.row.p_e_ids)' v-if='scope.row.num == 0' style='cursor: pointer;'><i class="el-icon-edit-outline"></i></span>
+              <span v-if='scope.row.num != 0'  @click='go(scope.row.p_e_ids, scope.row.project_name, scope.row.teacher_name)' style='cursor: pointer;'>{{ scope.row.num }}</span>
+              <span @click='go(scope.row.p_e_ids, scope.row.project_name, scope.row.teacher_name)' v-if='scope.row.num == 0' style='cursor: pointer;'><i class="el-icon-edit-outline"></i></span>
             </template>
           </el-table-column>
 
@@ -55,7 +55,7 @@
             <template slot-scope="scope">
               <el-button
                 size="mini"
-                @click="handleEdit(scope.row.executor_id, scope.row.subject_id)">编辑</el-button>
+                @click="handleEdit(scope.row.executor_id, scope.row.subject_id, scope.row.project_id, scope.row.leader_id)">编辑</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -63,7 +63,7 @@
 
       <el-pagination
           style='display:inline-block;margin-left:37%;margin-top:20px;'
-          @current-change="handleCurrentChange"  
+          @current-change="handleCurrentChange"
           background
           layout="prev, pager, next"
           :page-count="total">
@@ -84,7 +84,7 @@
           <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
         </span>
       </el-dialog>
-    </div> 
+    </div>
   </div>
 </template>
 
@@ -107,15 +107,7 @@ export default {
         flag: 1,
         path: '/itemList'
       },
-      tableData: [{
-        project_name: '1212',
-        project_remark: '2hahashdasdh',
-        teacher_name: '112sdasdas',
-        subject_name: '1212sdas',
-        g_c_name: 'dadasd',
-        project_comment: 'uyasyasd',
-        num: 12
-      }]
+      tableData: []
     }
   },
   components: {
@@ -144,17 +136,17 @@ export default {
           console.log(err)
         })
     },
-    handleEdit(val1, val2) {
-      console.log(val1, val2)
-      this.$router.push({ path: '/objectEdit', query: { teacher_id: val1, subject_id: val2 }})
+    handleEdit(val1, val2, val3, val4) {
+      console.log(val3)
+      this.$router.push({ path: '/objectEdit', query: { teacher_id: val1, subject_id: val2, project_id: val3, leader_id: val4 }})
     },
     handleDelete(index, row) {
       console.log(index, row)
       this.centerDialogVisible = true
     },
-    go(val1) {
-      console.log(val1)
-      this.$router.push({ path: '/objectMan', query: { p_e_ids: val1 }})
+    go(val1, val2, val3) {
+      console.log(val2)
+      this.$router.push({ path: '/objectMan', query: { p_e_ids: val1, project_name: val2, teacher_name: val3 }})
     },
     handleCurrentChange(val) {
       this.getData(val)

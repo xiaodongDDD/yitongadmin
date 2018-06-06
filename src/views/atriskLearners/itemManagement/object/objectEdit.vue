@@ -40,15 +40,9 @@
    name: 'transactorEdit',
    data() {
      return {
-       form: {
-         project_name: '',
-         teacher_name: '',
-         project_remark: '0',
-         schoolName: '',
-         g_c_name: '',
-         subject_name: '',
-         project_comment: ''
-       },
+       project_id: '',
+       form: {},
+       leader_id: '',
        msg: {
          title1: '评价项目管理',
          title2: '评价对象管理',
@@ -65,6 +59,8 @@
    mounted() {
      this.teacher_id = this.$route.query.teacher_id
      this.subject_id = this.$route.query.subject_id
+     this.project_id = this.$route.query.project_id
+     this.leader_id = this.$route.query.leader_id
      this.getData()
    },
    methods: {
@@ -72,6 +68,8 @@
        const obj = {
          teacher_id: this.teacher_id,
          subject_id: this.subject_id,
+         project_id: this.project_id,
+         leader_id: this.leader_id,
          token: localStorage.getItem('TOKEN')
        }
        getObjectDetail(obj)
@@ -81,6 +79,9 @@
              this.form = res.response.msg
            } else {
              console.log(res.error_response.msg)
+             this.$alert(res.error_response.msg, '提示', {
+               confirmButtonText: '确定'
+             })
            }
          })
          .catch(err => {
@@ -91,6 +92,7 @@
        const obj = {
          teacher_id: this.teacher_id,
          subject_id: this.subject_id,
+         project_id: this.project_id,
          project_comment: this.form.project_comment,
          token: localStorage.getItem('TOKEN')
        }

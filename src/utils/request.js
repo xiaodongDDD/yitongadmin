@@ -59,7 +59,7 @@ service.interceptors.response.use(
   error => {
     console.log('err' + error)// for debug
     Message({
-      message: error.message,
+      message: '请检查网络是否正常',
       type: 'error',
       duration: 5 * 1000
     })

@@ -48,7 +48,6 @@ const GainList = r => require.ensure([], () => r(require('../views/atriskLearner
 const GainSchoolList = r => require.ensure([], () => r(require('../views/atriskLearners/gainManagement/gainSchoolList')), 'GainSchoolList')
 const GainDetails = r => require.ensure([], () => r(require('../views/atriskLearners/gainManagement/gainDetails')), 'GainDetails')
 const LogList = r => require.ensure([], () => r(require('../views/atriskLearners/operationLog/logList')), 'LogList')
-const Test = r => require.ensure([], () => r(require('../views/atriskLearners/accountManagement/test')), 'LogList')
 
 export const constantRouterMap = [
   { path: '/login', component: Login, hidden: true },
@@ -59,14 +58,6 @@ export const constantRouterMap = [
     name: 'Index',
     component: Index,
     children: [
-      {
-        path: 'test',
-        name: '测试',
-        component: Test,
-        meta: {
-          title: '测试'
-        }
-      },
       {
         path: 'userList',
         name: '学校用户管理',
