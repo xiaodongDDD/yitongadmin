@@ -42,11 +42,11 @@
      return {
        form: {
          project_name: '',
-         teacher_name: '石选晓',
+         teacher_name: '',
          project_remark: '0',
-         schoolName: '石选晓可代发集齐啊小花',
+         schoolName: '',
          g_c_name: '',
-         subject_name: '13535790897',
+         subject_name: '',
          project_comment: ''
        },
        msg: {
