@@ -9,7 +9,7 @@
             <span>{{form.teacher_name}}</span>
           </el-form-item>
           <el-form-item label="类型：">
-            <span v-if="form.teacher_type == 3">运营</span>
+            <span v-if="form.teacher_type === '3'">运营</span>
             <span v-else>学校</span>
           </el-form-item>
           <el-form-item label="学校：">
@@ -21,9 +21,9 @@
 
           <el-form-item label="菜单：" prop="powerlist">
             <el-checkbox-group v-model="powerlist">
-              <el-checkbox label="1" name="powerlist" v-if="is_operate">学校用户管理</el-checkbox>
-              <el-checkbox label="2" name="powerlist">账户管理</el-checkbox>
-              <el-checkbox label="3" name="powerlist">权限管理</el-checkbox>
+              <el-checkbox label="1" name="powerlist" v-if="form.teacher_type === '3'">学校用户管理</el-checkbox>
+              <el-checkbox label="2" style='width: 120px' name="powerlist">账户管理</el-checkbox>
+              <el-checkbox label="3" style='width: 120px' name="powerlist">权限管理</el-checkbox>
               </el-checkbox-group>
               <!-- <el-checkbox :indeterminate="isIndeterminate" name="powerlist" v-model="checkAll" @change="handleCheckAllChange">评价项目管理</el-checkbox>
               <div style="margin: 15px 0;"></div>
@@ -33,11 +33,11 @@
               <el-checkbox label="4" v-model='checked1' name="powerlist">评价项目管理</el-checkbox>
               <el-checkbox-group v-model="powerlist">
               <el-checkbox label="5" :disabled='disabled' @change="handleCheckAllChange" style='margin-left:20px' name="powerlist">负责人管理</el-checkbox>
-              <el-checkbox label="6" style='margin-left:20px' name="powerlist">执行人管理</el-checkbox>
-              <el-checkbox label="7" style='margin-left:20px' name="powerlist">评价对象管理</el-checkbox>
-              <el-checkbox label="8" name="powerlist">评价模板管理</el-checkbox>
-              <el-checkbox label="9" name="powerlist">评价成果</el-checkbox>
-              <el-checkbox label="10" name="powerlist" v-if="is_operate">操作日志</el-checkbox>
+              <el-checkbox label="6" style='margin-left:20px; width:120px' name="powerlist">执行人管理</el-checkbox>
+              <el-checkbox label="7" style='margin-left:20px; width:120px' name="powerlist">评价对象管理</el-checkbox>
+              <el-checkbox label="8" style='width: 120px' name="powerlist">评价模板管理</el-checkbox>
+              <el-checkbox label="9" style='width: 120px' name="powerlist">评价成果</el-checkbox>
+              <el-checkbox label="10" style='width: 120px' name="powerlist" v-if="form.teacher_type === '3'">操作日志</el-checkbox>
             </el-checkbox-group>
           </el-form-item>
 
@@ -53,7 +53,7 @@
 
 <script>
   import myHeader from '../myHeader/myHeader'
-  import { getPowerDetail, authSave, isOperate } from '@/api/eduAdmin'
+  import { getPowerDetail, authSave, } from '@/api/eduAdmin'
   export default {
     name: 'powerEdit',
     data() {
@@ -109,18 +109,6 @@
           })
           .catch(err => {
             console.log(err)
-          })
-      },
-      getAuth() {
-        const obj = {
-          token: localStorage.getItem('TOKEN')
-        }
-        isOperate(obj)
-          .then(res => {
-            if (res.hasOwnProperty('response')) {
-              console.log(res)
-              this.is_operate = res.response.is_operate
-            }
           })
       },
       saveUser() {
