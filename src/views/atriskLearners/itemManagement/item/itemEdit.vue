@@ -45,16 +45,7 @@ export default {
   name: 'itemEdit',
   data() {
     return {
-      form: {
-        project_name: '石选晓',
-        schoolName: '武宁路小学',
-        semester_id: 'shixiuan',
-        project_id: '',
-        school_id: '',
-        create_time: '',
-        project_remark: '134752398@348.cn',
-        project_status: '0'
-      },
+      form: {},
       msg: {
         title1: '评价项目管理',
         title2: '编辑评价项目',

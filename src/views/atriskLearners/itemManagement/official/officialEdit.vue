@@ -58,15 +58,7 @@
     name: 'officialEdit',
     data() {
       return {
-        form: {
-          name: '石选晓',
-          schoolName: '武宁路小学',
-          userName: 'shixiuan',
-          type: '0',
-          telephone: '13535790897',
-          email: '134752398@348.cn',
-          status: 0
-        },
+        form: {},
         msg: {
           title1: '评价项目管理',
           title2: '负责人管理',
