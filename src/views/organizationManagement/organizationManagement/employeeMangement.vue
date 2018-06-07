@@ -418,23 +418,25 @@
             this.total = 0
             return
           }
-          if (this.formInline.user_name !== '' || this.formInline.department !== '') {
-            const arr = this.recursive(this.dataTree, 'department')
-            console.log(arr)
-            this.yt_c_id = arr.yt_c_id
-            this.headName = arr.name
-            this.numPeople = arr.count
-          } else if (this.formInline.company !== '') {
-            const arr = this.recursive(this.dataTree, 'company')
-            console.log(arr)
-            this.yt_c_id = arr.yt_c_id
-            this.headName = arr.name
-            this.numPeople = arr.count
-          } else {
-            this.yt_c_id = this.dataTree[0].yt_c_id
-            this.headName = this.dataTree[0].name
-            this.numPeople = this.dataTree[0].count
-          }
+          // if (this.formInline.user_name !== '' || this.formInline.department !== '') {
+          //   const arr = this.recursive(this.dataTree, 'department')
+          //   console.log(arr)
+          //   this.yt_c_id = arr.yt_c_id
+          //   this.headName = arr.name
+          //   this.numPeople = arr.count
+          // } else if (this.formInline.company !== '') {
+          //   const arr = this.recursive(this.dataTree, 'company')
+          //   console.log(arr)
+          //   this.yt_c_id = arr.yt_c_id
+          //   this.headName = arr.name
+          //   this.numPeople = arr.count
+          // } else {
+          //   this.yt_c_id = this.dataTree[0].yt_c_id
+          //   this.headName = this.dataTree[0].name
+          //   this.numPeople = this.dataTree[0].count
+          // }
+          this.yt_c_id = this.dataTree[0].yt_c_id
+          this.headName = this.dataTree[0].name
           this.initTable()
         })
       },
@@ -480,6 +482,7 @@
         companyList(obj).then(response => {
           this.tableData = response.response.list.category.rows
           this.total = response.response.list.category.count
+          this.numPeople = response.response.list.category.count
         })
       },
       onSubmit() {
@@ -900,7 +903,7 @@
       handleNodeClick(data) {
         this.yt_c_id = data.yt_c_id
         this.headName = data.name
-        this.numPeople = data.count
+        // this.numPeople = data.count
         this.initTable()
       }
     },

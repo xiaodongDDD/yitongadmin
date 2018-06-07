@@ -451,19 +451,28 @@
             if (this.entry_timeSp === null || this.entry_timeSp === '') {
               this.$message({
                 message: '请选择入职时间',
-                type: 'success'
+                type: 'error'
               })
               return
             }
+
             this.form.entry_time = new Date(this.entry_timeSp).getTime() / 1000
             if (this.leave_timeSp === '' || this.leave_timeSp == null) {
               this.form.leave_time = 0
             } else {
+              if (new Date(this.leave_timeSp).getFullYear() !== new Date().getFullYear() ||
+                new Date(this.leave_timeSp).getMonth() !== new Date().getMonth() || new Date(this.leave_timeSp).getDate() !== new Date().getDate()) {
+                this.$message({
+                  message: '离职日期只能为当日',
+                  type: 'error'
+                })
+                return
+              }
               this.form.leave_time = new Date(this.leave_timeSp).getTime() / 1000
               if (this.form.entry_time > this.form.leave_time) {
                 this.$message({
                   message: '离职日期不能早于入职日期！',
-                  type: 'success'
+                  type: 'error'
                 })
                 return
               }
@@ -558,7 +567,8 @@
               break
             case 5:
               this.upList = response.response.list
-              this.upNameSelect.user_name = this.form.shangji
+              console.log(this.form.shangji)
+              this.upNameSelect.user_name = this.form.parent_info.user_name
               this.upNameSelect.parent_id = this.form.parent_id
               if (flag !== 'init') {
                 this.dialogFormVisibleUp = true
@@ -672,6 +682,7 @@
         this.upNameSelect.parent_id = value.u_id
       },
       submitFormDataUp() {
+        console.log(this.upNameSelect)
         this.form.shangji = this.upNameSelect.user_name
         this.form.parent_id = this.upNameSelect.parent_id
         this.dialogFormVisibleUp = false
