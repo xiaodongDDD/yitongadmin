@@ -53,7 +53,7 @@
 
 <script>
   import myHeader from '../myHeader/myHeader'
-  import { getPowerDetail, authSave, } from '@/api/eduAdmin'
+  import { getPowerDetail, authSave } from '@/api/eduAdmin'
   export default {
     name: 'powerEdit',
     data() {
@@ -82,7 +82,6 @@
     mounted() {
       // this.checked1 = true
       this.teacher_id = this.$route.query.teacher_id
-      this.getAuth()
       this.getData()
       console.log(this.$route.path)
     },

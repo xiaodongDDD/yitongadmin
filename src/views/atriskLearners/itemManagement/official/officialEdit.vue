@@ -112,6 +112,7 @@
     methods: {
       getData() {
         const obj = {
+          leader_id: this.teacher_id,
           project_id: this.project_id,
           token: localStorage.getItem('TOKEN')
         }
