@@ -126,7 +126,7 @@
             </template>
           </el-table-column>
         </el-table>
-        <el-row :gutter="20" class="buttonClass" v-if="!disabledFlag">
+        <el-row :gutter="20" class="buttonClass" v-if="false">
           <el-col :span="24">
             <el-button size="small" type="text" disabled>批量上传</el-button>
               <input  type="file" name="FileUpload" id="FileUpload" style="width: 200px"/>

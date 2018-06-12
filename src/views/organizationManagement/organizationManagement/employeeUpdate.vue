@@ -460,14 +460,14 @@
             if (this.leave_timeSp === '' || this.leave_timeSp == null) {
               this.form.leave_time = 0
             } else {
-              if (new Date(this.leave_timeSp).getFullYear() !== new Date().getFullYear() ||
-                new Date(this.leave_timeSp).getMonth() !== new Date().getMonth() || new Date(this.leave_timeSp).getDate() !== new Date().getDate()) {
-                this.$message({
-                  message: '离职日期只能为当日',
-                  type: 'error'
-                })
-                return
-              }
+              // if (new Date(this.leave_timeSp).getFullYear() !== new Date().getFullYear() ||
+              //   new Date(this.leave_timeSp).getMonth() !== new Date().getMonth() || new Date(this.leave_timeSp).getDate() !== new Date().getDate()) {
+              //   this.$message({
+              //     message: '离职日期只能为当日',
+              //     type: 'error'
+              //   })
+              //   return
+              // }
               this.form.leave_time = new Date(this.leave_timeSp).getTime() / 1000
               if (this.form.entry_time > this.form.leave_time) {
                 this.$message({
@@ -549,6 +549,7 @@
           }
         }
         companyDepartmentList(obj).then(response => {
+          const arr = []
           switch (type) {
             case 1:
               this.companyList = response.response.list
@@ -564,6 +565,14 @@
               break
             case 3:
               this.positionList = response.response.list
+              for (let i = 0; i < this.positionList.length; i++) {
+                if (this.positionList[i].yt_d_p_id === '5' || this.positionList[i].yt_d_p_id === '6' || this.positionList[i].yt_d_p_id === '7') {
+                  console.log()
+                } else {
+                  arr.push(this.positionList[i])
+                }
+              }
+              this.positionList = arr
               break
             case 5:
               this.upList = response.response.list
