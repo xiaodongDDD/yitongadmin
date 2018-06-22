@@ -403,8 +403,12 @@
           this.form = response.response.info
           this.form.phoneNUm = '+86'
           console.log(this.form)
+          console.log('================================0000')
           this.form.gongsi = this.form.company_info.name
           this.entry_timeSp = new Date(this.form.entry_time.replace(/-/g, '/'))
+          console.log(this.form.entry_time)
+          console.log('================================')
+          console.log(this.entry_timeSp)
           if (this.form.leave_time === '' || this.form.leave_time === 0) {
             this.leave_timeSp === null
           } else {
