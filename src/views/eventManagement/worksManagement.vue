@@ -62,6 +62,19 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="关键字">
+        <el-input v-model="formInline.keyword"></el-input>
+      </el-form-item>
+      <el-form-item label="总分">
+        <el-select v-model="formInline.scoreSort" placeholder="">
+          <el-option
+            v-for="item in optionsStatus5"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
 
       <el-form-item>
         <el-button type="primary" @click="onSubmit">查询</el-button>
@@ -144,6 +157,11 @@
             {{scope.row.activity.webScore}}
           </template>
         </el-table-column>
+        <el-table-column align="center" prop="created_at" label="总分" width="110">
+          <template slot-scope="scope">
+            {{scope.row.activity.score}}
+          </template>
+        </el-table-column>
         <el-table-column label="操作" align="center" width="180">
           <template slot-scope="scope">
             <el-button type="" size="mini" @click="operating(scope.row,1)" v-if="scope.row.activity.status !== 3">入围</el-button>
@@ -168,7 +186,8 @@
         layout="total, sizes, prev, pager, next, jumper"
         :total="total">
       </el-pagination>
-      <el-button class="buttonEx" type="" icon="document" @click="fetchData('all')" :loading="downloadLoading">导出</el-button>
+      <el-button type="" class="buttonEx" icon="document" @click="fetchData('all')" :loading="downloadLoading">导出全部</el-button>
+      <el-input-number  class="buttonEx" v-model="num1" @change="handleChange" :step="100" :min="100" :max="1000" label="描述文字"></el-input-number>
     </div>
     <!--弹窗-->
     <el-dialog title="专家打分" :visible.sync="dialogFormVisible" width="40%" style="min-width: 600px" center>
@@ -224,8 +243,11 @@
           selectedOptions: null,
           expertScore: 'desc',
           webScore: 'desc',
-          dateValue: []
+          dateValue: [],
+          keyword: '',
+          scoreSort: 'desc'
         },
+        num1: 300,
         list: null,
         listAll: null,
         listLoading: true,
@@ -310,6 +332,11 @@
           { label: '由低到高', value: 'asc' },
           { label: '由高到低', value: 'desc' }
         ],
+        optionsStatus5: [
+          { label: '请选择', value: 0 },
+          { label: '由低到高', value: 'asc' },
+          { label: '由高到低', value: 'desc' }
+        ],
         options2: [],
         props: {
           value: 'value',
@@ -371,6 +398,9 @@
       this.fetchData()
     },
     methods: {
+      handleChange(value) {
+        console.log(value)
+      },
       fetchData(item) {
         let province = ''
         let city = ''
@@ -389,6 +419,7 @@
           status: this.formInline.status,
           province: province,
           city: city,
+          keyword: this.formInline.keyword,
           page: {
             pageNum: this.currentPage,
             size: this.pagesize
@@ -409,7 +440,10 @@
         if (this.formInline.webScore !== 0) {
           obj.webScore = this.formInline.webScore
         }
-        if (this.formInline.timeSort === 0 && this.formInline.expertScore === 0 && this.formInline.webScore === 0) {
+        if (this.formInline.scoreSort !== 0) {
+          obj.scoreSort = this.formInline.scoreSort
+        }
+        if (this.formInline.timeSort === 0 && this.formInline.expertScore === 0 && this.formInline.webScore === 0 && this.formInline.scoreSort === 0) {
           this.$message({
             type: 'warning',
             message: '请选择排序方式'
@@ -418,7 +452,7 @@
           return
         }
         if (item === 'all') {
-          obj.page.size = this.total
+          obj.page.size = 2000
           obj.page.pageNum = 1
         }
         getWorkManagementList(obj).then(response => {
@@ -557,14 +591,15 @@
                 'status': status,
                 'expertScore': this.listAll[i].activity.expertScore,
                 'webScore': this.listAll[i].activity.webScore,
+                'score': this.listAll[i].activity.score,
                 'img': this.listAll[i].extraContent.images[0].original
               }
             )
           }
           console.log(list)
           import('@/vendor/Export2Excel').then(excel => {
-            const tHeader = ['作品编号', '晓黑板账号', '手机归属地', '作品说明', '用户角色', '提交时间', '入围状态', '专家打分', '网络票', '图片']
-            const filterVal = ['recordId', 'mobile', 'province', 'content', 'role', 'createTime', 'status', 'expertScore', 'webScore', 'img']
+            const tHeader = ['作品编号', '晓黑板账号', '手机归属地', '作品说明', '用户角色', '提交时间', '入围状态', '专家打分', '网络票', '总分', '图片']
+            const filterVal = ['recordId', 'mobile', 'province', 'content', 'role', 'createTime', 'status', 'expertScore', 'webScore', 'score', 'img']
             const data = this.formatJson(filterVal, list)
             excel.export_json_to_excel(tHeader, data, this.filename)
             this.downloadLoading = false
