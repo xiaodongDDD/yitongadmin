@@ -62,6 +62,6 @@
     margin-top: 20px;
   }
   .main-content{
-    padding:5px 0px 20px 0px;
+    padding:20px;
   }
 </style>
