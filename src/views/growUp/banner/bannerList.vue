@@ -7,7 +7,7 @@
     </div>
 
     <div class="banner-add list-add">
-      <el-button>新增</el-button>
+      <el-button @click="editDialogVisible=true;isAdd=true">新增</el-button>
     </div>
 
     <div class="banner-container list-container">
@@ -48,8 +48,8 @@
             label="编辑"
             width="120">
             <template slot-scope="scope">
-              <el-button type="text" size="small">编辑</el-button>
-              <el-button type="text" size="small">删除</el-button>
+              <el-button type="text" @click="editBanner(scope)" size="small">编辑</el-button>
+              <el-button type="text" size="small" @click="deleteBanner(scope)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -57,12 +57,12 @@
     </div>
 
     <el-dialog
-      title="编辑banner"
+      :title="isAdd === true ? '新增banner' : '修改banner'"
       :visible.sync="editDialogVisible"
       width="30%">
       <div class="edit-container">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="120px" class="demo-ruleForm">
-          <el-form-item label="编号" prop="index">
+          <el-form-item label="编号" prop="index" v-show="!isAdd">
             <span>{{ruleForm.index}}</span>
           </el-form-item>
           <el-form-item label="标题" prop="name">
@@ -73,6 +73,9 @@
               <el-radio label="1">是</el-radio>
               <el-radio label="0">否</el-radio>
             </el-radio-group>
+          </el-form-item>
+          <el-form-item label="展示排序" prop="sort">
+            <el-input v-model="ruleForm.sort"></el-input>
           </el-form-item>
           <el-form-item label="图片" prop="img">
             <el-input v-model="ruleForm.img"></el-input>
@@ -108,12 +111,14 @@
     data() {
       return {
         isMajor: true,
+        isAdd: true,
         table: [],
         ruleForm: {
           index: 1,
           name: '',
           showTitle: '0',
           img: '',
+          sort: '',
           href: 'hao123.com'
         },
         rules: {
@@ -123,6 +128,9 @@
           ],
           showTitle: [
             { required: true, message: '请选择是否展示标题', trigger: 'change' }
+          ],
+          sort: [
+            { required: true, message: '请输入展示排序', trigger: 'blur' }
           ],
           href: [
             { required: true, message: '请输入链接', trigger: 'blur' }
@@ -179,6 +187,31 @@
         this.titleData.bannerId = row.bannerId
         this.titleData.showTitle = row.showTitle
         this.titleDialogVisible = true
+      },
+      // 编辑
+      editBanner(scope) {
+        console.log(scope)
+        this.isAdd = false
+        this.editDialogVisible = true
+      },
+      // 删除
+      deleteBanner(scope) {
+        console.log(scope)
+        this.$confirm('此操作将永久删除该banner, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });
+        });
       }
     }
   }

@@ -9,10 +9,6 @@ Vue.use(Router)
 /* Layout */
 import Layout from '../views/layout/Layout'
 
-import GIndex from '../views/growUp/index'
-import BannerList from '../views/growUp/banner/bannerList'
-import LabelList from '../views/growUp/label/labelList'
-
 /**
 * hidden: true                   if `hidden:true` will not show in the sidebar(default is false)
 * redirect: noredirect           if `redirect:noredirect` will no redirct in the breadcrumb
@@ -26,43 +22,38 @@ export const constantRouterMap = [
   { path: '/login', component: _import('login/index'), hidden: true },
   { path: '/404', component: _import('404'), hidden: true },
 
-  // {
-  //   path: '/',
-  //   component: Layout,
-  //   redirect: '/dashboard',
-  //   name: 'Dashboard',
-  //   hidden: true,
-  //   children: [{
-  //     path: 'dashboard',
-  //     component: _import('dashboard/index')
-  //   }]
-  // },
-
   {
     path: '/',
-    component: GIndex,
-    redirect: '/bannerList',
-    children: [
-      {
-        path: '/bannerList',
-        component: BannerList
-      },
-      {
-        path: '/labelList',
-        component: LabelList
-      }
-    ]
+    component: Layout,
+    redirect: '/dashboard',
+    name: 'Dashboard',
+    hidden: true,
+    children: [{
+      path: 'dashboard',
+      component: _import('dashboard/index')
+    }]
   },
-
   {
-    path: '/eventManagement',
+    path: '/bannerList',
     component: Layout,
     children: [
       {
-        path: 'worksManagement',
-        name: 'worksManagement',
-        component: _import('eventManagement/worksManagement'),
-        meta: { title: '作品管理', icon: 'table' }
+        path: 'bannerList',
+        name: 'bannerList',
+        component: _import('growUp/banner/bannerList'),
+        meta: { title: 'banner管理', icon: 'table' }
+      }
+    ]
+  },
+  {
+    path: '/labelList',
+    component: Layout,
+    children: [
+      {
+        path: 'labelList',
+        name: 'labelList',
+        component: _import('growUp/label/labelList'),
+        meta: { title: '标签管理', icon: 'table' }
       }
     ]
   },

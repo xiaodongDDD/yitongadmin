@@ -26,12 +26,28 @@ export default {
 }
 </script>
 
-<style rel="stylesheet/scss" lang="scss" scoped>
-@import "src/styles/mixin.scss";
-.app-wrapper {
-  @include clearfix;
-  position: relative;
-  height: 100%;
-  width: 100%;
-}
+<style rel="stylesheet/scss" lang="scss">
+  @import "src/styles/mixin.scss";
+  .app-wrapper {
+    @include clearfix;
+    position: relative;
+    height: 100%;
+    width: 100%;
+  }
+  .app-main{
+    padding: 20px;
+
+    .content{
+      .banner-switch{
+        margin-bottom: 20px;
+      }
+      .list-add{
+        text-align: right;
+      }
+
+      .list-container{
+        margin-top: 20px;
+      }
+    }
+  }
 </style>

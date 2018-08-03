@@ -2,7 +2,7 @@
   <div class="label-list content">
 
     <div class="label-add list-add">
-      <el-button>新增</el-button>
+      <el-button @click="isAdd=true;signDialogVisible=true">新增</el-button>
     </div>
 
     <div class="label-container list-container">
@@ -38,8 +38,8 @@
           label="操作"
           width="200">
           <template slot-scope="scope">
-            <el-button type="text" size="small">修改</el-button>
-            <el-button type="text" size="small" @click="deleteSign">删除</el-button>
+            <el-button type="text" size="small" @click="editLabel(scope)">修改</el-button>
+            <el-button type="text" size="small" @click="deleteSign(scope)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -54,7 +54,7 @@
           <el-form-item label="编号" v-show="!isAdd">
             <span>{{ form.index }}</span>
           </el-form-item>
-          <el-form-item label="活动名称" prop="name">
+          <el-form-item label="标签名称" prop="name">
             <el-input v-model="form.name" placehoder="最多可输入10个汉字"></el-input>
           </el-form-item>
           <el-form-item label="温馨提示：">
@@ -100,8 +100,14 @@
       }
     },
     methods: {
+      // 编辑
+      editLabel(scope) {
+        console.log(scope)
+        this.isAdd = false
+        this.signDialogVisible = true
+      },
       // 删除
-      deleteSign() {
+      deleteSign(scope) {
         this.$confirm('当前文章已被123篇文章引用，不可删除！', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
