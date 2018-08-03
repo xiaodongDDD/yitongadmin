@@ -9,6 +9,10 @@ Vue.use(Router)
 /* Layout */
 import Layout from '../views/layout/Layout'
 
+import GIndex from '../views/growUp/index'
+import BannerList from '../views/growUp/banner/bannerList'
+import LabelList from '../views/growUp/label/labelList'
+
 /**
 * hidden: true                   if `hidden:true` will not show in the sidebar(default is false)
 * redirect: noredirect           if `redirect:noredirect` will no redirct in the breadcrumb
@@ -22,55 +26,34 @@ export const constantRouterMap = [
   { path: '/login', component: _import('login/index'), hidden: true },
   { path: '/404', component: _import('404'), hidden: true },
 
+  // {
+  //   path: '/',
+  //   component: Layout,
+  //   redirect: '/dashboard',
+  //   name: 'Dashboard',
+  //   hidden: true,
+  //   children: [{
+  //     path: 'dashboard',
+  //     component: _import('dashboard/index')
+  //   }]
+  // },
+
   {
     path: '/',
-    component: Layout,
-    redirect: '/dashboard',
-    name: 'Dashboard',
-    hidden: true,
-    children: [{
-      path: 'dashboard',
-      component: _import('dashboard/index')
-    }]
+    component: GIndex,
+    redirect: '/bannerList',
+    children: [
+      {
+        path: '/bannerList',
+        component: BannerList
+      },
+      {
+        path: '/labelList',
+        component: LabelList
+      }
+    ]
   },
 
-  // {
-  //   path: '/example',
-  //   component: Layout,
-  //   // redirect: '/example/table',
-  //   // name: 'Example',
-  //   // meta: { title: 'Example', icon: 'example' },
-  //   children: [
-  //     {
-  //       path: 'table',
-  //       name: 'Table',
-  //       component: _import('table/index'),
-  //       meta: { title: '列表', icon: 'table' }
-  //     }
-  //   ]
-  // },
-  // {
-  //   path: '/feedbackQuestion',
-  //   component: Layout,
-  //   redirect: '/feedbackQuestion/schoolH5',
-  //   name: '反馈问题',
-  //   meta: { title: '反馈问题', icon: 'example' },
-  //   children: [
-  //     {
-  //       path: 'schoolH5',
-  //       name: '整校h5',
-  //       component: _import('feedbackQuestion/schoolH5'),
-  //       meta: { title: '整校h5', icon: 'form' }
-  //     },
-  //     {
-  //       path: 'schoolPC',
-  //       name: '整校pc',
-  //       component: _import('form/index'),
-  //       meta: { title: '整校pc', icon: 'form' },
-  //       hidden: true
-  //     }
-  //   ]
-  // },
   {
     path: '/eventManagement',
     component: Layout,
