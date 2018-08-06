@@ -57,6 +57,50 @@ export const constantRouterMap = [
       }
     ]
   },
+  {
+    path: '/column',
+    component: Layout,
+    redirect: '/columnList',
+    name: '栏目管理',
+    meta: { title: '栏目管理', icon: 'example' },
+    children: [
+      {
+        path: 'columnList',
+        name: 'columnList',
+        component: _import('growUp/column/columnList'),
+        meta: { title: '栏目管理', icon: 'form' }
+      },
+      {
+        path: 'pageList',
+        name: 'pageList',
+        component: _import('growUp/column/pageList'),
+        meta: { title: '专栏管理', icon: 'form' }
+      }
+    ]
+  },
+
+  // {
+  //   path: '/feedbackQuestion',
+  //   component: Layout,
+  //   redirect: '/feedbackQuestion/schoolH5',
+  //   name: '打卡任务管理',
+  //   meta: { title: '打卡任务管理', icon: 'example' },
+  //   children: [
+  //     {
+  //       path: 'schoolH5',
+  //       name: '打卡任务模版',
+  //       component: _import('feedbackQuestion/schoolH5'),
+  //       meta: { title: '打卡任务模板', icon: 'form' }
+  //     },
+  //     {
+  //       path: 'schoolPC',
+  //       name: '模板分类管理',
+  //       component: _import('form/index'),
+  //       meta: { title: '模板分类管理', icon: 'form' }
+  //     }
+  //   ]
+  // },
+
   { path: '*', redirect: '/404', hidden: true }
 ]
 
