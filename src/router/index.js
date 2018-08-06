@@ -91,6 +91,18 @@ export const constantRouterMap = [
         name: 'journalList',
         component: _import('growUp/weekly/journal/journalList'),
         meta: { title: '期刊管理', icon: 'form' }
+      },
+      {
+        path: 'spaceList',
+        name: 'spaceList',
+        component: _import('growUp/weekly/journal/spaceList'),
+        meta: { title: '版面管理', icon: 'form' }
+      },
+      {
+        path: 'dataList',
+        name: 'dataList',
+        component: _import('growUp/weekly/journal/dataList'),
+        meta: { title: '版面管理', icon: 'form' }
       }
     ]
   },
