@@ -68,13 +68,29 @@ export const constantRouterMap = [
         path: 'columnList',
         name: 'columnList',
         component: _import('growUp/column/columnList'),
-        meta: { title: '栏目管理', icon: 'form' }
+        meta: { title: '栏目管理111', icon: 'form' }
       },
       {
         path: 'pageList',
         name: 'pageList',
         component: _import('growUp/column/pageList'),
         meta: { title: '专栏管理', icon: 'form' }
+      }
+    ]
+  },
+  {
+    path: '/journal',
+    component: Layout,
+    redirect: '/journalList',
+    name: '晓周刊',
+    hidden: false,
+    meta: { title: '晓周刊', icon: 'example' },
+    children: [
+      {
+        path: 'journalList',
+        name: 'journalList',
+        component: _import('growUp/weekly/journal/journalList'),
+        meta: { title: '期刊管理', icon: 'form' }
       }
     ]
   },
