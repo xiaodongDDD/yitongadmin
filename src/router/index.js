@@ -60,7 +60,7 @@ export const constantRouterMap = [
   {
     path: '/column',
     component: Layout,
-    redirect: '/columnList',
+    redirect: '/column/columnList',
     name: '栏目管理',
     meta: { title: '栏目管理', icon: 'example' },
     children: [
@@ -68,7 +68,13 @@ export const constantRouterMap = [
         path: 'columnList',
         name: 'columnList',
         component: _import('growUp/column/columnList'),
-        meta: { title: '栏目管理111', icon: 'form' }
+        meta: { title: '栏目管理', icon: 'form' }
+      },
+      {
+        path: 'topList',
+        name: 'topList',
+        component: _import('growUp/column/topList'),
+        meta: { title: '置顶文章管理', icon: 'form' }
       },
       {
         path: 'pageList',
@@ -81,7 +87,7 @@ export const constantRouterMap = [
   {
     path: '/journal',
     component: Layout,
-    redirect: '/journalList',
+    redirect: '/journal/journalList',
     name: '晓周刊',
     hidden: false,
     meta: { title: '晓周刊', icon: 'example' },
@@ -89,45 +95,71 @@ export const constantRouterMap = [
       {
         path: 'journalList',
         name: 'journalList',
-        component: _import('growUp/weekly/journal/journalList'),
+        component: _import('growUp/weekly/journalList'),
         meta: { title: '期刊管理', icon: 'form' }
+      },
+      {
+        path: 'journalAdd',
+        name: 'journalAdd',
+        hidden: false,
+        component: _import('growUp/weekly/journalAdd'),
+        meta: { title: '期刊编辑/新增', icon: 'form' }
       },
       {
         path: 'spaceList',
         name: 'spaceList',
-        component: _import('growUp/weekly/journal/spaceList'),
+        component: _import('growUp/weekly/spaceList'),
         meta: { title: '版面管理', icon: 'form' }
       },
       {
         path: 'dataList',
         name: 'dataList',
-        component: _import('growUp/weekly/journal/dataList'),
-        meta: { title: '版面管理', icon: 'form' }
+        component: _import('growUp/weekly/dataList'),
+        meta: { title: '晓周刊数据', icon: 'form' }
       }
     ]
   },
-
-  // {
-  //   path: '/feedbackQuestion',
-  //   component: Layout,
-  //   redirect: '/feedbackQuestion/schoolH5',
-  //   name: '打卡任务管理',
-  //   meta: { title: '打卡任务管理', icon: 'example' },
-  //   children: [
-  //     {
-  //       path: 'schoolH5',
-  //       name: '打卡任务模版',
-  //       component: _import('feedbackQuestion/schoolH5'),
-  //       meta: { title: '打卡任务模板', icon: 'form' }
-  //     },
-  //     {
-  //       path: 'schoolPC',
-  //       name: '模板分类管理',
-  //       component: _import('form/index'),
-  //       meta: { title: '模板分类管理', icon: 'form' }
-  //     }
-  //   ]
-  // },
+  {
+    path: '/article',
+    component: Layout,
+    redirect: '/article/articleList',
+    name: '文章管理',
+    meta: { title: '文章管理', icon: 'example' },
+    children: [
+      {
+        path: 'articleList',
+        name: 'articleList',
+        component: _import('growUp/article/articleList'),
+        meta: { title: '文章管理', icon: 'form' }
+      },
+      {
+        path: 'articleAdd',
+        name: 'articleAdd',
+        hidden: true,
+        component: _import('growUp/article/articleAdd'),
+        meta: { title: '文章编辑/新增', icon: 'form' }
+      },
+      {
+        path: 'commentList',
+        name: 'commentList',
+        component: _import('growUp/article/commentList'),
+        meta: { title: '评论管理', icon: 'form' }
+      },
+      {
+        path: 'commentInfo',
+        name: 'commentInfo',
+        hidden: true,
+        component: _import('growUp/article/commentInfo'),
+        meta: { title: '评论详情', icon: 'form' }
+      },
+      {
+        path: 'artistList',
+        name: 'artistList',
+        component: _import('growUp/article/artistList'),
+        meta: { title: '作者管理', icon: 'form' }
+      }
+    ]
+  },
 
   { path: '*', redirect: '/404', hidden: true }
 ]

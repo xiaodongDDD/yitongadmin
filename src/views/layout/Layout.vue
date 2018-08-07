@@ -49,5 +49,10 @@ export default {
         margin-top: 20px;
       }
     }
+
+    .list-pagination{
+      text-align: center;
+      margin-top: 20px;
+    }
   }
 </style>

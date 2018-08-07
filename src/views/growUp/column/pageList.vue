@@ -14,7 +14,7 @@
           fixed
           prop="date"
           label="编号"
-          width="">
+          width="80">
         </el-table-column>
         <el-table-column
           prop="name"
@@ -69,7 +69,7 @@
     </div>
 
     <el-dialog
-      title="新增专栏"
+      :title="isAdd === true ? '新增栏目' : '修改栏目'"
       :visible.sync="signDialogVisible"
       width="30%">
       <div class="signedit">
@@ -77,7 +77,7 @@
           <el-form-item label="专栏名称" prop="name">
             <el-input v-model="cform.name" placehoder="最多可输入10个汉字"></el-input>
           </el-form-item>
-          <el-form-item label="icon" prop="icon">
+          <el-form-item label="专栏图片" prop="icon">
             <el-input v-model="cform.icon" placehoder=""></el-input>
             <p>说明：请上传大小为176*176像素，格式为JPEG或者PNG的图片</p>
           </el-form-item>
@@ -104,14 +104,15 @@
     data() {
       return {
         tableData: [{
-          date: '2016-05-03',
+          date: '201',
           name: '王小虎',
           province: '上海',
           city: '普陀区',
           address: '上海市普陀区金沙江路 1518 弄',
           zip: 200333
         }],
-        signDialogVisible: true,
+        isAdd: true,
+        signDialogVisible: false,
         cform: {
           name: '',
           sindex: '',
@@ -145,9 +146,26 @@
     methods: {
       editClick(row) {
         console.log(row)
+        this.isAdd = false
+        this.signDialogVisible = true
       },
       handleClick(row) {
         console.log(row)
+        this.$confirm('此操作将永久删除该栏目, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
       }
     }
   }
