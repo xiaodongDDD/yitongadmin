@@ -97,9 +97,9 @@
       width="30%">
       <span>标题开启/关闭后app端展示如下图所示，请确认是否开启/关闭？</span>
       <span slot="footer" class="dialog-footer">
-      <el-button @click="titleDialogVisible = false">取 消</el-button>
-      <el-button type="primary" @click="titleDialogVisible = false">确 定</el-button>
-    </span>
+        <el-button @click="titleDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="titleDialogVisible = false">确 定</el-button>
+      </span>
     </el-dialog>
 
   </div>
