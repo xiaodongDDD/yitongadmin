@@ -1,66 +1,64 @@
 <template>
   <div class="login-container">
-    <el-form autoComplete="on" :model="loginForm" :rules="loginRules" ref="loginForm" label-position="left" label-width="0px"
+    <el-form autoComplete="on" :model="loginForm" ref="loginForm" label-position="left" label-width="0px"
       class="card-box login-form">
-      <h3 class="title">一统后台</h3>
+      <h3 class="title">登录评价管理后台</h3>
       <el-form-item prop="username">
         <span class="svg-container svg-container_login">
           <svg-icon icon-class="user" />
         </span>
-        <el-input name="username" type="text" v-model="loginForm.username" autoComplete="on" placeholder="username" />
+        <el-input name="username" type="text" v-model="loginForm.username" placeholder="请输入手机号" />
       </el-form-item>
       <el-form-item prop="password">
         <span class="svg-container">
           <svg-icon icon-class="password"></svg-icon>
         </span>
-        <el-input name="password" :type="pwdType" @keyup.enter.native="handleLogin" v-model="loginForm.password" autoComplete="on"
-          placeholder="password"></el-input>
+        <el-input name="password" type="password" @keyup.enter.native="handleLogin" v-model="loginForm.password"
+          placeholder="请输入密码"></el-input>
           <span class="show-pwd" @click="showPwd"><svg-icon icon-class="eye" /></span>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" style="width:100%;" :loading="loading" @click.native.prevent="handleLogin">
-           登 录
+           登 录  测试版本号: v1.0.4
         </el-button>
       </el-form-item>
-      <div class="tips">
-        <!--<span style="margin-right:20px;">username: admin</span>-->
-        <!--</span> password: admin</span>-->
-      </div>
     </el-form>
   </div>
 </template>
 
 <script>
-import { isvalidUsername } from '@/utils/validate'
+import { setToken } from '@/utils/auth'
+import { loginGrowup } from '@/api/schoolH5'
 
 export default {
   name: 'login',
   data() {
-    const validateUsername = (rule, value, callback) => {
-      if (!isvalidUsername(value)) {
-        callback(new Error('请输入正确的用户名'))
-      } else {
-        callback()
-      }
-    }
-    const validatePass = (rule, value, callback) => {
-      if (value.length < 5) {
-        callback(new Error('密码不能小于5位'))
-      } else {
-        callback()
-      }
-    }
+    // const validateUsername = (rule, value, callback) => {
+    //   if (!isvalidUsername(value)) {
+    //     callback(new Error('请输入正确的用户名'))
+    //   } else {
+    //     callback()
+    //   }
+    // }
+    // const validatePass = (rule, value, callback) => {
+    //   if (value.length < 5) {
+    //     callback(new Error('密码不能小于5位'))
+    //   } else {
+    //     callback()
+    //   }
+    // }
     return {
       loginForm: {
-        username: 'admin',
-        password: 'admin'
+        username: '14000000030',
+        password: '111111'
       },
-      loginRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePass }]
-      },
+      // loginRules: {
+      //   username: [{ required: true, trigger: 'blur', validator: validateUsername }],
+      //   password: [{ required: true, trigger: 'blur', validator: validatePass }]
+      // },
       loading: false,
-      pwdType: 'password'
+      pwdType: 'password',
+      powers: ''
     }
   },
   methods: {
@@ -72,14 +70,25 @@ export default {
       }
     },
     handleLogin() {
+      const obj = this.loginForm
       this.$refs.loginForm.validate(valid => {
         if (valid) {
-          this.loading = true
-          this.$store.dispatch('Login', this.loginForm).then(() => {
-            this.loading = false
-            this.$router.push({ path: '/' })
+          // this.loading = true
+          loginGrowup(obj).then((res) => {
+            // console.log(res)
+            if (res.hasOwnProperty('response')) {
+              // this.loading = false
+              console.log(res)
+              setToken(res.response.token)
+              localStorage.setItem('TOKEN', res.response.data.token)
+              this.$router.push({ path: '/' })
+            } else {
+              this.$alert(res.error_response.msg, '提示', {
+                confirmButtonText: '确定'
+              })
+            }
           }).catch(() => {
-            this.loading = false
+            // this.loading = false
           })
         } else {
           console.log('error submit!!')
@@ -87,6 +96,8 @@ export default {
         }
       })
     }
+  },
+  mounted() {
   }
 }
 </script>
@@ -170,5 +181,8 @@ export default {
       right: 35px;
       bottom: 28px;
     }
+  }
+  .login-container .show-pwd{
+    display: none;
   }
 </style>
