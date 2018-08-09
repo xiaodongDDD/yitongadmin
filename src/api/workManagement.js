@@ -1,5 +1,13 @@
 import request from '@/utils/request'
 
+export function getctivityList(params) {
+  return request({
+    url: '/api/?v=0.1&method=Yi.activity',
+    method: 'post',
+    data: params
+  })
+}
+
 export function getWorkManagementList(params) {
   return request({
     url: '/api/?v=0.1&method=Yi.worksList',

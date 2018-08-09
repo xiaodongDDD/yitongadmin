@@ -74,12 +74,21 @@ export const constantRouterMap = [
   {
     path: '/eventManagement',
     component: Layout,
+    redirect: '/eventManagement/worksManagement',
+    name: '作品管理',
+    meta: { title: '作品管理', icon: 'example' },
     children: [
       {
         path: 'worksManagement',
         name: 'worksManagement',
         component: _import('eventManagement/worksManagement'),
-        meta: { title: '作品管理', icon: 'table' }
+        meta: { title: '晓画家' }
+      },
+      {
+        path: 'worldManagement',
+        name: 'worldManagement',
+        component: _import('eventManagement/worldManagement'),
+        meta: { title: '晓世界' }
       }
     ]
   },

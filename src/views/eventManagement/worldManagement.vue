@@ -2,16 +2,6 @@
   <div class="workManagement-html">
     <!--搜a索-->
     <el-form :inline="true" :model="formInline" class="form-inline">
-      <el-form-item label="入围状态">
-        <el-select v-model="formInline.status" placeholder="">
-          <el-option
-            v-for="item in optionsStatus1"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
-      </el-form-item>
       <el-form-item label="提交日期">
         <el-date-picker
           v-model="formInline.dateValue"
@@ -142,7 +132,7 @@
             {{scope.row.activity.createTime | timeFilter}}
           </template>
         </el-table-column>
-        <el-table-column label="入围状态" width="110" align="center">
+        <el-table-column label="作品类型" width="110" align="center">
           <template slot-scope="scope">
             <span>{{scope.row.activity.status | statusFilter}}</span>
           </template>
@@ -164,18 +154,15 @@
         </el-table-column>
         <el-table-column label="操作" align="center" width="180">
           <template slot-scope="scope">
-            <el-button type="" size="mini" @click="operating(scope.row,1)" v-if="scope.row.activity.status !== 3">入围</el-button>
-            <el-button type="" size="mini" @click="operating(scope.row,2)" v-if="scope.row.activity.status === 3">取消</el-button>
-            <el-button type="" size="mini" @click="goMark(scope.row)" v-if="scope.row.activity.status === 3">专家打分</el-button>
-            <el-button type="danger" size="mini" @click="deleteData(scope.row)" v-if="scope.row.activity.status !== 3">删除</el-button>
+            <el-button type="" size="mini" @click="goMark(scope.row)" >专家打分</el-button>
+            <el-button type="danger" size="mini" @click="deleteData(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
     </div>
     <!--分页-->
     <div class="block" v-if="page">
-      <el-button class="buttonSelect" type="" icon="document" @click="operating('',3)" >批量入围</el-button>
-      <el-button class="buttonSelect" type="" icon="document" @click="operating('',4)" >批量未入围</el-button>
+      <el-button class="buttonSelect" type="" icon="document" @click="operating('',3)" >批量删除</el-button>
       <el-pagination
         background
         @size-change="handleSizeChange"
@@ -230,7 +217,7 @@
 </template>
 
 <script>
-  import { getWorkManagementList, updataWorkManagementInfo, deleteWorkManagementInfo } from '@/api/workManagement'
+  import { getWorkManagementList, updataWorkManagementInfo, deleteWorkManagementInfo, getctivityList } from '@/api/workManagement'
   import { dateFormat } from '@/utils/validate'
   import dataProvinces from '@/staticData/provinces.json'
   import md5 from 'js-md5'
@@ -299,17 +286,7 @@
         dateValue: '',
         typeFlag: false,
         expertOptions: [
-          { label: '请选择', value: 0 },
-          { label: '1', value: 1 },
-          { label: '2', value: 2 },
-          { label: '3', value: 3 },
-          { label: '4', value: 4 },
-          { label: '5', value: 5 },
-          { label: '6', value: 6 },
-          { label: '7', value: 7 },
-          { label: '8', value: 8 },
-          { label: '9', value: 9 },
-          { label: '10', value: 10 }
+          { label: '请选择', value: 0 }
         ],
         optionsStatus1: [
           { label: '请选择', value: 0 },
@@ -359,9 +336,8 @@
       },
       statusFilter(status) {
         const statusMap = {
-          1: '待处理',
-          2: '未入围',
-          3: '已入围'
+          1: '植物类',
+          2: '昆虫类'
         }
         return statusMap[status]
       },
@@ -385,6 +361,14 @@
       }
     },
     created() {
+      getctivityList().then(response => {
+        console.log(response)
+      })
+      for (let i = 1; i < 101; i++) {
+        this.expertOptions.push(
+          { label: i, value: i }
+        )
+      }
       const date = new Date()
       this.formInline.dateValue = [new Date((date.getTime()) - 1000 * 60 * 60 * 24 * 7), date]
       for (let i = 0; i < dataProvinces.provinces.length; i++) {
@@ -416,6 +400,7 @@
         }
         this.listLoading = true
         const obj = {
+          ActivityId: 11,
           status: this.formInline.status,
           province: province,
           city: city,
@@ -423,8 +408,7 @@
           page: {
             pageNum: this.currentPage,
             size: this.pagesize
-          },
-          activityId: 7
+          }
         }
         if (this.formInline.dateValue === '' || this.formInline.dateValue === null) {
           console.log()
@@ -540,7 +524,7 @@
           return
         }
         const obj = { 'requests': [] }
-        obj.requests.push({ activityId: 7, 'recordId': this.form.activity.recordId, 'status': this.form.activity.status, 'expertScore': this.formExpertScore })
+        obj.requests.push({ ActivityId: 11, 'recordId': this.form.activity.recordId, 'status': this.form.activity.status, 'expertScore': this.formExpertScore })
         updataWorkManagementInfo(obj).then(response => {
           if (response.response.info[0].status === '1') {
             this.$message({
@@ -742,12 +726,15 @@
         return time.getFullYear() + '/' + (time.getMonth() + 1) + '/' + time.getDate() + '/' + time.getHours() + ':' + time.getMinutes() + ':' + time.getSeconds()
       },
       deleteData(item) {
+        console.log(item)
         const time = new Date()
         const date = dateFormat(time)
+        console.log('===' + date + '---')
+        console.log(md5('2018-05-03'))
         const obj = {
+          ActivityId: 11,
           'recordId': item.activity.recordId,
-          'salt': md5(date),
-          activityId: 7
+          'salt': md5(date)
         }
         this.$confirm('此操作将永久删除该数据, 是否继续?', '警告', {
           confirmButtonText: '确定',
