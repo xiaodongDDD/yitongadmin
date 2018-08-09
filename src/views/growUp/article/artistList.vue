@@ -4,13 +4,13 @@
     <div class="condition">
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
         <el-form-item label="姓名">
-          <el-input v-model="formInline.user" placeholder=""></el-input>
+          <el-input v-model="formInline.name" placeholder=""></el-input>
         </el-form-item>
         <el-form-item label="排序">
-          <el-select v-model="formInline.region" placeholder="全部">
-            <el-option label="新增时间倒序" value="beijing"></el-option>
-            <el-option label="文章总数" value="beijing"></el-option>
-            <el-option label="被引用文章数" value="beijing"></el-option>
+          <el-select v-model="formInline.sort" placeholder="请选择">
+            <el-option label="新增时间倒序" value="1"></el-option>
+            <el-option label="文章总数" value="2"></el-option>
+            <el-option label="被引用文章数" value="3"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
@@ -20,7 +20,7 @@
     </div>
 
     <div class="label-add list-add">
-      <el-button @click="isAdd=true;pageDialogVisible=true">新增</el-button>
+      <el-button @click="addArtist()">新增</el-button>
     </div>
   
     <div class="tableDiv list-container">
@@ -30,54 +30,41 @@
         style="width: 100%">
         <el-table-column
           fixed
-          prop="date"
+          prop="author_id"
           label="编号"
           width="80">
         </el-table-column>
         <el-table-column
+          label="头像"
+          width="">
+          <template slot-scope="scope">
+            <img :src="scope.row.img" style="width:80px;">
+          </template>
+        </el-table-column>
+        <el-table-column
           prop="name"
-          label="文章标题"
+          label="姓名"
           width="">
         </el-table-column>
         <el-table-column
-          prop="province"
-          label="标签"
+          prop="ename"
+          label="英文名"
           width="">
         </el-table-column>
         <el-table-column
-          prop="city"
-          label="创建时间"
+          prop="introduction"
+          label="简介"
           width="">
         </el-table-column>
         <el-table-column
-          prop="address"
-          label="创建人"
+          prop="article_sum"
+          label="文章总数"
           width="">
         </el-table-column>
         <el-table-column
-          prop="zip"
-          label="引用栏目"
+          prop="article_used"
+          label="被引用文章数"
           width="">
-        </el-table-column>
-        <el-table-column
-          prop="zip"
-          label="所属目录"
-          width="">
-        </el-table-column>
-        <el-table-column
-          prop="zip"
-          label="是否置顶"
-          width="">
-        </el-table-column>
-        <el-table-column
-          prop="zip"
-          label="发布时间"
-          width="120">
-        </el-table-column>
-        <el-table-column
-          prop="zip"
-          label="发布状态"
-          width="120">
         </el-table-column>
         <el-table-column
           fixed="right"
@@ -85,7 +72,6 @@
           width="100">
           <template slot-scope="scope">
             <el-button @click="editClick(scope.row)" type="text" size="small">编辑</el-button>
-            <el-button @click="deleteClick(scope.row)" type="text" size="small">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -94,7 +80,7 @@
       <el-pagination
         background
         layout="prev, pager, next"
-        :total="1000">
+        :total="pageData.allSum">
       </el-pagination>
     </div>
 
@@ -105,28 +91,33 @@
       <div class="edit-container">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="80px" class="demo-ruleForm">
           <el-form-item label="作者头像" prop="img">
-            <el-input v-model="ruleForm.img"></el-input>
+            <!-- <el-input v-model="ruleForm.img"></el-input> -->
+            <div class="userheader">
+              <img :src="ruleForm.img" alt="" width="80px" height="80px">
+            </div>
           </el-form-item>
           <el-form-item label="作者姓名" prop="name">
             <el-input v-model="ruleForm.name" placeholder="最多输入40个汉字"></el-input>
           </el-form-item>
           <el-form-item label="英文名" prop="ename">
-            <el-input v-model="ruleForm.name" placeholder="最多输入50个字符"></el-input>
+            <el-input v-model="ruleForm.ename" placeholder="最多输入50个字符"></el-input>
           </el-form-item>
-          <el-form-item label="作者简介" prop="name">
-            <el-input type="textarea" v-model="ruleForm.name" placeholder="最多输入300个汉字"></el-input>
+          <el-form-item label="作者简介" prop="introduction">
+            <el-input type="textarea" v-model="ruleForm.introduction" placeholder="最多输入300个汉字"></el-input>
           </el-form-item>
         </el-form>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="titleDialogVisible = false">保 存</el-button>
-        <el-button @click="titleDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="saveArtist()">保 存</el-button>
+        <el-button @click="pageDialogVisible = false">取 消</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 
 <script>
+  import { getAuthor, handleAuthor } from '@/api/schoolH5'
+  import defaultHead from '../../../assets/imgs/add-stu.png'
   export default {
     name: 'artistList',
     data() {
@@ -134,61 +125,103 @@
         isAdd: true,
         pageDialogVisible: false,
         formInline: {
-          user: '',
-          region: ''
+          name: '',
+          sort: ''
         },
         value6: '',
         value7: '',
         activeName2: 'first',
-        tableData: [{
-          date: '201',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '上海市普陀区金沙江路 1518 弄',
-          zip: 200333
-        }],
-        ruleForm: {
-          index: 1,
+        tableData: [],
+        ruleForm: {},
+        ruleFormr: {
+          author_id: '',
           name: '',
-          showTitle: '0',
-          img: '',
-          sort: '',
-          href: 'hao123.com'
+          ename: '',
+          introduction: '',
+          img: defaultHead
         },
         rules: {
           name: [
-            { required: true, message: '请输入活动名称', trigger: 'blur' },
-            { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
-          ],
-          showTitle: [
-            { required: true, message: '请选择是否展示标题', trigger: 'change' }
-          ],
-          sort: [
-            { required: true, message: '请输入展示排序', trigger: 'blur' }
-          ],
-          href: [
-            { required: true, message: '请输入链接', trigger: 'blur' }
+            { required: true, message: '请输入作者名称', trigger: 'blur' }
           ],
           img: [
             { required: true, message: '请选择图片', trigger: 'blur' }
+          ],
+          introduction: [
+            { required: true, message: '请输入作者简介', trigger: 'blur' }
           ]
+        },
+        pageData: {
+          allSum: 0
         }
       }
     },
     methods: {
-      onSubmit() {},
-      handleClick() {},
+      initData(page, name, sort) {
+        const obj = {
+          token: localStorage.getItem('TOKEN'),
+          page: page,
+          name: name,
+          sort: sort
+        }
+        getAuthor(obj).then( res => {
+          console.log(res)
+          if (res.hasOwnProperty('response')) {
+            const data = res.response
+            this.tableData = data.author_list
+            this.pageData.allSum = data.author_sum
+          } else {
+            this.$message.error(res.error_response.msg)
+          }
+        })
+      },
+      addArtist() {
+        this.isAdd=true
+        this.pageDialogVisible=true
+        this.ruleForm = this.ruleFormr
+      },
+      onSubmit() {
+        console.log(this.formInline)
+        this.initData(1, this.formInline.name, this.formInline.sort)
+      },
       editClick(row) {
         console.log(row)
         this.isAdd = false
         this.pageDialogVisible = true
+
+        this.ruleForm = row
       },
-      deleteClick(row) {}
+      saveArtist() {
+        // console.log(this.ruleForm)
+        this.ruleForm.token = localStorage.getItem('TOKEN')
+        this.ruleForm.introduce = this.ruleForm.introduction
+        handleAuthor(this.ruleForm).then( res => {
+          console.log(res)
+          if (res.hasOwnProperty('response')) {
+            const data = res.response
+            this.$message({
+              message: '编辑成功',
+              type: 'success'
+            })
+            this.pageDialogVisible = false
+          } else {
+            this.$message.error(res.error_response.msg)
+          }
+        })
+      }
+    },
+    mounted() {
+      this.initData(1)
     }
   }
 </script>
 
 <style scoped>
-
+  .userheader{
+    width: 80px;
+    height: 80px;
+    overflow: hidden;
+    border: 1px solid #999;
+    border-radius: 80px;
+  }
 </style>
