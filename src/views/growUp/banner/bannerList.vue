@@ -17,38 +17,30 @@
           border
           style="width: 100%">
           <el-table-column
-            type="index"
+            prop="sort"
             label="排序"
             width="100">
           </el-table-column>
           <el-table-column
-            prop="img"
             label="图片"
             width="180">
+            <template slot-scope="scope">
+              <img :src="scope.row.img_url" style="width:140px;">
+            </template>
           </el-table-column>
           <el-table-column
             prop="title"
             label="标题">
           </el-table-column>
           <el-table-column
-            width="120"
-            label="是否展示标题">
-            <template slot-scope="scope">
-              <el-switch
-                v-model="scope.row.showTitle"
-                @change="getTitle(scope)">
-              </el-switch>
-            </template>
-          </el-table-column>
-          <el-table-column
-            prop="href"
+            prop="link"
             label="链接">
           </el-table-column>
           <el-table-column
             label="编辑"
             width="120">
             <template slot-scope="scope">
-              <el-button type="text" @click="editBanner(scope)" size="small">编辑</el-button>
+              <el-button type="text" @click="editBanner(scope.row)" size="small">编辑</el-button>
               <el-button type="text" size="small" @click="deleteBanner(scope)">删除</el-button>
             </template>
           </el-table-column>
@@ -59,17 +51,18 @@
     <el-dialog
       :title="isAdd === true ? '新增banner' : '修改banner'"
       :visible.sync="editDialogVisible"
+      id='infos'
       width="30%">
       <div class="edit-container">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="120px" class="demo-ruleForm">
-          <el-form-item label="编号" prop="index" v-show="!isAdd">
-            <span>{{ruleForm.index}}</span>
+          <el-form-item label="编号" v-show="!isAdd">
+            <span>{{ruleForm.sort}}</span>
           </el-form-item>
-          <el-form-item label="标题" prop="name">
-            <el-input v-model="ruleForm.name" placeholder="最多输入20个汉字"></el-input>
+          <el-form-item label="标题" prop='title'>
+            <el-input v-model="ruleForm.title" placeholder="最多输入20个汉字"></el-input>
           </el-form-item>
-          <el-form-item label="标题是否展示" prop="showTitle">
-            <el-radio-group v-model="ruleForm.showTitle">
+          <el-form-item label="标题是否展示">
+            <el-radio-group v-model="ruleForm.title_show">
               <el-radio label="1">是</el-radio>
               <el-radio label="0">否</el-radio>
             </el-radio-group>
@@ -77,21 +70,21 @@
           <el-form-item label="展示排序" prop="sort">
             <el-input v-model="ruleForm.sort"></el-input>
           </el-form-item>
-          <el-form-item label="图片" prop="img">
-            <el-input v-model="ruleForm.img"></el-input>
+          <el-form-item label="图片" prop='urls'>
+            <upImage ref="upLoadFile" :urls="urls"></upImage>
           </el-form-item>
-          <el-form-item label="链接" prop="href">
-            <el-input v-model="ruleForm.href"></el-input>
+          <el-form-item label="链接" prop="link">
+            <el-input v-model="ruleForm.link"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary">保存</el-button>
-            <el-button>取消</el-button>
+            <el-button type="primary" @click='saveInfo'>保存</el-button>
+            <el-button @click='cancelInfo'>取消</el-button>
           </el-form-item>
         </el-form>
       </div>
     </el-dialog>
 
-    <el-dialog
+ <!--    <el-dialog
       title="是否展示标题"
       :visible.sync="titleDialogVisible"
       width="30%">
@@ -101,11 +94,13 @@
         <el-button type="primary" @click="titleDialogVisible = false">确 定</el-button>
       </span>
     </el-dialog>
-
+ -->
   </div>
 </template>
 
 <script>
+  import upImage from '../upImg/upImage'
+  import { getGrowBanner, handleGrowBanner, deleteGrowBanner } from '@/api/schoolH5'
   export default {
     name: 'bannerList',
     data() {
@@ -114,13 +109,15 @@
         isAdd: true,
         table: [],
         ruleForm: {
-          index: 1,
-          name: '',
-          showTitle: '0',
-          img: '',
-          sort: '',
-          href: 'hao123.com'
+          banner_id: '',
+          title: '',
+          title_show: '',
+          img_url: '',
+          link: '',
+          type: '0',
+          sort: ''
         },
+        urls: '',
         rules: {
           name: [
             { required: true, message: '请输入活动名称', trigger: 'blur' },
@@ -132,7 +129,7 @@
           sort: [
             { required: true, message: '请输入展示排序', trigger: 'blur' }
           ],
-          href: [
+          link: [
             { required: true, message: '请输入链接', trigger: 'blur' }
           ],
           img: [
@@ -157,7 +154,6 @@
             href: 'www.hao123.com'
           }
         ],
-        titleDialogVisible: false,
         editDialogVisible: false,
         titleData: {
           bannerId: '',
@@ -167,20 +163,42 @@
     },
     mounted() {
       this.table = this.table1
-      this.initData()
+      this.initData(1)
+    },
+    components: {
+      upImage
     },
     methods: {
       // 切换banner列表
       toMajor() {
         this.isMajor = true
         this.table = this.table1
+        this.initData(1)
       },
       notMajor() {
         this.isMajor = false
         this.table = this.table2
+        this.initData(2)
       },
       // 初始化数据
-      initData() {},
+      initData(val) {
+        const obj = {
+          token: localStorage.getItem('TOKEN'),
+          type: val
+        }
+        getGrowBanner(obj)
+          .then(res => {
+            if (res.hasOwnProperty('response')) {
+              console.log(res)
+              this.table = res.response.banner_list
+            } else {
+              this.$message.error(res.error_response.msg)
+            }
+          })
+          .catch(err => {
+            console.log(err)
+          })
+      },
       // 获取标题信息
       getTitle(scope) {
         const row = scope.row
@@ -192,7 +210,45 @@
       editBanner(scope) {
         console.log(scope)
         this.isAdd = false
+        this.ruleForm.banner_id = scope.banner_id
+        this.ruleForm.title = scope.title
+        this.ruleForm.title_show = scope.title_show
+        this.ruleForm.img_url = scope.img_url
+        this.urls = scope.img_url
+        this.ruleForm.link = scope.link
+        this.ruleForm.type = scope.type
+        this.ruleForm.sort = scope.sort
         this.editDialogVisible = true
+      },
+      saveInfo() {
+        this.ruleForm.img_url = this.$refs.upLoadFile.getUrl() !== '' ? this.$refs.upLoadFile.getUrl() : this.ruleForm.img_url
+        const obj = {
+          token: localStorage.getItem('TOKEN'),
+          banner_id: this.ruleForm.banner_id,
+          title: this.ruleForm.title,
+          title_show: this.ruleForm.title_show,
+          img_url: this.ruleForm.img_url,
+          link: this.ruleForm.link,
+          type: this.ruleForm.type,
+          sort: this.ruleForm.sort
+        }
+        handleGrowBanner(obj)
+          .then(res => {
+            if (res.hasOwnProperty('response')) {
+              console.log(res)
+              this.editDialogVisible = false
+              this.$message.success(res.response.msg)
+              this.initData(obj.type)
+            } else {
+              this.$message.error(res.error_response.msg)
+            }
+          })
+          .catch(err => {
+            console.log(err)
+          })
+      },
+      cancelInfo() {
+        this.editDialogVisible = false
       },
       // 删除
       deleteBanner(scope) {
@@ -213,14 +269,32 @@
           })
         })
       }
+    },
+    watch: {
+      "editDialogVisible": function(news, olds) {
+        if (news === false) {
+          this.ruleForm.banner_id = ''
+          this.ruleForm.title = ''
+          this.ruleForm.title_show = '0'
+          this.ruleForm.img_url = ''
+          this.urls = ''
+          this.ruleForm.link = ''
+          this.ruleForm.type = ''
+          this.ruleForm.sort = ''
+        }
+      }
     }
   }
 </script>
-
 <style scoped rel="stylesheet/scss" lang="scss">
   .el-button.active{
     color: #409EFF;
     border-color: #c6e2ff;
     background-color: #ecf5ff;
+  }
+</style>
+<style type="text/css">
+  #infos .el-dialog__headerbtn .el-dialog__close {
+    display:  none;
   }
 </style>
