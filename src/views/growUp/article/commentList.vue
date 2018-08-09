@@ -1,5 +1,9 @@
 <template>
-  <div></div>
+  <div class="comment-list content">
+
+    <div class=""></div>
+    
+  </div>
 </template>
 
 <script>

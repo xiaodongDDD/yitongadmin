@@ -148,7 +148,7 @@ export const constantRouterMap = [
       {
         path: 'commentInfo',
         name: 'commentInfo',
-        hidden: true,
+        hidden: false,
         component: _import('growUp/article/commentInfo'),
         meta: { title: '评论详情', icon: 'form' }
       },

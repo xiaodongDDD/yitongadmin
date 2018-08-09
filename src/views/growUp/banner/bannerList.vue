@@ -100,7 +100,7 @@
 
 <script>
   import upImage from '../upImg/upImage'
-  import { getGrowBanner, handleGrowBanner, deleteGrowBanner } from '@/api/schoolH5'
+  import { getGrowBanner, handleGrowBanner } from '@/api/schoolH5'
   export default {
     name: 'bannerList',
     data() {
@@ -271,7 +271,7 @@
       }
     },
     watch: {
-      "editDialogVisible": function(news, olds) {
+      'editDialogVisible': function(news, olds) {
         if (news === false) {
           this.ruleForm.banner_id = ''
           this.ruleForm.title = ''

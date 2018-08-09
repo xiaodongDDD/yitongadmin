@@ -189,27 +189,8 @@
     methods: {
       onSubmit() {},
       handleClick() {},
-      editClick(row) {
-      	console.log(row)
-      },
-      deleteClick(row) {
-      	console.log(row)
-      	this.$confirm('删除之后栏目将不再显示此篇文章，可能对app端展示造成影响，请确认是否删除该文章？', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          })
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          })
-        })
-      }
+      editClick(row) {},
+      deleteClick(row) {}
     }
   }
 </script>
