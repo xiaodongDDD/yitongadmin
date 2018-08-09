@@ -41,7 +41,7 @@
             width="120">
             <template slot-scope="scope">
               <el-button type="text" @click="editBanner(scope.row)" size="small">编辑</el-button>
-              <el-button type="text" size="small" @click="deleteBanner(scope)">删除</el-button>
+              <el-button type="text" size="small" @click="deleteBanner(scope.row)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -70,8 +70,8 @@
           <el-form-item label="展示排序" prop="sort">
             <el-input v-model="ruleForm.sort"></el-input>
           </el-form-item>
-          <el-form-item label="图片" prop='urls'>
-            <upImage ref="upLoadFile" :urls="urls"></upImage>
+          <el-form-item label="图片">
+            <upImage ref="upLoadFile" :urls="urls" v-if='isAlive'></upImage>
           </el-form-item>
           <el-form-item label="链接" prop="link">
             <el-input v-model="ruleForm.link"></el-input>
@@ -136,24 +136,7 @@
             { required: true, message: '请选择图片', trigger: 'blur' }
           ]
         },
-        table1: [
-          {
-            bannerId: '101',
-            img: '',
-            title: '不知如何教育孩子家长怎么办',
-            showTitle: true,
-            href: 'www.hao123.com'
-          }
-        ],
-        table2: [
-          {
-            bannerId: '102',
-            img: '',
-            title: '学霸就是这么任性',
-            showTitle: false,
-            href: 'www.hao123.com'
-          }
-        ],
+        isAlive: true,
         editDialogVisible: false,
         titleData: {
           bannerId: '',
@@ -161,9 +144,12 @@
         }
       }
     },
+    provide() {
+      reload: this.reload
+    },
     mounted() {
       this.table = this.table1
-      this.initData(1)
+      this.initData('1')
     },
     components: {
       upImage
@@ -172,13 +158,11 @@
       // 切换banner列表
       toMajor() {
         this.isMajor = true
-        this.table = this.table1
-        this.initData(1)
+        this.initData('1')
       },
       notMajor() {
         this.isMajor = false
-        this.table = this.table2
-        this.initData(2)
+        this.initData('2')
       },
       // 初始化数据
       initData(val) {
@@ -207,6 +191,12 @@
         this.titleDialogVisible = true
       },
       // 编辑
+      reload() {
+        this.isAlive = false
+        this.$nextTick(function() {
+          this.isAlive = true
+        })
+      },
       editBanner(scope) {
         console.log(scope)
         this.isAdd = false
@@ -239,6 +229,7 @@
               this.editDialogVisible = false
               this.$message.success(res.response.msg)
               this.initData(obj.type)
+              this.reload()
             } else {
               this.$message.error(res.error_response.msg)
             }
@@ -251,33 +242,49 @@
         this.editDialogVisible = false
       },
       // 删除
-      deleteBanner(scope) {
-        console.log(scope)
+      deleteBanner(val) {
+        console.log(val)
         this.$confirm('此操作将永久删除该banner, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
-        }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          })
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          })
         })
+          .then(() => {
+            const obj = {
+              token: localStorage.getItem('TOKEN'),
+              banner_id: val.banner_id,
+              type: val.type
+            }
+            deleteGrowBanner(obj)
+              .then(res => {
+                if (res.hasOwnProperty('response')) {
+                  console.log(res)
+                  this.$message.success(res.response.msg)
+                  this.initData(val.type)
+                } else {
+                  this.$message.error(res.error_response.msg)
+                }
+              })
+              .catch(err => {
+                console.log(err)
+              })
+          })
+          .catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消删除'
+            })
+          })
       }
     },
     watch: {
-      "editDialogVisible": function(news, olds) {
+      'editDialogVisible': function(news, olds) {
+        console.log(news)
         if (news === false) {
           this.ruleForm.banner_id = ''
           this.ruleForm.title = ''
           this.ruleForm.title_show = '0'
           this.ruleForm.img_url = ''
-          this.urls = ''
           this.ruleForm.link = ''
           this.ruleForm.type = ''
           this.ruleForm.sort = ''

@@ -177,7 +177,12 @@
         }
       }
     },
+    mounted() {
+      this.initData()
+    },
     methods: {
+      initData() {
+      },
       editcolumn(scope) {
         console.log(scope)
         this.signDialogVisible = true

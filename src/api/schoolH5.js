@@ -46,7 +46,7 @@ export function handleGrowLabel(datas) {
   return request({
     url: '/quandev?v=0.1&method=Growlabel.labelManage',
     method: 'post',
-    data: datas
+    data: qs.stringify(datas)
   })
 }
 // 删除标签
@@ -62,7 +62,7 @@ export function getGrowCommnet(datas) {
   return request({
     url: '/quandev?v=0.1&method=Growcomment.index',
     method: 'post',
-    data: datas
+    data: qs.stringify(datas)
   })
 }
 // 评论详情
@@ -78,7 +78,7 @@ export function growCommnetReply(datas) {
   return request({
     url: '/quandev/api/?v=0.1&method=Growcomment.commentReply',
     method: 'post',
-    data: datas
+    data: qs.stringify(datas)
   })
 }
 // 评论置顶，取消置顶
@@ -86,7 +86,7 @@ export function handleGrowCommnet(datas) {
   return request({
     url: '/quandev?v=0.1&method=Growcomment.commentStick',
     method: 'post',
-    data: datas
+    data: qs.stringify(datas)
   })
 }
 // 评论审核通过
@@ -118,6 +118,6 @@ export function handleAuthor(datas) {
   return request({
     url: '/quandev?v=0.1&method=Growauthor.authorManage',
     method: 'post',
-    data: datas
+    data: qs.stringify(datas)
   })
 }
