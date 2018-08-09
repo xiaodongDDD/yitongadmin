@@ -2,13 +2,13 @@
   <div class="file_container">
       <label>
         <!-- <div class="fileUpBtn" @click='choose1'>点击选择图片</div> -->
-        <i @click='choose1' class="imgSize" element-loading-text="图片上传中" title='点击上传' v-loading.fullscreen.lock="fullscreenLoading" v-if="noup && urls !== ''"><img :src="urls" class="avatar" style="cursor:pointer;"></i>
+        <i @click='choose1' class="imgSize" element-loading-text="图片上传中" title='点击上传' v-loading.fullscreen.lock="fullscreenLoading" v-if="noup && urls.url !== ''"><img :src="urls.url" class="avatar" style="cursor:pointer;"></i>
         <i @click='choose1' class="imgSize" element-loading-text="图片上传中" v-loading.fullscreen.lock="fullscreenLoading" title='点击上传' v-if="noup === false"><img :src="imgUrl" class="avatar" style="cursor:pointer;"></i>
-        <i v-if="urls === ''  && noup" title='点击上传' v-loading.fullscreen.lock="fullscreenLoading" element-loading-text="图片上传中" class="el-icon-plus avatar-uploader-icon" style="width:111px;height:111px;position:relative;cursor:pointer;" @click='choose1'></i>
+        <i v-if="urls.url === ''  && noup" title='点击上传' v-loading.fullscreen.lock="fullscreenLoading" element-loading-text="图片上传中" class="el-icon-plus avatar-uploader-icon" style="width:111px;height:111px;position:relative;cursor:pointer;" @click='choose1'></i>
         <!-- <input id="myvideo" type="file" name="upvideo" style="display: none;" /> -->
         <form id='filesUp'>
          <input id="myfile" type="file" name="upfiles" style="display:none;" />
-         </form>
+        </form>
       </label>
 <!--       <el-dialog
       title="无法上传"
@@ -68,8 +68,7 @@ export default {
       utxt1: true,
       imgUrl: '',
       cover: false,
-      fullscreenLoading: false,
-      currentStatus: this.urls || '暂无'
+      fullscreenLoading: false
     }
   },
   mounted() {
@@ -99,7 +98,11 @@ export default {
       img.src = URL
       console.log(img)
       const that = this
-      // console.log('img.width',img.width, 'img.height', img.height)
+      that.imgUrl = result.data.access_url
+      that.noup = false
+      that.$message.success('上传成功')
+      that.fullscreenLoading = false
+      console.log('img.width',img.width, 'img.height', img.height)
       // 判断是否有缓存
       if (img.complete) {
       // 打印
@@ -121,16 +124,19 @@ export default {
         // 打印
           // alert('from:onload : width:'+img.width+',height:'+img.height)
           console.log('errors3')
-          if (img.width !== 111 || img.height !== 111) {
-            that.$message.error('请上传111*111px的图片')
-            that.fullscreenLoading = false
-          } else {
-            that.imgUrl = result.data.access_url
-            that.cover = true
-            that.noup = false
-            that.$message.success('上传成功')
-            that.fullscreenLoading = false
-          }
+          // if (type === '1') {
+
+          // }
+          // if (img.width !== 111 || img.height !== 111) {
+          //   that.$message.error('请上传111*111px的图片')
+          //   that.fullscreenLoading = false
+          // } else {
+          //   that.imgUrl = result.data.access_url
+          //   that.cover = true
+          //   that.noup = false
+          //   that.$message.success('上传成功')
+          //   that.fullscreenLoading = false
+          // }
         }
       }
     },
@@ -155,6 +161,7 @@ export default {
       this.fullscreenLoading = true
     },
     choose1(e) {
+      console.log(this.urls)
       const that = this
       $('#myfile').off('change').on('change', function(e) {
         that.openFullScreen()
@@ -446,6 +453,11 @@ export default {
     width: 111px;
     height: 111px;
     overflow: hidden;
+  }
+
+  .eImg{
+    width: 80px;
+    height: 80px;
   }
 </style>
 <style>

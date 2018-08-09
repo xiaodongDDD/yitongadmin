@@ -93,7 +93,8 @@
           <el-form-item label="作者头像" prop="img">
             <!-- <el-input v-model="ruleForm.img"></el-input> -->
             <div class="userheader">
-              <img :src="ruleForm.img" alt="" width="80px" height="80px">
+              <!-- <img :src="ruleForm.img" alt="" width="80px" height="80px"> -->
+              <upImage ref="upLoadFile" :urls="urls"></upImage>
             </div>
           </el-form-item>
           <el-form-item label="作者姓名" prop="name">
@@ -116,6 +117,7 @@
 </template>
 
 <script>
+  import upImage from '../upImg/upImage'
   import { getAuthor, handleAuthor } from '@/api/schoolH5'
   import defaultHead from '../../../assets/imgs/add-stu.png'
   export default {
@@ -127,6 +129,10 @@
         formInline: {
           name: '',
           sort: ''
+        },
+        urls: {
+          url: '',
+          type: ''
         },
         value6: '',
         value7: '',
@@ -156,6 +162,9 @@
         }
       }
     },
+    components: {
+      upImage
+    },
     methods: {
       initData(page, name, sort) {
         const obj = {
@@ -164,7 +173,7 @@
           name: name,
           sort: sort
         }
-        getAuthor(obj).then( res => {
+        getAuthor(obj).then(res => {
           console.log(res)
           if (res.hasOwnProperty('response')) {
             const data = res.response
@@ -176,12 +185,12 @@
         })
       },
       addArtist() {
-        this.isAdd=true
-        this.pageDialogVisible=true
+        this.isAdd = true
+        this.pageDialogVisible = true
         this.ruleForm = this.ruleFormr
       },
       onSubmit() {
-        console.log(this.formInline)
+        // console.log(this.formInline)
         this.initData(1, this.formInline.name, this.formInline.sort)
       },
       editClick(row) {
@@ -190,15 +199,17 @@
         this.pageDialogVisible = true
 
         this.ruleForm = row
+        this.urls.url = row.img
       },
       saveArtist() {
         // console.log(this.ruleForm)
+        this.ruleForm.img = this.$refs.upLoadFile.getUrl() !== '' ? this.$refs.upLoadFile.getUrl() : this.ruleForm.img
         this.ruleForm.token = localStorage.getItem('TOKEN')
         this.ruleForm.introduce = this.ruleForm.introduction
-        handleAuthor(this.ruleForm).then( res => {
-          console.log(res)
+        console.log(this.ruleForm)
+        handleAuthor(this.ruleForm).then(res => {
+          // console.log(res)
           if (res.hasOwnProperty('response')) {
-            const data = res.response
             this.$message({
               message: '编辑成功',
               type: 'success'
