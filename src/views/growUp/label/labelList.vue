@@ -11,25 +11,25 @@
         border
         style="width: 100%">
         <el-table-column
-          type="index"
+          prop="label_id"
           label="编号"
           width="100">
         </el-table-column>
         <el-table-column
-          prop="signName"
+          prop="name"
           label="标签名称">
         </el-table-column>
         <el-table-column
-          prop="name"
+          prop="creator"
           label="创建人"
           width="180">
         </el-table-column>
         <el-table-column
-          prop="date"
+          prop="times"
           label="创建时间">
         </el-table-column>
         <el-table-column
-          prop="name"
+          prop="refs"
           label="已被使用次数"
           width="120">
         </el-table-column>
@@ -52,7 +52,7 @@
       <div class="signedit">
         <el-form ref="form" :rules="rules" :model="form" label-width="100px">
           <el-form-item label="编号" v-show="!isAdd">
-            <span>{{ form.index }}</span>
+            <span>{{ currentId }}</span>
           </el-form-item>
           <el-form-item label="标签名称" prop="name">
             <el-input v-model="form.name" placehoder="最多可输入10个汉字"></el-input>
@@ -63,8 +63,8 @@
         </el-form>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="signDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="signDialogVisible = false">确 定</el-button>
+        <el-button @click="cancelAdd">取 消</el-button>
+        <el-button type="primary" @click="confirmAdd">确 定</el-button>
       </span>
     </el-dialog>
 
@@ -72,21 +72,16 @@
 </template>
 
 <script>
+  import { getGrowLabel, handleGrowLabel, deleteGrowLabel } from '@/api/schoolH5'
+  import { parseTime } from '@/utils/index'
   export default {
     name: 'labelList',
     data() {
       return {
-        tableData: [{
-          signName: '大事件',
-          date: '2016-05-02',
-          name: '王小虎'
-        }, {
-          signName: '知天下',
-          date: '2016-05-04',
-          name: '王小虎'
-        }],
+        tableData: [],
         signDialogVisible: false,
         isAdd: false,
+        currentId: '',
         form: {
           index: 1,
           name: ''
@@ -99,30 +94,94 @@
         }
       }
     },
+    mounted() {
+      this.initData()
+    },
     methods: {
+      initData() {
+        const obj = {
+          token: localStorage.getItem('TOKEN'),
+          page: 1
+        }
+        getGrowLabel(obj)
+          .then(res => {
+            console.log(res)
+            if (res.hasOwnProperty('response')) {
+              for (var i = 0; i < res.response.label_list.length; i++) {
+                res.response.label_list[i].times = parseTime(res.response.label_list[i].create_time, '{y}-{m}-{d}')
+              }
+              this.tableData = res.response.label_list
+            } else {
+              this.$message.error(res.error_response.msg)
+            }
+          })
+          .catch(err => {
+            console.log(err)
+          })
+      },
       // 编辑
       editLabel(scope) {
         console.log(scope)
+        this.currentId = scope.row.label_id || ''
+        this.form.name = scope.row.name
         this.isAdd = false
         this.signDialogVisible = true
       },
+      // 确认新增
+      confirmAdd() {
+        const obj = {
+          token: localStorage.getItem('TOKEN'),
+          label_id: this.currentId,
+          name: this.form.name
+        }
+        handleGrowLabel(obj)
+          .then(res => {
+            if (res.hasOwnProperty('response')) {
+              this.$message.success(res.response.msg)
+              this.initData(1)
+              this.signDialogVisible = false
+            } else {
+              this.$message.error(res.error_response.msg)
+            }
+          })
+      },
+      // 取消新增
+      cancelAdd() {
+        this.signDialogVisible = false
+        this.form.name = ''
+      },
       // 删除
       deleteSign(scope) {
-        this.$confirm('当前文章已被123篇文章引用，不可删除！', '提示', {
+        this.$confirm('确认删除该标签?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
-        }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          })
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          })
         })
+          .then(() => {
+            const obj = {
+              token: localStorage.getItem('TOKEN'),
+              label_id: scope.row.label_id
+            }
+            deleteGrowLabel(obj)
+              .then(res => {
+                if (res.hasOwnProperty('response')) {
+                  this.$message.success(res.response.msg)
+                  this.initData(1)
+                  this.$message.success(res.response.msg)
+                } else {
+                  this.$message.error(res.error_response.msg)
+                }
+              })
+              .catch(err => {
+                console.log(err)
+              })
+          })
+          .catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消删除'
+            })
+          })
       }
     }
   }

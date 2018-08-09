@@ -68,7 +68,8 @@ export default {
       utxt1: true,
       imgUrl: '',
       cover: false,
-      fullscreenLoading: false
+      fullscreenLoading: false,
+      currentStatus: this.urls || '暂无'
     }
   },
   mounted() {
