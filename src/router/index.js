@@ -135,7 +135,7 @@ export const constantRouterMap = [
       {
         path: 'articleAdd',
         name: 'articleAdd',
-        hidden: true,
+        hidden: false,
         component: _import('growUp/article/articleAdd'),
         meta: { title: '文章编辑/新增', icon: 'form' }
       },

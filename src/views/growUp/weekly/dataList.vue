@@ -84,16 +84,16 @@
   export default {
     name: 'dataList',
     data() {
-    	return {
-    	  tableData: [{
-	        date: '201',
-	        name: '王小虎',
-	        province: '上海',
-	        city: '普陀区',
-	        address: '上海市普陀区金沙江路 1518 弄',
-	        zip: 200333
-	      }]
-    	}
+      return {
+        tableData: [{
+          date: '201',
+          name: '王小虎',
+          province: '上海',
+          city: '普陀区',
+          address: '上海市普陀区金沙江路 1518 弄',
+          zip: 200333
+        }]
+      }
     }
   }
 </script>
