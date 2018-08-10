@@ -67,7 +67,13 @@
         <el-button type="primary" @click="confirmAdd">确 定</el-button>
       </span>
     </el-dialog>
-
+    <div class="list-pagination">
+    <el-pagination
+      background
+      layout="prev, pager, next"
+      :total="1000">
+    </el-pagination>
+  </div>
   </div>
 </template>
 
