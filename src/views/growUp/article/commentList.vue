@@ -106,7 +106,7 @@
           region: ''
         },
         pageData: {
-          allSum: 0
+          allSum: 1
         },
         tableData: [{
           date: '201',
