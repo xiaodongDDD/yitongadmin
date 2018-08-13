@@ -1,12 +1,12 @@
 <template>
   <div>
-    <script :id=id type="text/plain"></script>
+    <script :id='id' type="text/plain"></script>
   </div>
 </template>
 <script>
   export default {
     name: 'UE',
-    data () {
+    data() {
       return {
         editor: null
       }
@@ -20,15 +20,15 @@
       },
       id: {
         type: String
-      },
+      }
     },
     mounted() {
-      const _this = this;
-      this.editor = UE.getEditor(this.id, this.config); // 初始化UE
-      this.editor.addListener("ready", function () {
-        _this.editor.setContent(_this.defaultMsg); // 确保UE加载完成后，放入内容。
-      });
-      console.log("上传这堆错误不用理会，上传接口需自行开发配置");
+      const _this = this
+      this.editor = UE.getEditor(this.id, this.config) // 初始化UE
+      this.editor.addListener('ready', function() {
+        _this.editor.setContent(_this.defaultMsg) // 确保UE加载完成后，放入内容。
+      })
+      console.log('上传这堆错误不用理会，上传接口需自行开发配置')
     },
     methods: {
       getUEContent() { // 获取内容方法
@@ -40,26 +40,28 @@
       setUEContent(content) {
         this.editor.setContent(content)
       },
-      escape2Html(str){
-        if(!str){
-          return "";
+      escape2Html(str) {
+        if (!str) {
+          return ''
         }
-        if(str.indexOf("&#34;") > -1){
-            str = str.replace(/&#34;/ig,"&quot;");
-        } 
-        var arrEntities={'&#34;':'"','lt':'<','gt':'>','nbsp':' ','amp':'&','quot':'"'};
-        return str.replace(/&(lt|gt|nbsp|amp|quot);/ig,function(all,t){return arrEntities[t];})
+        if (str.indexOf('&#34;') > -1) {
+          str = str.replace(/&#34;/ig, '&quot;')
+        }
+        var arrEntities = { '&#34;': '"', 'lt': '<', 'gt': '>', 'nbsp': ' ', 'amp': '&', 'quot': '"' }
+        return str.replace(/&(lt|gt|nbsp|amp|quot);/ig, function(all, t) {
+          return arrEntities[t]
+        })
       }
     },
-    watch: {  
-      defaultMsg : function (val, oldVal) {
-        if(this.editor && val != oldVal){
-          this.editor.setContent(this.escape2Html(val));
+    watch: {
+      defaultMsg: function(val, oldVal) {
+        if (this.editor && val !== oldVal) {
+          this.editor.setContent(this.escape2Html(val))
         }
       }
-    },  
+    },
     destroyed() {
-      this.editor.destroy();
+      this.editor.destroy()
     }
   }
 </script>

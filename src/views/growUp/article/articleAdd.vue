@@ -37,7 +37,7 @@
 </template>
 
 <script>
-  import UE from '../../ue/ue.vue';
+  import UE from '../../ue/ue.vue'
   export default {
     name: 'articleAdd',
     data() {
@@ -48,7 +48,7 @@
           initialFrameHeight: 350
         },
         defaultMsg: '',
-        ue1:'ue1',
+        ue1: 'ue1',
         ruleForm: {
           name: '',
           region: '',

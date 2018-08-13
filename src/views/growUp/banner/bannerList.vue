@@ -71,7 +71,7 @@
             <el-input v-model="ruleForm.sort"></el-input>
           </el-form-item>
           <el-form-item label="图片" prop='urls'>
-            <upImage ref="upLoadFile" :urls="urls"></upImage>
+            <upImage ref="upLoadFile" :urls="urls" v-if='isAlive'></upImage>
           </el-form-item>
           <el-form-item label="链接" prop="link">
             <el-input v-model="ruleForm.link"></el-input>
@@ -108,6 +108,7 @@
         isMajor: true,
         isAdd: true,
         table: [],
+        isAlive: true,
         ruleForm: {
           banner_id: '',
           title: '',
@@ -169,6 +170,12 @@
       upImage
     },
     methods: {
+      reload() {
+        this.isAlive = false
+        this.$nextTick(function() {
+          this.isAlive = true
+        })
+      },
       // 切换banner列表
       toMajor() {
         this.isMajor = true
@@ -277,7 +284,7 @@
           this.ruleForm.title = ''
           this.ruleForm.title_show = '0'
           this.ruleForm.img_url = ''
-          this.urls = ''
+          this.reload()
           this.ruleForm.link = ''
           this.ruleForm.type = ''
           this.ruleForm.sort = ''

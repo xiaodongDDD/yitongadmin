@@ -115,7 +115,7 @@
   export default {
     name: 'commentList',
     data() {
-	  return {
+      return {
         formInline: {
           user: '',
           region: ''
@@ -131,13 +131,13 @@
           address: '上海市普陀区金沙江路 1518 弄',
           zip: 200333
         }]
-	  }
+      }
     },
     methods: {
       onSubmit() {},
       addArtist() {},
       editClick(row) {},
-	  deleteClick(row) {}
+      deleteClick(row) {}
     }
   }
 </script>
