@@ -14,6 +14,10 @@ import store from './store'
 
 import '@/icons' // icon
 import '@/permission' // permission control
+import '../static/UE/ueditor.config.js'
+import '../static/UE/ueditor.all.min.js'
+import '../static/UE/lang/zh-cn/zh-cn.js'
+import '../static/UE/ueditor.parse.min.js'
 
 Vue.use(ElementUI, { locale })
 
