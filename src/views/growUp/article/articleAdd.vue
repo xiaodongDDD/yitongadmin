@@ -18,7 +18,9 @@
 	      <p>请上传mp3格式的音频</p>
 	    </el-form-item>
 	    <el-form-item label="文章内容" prop="desc">
-	      <el-input type="textarea" v-model="ruleForm.desc"></el-input>
+	      <div>
+          <UE :defaultMsg="defaultMsg" :config="config" :id="ue1" ref="ue"></UE>
+        </div>
 	    </el-form-item>
 	    <el-form-item>
 	      <el-button type="primary" @click="submitForm('ruleForm')">保存</el-button>
@@ -60,11 +62,18 @@
 </template>
 
 <script>
+  import UE from '../../ue/ue.vue';
   export default {
     name: 'articleAdd',
     data() {
       return {
         tabPosition: '1',
+        config: {
+          initialFrameWidth: null,
+          initialFrameHeight: 350
+        },
+        defaultMsg: '',
+        ue1:'ue1',
         ruleForm: {
           name: '',
           region: '',
@@ -101,6 +110,9 @@
         }
       }
     },
+    components: {
+      UE
+    },
     methods: {
       submitForm() {},
       resetForm() {}
@@ -110,4 +122,9 @@
 
 <style scoped>
 
+</style>
+<style type="text/css">
+  div.edui-editor-toolbarboxinner.edui-default {
+    line-height: 20px;
+  }
 </style>
