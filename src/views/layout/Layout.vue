@@ -28,6 +28,9 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss">
   @import "src/styles/mixin.scss";
+  ul,li{
+    list-style: none;
+  }
   .app-wrapper {
     @include clearfix;
     position: relative;

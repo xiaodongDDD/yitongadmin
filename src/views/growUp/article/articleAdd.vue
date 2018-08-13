@@ -30,8 +30,33 @@
 	</div>
 
 	<div class="teacher" v-show="tabPosition === '1'">
-	  <h4>作者管理</h4>
-		
+	  <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+	    <h4>作者管理</h4>
+	    <el-form-item label="文章标题" prop="name">
+	      <el-input v-model="ruleForm.name"></el-input>
+	    </el-form-item>
+	    <h4>展示图片</h4>
+	    <el-form-item label="短标题" prop="desc">
+	      <el-input v-model="ruleForm.desc"></el-input>
+	    </el-form-item>
+	    <h4>文章摘要</h4>
+	    <el-form-item label="音频" prop="desc">
+	      <el-input v-model="ruleForm.desc"></el-input>
+	      <p>请上传mp3格式的音频</p>
+	    </el-form-item>
+	    <h4>文章标签</h4>
+	    <el-form-item label="文章内容" prop="desc">
+	      <el-input type="textarea" v-model="ruleForm.desc"></el-input>
+	    </el-form-item>
+	    <h4>文章预览</h4>
+	    <el-form-item label="文章内容" prop="desc">
+	      <el-input type="textarea" v-model="ruleForm.desc"></el-input>
+	    </el-form-item>
+	    <el-form-item>
+	      <el-button type="primary" @click="submitForm('ruleForm')">保存</el-button>
+	      <el-button @click="resetForm('ruleForm')">取消</el-button>
+	    </el-form-item>
+	  </el-form>
 	</div>
   </div>
 </template>

@@ -117,7 +117,7 @@
 </template>
 
 <script>
-  import upImage from '../upImg/upImage'
+  import upImage from '../upImg/artistUpImg'
   import { getAuthor, handleAuthor } from '@/api/schoolH5'
   import defaultHead from '../../../assets/imgs/add-stu.png'
   export default {

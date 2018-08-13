@@ -51,51 +51,36 @@
         </el-table-column>
         <el-table-column
           prop="province"
-          label="标签"
+          label="文章状态"
           width="">
         </el-table-column>
         <el-table-column
           prop="city"
-          label="创建时间"
+          label="评论状态"
           width="">
         </el-table-column>
         <el-table-column
           prop="address"
-          label="创建人"
+          label="总点赞数"
           width="">
         </el-table-column>
         <el-table-column
           prop="zip"
-          label="引用栏目"
+          label="总评论数"
           width="">
         </el-table-column>
         <el-table-column
           prop="zip"
-          label="所属目录"
+          label="待审核数"
           width="">
-        </el-table-column>
-        <el-table-column
-          prop="zip"
-          label="是否置顶"
-          width="">
-        </el-table-column>
-        <el-table-column
-          prop="zip"
-          label="发布时间"
-          width="120">
-        </el-table-column>
-        <el-table-column
-          prop="zip"
-          label="发布状态"
-          width="120">
         </el-table-column>
         <el-table-column
           fixed="right"
           label="操作"
-          width="100">
+          width="120">
           <template slot-scope="scope">
-            <el-button @click="editClick(scope.row)" type="text" size="small">编辑</el-button>
-            <el-button @click="deleteClick(scope.row)" type="text" size="small">删除</el-button>
+            <el-button @click="editClick(scope.row)" type="text" size="small">详情</el-button>
+            <el-button @click="deleteClick(scope.row)" type="text" size="small">关闭评论</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -121,7 +106,7 @@
           region: ''
         },
         pageData: {
-          allSum: 0
+          allSum: 1
         },
         tableData: [{
           date: '201',
