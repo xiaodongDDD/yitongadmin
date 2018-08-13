@@ -454,6 +454,10 @@ export default {
     height: 111px;
     overflow: hidden;
   }
+  .imgSize img{
+    width: 80px;
+    height: 80px;
+  }
 
   .eImg{
     width: 80px;
