@@ -4,7 +4,9 @@
         <!-- <div class="fileUpBtn" @click='choose1'>点击选择图片</div> -->
         <i @click='choose1' class="imgSize" element-loading-text="图片上传中" title='点击上传' v-loading.fullscreen.lock="fullscreenLoading" v-if="noup && urls.url !== ''"><img :src="urls.url" class="avatar" style="cursor:pointer;"></i>
         <i @click='choose1' class="imgSize" element-loading-text="图片上传中" v-loading.fullscreen.lock="fullscreenLoading" title='点击上传' v-if="noup === false"><img :src="imgUrl" class="avatar" style="cursor:pointer;"></i>
-        <i v-if="urls.url === ''  && noup" title='点击上传' v-loading.fullscreen.lock="fullscreenLoading" element-loading-text="图片上传中" class="el-icon-plus avatar-uploader-icon" style="width:111px;height:111px;position:relative;cursor:pointer;" @click='choose1'></i>
+        <i v-if="urls.url === ''  && noup" title='点击上传' v-loading.fullscreen.lock="fullscreenLoading" element-loading-text="图片上传中" class="el-icon-plus avatar-uploader-icon" style="width:111px;height:111px;position:relative;cursor:pointer;" @click='choose1'>
+          <img src="../../../assets/imgs/add-stu.png" alt="">
+        </i>
         <!-- <input id="myvideo" type="file" name="upvideo" style="display: none;" /> -->
         <form id='filesUp'>
          <input id="myfile" type="file" name="upfiles" style="display:none;" />
@@ -47,6 +49,7 @@
 <script type="text/javascript" src="../../assets/js/cos-js-sdk-v4.js"></script>
 <script>
 import $ from 'jquery'
+import defaultHead from '../../../assets/imgs/add-stu.png'
 export default {
   name: 'files',
   data() {

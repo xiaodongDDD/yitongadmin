@@ -94,7 +94,7 @@
             <!-- <el-input v-model="ruleForm.img"></el-input> -->
             <div class="userheader">
               <!-- <img :src="ruleForm.img" alt="" width="80px" height="80px"> -->
-              <upImage ref="upLoadFile" :urls="urls"></upImage>
+              <upImage ref="upLoadFile" :urls="urls" v-if='isAlive'></upImage>
             </div>
           </el-form-item>
           <el-form-item label="作者姓名" prop="name">
@@ -126,6 +126,7 @@
       return {
         isAdd: true,
         pageDialogVisible: false,
+        isAlive: true,
         formInline: {
           name: '',
           sort: ''
@@ -165,7 +166,22 @@
     components: {
       upImage
     },
+    watch: {
+      'pageDialogVisible': function(news, olds) {
+        if (news === false) {
+          this.ruleForm = this.ruleFormr
+          this.reload()
+          this.urls.url = this.ruleFormr.img
+        }
+      }
+    },
     methods: {
+      reload() {
+        this.isAlive = false
+        this.$nextTick(function() {
+          this.isAlive = true
+        })
+      },
       initData(page, name, sort) {
         const obj = {
           token: localStorage.getItem('TOKEN'),
@@ -174,7 +190,7 @@
           sort: sort
         }
         getAuthor(obj).then(res => {
-          console.log(res)
+          // console.log(res)
           if (res.hasOwnProperty('response')) {
             const data = res.response
             this.tableData = data.author_list
