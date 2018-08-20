@@ -2,8 +2,8 @@
   <div class="banner-list content">
 
     <div class="banner-switch">
-      <el-button @click="toMajor" v-bind:class="{'active': isMajor}">主banner</el-button>
-      <el-button @click="notMajor" v-bind:class="{'active': !isMajor}">广告位banner</el-button>
+      <el-button @click="toMajor('1')" v-bind:class="{'active': isMajor}">主banner</el-button>
+      <el-button @click="notMajor('2')" v-bind:class="{'active': !isMajor}">广告位banner</el-button>
     </div>
 
     <div class="banner-add list-add">
@@ -41,7 +41,7 @@
             width="120">
             <template slot-scope="scope">
               <el-button type="text" @click="editBanner(scope.row)" size="small">编辑</el-button>
-              <el-button type="text" size="small" @click="deleteBanner(scope)">删除</el-button>
+              <el-button type="text" size="small" @click="deleteBanner(scope.row)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -77,7 +77,7 @@
             <el-input v-model="ruleForm.link"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click='saveInfo'>保存</el-button>
+            <el-button type="primary" @click='saveInfo()'>保存</el-button>
             <el-button @click='cancelInfo'>取消</el-button>
           </el-form-item>
         </el-form>
@@ -100,7 +100,7 @@
 
 <script>
   import upImage from '../upImg/upImage'
-  import { getGrowBanner, handleGrowBanner } from '@/api/schoolH5'
+  import { getGrowBanner, handleGrowBanner, deleteGrowBanner } from '@/api/schoolH5'
   export default {
     name: 'bannerList',
     data() {
@@ -108,6 +108,7 @@
         isMajor: true,
         isAdd: true,
         table: [],
+        type: '1',
         isAlive: true,
         ruleForm: {
           banner_id: '',
@@ -115,10 +116,12 @@
           title_show: '',
           img_url: '',
           link: '',
-          type: '0',
+          type: '',
           sort: ''
         },
-        urls: '',
+        urls: {
+          url: ''
+        },
         rules: {
           name: [
             { required: true, message: '请输入活动名称', trigger: 'blur' },
@@ -164,7 +167,7 @@
     },
     mounted() {
       this.table = this.table1
-      this.initData(1)
+      this.initData('1')
     },
     components: {
       upImage
@@ -175,17 +178,20 @@
         this.$nextTick(function() {
           this.isAlive = true
         })
+        console.log(1111)
       },
       // 切换banner列表
-      toMajor() {
+      toMajor(val) {
         this.isMajor = true
         this.table = this.table1
-        this.initData(1)
+        this.type = '1'
+        this.initData(val)
       },
-      notMajor() {
+      notMajor(val) {
         this.isMajor = false
         this.table = this.table2
-        this.initData(2)
+        this.type = '2'
+        this.initData(val)
       },
       // 初始化数据
       initData(val) {
@@ -221,7 +227,7 @@
         this.ruleForm.title = scope.title
         this.ruleForm.title_show = scope.title_show
         this.ruleForm.img_url = scope.img_url
-        this.urls = scope.img_url
+        this.urls.url = scope.img_url
         this.ruleForm.link = scope.link
         this.ruleForm.type = scope.type
         this.ruleForm.sort = scope.sort
@@ -236,7 +242,7 @@
           title_show: this.ruleForm.title_show,
           img_url: this.ruleForm.img_url,
           link: this.ruleForm.link,
-          type: this.ruleForm.type,
+          type: this.type,
           sort: this.ruleForm.sort
         }
         handleGrowBanner(obj)
@@ -258,17 +264,31 @@
         this.editDialogVisible = false
       },
       // 删除
-      deleteBanner(scope) {
-        console.log(scope)
+      deleteBanner(row) {
+        console.log(row)
         this.$confirm('此操作将永久删除该banner, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          })
+          const obj = {
+            token: localStorage.getItem('TOKEN'),
+            banner_id: row.banner_id,
+            type: row.type
+          }
+          deleteGrowBanner(obj)
+            .then(res => {
+              if (res.hasOwnProperty('response')) {
+                console.log(res)
+                this.initData()
+                this.$message.success(res.response.msg)
+              } else {
+                this.$message.error(res.error_response.msg)
+              }
+            })
+            .catch(err => {
+              console.log(err)
+            })
         }).catch(() => {
           this.$message({
             type: 'info',
@@ -284,6 +304,7 @@
           this.ruleForm.title = ''
           this.ruleForm.title_show = '0'
           this.ruleForm.img_url = ''
+          this.urls.url = ''
           this.reload()
           this.ruleForm.link = ''
           this.ruleForm.type = ''

@@ -14,8 +14,7 @@
 	      <el-input v-model="ruleForm.desc"></el-input>
 	    </el-form-item>
 	    <el-form-item label="音频" prop="desc">
-	      <el-input v-model="ruleForm.desc"></el-input>
-	      <p>请上传mp3格式的音频</p>
+	      <upAudio ref="upLoadFile" :urls="urls" v-if='isAlive'></upAudio>
 	    </el-form-item>
 	    <el-form-item label="文章内容" prop="desc">
 	      <div>
@@ -42,7 +41,6 @@
 	    <h4>文章摘要</h4>
 	    <el-form-item label="音频" prop="desc">
 	      <el-input v-model="ruleForm.desc"></el-input>
-	      <p>请上传mp3格式的音频</p>
 	    </el-form-item>
 	    <h4>文章标签</h4>
 	    <el-form-item label="文章内容" prop="desc">
@@ -62,18 +60,20 @@
 </template>
 
 <script>
+  import upAudio from '../upAudio/upAudio'
   import UE from '../../ue/ue.vue'
   export default {
     name: 'articleAdd',
     data() {
       return {
-        tabPosition: '1',
+        tabPosition: '0',
         config: {
           initialFrameWidth: null,
           initialFrameHeight: 350
         },
         defaultMsg: '',
         ue1: 'ue1',
+        isAlive: true,
         ruleForm: {
           name: '',
           region: '',
@@ -83,6 +83,9 @@
           type: [],
           resource: '',
           desc: ''
+        },
+        urls: {
+          url: ''
         },
         rules: {
           name: [
@@ -111,9 +114,17 @@
       }
     },
     components: {
-      UE
+      UE,
+      upAudio
     },
     methods: {
+      reload() {
+        this.isAlive = false
+        this.$nextTick(function() {
+          this.isAlive = true
+        })
+        console.log(1111)
+      },
       submitForm() {},
       resetForm() {}
     }

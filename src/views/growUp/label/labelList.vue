@@ -11,7 +11,7 @@
         border
         style="width: 100%">
         <el-table-column
-          prop="label_id"
+          prop="sort"
           label="编号"
           width="100">
         </el-table-column>
@@ -69,9 +69,10 @@
     </el-dialog>
     <div class="list-pagination">
     <el-pagination
+      @current-change="handleCurrentChange"
       background
       layout="prev, pager, next"
-      :total="1000">
+      :total="total">
     </el-pagination>
   </div>
   </div>
@@ -88,6 +89,8 @@
         signDialogVisible: false,
         isAdd: false,
         currentId: '',
+        total: 0,
+        current_page: 1,
         form: {
           index: 1,
           name: ''
@@ -107,7 +110,7 @@
       initData() {
         const obj = {
           token: localStorage.getItem('TOKEN'),
-          page: 1
+          page: this.current_page
         }
         getGrowLabel(obj)
           .then(res => {
@@ -117,6 +120,7 @@
                 res.response.label_list[i].times = parseTime(res.response.label_list[i].create_time, '{y}-{m}-{d}')
               }
               this.tableData = res.response.label_list
+              this.total = res.response.label_sum
             } else {
               this.$message.error(res.error_response.msg)
             }
@@ -150,6 +154,11 @@
               this.$message.error(res.error_response.msg)
             }
           })
+      },
+      handleCurrentChange(val) {
+        console.log('当前页:', val)
+        this.current_page = val
+        this.initData()
       },
       // 取消新增
       cancelAdd() {

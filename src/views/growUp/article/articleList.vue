@@ -7,10 +7,10 @@
           <el-input v-model="formInline.user" placeholder="文章标题"></el-input>
         </el-form-item>
         <el-form-item label="标签">
-          <el-input v-model="formInline.user" placeholder="标签"></el-input>
+          <el-input v-model="formInline.label" placeholder="标签"></el-input>
         </el-form-item>
         <el-form-item label="创建人">
-          <el-input v-model="formInline.user" placeholder="创建人"></el-input>
+          <el-input v-model="formInline.creator" placeholder="创建人"></el-input>
         </el-form-item>
         <el-form-item label="创建时间">
           <el-date-picker
@@ -144,7 +144,8 @@
       return {
         formInline: {
           user: '',
-          region: ''
+          label: '',
+          creator: ''
         },
         pickerOptions2: {
           shortcuts: [{
@@ -186,7 +187,15 @@
         }]
       }
     },
+    mounted() {
+      this.initData()
+    },
     methods: {
+      initData() {
+        const obj = {
+          token: localStorage.getItem('TOKEN')
+        }
+      },
       onSubmit() {},
       handleClick() {},
       editClick(row) {},

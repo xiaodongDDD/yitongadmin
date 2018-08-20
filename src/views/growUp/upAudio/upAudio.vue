@@ -1,52 +1,53 @@
   <template>
   <div class="file_container">
-      <label>
+    
         <!-- <div class="fileUpBtn" @click='choose1'>点击选择图片</div> -->
-        <i @click='choose1' class="imgSize" element-loading-text="图片上传中" title='点击上传' v-loading.fullscreen.lock="fullscreenLoading" v-if="noup && urls.url !== ''"><img :src="urls.url" class="avatar" style="cursor:pointer;"></i>
-        <i @click='choose1' class="imgSize" element-loading-text="图片上传中" v-loading.fullscreen.lock="fullscreenLoading" title='点击上传' v-if="noup === false"><img :src="imgUrl" class="avatar" style="cursor:pointer;"></i>
-        <i v-if="urls.url === ''  && noup" title='点击上传' v-loading.fullscreen.lock="fullscreenLoading" class="imgSize" element-loading-text="图片上传中" @click='choose1'>
-          <img src="../../../assets/imgs/add-stu.png" class="avatar" style="cursor:pointer;">
-        </i>
-        <!-- <input id="myvideo" type="file" name="upvideo" style="display: none;" /> -->
-        <form id='filesUp'>
-         <input id="myfile" type="file" name="upfiles" style="display:none;" />
-        </form>
-      </label>
-<!--       <el-dialog
-      title="无法上传"
-      :visible.sync="delDialogVisible"
-      width="480px"
-      :top='topValues'
-      center
-      id="del-dialog">
-      <span class="text-center">文件大于50M 无法上传</span>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="goback">我知道了</el-button>
-      </span>
-    </el-dialog>
-        <el-dialog
-                title="取消上传"
-                :visible.sync="cancelUpFile"
-                width="480px"
-                :top = 'topValues'
-                center
-                id="file_del-dialog">
-                <span class="text-center">取消上传将消除目前的上传进度</span>
-                <span slot="footer" class="dialog-footer">
-                  <el-button @click="cancelUpFile = false">取 消</el-button>
-                  <el-button type="primary" @click="sureCancelFile">取消上传</el-button>
-                </span>
-           </el-dialog>
-  <!--  <div id='filehash' v-if='itemShow == 2'>
-     <div id='upContent'>正在上传...</div>
-   </div>
-   <div id='delFile' v-if='itemShow == 3' @click='delFile'>
-    <div class="fileName2">{{ filesName }}</div>
-   删除附件
-   </div> --> 
+        <div class="fileBox" v-if="noup && urls.url !== ''" element-loading-text="音频上传中" v-loading.fullscreen.lock="fullscreenLoading">
+          <audio width="380" controls>
+            <source :src="urls.url" type="audio/mp3">
+          </audio>
+          <label>
+            <div class="point-info">
+              <div @click="upAudio">重新上传</div>
+              <form id="upform">
+                <input id="myaudio" type="file" style="display: none;"/>
+              </form>
+            </div>
+          </label> 
+        </div>
+        <div class="fileBox" v-if="noup === false" element-loading-text="音频上传中" v-loading.fullscreen.lock="fullscreenLoading">
+         <!--  <audio width="380" controls>
+            <source :src="audioUrl" type="audio/mp3">
+          </audio> -->
+          <audio :src="audioUrl" width="380" controls>
+             您的浏览器不支持 audio。
+          </audio>
+          <label>
+            <div class="point-info">
+              <div @click="upAudio" >重新上传</div>
+              <form id="upform">
+                <input id="myaudio" type="file" style="display: none;"/>
+              </form>
+            </div>
+          </label>
+        </div> 
+        <div class="fileBox" v-if="urls.url === '' && noup" element-loading-text="音频上传中" v-loading.fullscreen.lock="fullscreenLoading">
+          <label>
+            <div class="point-info">
+              <div @click="upAudio">点击上传</div>
+              <form id="upform">
+                <input id="myaudio" type="file" style="display: none;"/>
+              </form>
+            </div>
+          </label>
+        </div>
+        <p style="padding: 0 20px;">请上传mp3格式的音频</p>
+    
+        <!-- <input id="myaudio" type="file" name="upvideo" style="display: none;" /> -->
+         
 </div>
 </template>
-<script type="text/javascript" src="../../assets/js/cos-js-sdk-v4.js"></script>
+<!-- <script type="text/javascript" src="../../assets/js/cos-js-sdk-v4.js"></script> -->
 <script>
 import $ from 'jquery'
 export default {
@@ -59,7 +60,7 @@ export default {
       region: 'sh',
       topValues: '',
       lastTaskId: '',
-      myFolders: '/image/',
+      myFolders: '/audio/',
       taskId: 0,
       size: 0,
       noup: true,
@@ -68,13 +69,14 @@ export default {
       base: 1024 * 1024,
       cos: {},
       utxt1: true,
-      imgUrl: '',
+      audioUrl: '',
       cover: false,
       fullscreenLoading: false
     }
   },
   mounted() {
     this.upFileUrls = process.env.tempurl
+    console.log(this.urls)
     const that = this
     var cos = new CosCloud({
       appid: that.appid, // APPID 必填参数
@@ -95,49 +97,11 @@ export default {
     // 成功回调
     successCallBacks(result) {
       console.log(result)
-      const URL = result.data.access_url
-      const img = new Image()
-      img.src = URL
-      console.log(img)
       const that = this
-      that.imgUrl = result.data.access_url
+      that.audioUrl = result.data.access_url
       that.noup = false
-      // that.$message.success('上传成功')
+      that.$message.success('上传成功')
       that.fullscreenLoading = false
-      // console.log('img.width', img.width, 'img.height', img.height)
-      // 判断是否有缓存
-      if (img.complete) {
-      // 打印
-        // alert('from:complete : width:'+img.width+',height:'+img.height)
-        console.log('errors2')
-        if (img.width !== 111 || img.height !== 111) {
-          that.$message.error('请上传111*111px的图片')
-          that.fullscreenLoading = false
-        } else {
-          that.imgUrl = result.data.access_url
-          that.cover = true
-          that.noup = false
-          that.$message.success('上传成功')
-          that.fullscreenLoading = false
-        }
-      } else {
-        // 加载完成执行
-        img.onload = function() {
-        // 打印
-          // alert('from:onload : width:'+img.width+',height:'+img.height)
-          console.log('errors3')
-          // if (img.width !== 111 || img.height !== 111) {
-          //   that.$message.error('请上传111*111px的图片')
-          //   that.fullscreenLoading = false
-          // } else {
-          that.imgUrl = result.data.access_url
-          that.cover = true
-          that.noup = false
-          that.$message.success('上传成功')
-          that.fullscreenLoading = false
-          // }
-        }
-      }
     },
     // 错误回调
     errorCallBacks(result) {
@@ -151,7 +115,7 @@ export default {
       this.lastTaskId = taskId
     },
     getUrl() {
-      return (this.imgUrl)
+      return (this.audioUrl)
     },
     openFun() {
       return this.choose1()
@@ -159,9 +123,10 @@ export default {
     openFullScreen() {
       this.fullscreenLoading = true
     },
-    choose1(e) {
+    upAudio(e) {
+      console.log(11112222)
       const that = this
-      $('#myfile').off('change').on('change', function(e) {
+      $('#myaudio').off('change').on('change', function(e) {
         that.openFullScreen()
         var files = e.target.files[0]
         console.log(files)
@@ -171,14 +136,14 @@ export default {
         console.log('size', that.size)
         console.log('sizeM', that.sizeM)
         var fileSize = parseInt(that.sizeM)
-        if (fileSize > 20) {
-          that.$message.error('文件大小超过20M')
+        if (fileSize > 200) {
+          that.$message.error('文件大小超过200M')
           that.fullscreenLoading = false
           return false
         }
         // 查看文件名后缀是否合法
         var nameFlag = false
-        var nameArr = ['PNG', 'JPEG', 'JPG', 'GIF']
+        var nameArr = ['MP3']
         var nameIndex = that.filesName.lastIndexOf('.')
         var extension = that.filesName.substr(nameIndex + 1).toUpperCase()
         for (var i = 0; i < nameArr.length; i++) {
@@ -200,7 +165,7 @@ export default {
         // 分片上传过程可能会有 op=upload_slice_list 的 POST 请求返回 404，不会影响上传：https://  github.com /tencentyun/cos-js-sdk-v4/issues/16
         that.taskId = that.cos.uploadFile(that.successCallBacks, that.errorCallBacks, that.progressCallBacks, that.buckets, that.myFolders + fileNames, files, 0, that.taskReadys)
         // insertOnly==0 表示允许覆盖文件 1表示不允许
-        $('#filesUp')[0].reset()
+        $('#upform')[0].reset()
         return false
       })
     },
@@ -256,18 +221,12 @@ export default {
       float:right;
   }
   .fileBox{
-    /*position: absolute;
-    top: 5px;
-    right: 10px*/
-    padding: 0 30px;
-    overflow:hidden;
+    width: 200px;
+    padding: 0 20px;
     position:relative;
   }
   .fileBox video{
     float:left;
-  }
-  .fileBox .point-info{
-    margin-left:340px;
   }
   .fileBox .point-info p{
     font-family: PingFangSC-Light;
@@ -276,24 +235,6 @@ export default {
     letter-spacing: -0.39px;
     line-height: 24px;
   }
-  .fileBox .point-info input{
-    width:112px;
-    height:32px;
-    background: #FFFFFF;
-    border: 1px solid #E5E5E5;
-    border-radius: 2px;
-    font-family: PingFangSC-Regular;
-    font-size: 16px;
-    color: #444444;
-    letter-spacing: -0.39px;
-    line-height: 32px;
-    text-align:center;
-    position:absolute;
-    bottom:0;
-    right:30px;
-    cursor:pointer;
-  }
-
   .fileUpBtn{
     cursor:pointer;
     width: 280px;
@@ -408,7 +349,7 @@ export default {
    word-break: break-all;
    overflow:hidden;
  }
- .file_container .point-info input{
+ .file_container .point-info div{
    width:112px;
    height:32px;
    background: #FFFFFF;

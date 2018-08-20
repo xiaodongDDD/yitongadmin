@@ -4,7 +4,6 @@
     <div class="top-container list-container">
       <div class="column1 column">
         <h4>育儿好文</h4>
-
         <ul class="children-list">
           <li @click='changeChild'>
             <div class="child">

@@ -65,6 +65,14 @@ export function getGrowCommnet(datas) {
     data: qs.stringify(datas)
   })
 }
+// 评论开启/关闭
+export function changeCommnetStatus(params) {
+  return request({
+    url: '/quandev?v=0.1&method=Growcomment.commentStatus',
+    method: 'get',
+    params
+  })
+}
 // 评论详情
 export function growCommnetDetail(params) {
   return request({
@@ -76,7 +84,7 @@ export function growCommnetDetail(params) {
 // 评论回复
 export function growCommnetReply(datas) {
   return request({
-    url: '/quandev/api/?v=0.1&method=Growcomment.commentReply',
+    url: '/quandev?v=0.1&method=Growcomment.commentReply',
     method: 'post',
     data: qs.stringify(datas)
   })
