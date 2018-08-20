@@ -192,9 +192,9 @@
     },
     methods: {
       initData() {
-        const obj = {
-          token: localStorage.getItem('TOKEN')
-        }
+        // const obj = {
+        //   token: localStorage.getItem('TOKEN')
+        // }
       },
       onSubmit() {},
       handleClick() {},
