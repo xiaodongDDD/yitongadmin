@@ -129,3 +129,10 @@ export function handleAuthor(datas) {
     data: qs.stringify(datas)
   })
 }
+export function getArticle(params) {
+  return request({
+    url: '/quandev?v=0.1&method=Growarticle.indexSearch',
+    method: 'get',
+    params
+  })
+}

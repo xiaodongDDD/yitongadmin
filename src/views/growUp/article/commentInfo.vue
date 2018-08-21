@@ -6,10 +6,10 @@
 
   	<el-radio-group v-model="tabPosition" style="margin-bottom: 30px;">
 	  <el-radio-button label="">全部评论{{ '('+ article_info.comment_all +') '}}</el-radio-button>
-	  <el-radio-button label="1">已回复{{ '('+ article_info.comment_replied +') '}}</el-radio-button>
-	  <el-radio-button label="2">待回复{{ '('+ article_info.comment_repling +') '}}</el-radio-button>
-	  <el-radio-button label="3">审核通过{{ '('+ article_info.comment_checked +') '}}</el-radio-button>
-	  <el-radio-button label="4">待审核{{ '('+ article_info.comment_checking +') '}}</el-radio-button>
+	  <el-radio-button label="1">已回复{{ '('+ article_info.comment_replied +')'}}</el-radio-button>
+	  <el-radio-button label="2">待回复{{ '('+ article_info.comment_repling +')'}}</el-radio-button>
+	  <el-radio-button label="3">审核通过{{ '('+ article_info.comment_checked +')'}}</el-radio-button>
+	  <el-radio-button label="4">待审核{{ '('+ article_info.comment_checking +')'}}</el-radio-button>
 	</el-radio-group>
 
 	<div class="comment">
