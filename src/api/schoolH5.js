@@ -161,6 +161,14 @@ export function articleManage(params) {
     params
   })
 }
+// 文章详情
+export function articleDetail(params) {
+  return request({
+    url: '/quandev?v=0.1&method=Growarticle.articleDetail',
+    method: 'get',
+    params
+  })
+}
 // 作者搜索
 export function authorSearch(params) {
   return request({

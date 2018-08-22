@@ -29,14 +29,15 @@
         </el-form-item>
         <el-form-item label="文章状态">
           <el-select v-model="formInline.status" placeholder="全部">
-            <el-option label="待发布" value="beijing"></el-option>
-            <el-option label="已发布" value="beijing"></el-option>
-            <el-option label="已下架" value="beijing"></el-option>
+            <el-option label="全部" value="-1"></el-option>
+            <el-option label="待发布" value="1"></el-option>
+            <el-option label="已发布" value="2"></el-option>
+            <el-option label="已下架" value="3"></el-option>
           </el-select>
           <el-select v-model="formInline.stick" placeholder="全部">
-            <el-option label="全部" value="shanghai"></el-option>
-            <el-option label="已置顶" value="shanghai"></el-option>
-            <el-option label="未置顶" value="beijing"></el-option>
+            <el-option label="全部" value="1"></el-option>
+            <el-option label="已置顶" value="2"></el-option>
+            <el-option label="未置顶" value="3"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
@@ -120,9 +121,9 @@
           label="发布状态"
           width="120">
           <template slot-scope="scope">
-            <el-button  v-if="scope.row.status === '2' && scope.row.column_id !== '0'" type="text" size="small">已发布</el-button>
-            <el-button  v-if="scope.row.status === '1' && scope.row.column_id !== '0'" type="text" size="small">已下架</el-button>
-            <el-button  v-if="scope.row.column_id === '0'" type="text" size="small">未发布</el-button>
+            <el-button disabled v-if="scope.row.status === '2' && scope.row.column_id !== '0'" type="text" size="small">已发布</el-button>
+            <el-button disabled v-if="scope.row.status === '1' && scope.row.column_id !== '0'" type="text" size="small">已下架</el-button>
+            <el-button disabled v-if="scope.row.column_id === '0'" type="text" size="small">未发布</el-button>
             <el-button @click="upDown(scope.row)" v-if="scope.row.status === '2' && scope.row.column_id !== '0'" type="text" size="small">下架</el-button>
             <el-button @click="upDown(scope.row)" v-if="scope.row.status === '1' && scope.row.column_id !== '0'" type="text" size="small">上架</el-button>
           </template>
@@ -146,6 +147,26 @@
 	  	:total="1000">
 	  </el-pagination>
 	</div>
+  <template>
+  <el-select v-model="value8" filterable placeholder="请选择" @keyup.enter.native="handleLogin">
+    <el-option
+      v-for="item in options"
+      :key="item.value"
+      :label="item.label"
+      :value="item.value">
+    </el-option>
+  </el-select>
+</template>
+<template>
+  <el-select v-model="value9" multiple placeholder="请选择">
+    <el-option
+      v-for="item in options"
+      :key="item.value"
+      :label="item.label"
+      :value="item.value">
+    </el-option>
+  </el-select>
+  </template>
   </div>
 </template>
 
@@ -208,7 +229,7 @@
           city: '普陀区',
           address: '上海市普陀区金沙江路 1518 弄',
           zip: 200333
-        }]
+        }],
       }
     },
     mounted() {
@@ -234,6 +255,7 @@
             if (res.hasOwnProperty('response')) {
               console.log(res)
               this.article_sum = res.response.article_sum
+              this.tableData = res.response.article_list
             } else {
               this.$message.error(res.error_response.msg)
             }
@@ -259,6 +281,9 @@
           console.log(this.activeName2)
           this.initData()
         }
+      },
+      handleLogin() {
+        console.log(1111)
       },
       labelChange(val) {
         console.log(1111, val)
@@ -294,7 +319,7 @@
       editClick(row) {
         this.$router.push({ path: '/article/articleAdd', query: { article_id: row.article_id }})
       },
-      deleteClick(row) {}
+      deleteClick(row) {},
     }
   }
 </script>

@@ -76,6 +76,7 @@ export default {
   },
   mounted() {
     this.upFileUrls = process.env.tempurl
+    this.audioUrl = this.urls.url
     console.log(this.urls)
     const that = this
     var cos = new CosCloud({
