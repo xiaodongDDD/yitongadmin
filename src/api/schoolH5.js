@@ -129,3 +129,21 @@ export function handleAuthor(datas) {
     data: qs.stringify(datas)
   })
 }
+
+// 栏目列表
+export function columnLists(datas) {
+  return request({
+    url: '/quandev?v=0.1&method=Growcolumn.getColumns',
+    method: 'post',
+    data: qs.stringify(datas)
+  })
+}
+
+// 栏目信息
+export function columnInfo(datas) {
+  return request({
+    url: '/quandev?v=0.1&method=Growcolumn.getColumn',
+    method: 'post',
+    data: qs.stringify(datas)
+  })
+}
