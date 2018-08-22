@@ -131,11 +131,11 @@ export function handleAuthor(datas) {
 }
 
 // 栏目列表
-export function columnLists(datas) {
+export function columnLists(params) {
   return request({
     url: '/quandev?v=0.1&method=Growcolumn.getColumns',
-    method: 'post',
-    data: qs.stringify(datas)
+    method: 'get',
+    params
   })
 }
 
