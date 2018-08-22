@@ -12,48 +12,48 @@
         style="width: 100%">
         <el-table-column
           fixed
-          prop="date"
+          prop="scid"
           label="编号"
           width="80">
         </el-table-column>
         <el-table-column
-          prop="name"
+          prop="column_name"
           label="所属栏目"
           width="">
         </el-table-column>
         <el-table-column
-          prop="province"
+          prop="name"
           label="专栏名称"
           width="">
         </el-table-column>
         <el-table-column
-          prop="city"
+          prop="catalogs"
           label="目录数量"
           width="">
         </el-table-column>
         <el-table-column
-          prop="address"
+          prop="catalogs_2"
           label="二级目录数量"
           width="">
         </el-table-column>
         <el-table-column
-          prop="zip"
+          prop="articles"
           label="文章数量"
           width="">
         </el-table-column>
         <el-table-column
-          prop="zip"
+          prop="creator"
           label="创建者"
           width="">
         </el-table-column>
         <el-table-column
-          prop="zip"
+          prop="create_time"
           label="创建时间"
           width="">
         </el-table-column>
         <el-table-column
           prop="zip"
-          label="状态"
+          label="status"
           width="120">
         </el-table-column>
         <el-table-column
@@ -99,18 +99,16 @@
 </template>
 
 <script>
+  import { pageList } from '@/api/schoolH5'
+  // import { parseTime } from '@/utils/index'
+  import upImage from '../upImg/columnImg1'
+  import defaultHead from '../../../assets/imgs/add-stu.png'
   export default {
     name: 'pageList',
     data() {
       return {
-        tableData: [{
-          date: '201',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '上海市普陀区金沙江路 1518 弄',
-          zip: 200333
-        }],
+        defaultHead: defaultHead,
+        tableData: [],
         isAdd: true,
         signDialogVisible: false,
         cform: {
@@ -143,7 +141,22 @@
         }
       }
     },
+    mounted() {
+      this.initData()
+    },
     methods: {
+      initData() {
+        const obj = {
+          token: localStorage.getItem('TOKEN')
+        }
+        pageList(obj).then(res => {
+          console.log(res)
+          if (res.hasOwnProperty('response')) {
+            const data = res.response.data
+            this.tableData = data.rows
+          }
+        })
+      },
       editClick(row) {
         console.log(row)
         this.isAdd = false
