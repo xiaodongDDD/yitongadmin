@@ -194,10 +194,34 @@ export function columnLists(params) {
   })
 }
 // 栏目信息
-export function columnInfo(datas) {
+export function columnInfo(params) {
   return request({
     url: '/quandev?v=0.1&method=Growcolumn.getColumn',
+    method: 'get',
+    params
+  })
+}
+// 保存栏目
+export function columnSave(datas) {
+  return request({
+    url: '/quandev?v=0.1&method=Growcolumn.addColumn',
     method: 'post',
     data: qs.stringify(datas)
+  })
+}
+// 栏目获取文章
+export function columnArticles(params) {
+  return request({
+    url: '/quandev?v=0.1&method=Growcolumn.searchArticle',
+    method: 'get',
+    params
+  })
+}
+// 专栏列表
+export function pageList(params) {
+  return request({
+    url: '/quandev?v=0.1&method=Growcolumn.getSpecialColumns',
+    method: 'get',
+    params
   })
 }

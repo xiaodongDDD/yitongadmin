@@ -61,29 +61,26 @@
           <el-form-item label="栏目名称" prop="name">
             <el-input v-model="cform.name" placehoder="最多可输入10个汉字"></el-input>
           </el-form-item>
-          <el-form-item label="快捷栏目排序" prop="sindex">
-            <el-input v-model="cform.sindex" placehoder=""></el-input>
+          <el-form-item label="快捷栏目排序" prop="kj_sort">
+            <el-input v-model="cform.kj_sort" placehoder=""></el-input>
           </el-form-item>
-          <el-form-item label="快捷栏目是否展示" prop="sShow">
-            <el-radio-group v-model="cform.sShow">
-              <el-radio :label="1">是</el-radio>
-              <el-radio :label="0">否</el-radio>
+          <el-form-item label="快捷栏目是否展示" prop="is_show">
+            <el-radio-group v-model="cform.is_show">
+              <el-radio :label="'1'">是</el-radio>
+              <el-radio :label="'0'">否</el-radio>
             </el-radio-group>
           </el-form-item>
-          <el-form-item label="栏目排序" prop="index">
-            <el-input v-model="cform.index" placehoder=""></el-input>
+          <el-form-item label="栏目排序" prop="lm_sort">
+            <el-input v-model="cform.lm_sort" placehoder=""></el-input>
           </el-form-item>
-          <el-form-item label="icon" prop="icon">
-            <el-input v-model="cform.icon" placehoder=""></el-input>
-            <p>说明：请上传大小为176*176像素，格式为JPEG或者PNG的图片</p>
-          </el-form-item>
-          <el-form-item label="发布时间" prop="date">
-            <el-input v-model="cform.date" placehoder=""></el-input>
+          <el-form-item label="icon" prop="img">
+            <upImage ref="upLoadFile" :urls="urls" v-if='isAlive'></upImage>
+            <p style="line-height: 20px;">说明：请上传大小为176*176像素，格式为JPEG或者PNG的图片</p>
           </el-form-item>
         </el-form>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="signDialogVisible = false">保 存</el-button>
+        <el-button type="primary" @click="saveEditColumn">保 存</el-button>
         <el-button @click="signDialogVisible = false">取 消</el-button>
       </span>
     </el-dialog>
@@ -96,23 +93,16 @@
       <div class="signedit">
         <el-form ref="form" :rules="rules" :model="oneform" label-width="80px">
           <el-form-item label="选择文章" prop="name">
-            <el-input v-model="oneform.name" placehoder="请输入文章标题"></el-input>
-            
-            <div class="searchCon">
-              <el-dropdown trigger="click" @command="handleCommand">
-                <span class="el-dropdown-link searchDiv">
-                  <i class="el-icon-search el-icon--right searchIcon"></i>
-                </span>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item command="黄金糕">黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕</el-dropdown-item>
-                  <el-dropdown-item command="狮子头">狮子头</el-dropdown-item>
-                  <el-dropdown-item command="螺蛳粉">螺蛳粉</el-dropdown-item>
-                  <el-dropdown-item command="双皮奶">双皮奶</el-dropdown-item>
-                  <el-dropdown-item command="蚵仔煎">蚵仔煎</el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
+            <div class="search-condition">
+              <el-input v-model="oneform.name" placehoder="请输入文章标题"></el-input>
+              <i class="el-icon-search el-icon--right searchIcon" @click="getArticle"></i>
+              <ul class="articles-list" v-show="hasArticle">
+                <li v-for="(item, index) in articleList" @click="checkArticle(index, item.article_id, item.title)">{{ item.title }}</li>
+              </ul>
             </div>
-
+          </el-form-item>
+          <el-form-item>
+            <span class="carticle" v-for="(item, index) in articles">{{ item.title }}<i class="el-icon-close el-icon--right ccicon" @click="deleteCarticle(index)"></i></span>
           </el-form-item>
           <el-form-item label="是否置顶" prop="sShow">
             <el-radio-group v-model="oneform.sShow">
@@ -144,7 +134,10 @@
 </template>
 
 <script>
-  import { columnLists, columnInfo } from '@/api/schoolH5'
+  import { columnLists, columnInfo, columnArticles, columnSave } from '@/api/schoolH5'
+  import { parseTime } from '@/utils/index'
+  import upImage from '../upImg/columnImg1'
+  import defaultHead from '../../../assets/imgs/add-stu.png'
   export default {
     name: 'columnList',
     data() {
@@ -158,6 +151,12 @@
           index: '',
           icon: '',
           date: ''
+        },
+        hasArticle: false,
+        isAlive: true,
+        urls: {
+          url: '',
+          type: ''
         },
         rules: {
           name: [
@@ -187,6 +186,20 @@
           index: '',
           icon: '',
           date: ''
+        },
+        articleList: [],
+        articles: [],
+        defaultHead: defaultHead
+      }
+    },
+    components: {
+      upImage
+    },
+    watch: {
+      'signDialogVisible': function(news, olds) {
+        if (news === false) {
+          this.reload()
+          this.urls.url = this.defaultHead
         }
       }
     },
@@ -194,6 +207,12 @@
       this.initData()
     },
     methods: {
+      reload() {
+        this.isAlive = false
+        this.$nextTick(function() {
+          this.isAlive = true
+        })
+      },
       initData() {
         const obj = {
           token: localStorage.getItem('TOKEN')
@@ -207,17 +226,59 @@
         })
       },
       editcolumn(scope) {
-        console.log(scope)
         const row = scope.row
-        // columnInfo
         this.signDialogVisible = true
         const obj = {
           column_id: row.column_id,
           token: localStorage.getItem('TOKEN')
         }
         columnInfo(obj).then(res => {
-          console.log(res)
+          // console.log(res)
+          if (res.hasOwnProperty('response')) {
+            const data = res.response
+            data.data.create_time = parseTime(data.data.create_time, '{y}-{m}-{d}')
+            this.cform = data.data
+          }
         })
+      },
+      saveEditColumn() {
+        this.cform.img = this.$refs.upLoadFile.getUrl() !== '' ? this.$refs.upLoadFile.getUrl() : this.cform.img
+        this.cform.is_show = parseInt(this.cform.is_show)
+        this.cform.token = localStorage.getItem('TOKEN')
+        columnSave(this.cform).then(res => {
+          // console.log(res)
+          if (res.hasOwnProperty('response')) {
+            this.$message({
+              message: '修改成功',
+              type: 'success'
+            })
+          } else {
+            this.$message.error(res.error_response.msg)
+          }
+        })
+      },
+      getArticle() {
+        const obj = {
+          token: localStorage.getItem('TOKEN'),
+          title: this.oneform.name
+        }
+        columnArticles(obj).then(res => {
+          console.log(res)
+          if (res.hasOwnProperty('response')) {
+            const data = res.response
+            this.articleList = data.data
+            this.hasArticle = true
+          }
+        })
+      },
+      checkArticle(index, id, title) {
+        this.oneform.name = title
+        this.articles.push(this.articleList[index])
+        console.log(this.articles)
+        this.hasArticle = false
+      },
+      deleteCarticle(index) {
+        console.log(index)
       },
       publishcolumn(scope) {
         console.log(scope)
@@ -232,7 +293,7 @@
   }
 </script>
 
-<style scoped>
+<style scoped rel="stylesheet/scss" lang="scss">
   .searchCon{
     position: absolute;
     right: 5px;
@@ -240,5 +301,45 @@
   }
   .searchIcon{
     font-size: 18px;
+  }
+  .search-condition{
+
+    .searchIcon{
+      position: absolute;
+      right: 10px;
+      top: 10px;
+    }
+
+    .articles-list{
+      position: absolute;
+      right: 0;
+      background: #FFF;
+      z-index: 1000;
+      padding: 0px;
+      border: 1px solid #eee;
+      margin-top: 0;
+      line-height: 50px;
+
+      li{
+        cursor: pointer;
+        text-align: center;
+        padding: 0 20px;
+
+        &:hover{
+          background-color: #ecf5ff;
+          color: #66b1ff;
+        }
+      }
+    }
+  }
+  .carticle{
+    border: 1px solid #66b1ff;
+    padding: 5px 10px;
+    margin-right: 10px;
+
+    .ccicon{
+      color: red;
+      font-size: 15px;
+    }
   }
 </style>
