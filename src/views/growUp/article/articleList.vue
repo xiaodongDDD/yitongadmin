@@ -4,7 +4,7 @@
   	<div class="condition">
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
         <el-form-item label="文章标题">
-          <el-input v-model="formInline.user" placeholder="文章标题"></el-input>
+          <el-input v-model="formInline.title" placeholder="文章标题"></el-input>
         </el-form-item>
         <el-form-item label="标签">
           <el-input v-model="formInline.label" placeholder="标签"></el-input>
@@ -25,15 +25,16 @@
 		  </el-date-picker>
         </el-form-item>
         <el-form-item label="栏目">
-          <el-input v-model="formInline.user" placeholder="所属栏目"></el-input>
+          <el-input v-model="formInline.special_column" placeholder="所属栏目"></el-input>
         </el-form-item>
         <el-form-item label="文章状态">
-          <el-select v-model="formInline.region" placeholder="全部">
+          <el-select v-model="formInline.status" placeholder="全部">
             <el-option label="待发布" value="beijing"></el-option>
             <el-option label="已发布" value="beijing"></el-option>
             <el-option label="已下架" value="beijing"></el-option>
           </el-select>
-          <el-select v-model="formInline.region" placeholder="全部">
+          <el-select v-model="formInline.stick" placeholder="全部">
+            <el-option label="全部" value="shanghai"></el-option>
             <el-option label="已置顶" value="shanghai"></el-option>
             <el-option label="未置顶" value="beijing"></el-option>
           </el-select>
@@ -45,17 +46,20 @@
   	</div>
 
     <div class="label-add list-add">
-      <el-button @click="isAdd=true;signDialogVisible=true">新增</el-button>
+      <el-button @click="addArticle">新增</el-button>
     </div>
 
   	<div class="article-container list-container">
-  	  <el-tabs v-model="activeName2" type="card" @tab-click="handleClick">
-	    <el-tab-pane label="全部（123）" name="first"></el-tab-pane>
-	    <el-tab-pane label="育儿好文（30）" name="second"></el-tab-pane>
+  	  <!-- <el-tabs v-model="activeName2" type="card" @tab-click="handleClick">
+	    <el-tab-pane v-for="(item, index) in article_sum" :label="item.type" :name="item.name">{{ item.name + '(' + item.article_num + ')' }}</el-tab-pane> -->
+	    <!-- <el-tab-pane label="育儿好文（30）" name="second"></el-tab-pane>
 	    <el-tab-pane label="精品专栏（40）" name="third"></el-tab-pane>
 	    <el-tab-pane label="知晓天下（20）" name="fourth"></el-tab-pane>
 	    <el-tab-pane label="每周好书（50）" name="fifth"></el-tab-pane>
-	    <el-tab-pane label="晓周刊（60）" name="sixth"></el-tab-pane>
+	    <el-tab-pane label="晓周刊（60）" name="sixth"></el-tab-pane> -->
+      <el-radio-group v-model="activeName2" style="margin-bottom: 20px;" @change='labelChange(activeName2)'>
+        <el-radio-button v-for="(item, index) in article_sum" :label="item.column_id">{{ item.name + '(' + item.article_num + ')' }}</el-radio-button>
+      </el-radio-group>
 	  </el-tabs>
 
 	
@@ -71,49 +75,57 @@
           width="80">
         </el-table-column>
         <el-table-column
-          prop="name"
+          prop="title"
           label="文章标题"
           width="">
         </el-table-column>
         <el-table-column
-          prop="province"
+          prop="label"
           label="标签"
           width="">
         </el-table-column>
         <el-table-column
-          prop="city"
+          prop="create_time"
           label="创建时间"
           width="">
         </el-table-column>
         <el-table-column
-          prop="address"
+          prop="creator"
           label="创建人"
           width="">
         </el-table-column>
         <el-table-column
-          prop="zip"
+          prop="lm_name"
           label="引用栏目"
           width="">
         </el-table-column>
         <el-table-column
-          prop="zip"
+          prop="ml_name"
           label="所属目录"
           width="">
         </el-table-column>
         <el-table-column
-          prop="zip"
           label="是否置顶"
           width="">
+          <span>是</span>
+          <span>否</span>
         </el-table-column>
         <el-table-column
-          prop="zip"
+          prop="publish_time"
           label="发布时间"
           width="120">
         </el-table-column>
         <el-table-column
-          prop="zip"
+          fixed="right"
           label="发布状态"
           width="120">
+          <template slot-scope="scope">
+            <el-button  v-if="scope.row.status === '2' && scope.row.column_id !== '0'" type="text" size="small">已发布</el-button>
+            <el-button  v-if="scope.row.status === '1' && scope.row.column_id !== '0'" type="text" size="small">已下架</el-button>
+            <el-button  v-if="scope.row.column_id === '0'" type="text" size="small">未发布</el-button>
+            <el-button @click="upDown(scope.row)" v-if="scope.row.status === '2' && scope.row.column_id !== '0'" type="text" size="small">下架</el-button>
+            <el-button @click="upDown(scope.row)" v-if="scope.row.status === '1' && scope.row.column_id !== '0'" type="text" size="small">上架</el-button>
+          </template>
         </el-table-column>
         <el-table-column
           fixed="right"
@@ -138,15 +150,27 @@
 </template>
 
 <script>
+  import { getArticle, articleUpDown } from '@/api/schoolH5'
+  import { parseTime } from '@/utils/index'
   export default {
     name: 'articleList',
     data() {
       return {
         formInline: {
-          user: '',
+          title: '',
           label: '',
-          creator: ''
+          creator: '',
+          start_time: '',
+          end_time: '',
+          special_column: '',
+          status: '',
+          stick: '',
+          type: '',
+          page: ''
         },
+        up: false,
+        publish: false,
+        article_sum: [],
         pickerOptions2: {
           shortcuts: [{
             text: '最近一周',
@@ -175,8 +199,8 @@
           }]
         },
         value6: '',
-        value7: '',
-        activeName2: 'first',
+        value7: [],
+        activeName2: '0',
         tableData: [{
           date: '201',
           name: '王小虎',
@@ -192,13 +216,84 @@
     },
     methods: {
       initData() {
-        // const obj = {
-        //   token: localStorage.getItem('TOKEN')
-        // }
+        const obj = {
+          token: localStorage.getItem('TOKEN'),
+          title: this.formInline.title,
+          label: this.formInline.label,
+          creator: this.formInline.creator,
+          start_time: this.formInline.start_time,
+          end_time: this.formInline.end_time,
+          special_column: this.formInline.special_column,
+          status: this.formInline.status,
+          stick: this.formInline.stick,
+          type: this.activeName2,
+          page: 1
+        }
+        getArticle(obj)
+          .then(res => {
+            if (res.hasOwnProperty('response')) {
+              console.log(res)
+              this.article_sum = res.response.article_sum
+            } else {
+              this.$message.error(res.error_response.msg)
+            }
+          })
+          .catch(err => {
+            console.log(err)
+          })
       },
-      onSubmit() {},
+      onSubmit() {
+        if (this.value7 === null) {
+          this.formInline.start_time = ''
+          this.formInline.end_time = ''
+          console.log(this.formInline.start_time, this.formInline.end_time)
+          console.log(this.activeName2)
+          this.initData()
+        } else {
+          console.log(this.value7)
+          const start = this.value7[0]
+          const end = this.value7[1]
+          this.formInline.start_time = parseTime(start, '{y}-{m}-{d}') === '0-0-0' ? '' :   parseTime(start, '{y}-{m}-{d}')
+          this.formInline.end_time = parseTime(end, '{y}-{m}-{d}') === '0-0-0' ? '' : parseTime(  end, '{y}-{m}-{d}')
+          console.log(this.formInline.start_time, this.formInline.end_time)
+          console.log(this.activeName2)
+          this.initData()
+        }
+      },
+      labelChange(val) {
+        console.log(1111, val)
+        this.initData()
+      },
+      upDown(row) {
+        const obj = {
+          token: localStorage.getItem('TOKEN'),
+          article_id: row.article_id,
+          column_id: row.column_id,
+          zl_id: row.zl_id,
+          ml_id: row.ml_id,
+          status: row.status
+        }
+        articleUpDown(obj)
+          .then(res => {
+            if (res.hasOwnProperty('response')) {
+              console.log(res)
+              this.article_sum = res.response.article_sum
+              this.initData()
+            } else {
+              this.$message.error(res.error_response.msg)
+            }
+          })
+          .catch(err => {
+            console.log(err)
+          })
+      },
+      addArticle() {
+        this.$router.push({ path: '/article/articleAdd' })
+      },
       handleClick() {},
-      editClick(row) {},
+      editClick(row) {
+        this.$router.push({ path: '/article/articleAdd', query: { article_id: row.article_id }})
+      },
       deleteClick(row) {}
     }
   }
