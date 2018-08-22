@@ -49,7 +49,7 @@
 <script type="text/javascript" src="../../assets/js/cos-js-sdk-v4.js"></script>
 <script>
 import $ from 'jquery'
-import defaultHead from '../../../assets/imgs/add-stu.png'
+// import defaultHead from '../../../assets/imgs/add-stu.png'
 export default {
   name: 'files',
   data() {
@@ -105,7 +105,7 @@ export default {
       that.noup = false
       that.$message.success('上传成功')
       that.fullscreenLoading = false
-      console.log('img.width',img.width, 'img.height', img.height)
+      console.log('img.width', img.width, 'img.height', img.height)
       // 判断是否有缓存
       if (img.complete) {
       // 打印

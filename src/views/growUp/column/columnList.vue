@@ -94,6 +94,22 @@
         <el-form ref="form" :rules="rules" :model="oneform" label-width="80px">
           <el-form-item label="选择文章" prop="name">
             <el-input v-model="oneform.name" placehoder="请输入文章标题"></el-input>
+            
+            <div class="searchCon">
+              <el-dropdown trigger="click" @command="handleCommand">
+                <span class="el-dropdown-link searchDiv">
+                  <i class="el-icon-search el-icon--right searchIcon"></i>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item command="黄金糕">黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕</el-dropdown-item>
+                  <el-dropdown-item command="狮子头">狮子头</el-dropdown-item>
+                  <el-dropdown-item command="螺蛳粉">螺蛳粉</el-dropdown-item>
+                  <el-dropdown-item command="双皮奶">双皮奶</el-dropdown-item>
+                  <el-dropdown-item command="蚵仔煎">蚵仔煎</el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </div>
+
           </el-form-item>
           <el-form-item label="是否置顶" prop="sShow">
             <el-radio-group v-model="oneform.sShow">
@@ -148,7 +164,7 @@
         },
         rules: {
           name: [
-            { required: true, message: '请输入栏目名称', trigger: 'blur' }
+            { required: true, message: '请输入栏目名称', trigger: 'change' }
           ],
           sindex: [
             { required: true, message: '请输入快捷栏目排序', trigger: 'blur' }
@@ -189,11 +205,30 @@
       },
       publishcolumn(scope) {
         console.log(scope)
+        this.oneform.name = ''
+        this.oneDialogVisible = true
+      },
+      handleCommand(command) {
+        // console.log(command)
+        this.oneform.name = command
       }
     }
   }
 </script>
 
 <style scoped>
-
+  .searchCon{
+    position: absolute;
+    right: 5px;
+    top: 0;
+  }
+  .searchIcon{
+    font-size: 18px;
+  }
+  /*.searchIcon{
+    position: absolute;
+    right: 12px;
+    font-size: 16px;
+    top: 0px;
+  }*/
 </style>

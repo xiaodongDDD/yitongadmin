@@ -129,9 +129,50 @@ export function handleAuthor(datas) {
     data: qs.stringify(datas)
   })
 }
+//文章首页
 export function getArticle(params) {
   return request({
     url: '/quandev?v=0.1&method=Growarticle.indexSearch',
+    method: 'get',
+    params
+  })
+}
+//文章上下架
+export function articleUpDown(params) {
+  return request({
+    url: '/quandev?v=0.1&method=Growarticle.articleUpDown',
+    method: 'get',
+    params
+  })
+}
+//文章删除
+export function articleDelete(params) {
+  return request({
+    url: '/quandev?v=0.1&method=Growarticle.articleDelete',
+    method: 'get',
+    params
+  })
+}
+//文章新增编辑
+export function articleManage(params) {
+  return request({
+    url: '/quandev?v=0.1&method=Growarticle.articleManage',
+    method: 'get',
+    params
+  })
+}
+//作者搜索
+export function authorSearch(params) {
+  return request({
+    url: '/quandev?v=0.1&method=Growarticle.authorSearch',
+    method: 'get',
+    params
+  })
+}
+//标签搜索
+export function labelSearch(params) {
+  return request({
+    url: '/quandev?v=0.1&method=Growarticle.labelSearch',
     method: 'get',
     params
   })
