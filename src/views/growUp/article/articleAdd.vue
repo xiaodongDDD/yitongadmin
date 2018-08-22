@@ -219,11 +219,12 @@
           })
       },
       haha(val) {
-        const val1 = this.value9
-        const val2 = this.values
+        var val1 = this.value9
+        var val2 = this.values
         console.log(val1)
         console.log(val)
-        if (val1.indexOf(val) === -1) {
+        if (val2.indexOf(val) === -1) {
+          console.log(1111)
           for (var i = 0; i < this.options.length; i++) {
             if (this.options[i].value === val) {
               val1.push(this.options[i].label)
@@ -235,10 +236,11 @@
           console.log(this.value9, this.values)
           this.value8 = ''
         } else {
+          console.log(2222)
           for (var j = 0; j < this.options.length; j++) {
             if (this.options[j].value === val) {
-              val1.splice(val1.indexOf(this.options[i].label), 1)
-              val2.splice(val2.indexOf(this.options[i].value), 1)
+              val1.splice(val1.indexOf(this.options[j].label), 1)
+              val2.splice(val2.indexOf(val), 1)
               this.value9 = val1
               this.values = val2
             }
