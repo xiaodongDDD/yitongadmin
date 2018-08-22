@@ -7,10 +7,10 @@
   <h3>文章编辑</h3>
 	  <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
 	    <el-form-item label="文章标题" prop="name">
-	      <el-input v-model="ruleForm.name"></el-input>
+	      <el-input v-model="ruleForm.title"></el-input>
 	    </el-form-item>
 	    <el-form-item label="短标题" prop="desc">
-	      <el-input v-model="ruleForm.desc"></el-input>
+	      <el-input v-model="ruleForm.short_title"></el-input>
 	    </el-form-item>
 	    <el-form-item label="音频" prop="desc">
 	      <upAudio ref="upLoadFile" :urls="urls" v-if='isAlive'></upAudio>
@@ -28,17 +28,34 @@
 	      <el-input v-model="ruleForm.name"></el-input>
 	    </el-form-item>
 	    <h4>展示图片</h4>
-	    <el-form-item label="短标题" prop="desc">
-	      <el-input v-model="ruleForm.desc"></el-input>
+	    <el-form-item label="图片" prop="desc">
+	      <el-input v-model="ruleForm.cover"></el-input>
 	    </el-form-item>
 	    <h4>文章摘要</h4>
 	    <el-form-item label="摘要内容" prop="desc">
-	      <el-input v-model="ruleForm.desc"></el-input>
+	      <el-input v-model="ruleForm.description"></el-input>
 	    </el-form-item>
+
+
 	    <h4>文章标签</h4>
 	    <el-form-item label="文章标签" prop="desc">
-	      <el-input type="textarea" v-model="ruleForm.desc"></el-input>
+         <div style="margin-bottom:20px;">
+            <el-select v-model="value8" filterable placeholder="请选择" @keyup.enter.native="handleLogin">
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+        </div>
+        <div id="haha">
+            <el-select v-model="value9" multiple placeholder="" id='noCss'>
+              
+            </el-select>
+        </div>
 	    </el-form-item>
+
 	    <h4>文章预览</h4>
 	    <el-form-item label="预览地址" prop="desc">
 	      <el-input type="textarea" v-model="ruleForm.desc"></el-input>
@@ -54,7 +71,7 @@
 <script>
   import upAudio from '../upAudio/upAudio'
   import UE from '../../ue/ue.vue'
-  import { articleManage } from '@/api/schoolH5'
+  import { articleManage, articleDetail } from '@/api/schoolH5'
   export default {
     name: 'articleAdd',
     data() {
@@ -69,15 +86,33 @@
         isAlive: true,
         article_id: '',
         ruleForm: {
+          title: '',
+          short_title: '',
+          audio: '',
+          content: '',
+          author_id: '',
           name: '',
-          region: '',
-          date1: '',
-          date2: '',
-          delivery: false,
-          type: [],
-          resource: '',
-          desc: ''
+          cover: '',
+          description: ''
         },
+        options: [{
+          value: '选项1',
+          label: '黄金糕'
+        }, {
+          value: '选项2',
+          label: '双皮奶'
+        }, {
+          value: '选项3',
+          label: '蚵仔煎'
+        }, {
+          value: '选项4',
+          label: '龙须面'
+        }, {
+          value: '选项5',
+          label: '北京烤鸭'
+        }],
+        value9: [],
+        value8: '',
         urls: {
           url: ''
         },
@@ -119,7 +154,24 @@
     },
     methods: {
      getData() {
-        
+        const obj = {
+          token: localStorage.getItem('TOKEN'),
+          article_id: this.article_id
+        }
+        articleDetail(obj)
+          .then(res => {
+            if (res.hasOwnProperty('response')) {
+              console.log(res)
+              this.ruleForm = res.response.article_detail[0]
+              this.urls.url = res.response.article_detail[0].audio
+              this.defaultMsg = res.response.article_detail[0].content
+            } else {
+              this.$message.error(res.error_response.msg)
+            }
+          })
+          .catch(err => {
+            console.log(err)
+          })
       },
       reload() {
         this.isAlive = false
@@ -130,9 +182,55 @@
       },
       submitForm() {
         console.log(1111)
+        const obj = {
+          token: localStorage.getItem('TOKEN'),
+          title: this.ruleForm.author_id,
+          short_title: this.ruleForm.author_id,
+          audio: this.$refs.upLoadFile.getUrl(),
+          content: this.$refs.ue.getUEContent(),
+          author_id: this.ruleForm.author_id,
+          cover: this.ruleForm.cover,
+          article_id: this.article_id,
+          description: this.ruleForm.description,
+          label_ids: '1,2,3'
+        }
+        articleManage(obj)
+          .then(res => {
+            if (res.hasOwnProperty('response')) {
+              console.log(res)
+              this.$message.success(res.response.msg)
+            } else {
+              this.$message.error(res.error_response.msg)
+            }
+          })
+          .catch(err => {
+            console.log(err)
+          })
+      },
+      haha(val) {
+        const val1 = this.value9
+        console.log(val1)
+        console.log(val)
+        if (val1.indexOf(val) === -1) {
+          val1.push(val)
+          this.value9 = val1
+          this.value8 = ''
+        } else {
+          val1.splice(val1.indexOf(val), 1)
+          this.value9 = val1
+          this.value8 = ''
+        }
       },
       resetForm() {}
-    }
+    },
+    watch: {
+      'value8': function(news, old) {
+        console.log(news)
+        if (news !== '') {
+           this.haha(news)
+        }
+      }
+    } 
   }
 </script>
 
@@ -145,5 +243,15 @@
   }
   .demo-ruleForm h4{
     text-indent: 10px;
+  }
+  input#noCss.el-input__inner {
+  border: none;
+  width: 500px;
+  }
+  #haha span.el-input__suffix{
+    display: none;
+  }
+  div.el-select-dropdown.el-popper.is-multiple{
+    display: none;
   }
 </style>
