@@ -229,7 +229,7 @@
           city: '普陀区',
           address: '上海市普陀区金沙江路 1518 弄',
           zip: 200333
-        }],
+        }]
       }
     },
     mounted() {
@@ -275,8 +275,8 @@
           console.log(this.value7)
           const start = this.value7[0]
           const end = this.value7[1]
-          this.formInline.start_time = parseTime(start, '{y}-{m}-{d}') === '0-0-0' ? '' :   parseTime(start, '{y}-{m}-{d}')
-          this.formInline.end_time = parseTime(end, '{y}-{m}-{d}') === '0-0-0' ? '' : parseTime(  end, '{y}-{m}-{d}')
+          this.formInline.start_time = parseTime(start, '{y}-{m}-{d}') === '0-0-0' ? '' : parseTime(start, '{y}-{m}-{d}')
+          this.formInline.end_time = parseTime(end, '{y}-{m}-{d}') === '0-0-0' ? '' : parseTime(end, '{y}-{m}-{d}')
           console.log(this.formInline.start_time, this.formInline.end_time)
           console.log(this.activeName2)
           this.initData()
@@ -319,7 +319,7 @@
       editClick(row) {
         this.$router.push({ path: '/article/articleAdd', query: { article_id: row.article_id }})
       },
-      deleteClick(row) {},
+      deleteClick(row) {}
     }
   }
 </script>

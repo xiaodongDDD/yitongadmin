@@ -29,7 +29,13 @@
 	    </el-form-item>
 	    <h4>展示图片</h4>
 	    <el-form-item label="图片" prop="desc">
-	      <el-input v-model="ruleForm.cover"></el-input>
+      <template>
+        <el-radio v-model="radio" label="1">正方形</el-radio>
+        <el-radio v-model="radio" label="2">竖版</el-radio>
+      </template>
+	    <upImage ref="upLoadFile" :urls="urls" v-if='isAlive'></upImage>
+      <p>正方形：请上传大小为160*160像素，格式为jpeg或png格式的图片</p>
+      <p>竖版：请上传大小为208*280像素，格式为jpeg或png格式的图片</p>
 	    </el-form-item>
 	    <h4>文章摘要</h4>
 	    <el-form-item label="摘要内容" prop="desc">
@@ -51,7 +57,6 @@
         </div>
         <div id="haha">
             <el-select v-model="value9" multiple placeholder="" id='noCss'>
-              
             </el-select>
         </div>
 	    </el-form-item>
@@ -71,6 +76,7 @@
 <script>
   import upAudio from '../upAudio/upAudio'
   import UE from '../../ue/ue.vue'
+  import upImage from '../upImg/articleUpImage'
   import { articleManage, articleDetail } from '@/api/schoolH5'
   export default {
     name: 'articleAdd',
@@ -83,8 +89,10 @@
         },
         defaultMsg: '',
         ue1: 'ue1',
+        radio: '1',
         isAlive: true,
         article_id: '',
+        values: [],
         ruleForm: {
           title: '',
           short_title: '',
@@ -114,7 +122,8 @@
         value9: [],
         value8: '',
         urls: {
-          url: ''
+          url: '',
+          type: '1'
         },
         rules: {
           name: [
@@ -144,16 +153,18 @@
     },
     components: {
       UE,
-      upAudio
+      upAudio,
+      upImage
     },
     mounted() {
+      console.log(this.urls)
       if (this.$route.query.hasOwnProperty('article_id')) {
         this.article_id = this.$route.query.article_id
         this.getData()
       }
     },
     methods: {
-     getData() {
+      getData() {
         const obj = {
           token: localStorage.getItem('TOKEN'),
           article_id: this.article_id
@@ -209,28 +220,46 @@
       },
       haha(val) {
         const val1 = this.value9
+        const val2 = this.values
         console.log(val1)
         console.log(val)
         if (val1.indexOf(val) === -1) {
-          val1.push(val)
-          this.value9 = val1
+          for (var i = 0; i < this.options.length; i++) {
+            if (this.options[i].value === val) {
+              val1.push(this.options[i].label)
+              val2.push(this.options[i].value)
+              this.value9 = val1
+              this.values = val2
+            }
+          }
+          console.log(this.value9, this.values)
           this.value8 = ''
         } else {
-          val1.splice(val1.indexOf(val), 1)
-          this.value9 = val1
+          for (var j = 0; j < this.options.length; j++) {
+            if (this.options[j].value === val) {
+              val1.splice(val1.indexOf(this.options[i].label), 1)
+              val2.splice(val2.indexOf(this.options[i].value), 1)
+              this.value9 = val1
+              this.values = val2
+            }
+          }
           this.value8 = ''
+          console.log(this.value9, this.values)
         }
       },
       resetForm() {}
     },
     watch: {
       'value8': function(news, old) {
-        console.log(news)
         if (news !== '') {
-           this.haha(news)
+          this.haha(news)
         }
+      },
+      'radio': function(news, old) {
+        this.urls.type = news
+        console.log(this.urls.type)
       }
-    } 
+    }
   }
 </script>
 
