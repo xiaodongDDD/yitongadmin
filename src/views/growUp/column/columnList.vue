@@ -7,12 +7,12 @@
       style="width: 100%">
       <el-table-column
         fixed
-        prop="date"
+        prop="kj_sort"
         label="快捷栏目排序"
         width="150">
       </el-table-column>
       <el-table-column
-        prop="name"
+        prop="lm_sort"
         label="栏目排序"
         width="120">
       </el-table-column>
@@ -22,17 +22,20 @@
         width="">
       </el-table-column>
       <el-table-column
-        prop="city"
+        prop="name"
         label="栏目名称"
         width="">
       </el-table-column>
       <el-table-column
-        prop="city"
         label="是否栏目"
         width="120">
+        <template slot-scope="scope">
+          <span v-if="scope.row.is_column == 0">否</span>
+          <span v-else>是</span>
+        </template>
       </el-table-column>
       <el-table-column
-        prop="number"
+        prop="article_num"
         label="上架文章数"
         width="120">
       </el-table-column>
@@ -141,18 +144,12 @@
 </template>
 
 <script>
+  import { columnLists, columnInfo } from '@/api/schoolH5'
   export default {
     name: 'columnList',
     data() {
       return {
-        tableData: [{
-          date: '2016-05-03',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '上海市普陀区金沙江路 1518 弄',
-          zip: 200333
-        }],
+        tableData: [],
         signDialogVisible: false,
         cform: {
           name: '',
@@ -198,10 +195,29 @@
     },
     methods: {
       initData() {
+        const obj = {
+          token: localStorage.getItem('TOKEN')
+        }
+        columnLists(obj).then(res => {
+          console.log(res)
+          if (res.hasOwnProperty('response')) {
+            const data = res.response
+            this.tableData = data.data
+          }
+        })
       },
       editcolumn(scope) {
         console.log(scope)
+        const row = scope.row
+        // columnInfo
         this.signDialogVisible = true
+        const obj = {
+          column_id: row.column_id,
+          token: localStorage.getItem('TOKEN')
+        }
+        columnInfo(obj).then(res => {
+          console.log(res)
+        })
       },
       publishcolumn(scope) {
         console.log(scope)
@@ -225,10 +241,4 @@
   .searchIcon{
     font-size: 18px;
   }
-  /*.searchIcon{
-    position: absolute;
-    right: 12px;
-    font-size: 16px;
-    top: 0px;
-  }*/
 </style>

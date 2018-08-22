@@ -129,7 +129,7 @@ export function handleAuthor(datas) {
     data: qs.stringify(datas)
   })
 }
-//文章首页
+// 文章首页
 export function getArticle(params) {
   return request({
     url: '/quandev?v=0.1&method=Growarticle.indexSearch',
@@ -137,7 +137,7 @@ export function getArticle(params) {
     params
   })
 }
-//文章上下架
+// 文章上下架
 export function articleUpDown(params) {
   return request({
     url: '/quandev?v=0.1&method=Growarticle.articleUpDown',
@@ -145,7 +145,7 @@ export function articleUpDown(params) {
     params
   })
 }
-//文章删除
+// 文章删除
 export function articleDelete(params) {
   return request({
     url: '/quandev?v=0.1&method=Growarticle.articleDelete',
@@ -153,7 +153,7 @@ export function articleDelete(params) {
     params
   })
 }
-//文章新增编辑
+// 文章新增编辑
 export function articleManage(params) {
   return request({
     url: '/quandev?v=0.1&method=Growarticle.articleManage',
@@ -161,7 +161,7 @@ export function articleManage(params) {
     params
   })
 }
-//作者搜索
+// 作者搜索
 export function authorSearch(params) {
   return request({
     url: '/quandev?v=0.1&method=Growarticle.authorSearch',
@@ -169,11 +169,27 @@ export function authorSearch(params) {
     params
   })
 }
-//标签搜索
+// 标签搜索
 export function labelSearch(params) {
   return request({
     url: '/quandev?v=0.1&method=Growarticle.labelSearch',
     method: 'get',
     params
+  })
+}
+// 栏目列表
+export function columnLists(datas) {
+  return request({
+    url: '/quandev?v=0.1&method=Growcolumn.getColumns',
+    method: 'post',
+    data: qs.stringify(datas)
+  })
+}
+// 栏目信息
+export function columnInfo(datas) {
+  return request({
+    url: '/quandev?v=0.1&method=Growcolumn.getColumn',
+    method: 'post',
+    data: qs.stringify(datas)
   })
 }
