@@ -100,7 +100,7 @@ export default {
       img.src = URL
       console.log(img)
       const that = this
-      that.imgUrl = result.data.access_url
+      // that.imgUrl = result.data.access_url
       that.noup = false
       // that.$message.success('上传成功')
       that.fullscreenLoading = false

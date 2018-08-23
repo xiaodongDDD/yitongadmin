@@ -13,7 +13,7 @@
 	      <el-input v-model="ruleForm.short_title"></el-input>
 	    </el-form-item>
 	    <el-form-item label="音频" prop="desc">
-	      <upAudio ref="upLoadFile" :urls="urls" v-if='isAlive'></upAudio>
+	      <upAudio ref="upLoadAudio" :urls="urls1" v-if='isAlive'></upAudio>
 	    </el-form-item>
 	    <el-form-item label="文章内容" prop="desc">
 	      <div>
@@ -25,7 +25,14 @@
 	  <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
 	    <h4>作者管理</h4>
 	    <el-form-item label="选择作者" prop="name">
-	      <el-input v-model="ruleForm.name"></el-input>
+	      <el-select v-model="value7" filterable ref='searchArtist' placeholder="请选择或搜索" @keyup.enter.native="searchArtist">
+          <el-option
+            v-for="item in options1"
+            :key="item.author_id"
+            :label="item.name"
+            :value="item.author_id">
+          </el-option>
+        </el-select>
 	    </el-form-item>
 	    <h4>展示图片</h4>
 	    <el-form-item label="图片" prop="desc">
@@ -33,7 +40,7 @@
         <el-radio v-model="radio" label="1">正方形</el-radio>
         <el-radio v-model="radio" label="2">竖版</el-radio>
       </template>
-	    <upImage ref="upLoadFile" :urls="urls" v-if='isAlive'></upImage>
+	    <upImage ref="upLoadFile" :urls="urls2" v-if='isAlive'></upImage>
       <p>正方形：请上传大小为160*160像素，格式为jpeg或png格式的图片</p>
       <p>竖版：请上传大小为208*280像素，格式为jpeg或png格式的图片</p>
 	    </el-form-item>
@@ -46,12 +53,12 @@
 	    <h4>文章标签</h4>
 	    <el-form-item label="文章标签" prop="desc">
          <div style="margin-bottom:20px;">
-            <el-select v-model="value8" filterable placeholder="请选择" @keyup.enter.native="handleLogin">
+            <el-select v-model="value8" filterable placeholder="请选择或搜索" ref="selectValue" @keyup.enter.native="searchLabel">
               <el-option
                 v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
+                :key="item.label_id"
+                :label="item.name"
+                :value="item.label_id">
               </el-option>
             </el-select>
         </div>
@@ -63,10 +70,11 @@
 
 	    <h4>文章预览</h4>
 	    <el-form-item label="预览地址" prop="desc">
-	      <el-input type="textarea" v-model="ruleForm.desc"></el-input>
+	      <el-input type="text" placeholder="请输入您的手机号" v-model="ruleForm.address"></el-input>
 	    </el-form-item>
 	    <el-form-item>
-	      <el-button type="primary" @click="submitForm('ruleForm')">保存</el-button>
+        <el-button @click="preview">预览</el-button>
+	      <el-button type="primary" @click="submitForm">保存</el-button>
 	      <el-button @click="resetForm('ruleForm')">取消</el-button>
 	    </el-form-item>
 	  </el-form>
@@ -77,7 +85,7 @@
   import upAudio from '../upAudio/upAudio'
   import UE from '../../ue/ue.vue'
   import upImage from '../upImg/articleUpImage'
-  import { articleManage, articleDetail } from '@/api/schoolH5'
+  import { articleManage, articleDetail, labelSearch, authorSearch } from '@/api/schoolH5'
   export default {
     name: 'articleAdd',
     data() {
@@ -101,27 +109,18 @@
           author_id: '',
           name: '',
           cover: '',
-          description: ''
+          description: '',
+          address: ''
         },
-        options: [{
-          value: '选项1',
-          label: '黄金糕'
-        }, {
-          value: '选项2',
-          label: '双皮奶'
-        }, {
-          value: '选项3',
-          label: '蚵仔煎'
-        }, {
-          value: '选项4',
-          label: '龙须面'
-        }, {
-          value: '选项5',
-          label: '北京烤鸭'
-        }],
+        options: [],
         value9: [],
         value8: '',
-        urls: {
+        options1: [],
+        value7: '',
+        urls1: {
+          url: ''
+        },
+        urls2: {
           url: '',
           type: '1'
         },
@@ -145,7 +144,7 @@
           resource: [
             { required: true, message: '请选择活动资源', trigger: 'change' }
           ],
-          desc: [
+          description: [
             { required: true, message: '请填写活动形式', trigger: 'blur' }
           ]
         }
@@ -174,8 +173,12 @@
             if (res.hasOwnProperty('response')) {
               console.log(res)
               this.ruleForm = res.response.article_detail[0]
-              this.urls.url = res.response.article_detail[0].audio
+              this.urls1.url = res.response.article_detail[0].audio
+              this.urls2.url = res.response.article_detail[0].cover
               this.defaultMsg = res.response.article_detail[0].content
+              this.options1[0].name = res.response.article_detail[0].name
+              this.options1[0].author_id = res.response.article_detail[0].author_id
+              this.options = res.response.label_info
             } else {
               this.$message.error(res.error_response.msg)
             }
@@ -197,13 +200,42 @@
           token: localStorage.getItem('TOKEN'),
           title: this.ruleForm.author_id,
           short_title: this.ruleForm.author_id,
-          audio: this.$refs.upLoadFile.getUrl(),
+          audio: this.$refs.upLoadAudio.getUrl(),
           content: this.$refs.ue.getUEContent(),
           author_id: this.ruleForm.author_id,
-          cover: this.ruleForm.cover,
+          cover: this.$refs.upLoadFile.getUrl() === '' ? this.ruleForm.cover : this.$refs.upLoadFile.getUrl(),
           article_id: this.article_id,
           description: this.ruleForm.description,
-          label_ids: '1,2,3'
+          label_ids: this.values.join(","),
+          type: '2'
+        }
+        articleManage(obj)
+          .then(res => {
+            if (res.hasOwnProperty('response')) {
+              console.log(res)
+              this.$message.success(res.response.msg)
+            } else {
+              this.$message.error(res.error_response.msg)
+            }
+          })
+          .catch(err => {
+            console.log(err)
+          })
+      },
+      preview() {
+        const obj = {
+          token: localStorage.getItem('TOKEN'),
+          title: this.ruleForm.author_id,
+          short_title: this.ruleForm.author_id,
+          audio: this.$refs.upLoadAudio.getUrl(),
+          content: this.$refs.ue.getUEContent(),
+          author_id: this.ruleForm.author_id,
+          cover: this.$refs.upLoadFile.getUrl() === '' ? this.ruleForm.cover : this.$refs.upLoadFile.getUrl(),
+          article_id: this.article_id,
+          description: this.ruleForm.description,
+          label_ids: this.values.join(","),
+          phonenum: this.ruleForm.address,
+          type: '1'
         }
         articleManage(obj)
           .then(res => {
@@ -226,9 +258,9 @@
         if (val2.indexOf(val) === -1) {
           console.log(1111)
           for (var i = 0; i < this.options.length; i++) {
-            if (this.options[i].value === val) {
-              val1.push(this.options[i].label)
-              val2.push(this.options[i].value)
+            if (this.options[i].label_id === val) {
+              val1.push(this.options[i].name)
+              val2.push(val)
               this.value9 = val1
               this.values = val2
             }
@@ -238,8 +270,8 @@
         } else {
           console.log(2222)
           for (var j = 0; j < this.options.length; j++) {
-            if (this.options[j].value === val) {
-              val1.splice(val1.indexOf(this.options[j].label), 1)
+            if (this.options[j].label_id === val) {
+              val1.splice(val1.indexOf(this.options[j].name), 1)
               val2.splice(val2.indexOf(val), 1)
               this.value9 = val1
               this.values = val2
@@ -248,6 +280,45 @@
           this.value8 = ''
           console.log(this.value9, this.values)
         }
+      },
+      searchLabel() {
+        console.log(this.$refs.selectValue.query)
+        const obj = {
+          token: localStorage.getItem('TOKEN'),
+          name: this.$refs.selectValue.query
+        }
+        labelSearch(obj)
+          .then(res => {
+            if (res.hasOwnProperty('response')) {
+              console.log(res)
+              this.options = res.response.label_list
+              this.$message.success(res.response.msg)
+            } else {
+              this.$message.error(res.error_response.msg)
+            }
+          })
+          .catch(err => {
+            console.log(err)
+          })
+      },
+      searchArtist() {
+        const obj = {
+          token: localStorage.getItem('TOKEN'),
+          name: this.$refs.searchArtist.query
+        }
+        authorSearch(obj)
+          .then(res => {
+            if (res.hasOwnProperty('response')) {
+              console.log(res)
+              this.options1 = res.response.author_list
+              this.$message.success(res.response.msg)
+            } else {
+              this.$message.error(res.error_response.msg)
+            }
+          })
+          .catch(err => {
+            console.log(err)
+          })
       },
       resetForm() {}
     },
@@ -258,8 +329,8 @@
         }
       },
       'radio': function(news, old) {
-        this.urls.type = news
-        console.log(this.urls.type)
+        this.urls2.type = news
+        console.log(this.urls2.type)
       }
     }
   }

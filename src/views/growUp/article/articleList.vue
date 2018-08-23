@@ -144,34 +144,14 @@
 	  <el-pagination
 	  	background
 	  	layout="prev, pager, next"
-	  	:total="1000">
+	  	:total="totals">
 	  </el-pagination>
 	</div>
-  <template>
-  <el-select v-model="value8" filterable placeholder="请选择" @keyup.enter.native="handleLogin">
-    <el-option
-      v-for="item in options"
-      :key="item.value"
-      :label="item.label"
-      :value="item.value">
-    </el-option>
-  </el-select>
-</template>
-<template>
-  <el-select v-model="value9" multiple placeholder="请选择">
-    <el-option
-      v-for="item in options"
-      :key="item.value"
-      :label="item.label"
-      :value="item.value">
-    </el-option>
-  </el-select>
-  </template>
   </div>
 </template>
 
 <script>
-  import { getArticle, articleUpDown } from '@/api/schoolH5'
+  import { getArticle, articleUpDown, articleDelete } from '@/api/schoolH5'
   import { parseTime } from '@/utils/index'
   export default {
     name: 'articleList',
@@ -184,7 +164,7 @@
           start_time: '',
           end_time: '',
           special_column: '',
-          status: '',
+          status: '2',
           stick: '',
           type: '',
           page: ''
@@ -221,6 +201,7 @@
         },
         value6: '',
         value7: [],
+        totals: 0,
         activeName2: '0',
         tableData: [{
           date: '201',
@@ -256,6 +237,7 @@
               console.log(res)
               this.article_sum = res.response.article_sum
               this.tableData = res.response.article_list
+              this.totals = res.response.page_sum
             } else {
               this.$message.error(res.error_response.msg)
             }
@@ -319,7 +301,52 @@
       editClick(row) {
         this.$router.push({ path: '/article/articleAdd', query: { article_id: row.article_id }})
       },
-      deleteClick(row) {}
+      deleteClick(row) {
+        this.$confirm('此操作将删除该回复, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          const obj = {
+            token: localStorage.getItem('TOKEN'),
+            article_id: row.article_id,
+            column_id: row.column_id,
+            zl_id: row.zl_id,
+            ml_id: row.ml_id
+          }
+           articleDelete(obj)
+          .then(res => {
+            if (res.hasOwnProperty('response')) {
+              console.log(res)
+              this.$message.success(res.response.msg)
+              this.initData()
+            } else {
+              this.$message.error(res.error_response.msg)
+            }
+          })
+          .catch(err => {
+            console.log(err)
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
+
+
+        
+        articleDelete(obj)
+          .then(res => {
+            if (res.hasOwnProperty('response')) {
+              console.log(res)
+              this.$message.success(res.response.msg)
+              this.initData()
+            } else {
+              this.$message.error(res.error_response.msg)
+            }
+          })
+      }
     }
   }
 </script>
