@@ -5,32 +5,10 @@
       <div class="column1 column">
         <h4>育儿好文</h4>
         <ul class="children-list">
-          <li @click='changeChild'>
+          <li @click='changeChild(index)' v-for="(item, index) in childs1">
             <div class="child">
-              <img src="../../../assets/imgs/add-stu.png" alt="" />
-              <span>请点击选择</span>
-              <p>请点击选择</p>
-            </div>
-          </li>
-          <li>
-            <div class="child">
-              <img src="../../../assets/imgs/add-stu.png" alt="" />
-              <span>请点击选择</span>
-              <p>请点击选择</p>
-            </div>
-          </li>
-          <li>
-            <div class="child">
-              <img src="../../../assets/imgs/add-stu.png" alt="" />
-              <span>请点击选择</span>
-              <p>请点击选择</p>
-            </div>
-          </li>
-          <li>
-            <div class="child">
-              <img src="../../../assets/imgs/add-stu.png" alt="" />
-              <span>请点击选择</span>
-              <p>请点击选择</p>
+              <img :src="item.cover" alt="" />
+              <p>{{ item.short_title }}</p>
             </div>
           </li>
         </ul>
@@ -43,14 +21,12 @@
           <li>
             <div class="child">
               <img src="../../../assets/imgs/add-stu.png" alt="" />
-              <span>请点击选择</span>
               <p></p>
             </div>
           </li>
           <li>
             <div class="child">
               <img src="../../../assets/imgs/add-stu.png" alt="" />
-              <span>请点击选择</span>
               <p></p>
             </div>
           </li>
@@ -74,8 +50,7 @@
         <ul class="children-list">
           <li>
             <div class="child">
-              <img src="../../../assets/imgs/add-stu.png" alt="" />
-              <span>请点击选择</span>
+              <img src="../../../assets/imgs/add-stu_1.png" alt="" />
               <p></p>
             </div>
           </li>
@@ -91,7 +66,8 @@
       <div class="edit-container">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="80px" class="demo-ruleForm">
           <el-form-item label="选择图片" prop="img">
-            <el-input v-model="ruleForm.img"></el-input>
+            <upImage1 ref="upLoadFile1" :urls="urls1" v-if='isAlive1'></upImage1>
+            <p style="line-height: 20px;">说明：请上传大小为330*180像素，格式为JPEG或者PNG的图片</p>
           </el-form-item>
           <el-form-item label="选择文章" prop="name">
             <el-input v-model="ruleForm.name" placeholder="最多输入20个汉字"></el-input>
@@ -111,7 +87,8 @@
       <div class="edit-container">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="80px" class="demo-ruleForm">
           <el-form-item label="选择图片" prop="img">
-            <el-input v-model="ruleForm.img"></el-input>
+            <upImage2 ref="upLoadFile2" :urls="urls2" v-if='isAlive2'></upImage2>
+            <p style="line-height: 20px;">说明：请上传大小为330*200像素，格式为JPEG或者PNG的图片</p>
           </el-form-item>
           <el-form-item label="选择文章" prop="name">
             <el-input v-model="ruleForm.name" placeholder="最多输入20个汉字"></el-input>
@@ -148,7 +125,8 @@
       <div class="edit-container">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="80px" class="demo-ruleForm">
           <el-form-item label="选择图片" prop="img">
-            <el-input v-model="ruleForm.img"></el-input>
+            <upImage3 ref="upLoadFile3" :urls="urls3" v-if='isAlive3'></upImage3>
+            <p style="line-height: 20px;">说明：请上传大小为208*280像素，格式为JPEG或者PNG的图片</p>
           </el-form-item>
           <el-form-item label="选择文章" prop="name">
             <el-input v-model="ruleForm.name" placeholder="最多输入20个汉字"></el-input>
@@ -164,14 +142,56 @@
 </template>
 
 <script>
+  import { topList, topInfo, topSave } from '@/api/schoolH5'
+  import upImage1 from '../upImg/topImg1'
+  import upImage2 from '../upImg/topImg2'
+  import upImage3 from '../upImg/topImg3'
+  import defaultHead from '../../../assets/imgs/add-stu.png'
   export default {
     name: 'topList',
     data() {
       return {
+        defaultHead: defaultHead,
         childDialogVisible: false,
         pageDialogVisible: false,
         seeDialogVisible: false,
         bookDialogVisible: false,
+        isAlive1: true,
+        urls1: {
+          url: '',
+          type: ''
+        },
+        isAlive2: true,
+        urls2: {
+          url: '',
+          type: ''
+        },
+        isAlive3: true,
+        urls3: {
+          url: '',
+          type: ''
+        },
+        childs1: [
+        {
+          title: "",
+          short_title: "",
+          cover: defaultHead
+        },
+        {
+          title: "",
+          short_title: "",
+          cover: defaultHead
+        },
+        {
+          title: "",
+          short_title: "",
+          cover: defaultHead
+        },
+        {
+          title: "",
+          short_title: "",
+          cover: defaultHead
+        }],
         ruleForm: {
           index: 1,
           name: '',
@@ -200,8 +220,24 @@
         }
       }
     },
+    mounted() {
+      this.initData()
+    },
+    components: {
+      upImage1,
+      upImage2,
+      upImage3
+    },
     methods: {
-      changeChild() {
+      initData() {
+        const obj = {
+          token: localStorage.getItem('TOKEN')
+        }
+        topList(obj).then(res => {
+          console.log(res)
+        })
+      },
+      changeChild(index) {
         this.childDialogVisible = true
       }
     }
@@ -215,12 +251,12 @@
   .children-list{
     list-style: none;
     overflow: hidden;
-    width: 500px;
+    width: 700px;
     margin-top: 0;
     padding: 0;
 
     li{
-      width: 200px;
+      // width: 200px;
       text-align: center;
       float: left;
       margin-right: 20px;
@@ -233,13 +269,12 @@
 
       span {
         position: absolute;
-        left: 60px;
-        top: 72px;
+        left: 116px;
+        top: 130px;
         color: #999;
       }
       img{
-        width: 200px;
-        height: 100px;
+        width: 150px;
       }
     }
   }
@@ -258,5 +293,10 @@
     .clickt{
       color: blue;
     }
+  }
+  .column4{
+     .child img{
+      width: 106px;
+     }
   }
 </style>

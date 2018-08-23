@@ -238,6 +238,8 @@
             const data = res.response
             data.data.create_time = parseTime(data.data.create_time, '{y}-{m}-{d}')
             this.cform = data.data
+          } else {
+            this.$message.error(res.error_response.msg)
           }
         })
       },
