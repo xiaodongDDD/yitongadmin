@@ -154,11 +154,11 @@ export function articleDelete(params) {
   })
 }
 // 文章新增编辑
-export function articleManage(params) {
+export function articleManage(datas) {
   return request({
     url: '/quandev?v=0.1&method=Growarticle.articleManage',
-    method: 'get',
-    params
+    method: 'post',
+    data: qs.stringify(datas)
   })
 }
 // 文章详情
