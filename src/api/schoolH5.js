@@ -209,7 +209,32 @@ export function columnSave(datas) {
     data: qs.stringify(datas)
   })
 }
-// 栏目获取文章
+// 发布文章
+export function columnPublish(datas) {
+  return request({
+    url: '/quandev?v=0.1&method=Growcolumn.publish',
+    method: 'post',
+    data: qs.stringify(datas)
+  })
+}
+// 专栏列表
+export function columnScols(params) {
+  return request({
+    url: '/quandev?v=0.1&method=Growcolumn.getScols',
+    method: 'get',
+    params
+  })
+}
+
+// 一级目录
+export function columnCatalogs(params) {
+  return request({
+    url: '/quandev?v=0.1&method=Growcolumn.getCatalogs',
+    method: 'get',
+    params
+  })
+}
+// 搜索文章
 export function columnArticles(params) {
   return request({
     url: '/quandev?v=0.1&method=Growcolumn.searchArticle',
@@ -266,11 +291,11 @@ export function topInfo(params) {
   })
 }
 // 置顶保存
-export function topSave(params) {
+export function topSave(datas) {
   return request({
     url: '/quandev?v=0.1&method=Growcolumn.addStick',
-    method: 'get',
-    params
+    method: 'post',
+    data: qs.stringify(datas)
   })
 }
 

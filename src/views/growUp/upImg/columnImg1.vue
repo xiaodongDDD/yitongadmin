@@ -100,8 +100,8 @@ export default {
       img.src = URL
       console.log(img)
       const that = this
-      that.imgUrl = result.data.access_url
-      that.noup = false
+      // that.imgUrl = result.data.access_url
+      // that.noup = false
       // that.$message.success('上传成功')
       that.fullscreenLoading = false
       // console.log('img.width', img.width, 'img.height', img.height)
@@ -113,6 +113,7 @@ export default {
         if (img.width !== 176 || img.height !== 176) {
           that.$message.error('请上传176*176px的图片')
           that.fullscreenLoading = false
+          return false
         } else {
           that.imgUrl = result.data.access_url
           that.cover = true
@@ -129,6 +130,7 @@ export default {
           if (img.width !== 176 || img.height !== 176) {
             that.$message.error('请上传176*176px的图片')
             that.fullscreenLoading = false
+            return false
           } else {
             that.imgUrl = result.data.access_url
             that.cover = true

@@ -9,7 +9,7 @@
         </i>
         <!-- <input id="myvideo" type="file" name="upvideo" style="display: none;" /> -->
         <form id='filesUp'>
-         <input id="myfile" type="file" name="upfiles" style="display:none;" />
+         <input id="myfile3" type="file" name="upfiles" style="display:none;" />
         </form>
       </label>
 <!--       <el-dialog
@@ -100,8 +100,8 @@ export default {
       img.src = URL
       console.log(img)
       const that = this
-      that.imgUrl = result.data.access_url
-      that.noup = false
+      // that.imgUrl = result.data.access_url
+      // that.noup = false
       // that.$message.success('上传成功')
       that.fullscreenLoading = false
       // console.log('img.width', img.width, 'img.height', img.height)
@@ -113,6 +113,7 @@ export default {
         if (img.width !== 208 || img.height !== 280) {
           that.$message.error('请上传208*280px的图片')
           that.fullscreenLoading = false
+          return false
         } else {
           that.imgUrl = result.data.access_url
           that.cover = true
@@ -129,6 +130,7 @@ export default {
           if (img.width !== 208 || img.height !== 280) {
             that.$message.error('请上传208*280px的图片')
             that.fullscreenLoading = false
+            return false
           } else {
             that.imgUrl = result.data.access_url
             that.cover = true
@@ -161,7 +163,7 @@ export default {
     },
     choose1(e) {
       const that = this
-      $('#myfile').off('change').on('change', function(e) {
+      $('#myfile3').off('change').on('change', function(e) {
         that.openFullScreen()
         var files = e.target.files[0]
         console.log(files)

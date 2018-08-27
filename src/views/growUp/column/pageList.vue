@@ -69,7 +69,7 @@
     </div>
 
     <el-dialog
-      :title="isAdd === true ? '新增栏目' : '修改栏目'"
+      :title="isAdd === true ? '新增栏目' : '编辑栏目'"
       :visible.sync="signDialogVisible"
       width="30%">
       <div class="signedit">
