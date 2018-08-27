@@ -5,11 +5,11 @@
         <i @click='choose1' class="imgSize" element-loading-text="图片上传中" title='点击上传' v-loading.fullscreen.lock="fullscreenLoading" v-if="noup && urls.url !== ''"><img :src="urls.url" class="avatar" style="cursor:pointer;"></i>
         <i @click='choose1' class="imgSize" element-loading-text="图片上传中" v-loading.fullscreen.lock="fullscreenLoading" title='点击上传' v-if="noup === false"><img :src="imgUrl" class="avatar" style="cursor:pointer;"></i>
         <i v-if="urls.url === ''  && noup" title='点击上传' v-loading.fullscreen.lock="fullscreenLoading" class="imgSize" element-loading-text="图片上传中" @click='choose1'>
-          <img src="../../../assets/imgs/add-stu.png" class="avatar" style="cursor:pointer;">
+          <img src="../../../assets/imgs/add-stu_1.png" class="avatar" style="cursor:pointer;">
         </i>
         <!-- <input id="myvideo" type="file" name="upvideo" style="display: none;" /> -->
         <form id='filesUp'>
-         <input id="myfile" type="file" name="upfiles" style="display:none;" />
+         <input id="myfile3" type="file" name="upfiles" style="display:none;" />
         </form>
       </label>
 <!--       <el-dialog
@@ -110,8 +110,8 @@ export default {
       // 打印
         // alert('from:complete : width:'+img.width+',height:'+img.height)
         console.log('errors2')
-        if (img.width !== 176 || img.height !== 176) {
-          that.$message.error('请上传176*176px的图片')
+        if (img.width !== 208 || img.height !== 280) {
+          that.$message.error('请上传208*280px的图片')
           that.fullscreenLoading = false
           return false
         } else {
@@ -127,8 +127,8 @@ export default {
         // 打印
           // alert('from:onload : width:'+img.width+',height:'+img.height)
           console.log('errors3')
-          if (img.width !== 176 || img.height !== 176) {
-            that.$message.error('请上传176*176px的图片')
+          if (img.width !== 208 || img.height !== 280) {
+            that.$message.error('请上传208*280px的图片')
             that.fullscreenLoading = false
             return false
           } else {
@@ -163,7 +163,7 @@ export default {
     },
     choose1(e) {
       const that = this
-      $('#myfile').off('change').on('change', function(e) {
+      $('#myfile3').off('change').on('change', function(e) {
         that.openFullScreen()
         var files = e.target.files[0]
         console.log(files)
@@ -450,7 +450,7 @@ export default {
   }
   .imgSize img{
     display: inline-block;
-    width: 150px;
+    width: 106px;
     overflow: hidden;
   }
 

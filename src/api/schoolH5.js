@@ -209,7 +209,32 @@ export function columnSave(datas) {
     data: qs.stringify(datas)
   })
 }
-// 栏目获取文章
+// 发布文章
+export function columnPublish(datas) {
+  return request({
+    url: '/quandev?v=0.1&method=Growcolumn.publish',
+    method: 'post',
+    data: qs.stringify(datas)
+  })
+}
+// 专栏列表
+export function columnScols(params) {
+  return request({
+    url: '/quandev?v=0.1&method=Growcolumn.getScols',
+    method: 'get',
+    params
+  })
+}
+
+// 一级目录
+export function columnCatalogs(params) {
+  return request({
+    url: '/quandev?v=0.1&method=Growcolumn.getCatalogs',
+    method: 'get',
+    params
+  })
+}
+// 搜索文章
 export function columnArticles(params) {
   return request({
     url: '/quandev?v=0.1&method=Growcolumn.searchArticle',
@@ -225,3 +250,52 @@ export function pageList(params) {
     params
   })
 }
+// 专栏详情
+export function pageInfo(params) {
+  return request({
+    url: '/quandev?v=0.1&method=Growcolumn.getSpecialColumn',
+    method: 'get',
+    params
+  })
+}
+// 保存专栏
+export function pageSave(datas) {
+  return request({
+    url: '/quandev?v=0.1&method=Growcolumn.addSpecialColumn',
+    method: 'post',
+    data: qs.stringify(datas)
+  })
+}
+// 删除专栏
+export function pageDelete(datas) {
+  return request({
+    url: '/quandev?v=0.1&method=Growcolumn.delSpecialColumn',
+    method: 'post',
+    data: qs.stringify(datas)
+  })
+}
+// 置顶列表
+export function topList(params) {
+  return request({
+    url: '/quandev?v=0.1&method=Growcolumn.getStickArticles',
+    method: 'get',
+    params
+  })
+}
+// 置顶详情
+export function topInfo(params) {
+  return request({
+    url: '/quandev?v=0.1&method=Growcolumn.getOneStick',
+    method: 'get',
+    params
+  })
+}
+// 置顶保存
+export function topSave(datas) {
+  return request({
+    url: '/quandev?v=0.1&method=Growcolumn.addStick',
+    method: 'post',
+    data: qs.stringify(datas)
+  })
+}
+

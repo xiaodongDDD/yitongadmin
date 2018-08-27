@@ -17,9 +17,11 @@
         width="120">
       </el-table-column>
       <el-table-column
-        prop="province"
         label="icon"
         width="">
+        <template slot-scope="scope">
+          <img width="60px" :src="scope.row.img" alt="">
+        </template>
       </el-table-column>
       <el-table-column
         prop="name"
@@ -45,7 +47,7 @@
         width="100">
         <template slot-scope="scope">
           <el-button @click="editcolumn(scope)" type="text" size="small">编辑</el-button>
-          <el-button @click="publishcolumn(scope)" type="text" size="small">发布</el-button>
+          <el-button v-show="scope.row.column_id != 6 && scope.row.column_id != 7 && scope.row.column_id != 5" @click="publishcolumn(scope)" type="text" size="small">发布</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -87,54 +89,125 @@
 
     <!--发布-->
     <el-dialog
-      title="听见好书发布"
+      :title="rData.title + '发布'"
       :visible.sync="oneDialogVisible"
       width="30%">
       <div class="signedit">
-        <el-form ref="form" :rules="rules" :model="oneform" label-width="80px">
+        <el-form ref="form" :model="oneform" label-width="80px">
           <el-form-item label="选择文章" prop="name">
-            <div class="search-condition">
-              <el-input v-model="oneform.name" placehoder="请输入文章标题"></el-input>
-              <i class="el-icon-search el-icon--right searchIcon" @click="getArticle"></i>
-              <ul class="articles-list" v-show="hasArticle">
-                <li v-for="(item, index) in articleList" @click="checkArticle(index, item.article_id, item.title)">{{ item.title }}</li>
-              </ul>
+            <span class="redicon">*</span>
+            <div style="margin-bottom:20px;">
+              <el-select v-model="value8" filterable placeholder="请选择或搜索" ref="selectValue" @keyup.enter.native="searchArticle">
+                <el-option
+                  v-for="item in options"
+                  :key="item.article_id"
+                  :label="item.title"
+                  :value="item.article_id">
+                </el-option>
+              </el-select>
             </div>
-          </el-form-item>
-          <el-form-item>
-            <span class="carticle" v-for="(item, index) in articles">{{ item.title }}<i class="el-icon-close el-icon--right ccicon" @click="deleteCarticle(index)"></i></span>
-          </el-form-item>
-          <el-form-item label="是否置顶" prop="sShow">
-            <el-radio-group v-model="oneform.sShow">
-              <el-radio :label="1">是</el-radio>
-              <el-radio :label="0">否</el-radio>
-            </el-radio-group>
-          </el-form-item>
-          <el-form-item label="展示图" prop="icon">
-            <el-input v-model="oneform.icon" placehoder=""></el-input>
-            <p>说明：请上传大小为176*176像素，格式为JPEG或者PNG的图片</p>
-          </el-form-item>
-          <el-form-item label="展示标题" prop="index">
-            <el-input v-model="oneform.index" placehoder="最多输入20个汉子"></el-input>
-          </el-form-item>
-          <el-form-item label="发布时间" prop="date">
-            <el-input v-model="oneform.date" placehoder=""></el-input>
-          </el-form-item>
-          <el-form-item label="预览地址" prop="index">
-            <el-input v-model="oneform.index" placehoder=""></el-input>
+            <div id="haha">
+              <el-select v-model="value9" multiple placeholder="" id='noCss'>
+              </el-select>
+            </div>
           </el-form-item>
         </el-form>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="signDialogVisible = false">预 览</el-button>
-        <el-button @click="signDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="pushSave">保 存</el-button>
+        <el-button @click="oneDialogVisible = false">取 消</el-button>
+      </span>
+    </el-dialog>
+
+    <el-dialog
+      title="精品专栏发布"
+      :visible.sync="threeDialogVisible"
+      width="30%">
+      <div class="signedit">
+        <el-form :model="ruleForm" :rules="rules1" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+          <el-form-item label="选择栏目" prop="column">
+            <el-select v-model="ruleForm.column" @change="chooseColumn" placeholder="请选择栏目">
+              <el-option
+                v-for="item in columnList"
+                :key="item.scid"
+                :label="item.name"
+                :value="item.scid">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="选择目录" prop="catalog" v-show="showCatalog">
+            <el-select v-model="ruleForm.catalog" placeholder="请选择目录">
+              <el-option
+                v-for="item in catalogList"
+                :key="item.sccid"
+                :label="item.cname"
+                :value="item.sccid">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="二级目录" prop="ml2_name">
+            <el-input v-model="ruleForm.ml2_name" placeholder="最多输入20个汉字"></el-input>
+          </el-form-item>
+          <el-form-item label="排序" prop="sort_ml2">
+            <el-input v-model="ruleForm.sort_ml2" placeholder="请输入阿拉伯数字"></el-input>
+          </el-form-item>
+          <el-form-item label="选择文章" prop="">
+            <span class="redicon">*</span>
+            <div style="margin-bottom:20px;">
+              <el-select v-model="value8" filterable placeholder="请选择或搜索" ref="selectValue" @keyup.enter.native="searchArticle">
+                <el-option
+                  v-for="item in options"
+                  :key="item.article_id"
+                  :label="item.title"
+                  :value="item.article_id">
+                </el-option>
+              </el-select>
+            </div>
+            <div id="haha">
+              <el-select v-model="value9" multiple placeholder="" id='noCss'>
+              </el-select>
+            </div>
+          </el-form-item>
+        </el-form>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="pushSave">保存</el-button>
+        <el-button @click="threeDialogVisible = false">取消</el-button>
+      </span>
+    </el-dialog>
+
+    <el-dialog
+      title="家庭晓电台发布"
+      :visible.sync="fourDialogVisible"
+      width="30%">
+      <div class="signedit">
+        <el-form ref="form" :model="oneform" label-width="80px">
+          <el-form-item label="选择文章" prop="name">
+            <div class="search-condition">
+            </div>
+            <div style="margin-bottom:20px;">
+              <el-select v-model="value8" filterable placeholder="请选择或搜索" ref="selectValue" @keyup.enter.native="searchArticle">
+                <el-option
+                  v-for="item in options"
+                  :key="item.article_id"
+                  :label="item.title"
+                  :value="item.article_id">
+                </el-option>
+              </el-select>
+            </div>
+          </el-form-item>
+        </el-form>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="fourDialogVisible = false">预 览</el-button>
+        <el-button @click="fourDialogVisible = false">取 消</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 
 <script>
-  import { columnLists, columnInfo, columnArticles, columnSave } from '@/api/schoolH5'
+  import { columnLists, columnInfo, columnArticles, columnSave, columnPublish, columnCatalogs, columnScols } from '@/api/schoolH5'
   import { parseTime } from '@/utils/index'
   import upImage from '../upImg/columnImg1'
   import defaultHead from '../../../assets/imgs/add-stu.png'
@@ -152,6 +225,10 @@
           icon: '',
           date: ''
         },
+        value8: '',
+        value9: [],
+        values: [],
+        options: [],
         hasArticle: false,
         isAlive: true,
         urls: {
@@ -160,36 +237,66 @@
         },
         rules: {
           name: [
-            { required: true, message: '请输入栏目名称', trigger: 'change' }
-          ],
-          sindex: [
-            { required: true, message: '请输入快捷栏目排序', trigger: 'blur' }
-          ],
-          sShow: [
-            { required: true, message: '请选择是否显示快捷栏目', trigger: 'change' }
-          ],
-          index: [
-            { required: true, message: '请输入栏目排序', trigger: 'blur' }
-          ],
-          icon: [
-            { required: true, message: '请选择栏目icon', trigger: 'change' }
-          ],
-          date: [
-            { required: true, message: '请选择发布时间', trigger: 'change' }
+            { required: true, message: '请选择文章', trigger: 'change' }
           ]
         },
         oneDialogVisible: false,
+        twoDialogVisible: false,
+        threeDialogVisible: false,
+        fourDialogVisible: false,
         oneform: {
-          name: '',
-          sindex: '',
-          sShow: 0,
-          index: '',
-          icon: '',
-          date: ''
+          name: ''
         },
         articleList: [],
         articles: [],
-        defaultHead: defaultHead
+        defaultHead: defaultHead,
+        rDatar: {
+          title: '',
+          column_id: '',
+          aids: '',
+          scid: '',
+          sccid: '',
+          ml2_name: '',
+          sort_ml2: ''
+        },
+        rData: {
+          title: '',
+          column_id: '',
+          aids: '',
+          scid: '',
+          sccid: '',
+          ml2_name: '',
+          sort_ml2: ''
+        },
+        columnList: [],
+        catalogList: [],
+        ruleFormr: {
+          column: '',
+          catalog: '',
+          ml2_name: '',
+          sort_ml2: ''
+        },
+        showCatalog: true,
+        ruleForm: {
+          column: '',
+          catalog: '',
+          ml2_name: '',
+          sort_ml2: ''
+        },
+        rules1: {
+          column: [
+            { required: true, message: '请选择专栏', trigger: 'change' }
+          ],
+          catalog: [
+            { required: true, message: '请选择目录', trigger: 'change' }
+          ],
+          ml2_name: [
+            { required: true, message: '请选择二级目录', trigger: 'blur' }
+          ],
+          sort_ml2: [
+            { required: true, message: '请选择二级目录', trigger: 'blur' }
+          ]
+        }
       }
     },
     components: {
@@ -201,6 +308,24 @@
           this.reload()
           this.urls.url = this.defaultHead
         }
+      },
+      'value8': function(news, old) {
+        if (news !== '') {
+          if (this.rData.column_id == 1 || this.rData.column_id == 4) {
+            this.chooseArticle(news)
+          } else if (this.rData.column_id == 8 || this.rData.column_id == 2) {
+            this.values = []
+            this.value9 = []
+            for (let i in this.options) {
+              if (this.options[i].article_id === news) {
+                this.oneform.name = this.options[i].title
+                this.value9.push(this.options[i].title)
+              }
+            }
+            this.values.push(news)
+          }  
+        }
+        console.log(this.values)
       }
     },
     mounted() {
@@ -238,6 +363,8 @@
             const data = res.response
             data.data.create_time = parseTime(data.data.create_time, '{y}-{m}-{d}')
             this.cform = data.data
+          } else {
+            this.$message.error(res.error_response.msg)
           }
         })
       },
@@ -252,38 +379,127 @@
               message: '修改成功',
               type: 'success'
             })
+            this.signDialogVisible = false
+            this.initData()
           } else {
             this.$message.error(res.error_response.msg)
           }
         })
       },
-      getArticle() {
+      searchArticle() {
         const obj = {
-          token: localStorage.getItem('TOKEN'),
-          title: this.oneform.name
+          title: this.$refs.selectValue.query,
+          token: localStorage.getItem('TOKEN')
         }
+        console.log(obj)
         columnArticles(obj).then(res => {
           console.log(res)
           if (res.hasOwnProperty('response')) {
             const data = res.response
-            this.articleList = data.data
-            this.hasArticle = true
+            this.options = data.data
+          } else {
+            this.$message.error(res.error_response.msg)
           }
         })
       },
-      checkArticle(index, id, title) {
-        this.oneform.name = title
-        this.articles.push(this.articleList[index])
-        console.log(this.articles)
-        this.hasArticle = false
+      chooseArticle(val) {
+        var val1 = this.value9
+        var val2 = this.values
+        if (val2.indexOf(val) === -1) {
+          for (var i = 0; i < this.options.length; i++) {
+            if (this.options[i].article_id === val) {
+              val1.push(this.options[i].title)
+              val2.push(val)
+              this.value9 = val1
+              this.values = val2
+            }
+          }
+          this.value8 = ''
+        } else {
+          for (var j = 0; j < this.options.length; j++) {
+            if (this.options[j].article_id === val) {
+              val1.splice(val1.indexOf(this.options[j].title), 1)
+              val2.splice(val2.indexOf(val), 1)
+              this.value9 = val1
+              this.values = val2
+            }
+          }
+          this.value8 = ''
+        }
       },
-      deleteCarticle(index) {
-        console.log(index)
+      chooseColumn(val) {
+        this.ruleForm.catalog = ''
+        const obj = {
+          scid: val,
+          token: localStorage.getItem('TOKEN')
+        }
+        columnCatalogs(obj).then(res => {
+          // console.log(res)
+          if (res.hasOwnProperty('response')) {
+            const data = res.response
+            this.catalogList = data.data
+            if (this.catalogList.length == 0) {
+              this.showCatalog = false
+            } else {
+              this.showCatalog = true
+            }
+          }
+        })
       },
       publishcolumn(scope) {
-        console.log(scope)
+        this.rData = this.rDatar
+        this.options = []
         this.oneform.name = ''
-        this.oneDialogVisible = true
+        this.value8 = ''
+        this.value9 = []
+        this.values = []
+        const row = scope.row
+        this.rData.column_id = row.column_id
+        this.rData.title = row.name
+        if (row.column_id == 1 || row.column_id == 4 || row.column_id == 8) {
+          this.oneDialogVisible = true
+        } else if (row.column_id == 2) {
+          const obj = {
+            token: localStorage.getItem('TOKEN')
+          }
+          columnScols(obj).then(res => {
+            console.log(res)
+            if (res.hasOwnProperty('response')) {
+              const data = res.response
+              this.columnList = data.data
+            }
+          })
+          this.threeDialogVisible = true
+        } else if (row.column_id == 3) {
+          this.fourDialogVisible = true
+        }
+      },
+      pushSave() {
+        const obj = {
+          token: localStorage.getItem('TOKEN'),
+          aids: this.values.join(","),
+          column_id: this.rData.column_id,
+          scid: this.ruleForm.column,
+          sccid: this.ruleForm.catalog,
+          ml2_name: this.ruleForm.ml2_name,
+          sort_ml2: this.ruleForm.sort_ml2
+        }
+        // console.log(obj)
+        // return false
+        columnPublish(obj).then(res => {
+          // console.log(res)
+          if (res.hasOwnProperty('response')) {
+            this.$message({
+              type: 'success',
+              message: '发布成功!'
+            })
+            this.oneDialogVisible = false
+            this.threeDialogVisible = false
+            this.initData()
+          } else {
+            this.$message.error(res.error_response.msg)
+          }
+        })
       },
       handleCommand(command) {
         // console.log(command)
@@ -341,5 +557,40 @@
       color: red;
       font-size: 15px;
     }
+  }
+</style>
+<style type="text/css">
+  div.edui-editor-toolbarboxinner.edui-default {
+    line-height: 20px;
+  }
+  .demo-ruleForm h4{
+    text-indent: 10px;
+  }
+  input#noCss.el-input__inner {
+  border: none;
+  // width: 500px;
+  }
+  #haha span.el-input__suffix{
+    display: none;
+  }
+  div.el-select-dropdown.el-popper.is-multiple{
+    display: none;
+  }
+  .redicon{
+    display: block;
+    position: absolute;
+    color: red;
+    left: -82px;
+    top: 2px;
+  }
+  .choosed{
+    box-sizing: border-box;
+    border-color: transparent;
+    margin: 2px 0 2px 6px;
+    color: #909399;
+    height: 24px;
+    font-size: 12px;
+    line-height: 22px;
+    background-color: #f0f2f5;
   }
 </style>
