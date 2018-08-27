@@ -25,7 +25,7 @@
 	  <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
 	    <h4>作者管理</h4>
 	    <el-form-item label="选择作者" prop="name">
-	      <el-select v-model="value7" filterable ref='searchArtist' placeholder="请选择或搜索" @keyup.enter.native="searchArtist">
+	      <el-select v-model="ruleForm.author_id" filterable ref='searchArtist' placeholder="请选择或搜索" @keyup.enter.native="searchArtist">
           <el-option
             v-for="item in options1"
             :key="item.author_id"
@@ -36,11 +36,14 @@
 	    </el-form-item>
 	    <h4>展示图片</h4>
 	    <el-form-item label="图片" prop="desc">
-      <template>
-        <el-radio v-model="radio" label="1">正方形</el-radio>
-        <el-radio v-model="radio" label="2">竖版</el-radio>
-      </template>
-	    <upImage ref="upLoadFile" :urls="urls2" v-if='isAlive'></upImage>
+      <div>
+        <p>正方形</p>
+        <upImage ref="upLoadFile" :urls="urls2" v-if='isAlive'></upImage>
+      </div>
+      <div>
+        <p>竖版</p>
+        <upImages ref="upLoadFiles" :urls="urls3" v-if='isAlive'></upImages>
+      </div>
       <p>正方形：请上传大小为160*160像素，格式为jpeg或png格式的图片</p>
       <p>竖版：请上传大小为208*280像素，格式为jpeg或png格式的图片</p>
 	    </el-form-item>
@@ -64,6 +67,12 @@
         </div>
         <div id="haha">
             <el-select v-model="value9" multiple placeholder="" id='noCss'>
+              <el-option
+                v-for="item in options"
+                :key="item.label_id"
+                :label="item.name"
+                :value="item.label_id">
+              </el-option>
             </el-select>
         </div>
 	    </el-form-item>
@@ -85,6 +94,7 @@
   import upAudio from '../upAudio/upAudio'
   import UE from '../../ue/ue.vue'
   import upImage from '../upImg/articleUpImage'
+  import upImages from '../upImg/longUpImage'
   import { articleManage, articleDetail, labelSearch, authorSearch } from '@/api/schoolH5'
   export default {
     name: 'articleAdd',
@@ -100,7 +110,6 @@
         radio: '1',
         isAlive: true,
         article_id: '',
-        values: [],
         ruleForm: {
           title: '',
           short_title: '',
@@ -108,7 +117,8 @@
           content: '',
           author_id: '',
           name: '',
-          cover: '',
+          cover_square: '',
+          cover_stand: '',
           description: '',
           address: ''
         },
@@ -121,39 +131,42 @@
           url: ''
         },
         urls2: {
-          url: '',
-          type: '1'
+          url: ''
         },
-        rules: {
-          name: [
-            { required: true, message: '请输入活动名称', trigger: 'blur' },
-            { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
-          ],
-          region: [
-            { required: true, message: '请选择活动区域', trigger: 'change' }
-          ],
-          date1: [
-            { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
-          ],
-          date2: [
-            { type: 'date', required: true, message: '请选择时间', trigger: 'change' }
-          ],
-          type: [
-            { type: 'array', required: true, message: '请至少选择一个活动性质', trigger: 'change' }
-          ],
-          resource: [
-            { required: true, message: '请选择活动资源', trigger: 'change' }
-          ],
-          description: [
-            { required: true, message: '请填写活动形式', trigger: 'blur' }
-          ]
-        }
+        urls3: {
+          url: ''
+        },
+        // rules: {
+        //   name: [
+        //     { required: true, message: '请输入活动名称', trigger: 'blur' },
+        //     { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+        //   ],
+        //   region: [
+        //     { required: true, message: '请选择活动区域', trigger: 'change' }
+        //   ],
+        //   date1: [
+        //     { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
+        //   ],
+        //   date2: [
+        //     { type: 'date', required: true, message: '请选择时间', trigger: 'change' }
+        //   ],
+        //   type: [
+        //     { type: 'array', required: true, message: '请至少选择一个活动性质', trigger: 'change' }
+        //   ],
+        //   resource: [
+        //     { required: true, message: '请选择活动资源', trigger: 'change' }
+        //   ],
+        //   description: [
+        //     { required: true, message: '请填写活动形式', trigger: 'blur' }
+        //   ]
+        // }
       }
     },
     components: {
       UE,
       upAudio,
-      upImage
+      upImage,
+      upImages
     },
     mounted() {
       console.log(this.urls)
@@ -172,13 +185,16 @@
           .then(res => {
             if (res.hasOwnProperty('response')) {
               console.log(res)
+              this.options = res.response.label_info
               this.ruleForm = res.response.article_detail[0]
               this.urls1.url = res.response.article_detail[0].audio
-              this.urls2.url = res.response.article_detail[0].cover
+              this.urls2.url = res.response.article_detail[0].cover_square
+              this.urls3.url = res.response.article_detail[0].cover_stand
               this.defaultMsg = res.response.article_detail[0].content
-              this.options1[0].name = res.response.article_detail[0].name
               this.options1[0].author_id = res.response.article_detail[0].author_id
-              this.options = res.response.label_info
+              this.options1[0].name = res.response.article_detail[0].name
+              this.value9 = res.response.label_ids
+              this.values = res.response.label_ids
             } else {
               this.$message.error(res.error_response.msg)
             }
@@ -198,15 +214,16 @@
         console.log(1111)
         const obj = {
           token: localStorage.getItem('TOKEN'),
-          title: this.ruleForm.author_id,
-          short_title: this.ruleForm.author_id,
+          title: this.ruleForm.title,
+          short_title: this.ruleForm.short_title,
           audio: this.$refs.upLoadAudio.getUrl(),
           content: this.$refs.ue.getUEContent(),
           author_id: this.ruleForm.author_id,
-          cover: this.$refs.upLoadFile.getUrl() === '' ? this.ruleForm.cover : this.$refs.upLoadFile.getUrl(),
+          cover_square: this.$refs.upLoadFile.getUrl() === '' ? this.ruleForm.cover_square : this.$refs.upLoadFile.getUrl(),
+          cover_stand: this.$refs.upLoadFiles.getUrl() === '' ? this.ruleForm.cover_stand : this.$refs.upLoadFiles.getUrl(),
           article_id: this.article_id,
           description: this.ruleForm.description,
-          label_ids: this.values.join(","),
+          label_ids: this.value9.join(","),
           type: '2'
         }
         articleManage(obj)
@@ -214,6 +231,7 @@
             if (res.hasOwnProperty('response')) {
               console.log(res)
               this.$message.success(res.response.msg)
+              this.$router.go(-1)
             } else {
               this.$message.error(res.error_response.msg)
             }
@@ -233,7 +251,7 @@
           cover: this.$refs.upLoadFile.getUrl() === '' ? this.ruleForm.cover : this.$refs.upLoadFile.getUrl(),
           article_id: this.article_id,
           description: this.ruleForm.description,
-          label_ids: this.values.join(","),
+          label_ids: this.value9.join(","),
           phonenum: this.ruleForm.address,
           type: '1'
         }
@@ -252,17 +270,14 @@
       },
       haha(val) {
         var val1 = this.value9
-        var val2 = this.values
         console.log(val1)
         console.log(val)
-        if (val2.indexOf(val) === -1) {
+        if (val1.indexOf(val) === -1) {
           console.log(1111)
           for (var i = 0; i < this.options.length; i++) {
             if (this.options[i].label_id === val) {
-              val1.push(this.options[i].name)
-              val2.push(val)
+              val1.push(this.options[i].label_id)
               this.value9 = val1
-              this.values = val2
             }
           }
           console.log(this.value9, this.values)
@@ -271,14 +286,12 @@
           console.log(2222)
           for (var j = 0; j < this.options.length; j++) {
             if (this.options[j].label_id === val) {
-              val1.splice(val1.indexOf(this.options[j].name), 1)
-              val2.splice(val2.indexOf(val), 1)
+              val1.splice(val1.indexOf(this.options[j].label_id), 1)
               this.value9 = val1
-              this.values = val2
             }
           }
           this.value8 = ''
-          console.log(this.value9, this.values)
+          console.log(this.value9)
         }
       },
       searchLabel() {

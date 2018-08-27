@@ -24,8 +24,8 @@
 		    :picker-options="pickerOptions2">
 		  </el-date-picker>
         </el-form-item>
-        <el-form-item label="栏目">
-          <el-input v-model="formInline.special_column" placeholder="所属栏目"></el-input>
+        <el-form-item label="专栏">
+          <el-input v-model="formInline.special_column" placeholder="所属专栏"></el-input>
         </el-form-item>
         <el-form-item label="文章状态">
           <el-select v-model="formInline.status" placeholder="全部">
@@ -35,9 +35,9 @@
             <el-option label="已下架" value="3"></el-option>
           </el-select>
           <el-select v-model="formInline.stick" placeholder="全部">
-            <el-option label="全部" value="1"></el-option>
-            <el-option label="已置顶" value="2"></el-option>
-            <el-option label="未置顶" value="3"></el-option>
+            <el-option label="全部" value="-1"></el-option>
+            <el-option label="已置顶" value="1"></el-option>
+            <el-option label="未置顶" value="0"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
@@ -101,6 +101,11 @@
           width="">
         </el-table-column>
         <el-table-column
+          prop="zl_name"
+          label="引用专栏"
+          width="">
+        </el-table-column>
+        <el-table-column
           prop="ml_name"
           label="所属目录"
           width="">
@@ -108,8 +113,10 @@
         <el-table-column
           label="是否置顶"
           width="">
-          <span>是</span>
-          <span>否</span>
+          <template slot-scope="scope">
+            <span v-if="scope.row.stick_sort !== ''">{{ scope.row.stick_sort }}</span>
+            <!-- <span v-if="scope.row.stick_sort === ''"></span> -->
+          </template>
         </el-table-column>
         <el-table-column
           prop="publish_time"
@@ -122,10 +129,10 @@
           width="120">
           <template slot-scope="scope">
             <el-button disabled v-if="scope.row.status === '2' && scope.row.column_id !== '0'" type="text" size="small">已发布</el-button>
-            <el-button disabled v-if="scope.row.status === '1' && scope.row.column_id !== '0'" type="text" size="small">已下架</el-button>
-            <el-button disabled v-if="scope.row.column_id === '0'" type="text" size="small">未发布</el-button>
+            <el-button disabled v-if="scope.row.status === '3' && scope.row.column_id !== '0'" type="text" size="small">已下架</el-button>
+            <el-button disabled v-if="scope.row.column_id === '0'" type="text" size="small">待发布</el-button>
             <el-button @click="upDown(scope.row)" v-if="scope.row.status === '2' && scope.row.column_id !== '0'" type="text" size="small">下架</el-button>
-            <el-button @click="upDown(scope.row)" v-if="scope.row.status === '1' && scope.row.column_id !== '0'" type="text" size="small">上架</el-button>
+            <el-button @click="upDown(scope.row)" v-if="scope.row.status === '3' && scope.row.column_id !== '0'" type="text" size="small">上架</el-button>
           </template>
         </el-table-column>
         <el-table-column
@@ -203,14 +210,7 @@
         value7: [],
         totals: 0,
         activeName2: '0',
-        tableData: [{
-          date: '201',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '上海市普陀区金沙江路 1518 弄',
-          zip: 200333
-        }]
+        tableData: []
       }
     },
     mounted() {
@@ -333,19 +333,6 @@
             message: '已取消删除'
           })
         })
-
-
-        
-        articleDelete(obj)
-          .then(res => {
-            if (res.hasOwnProperty('response')) {
-              console.log(res)
-              this.$message.success(res.response.msg)
-              this.initData()
-            } else {
-              this.$message.error(res.error_response.msg)
-            }
-          })
       }
     }
   }
