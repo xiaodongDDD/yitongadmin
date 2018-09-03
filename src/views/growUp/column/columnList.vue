@@ -68,8 +68,8 @@
           </el-form-item>
           <el-form-item label="快捷栏目是否展示" prop="is_show">
             <el-radio-group v-model="cform.is_show">
-              <el-radio :label="'1'">是</el-radio>
-              <el-radio :label="'0'">否</el-radio>
+              <el-radio :label="1">是</el-radio>
+              <el-radio :label="0">否</el-radio>
             </el-radio-group>
           </el-form-item>
           <el-form-item label="栏目排序" prop="lm_sort">
