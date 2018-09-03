@@ -163,8 +163,8 @@
                 </el-option>
               </el-select>
             </div>
-            <div id="haha">
-              <el-select v-model="value9" multiple placeholder="" id='noCss'>
+            <div id="haha1">
+              <el-select v-model="value9" multiple placeholder="" id='noCss1'>
               </el-select>
             </div>
           </el-form-item>
@@ -181,10 +181,14 @@
       :visible.sync="fourDialogVisible"
       width="30%">
       <div class="signedit">
-        <el-form ref="form" :model="oneform" label-width="80px">
+        <el-form ref="form" :model="fourform" :rules='rules2' label-width="80px">
+          <el-form-item label="二级目录" prop="ml2_name">
+            <el-input v-model="fourform.ml2_name" placeholder="最多输入20个汉字"></el-input>
+          </el-form-item>
+          <el-form-item label="排序" prop="sort_ml2">
+            <el-input v-model="fourform.sort_ml2" placeholder="请输入阿拉伯数字"></el-input>
+          </el-form-item>
           <el-form-item label="选择文章" prop="name">
-            <div class="search-condition">
-            </div>
             <div style="margin-bottom:20px;">
               <el-select v-model="value8" filterable placeholder="请选择或搜索" ref="selectValue" @keyup.enter.native="searchArticle">
                 <el-option
@@ -247,6 +251,10 @@
         oneform: {
           name: ''
         },
+        fourform: {
+          ml2_name: '',
+          sort_ml2: ''
+        },
         articleList: [],
         articles: [],
         defaultHead: defaultHead,
@@ -288,13 +296,24 @@
             { required: true, message: '请选择专栏', trigger: 'change' }
           ],
           catalog: [
-            { required: true, message: '请选择目录', trigger: 'change' }
+            { required: true, message: '请选择一级目录', trigger: 'change' }
           ],
           ml2_name: [
-            { required: true, message: '请选择二级目录', trigger: 'blur' }
+            { required: true, message: '请输入二级目录', trigger: 'blur' }
           ],
           sort_ml2: [
-            { required: true, message: '请选择二级目录', trigger: 'blur' }
+            { required: true, message: '请输入排序', trigger: 'blur' }
+          ]
+        },
+        rules2: {
+          ml2_name: [
+            { required: true, message: '请输入二级目录', trigger: 'blur' }
+          ],
+          sort_ml2: [
+            { required: true, message: '请输入排序', trigger: 'blur' }
+          ],
+          name: [
+            { required: true, message: '请选择文章', trigger: 'change' }
           ]
         }
       }
@@ -575,10 +594,15 @@
     text-indent: 10px;
   }
   input#noCss.el-input__inner {
-  border: none;
-   width: 300px;
+    border: none;
   }
   #haha span.el-input__suffix{
+    display: none;
+  }
+  input#noCss1.el-input__inner {
+    border: none;
+  }
+  #haha1 span.el-input__suffix{
     display: none;
   }
   div.el-select-dropdown.el-popper.is-multiple{
