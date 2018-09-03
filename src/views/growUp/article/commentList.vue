@@ -11,10 +11,10 @@
         </el-form-item>
         </el-form-item>
         <el-form-item label="排序">
-          <el-select v-model="formInline.sort" placeholder="全部">
-            <el-option label="点赞数" value="1"></el-option>
-            <el-option label="评论数" value="2"></el-option>
-            <el-option label="创建时间倒序" value="3"></el-option>
+          <el-select v-model="formInline.sort" placeholder="请选择">
+            <el-option label="请选择" value=""></el-option>
+            <el-option label="待审核数" value="1"></el-option>
+            <el-option label="创建时间倒序" value="2"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
@@ -42,22 +42,57 @@
           label="评论状态"
           width="">
           <template slot-scope="scope">
-          <span v-if="scope.row.comment_on === '1'">开启</span>
-          <span v-if="scope.row.comment_on === '0'">关闭</span>
+          <span v-if="scope.row.comment_on === '1'">已开启</span>
+          <span v-if="scope.row.comment_on === '0'">已关闭</span>
           </template>
         </el-table-column>
         <el-table-column
-          prop="agrees"
+          prop="pv_all"
+          label="总阅读量pv"
+          width="">
+        </el-table-column>
+        <el-table-column
+          prop="uv_all"
+          label="总阅读量uv"
+          width="">
+        </el-table-column>
+        <el-table-column
+          prop="pv_xhb"
+          label="晓黑板内pv"
+          width="">
+        </el-table-column>
+        <el-table-column
+          prop="uv_xhb"
+          label="晓黑板内uv"
+          width="">
+        </el-table-column>
+        <el-table-column
+          prop="pv_share"
+          label="晓黑板外pv"
+          width="">
+        </el-table-column>
+        <el-table-column
+          prop="uv_share"
+          label="晓黑板外uv"
+          width="">
+        </el-table-column>
+        <el-table-column
+          prop="collect_num"
+          label="总收藏数"
+          width="">
+        </el-table-column>
+        <el-table-column
+          prop="agree_num"
           label="总点赞数"
           width="">
         </el-table-column>
         <el-table-column
-          prop="comments"
+          prop="comments_all"
           label="总评论数"
           width="">
         </el-table-column>
         <el-table-column
-          prop="comments_check"
+          prop="comments_uncheck"
           label="待审核数"
           width="">
         </el-table-column>
@@ -99,14 +134,7 @@
         pageData: {
           allSum: 1
         },
-        tableData: [{
-          article_id: '',
-          title: '',
-          agrees: '',
-          comments_check: '',
-          comments: '',
-          comment_on: '0'
-        }]
+        tableData: []
       }
     },
     mounted() {

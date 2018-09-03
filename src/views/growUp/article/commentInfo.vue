@@ -105,7 +105,6 @@
               this.article_info = res.response.article_info
               this.comment_info = res.response.comment_info
               this.pageData.allSum = res.response.comment_sum
-              this.$message.success(res.response.msg)
             } else {
               this.$message.error(res.error_response.msg)
             }

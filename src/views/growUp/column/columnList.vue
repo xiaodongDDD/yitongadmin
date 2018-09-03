@@ -342,13 +342,19 @@
         const obj = {
           token: localStorage.getItem('TOKEN')
         }
-        columnLists(obj).then(res => {
-          console.log(res)
-          if (res.hasOwnProperty('response')) {
-            const data = res.response
-            this.tableData = data.data
-          }
-        })
+        columnLists(obj)
+          .then(res => {
+            console.log(res)
+            if (res.hasOwnProperty('response')) {
+              const data = res.response
+              this.tableData = data.data
+            } else {
+              this.$message.error(res.error_response.msg)
+            }
+          })
+          .catch(err => {
+            console.log(err)
+          })
       },
       editcolumn(scope) {
         const row = scope.row
@@ -366,7 +372,9 @@
           } else {
             this.$message.error(res.error_response.msg)
           }
-        })
+        }).catch(err => {
+            console.log(err)
+          })
       },
       saveEditColumn() {
         this.cform.img = this.$refs.upLoadFile.getUrl() !== '' ? this.$refs.upLoadFile.getUrl() : this.cform.img
@@ -568,7 +576,7 @@
   }
   input#noCss.el-input__inner {
   border: none;
-  // width: 500px;
+   width: 300px;
   }
   #haha span.el-input__suffix{
     display: none;

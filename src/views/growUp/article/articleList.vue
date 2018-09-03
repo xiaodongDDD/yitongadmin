@@ -14,15 +14,15 @@
         </el-form-item>
         <el-form-item label="创建时间">
           <el-date-picker
-		    v-model="value7"
-		    type="daterange"
-		    align="right"
-		    unlink-panels
-		    range-separator="至"
-		    start-placeholder="开始日期"
-		    end-placeholder="结束日期"
-		    :picker-options="pickerOptions2">
-		  </el-date-picker>
+    		    v-model="value7"
+    		    type="daterange"
+    		    align="right"
+    		    unlink-panels
+    		    range-separator="至"
+    		    start-placeholder="开始日期"
+    		    end-placeholder="结束日期"
+    		    :picker-options="pickerOptions2">
+    		  </el-date-picker>
         </el-form-item>
         <el-form-item label="专栏">
           <el-input v-model="formInline.special_column" placeholder="所属专栏"></el-input>
@@ -37,7 +37,7 @@
           <el-select v-model="formInline.stick" placeholder="全部">
             <el-option label="全部" value="-1"></el-option>
             <el-option label="已置顶" value="1"></el-option>
-            <el-option label="未置顶" value="0"></el-option>
+            <el-option label="未置顶" value="2"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
@@ -71,7 +71,7 @@
         style="width: 100%">
         <el-table-column
           fixed
-          prop="date"
+          prop="page_sort"
           label="编号"
           width="80">
         </el-table-column>
@@ -128,11 +128,11 @@
           label="发布状态"
           width="120">
           <template slot-scope="scope">
-            <el-button disabled v-if="scope.row.status === '2' && scope.row.column_id !== '0'" type="text" size="small">已发布</el-button>
-            <el-button disabled v-if="scope.row.status === '3' && scope.row.column_id !== '0'" type="text" size="small">已下架</el-button>
+            <el-button disabled v-if="scope.row.status === 2 && scope.row.column_id !== '0'" type="text" size="small">已发布</el-button>
+            <el-button disabled v-if="scope.row.status === 3 && scope.row.column_id !== '0'" type="text" size="small">已下架</el-button>
             <el-button disabled v-if="scope.row.column_id === '0'" type="text" size="small">待发布</el-button>
-            <el-button @click="upDown(scope.row)" v-if="scope.row.status === '2' && scope.row.column_id !== '0'" type="text" size="small">下架</el-button>
-            <el-button @click="upDown(scope.row)" v-if="scope.row.status === '3' && scope.row.column_id !== '0'" type="text" size="small">上架</el-button>
+            <el-button @click="upDown(scope.row)" v-if="scope.row.status === 2 && scope.row.column_id !== '0'" type="text" size="small">下架</el-button>
+            <el-button @click="upDown(scope.row)" v-if="scope.row.status === 3 && scope.row.column_id !== '0'" type="text" size="small">上架</el-button>
           </template>
         </el-table-column>
         <el-table-column
@@ -151,6 +151,7 @@
 	  <el-pagination
 	  	background
 	  	layout="prev, pager, next"
+      @current-change="handleCurrentChange"
 	  	:total="totals">
 	  </el-pagination>
 	</div>
@@ -176,6 +177,7 @@
           type: '',
           page: ''
         },
+        currentPage: 1,
         up: false,
         publish: false,
         article_sum: [],
@@ -229,7 +231,7 @@
           status: this.formInline.status,
           stick: this.formInline.stick,
           type: this.activeName2,
-          page: 1
+          page: this.currentPage
         }
         getArticle(obj)
           .then(res => {
@@ -264,6 +266,10 @@
           this.initData()
         }
       },
+      handleCurrentChange(val) {
+        this.currentPage = val
+        this.initData()
+      },
       handleLogin() {
         console.log(1111)
       },
@@ -272,7 +278,12 @@
         this.initData()
       },
       upDown(row) {
-        const obj = {
+        this.$confirm('下架之后,'+row.lm_name+'栏目将不再显示此篇文章，可能对app端展示造成影响，请确认是否下架该文章？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          const obj = {
           token: localStorage.getItem('TOKEN'),
           article_id: row.article_id,
           column_id: row.column_id,
@@ -293,6 +304,12 @@
           .catch(err => {
             console.log(err)
           })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消下架'
+          })
+        })  
       },
       addArticle() {
         this.$router.push({ path: '/article/articleAdd' })
@@ -302,7 +319,7 @@
         this.$router.push({ path: '/article/articleAdd', query: { article_id: row.article_id }})
       },
       deleteClick(row) {
-        this.$confirm('此操作将删除该回复, 是否继续?', '提示', {
+        this.$confirm('删除之后,'+row.lm_name+'栏目将不再显示此篇文章，可能对app端展示造成影响，请确认是否删除该文章？', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'

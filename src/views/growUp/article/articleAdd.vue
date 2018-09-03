@@ -5,7 +5,7 @@
 	  <el-radio-button label="1">作者摘要及标签</el-radio-button>
 	</el-radio-group> -->
   <h3>文章编辑</h3>
-	  <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+	  <el-form :model="ruleForm" ref="ruleForm" label-width="100px" class="demo-ruleForm">
 	    <el-form-item label="文章标题" prop="name">
 	      <el-input v-model="ruleForm.title"></el-input>
 	    </el-form-item>
@@ -22,7 +22,7 @@
 	    </el-form-item>
 	  </el-form>
   <h3 style="margin-top:50px;">作者摘要及标签</h3>
-	  <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+	  <el-form :model="ruleForm" ref="ruleForm" label-width="100px" class="demo-ruleForm">
 	    <h4>作者管理</h4>
 	    <el-form-item label="选择作者" prop="name">
 	      <el-select v-model="ruleForm.author_id" filterable ref='searchArtist' placeholder="请选择或搜索" @keyup.enter.native="searchArtist">
@@ -125,7 +125,10 @@
         options: [],
         value9: [],
         value8: '',
-        options1: [],
+        options1: [{
+          author_id: '',
+          name: ''
+        }],
         value7: '',
         urls1: {
           url: ''
@@ -186,15 +189,14 @@
             if (res.hasOwnProperty('response')) {
               console.log(res)
               this.options = res.response.label_info
+              this.options1[0].author_id = res.response.article_detail[0].author_id
+              this.options1[0].name = res.response.article_detail[0].name
               this.ruleForm = res.response.article_detail[0]
               this.urls1.url = res.response.article_detail[0].audio
               this.urls2.url = res.response.article_detail[0].cover_square
               this.urls3.url = res.response.article_detail[0].cover_stand
               this.defaultMsg = res.response.article_detail[0].content
-              this.options1[0].author_id = res.response.article_detail[0].author_id
-              this.options1[0].name = res.response.article_detail[0].name
               this.value9 = res.response.label_ids
-              this.values = res.response.label_ids
             } else {
               this.$message.error(res.error_response.msg)
             }
