@@ -199,11 +199,15 @@
                 </el-option>
               </el-select>
             </div>
+            <div id="haha">
+              <el-select v-model="value9" multiple placeholder="" id='noCss'>
+              </el-select>
+            </div>
           </el-form-item>
         </el-form>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="fourDialogVisible = false">预 览</el-button>
+        <el-button type="primary" @click="radioSave">保 存</el-button>
         <el-button @click="fourDialogVisible = false">取 消</el-button>
       </span>
     </el-dialog>
@@ -253,7 +257,8 @@
         },
         fourform: {
           ml2_name: '',
-          sort_ml2: ''
+          sort_ml2: '',
+          name: 'ceshi'
         },
         articleList: [],
         articles: [],
@@ -332,7 +337,8 @@
         if (news !== '') {
           if (this.rData.column_id == 1 || this.rData.column_id == 4) {
             this.chooseArticle(news)
-          } else if (this.rData.column_id == 8 || this.rData.column_id == 2) {
+          } else if (this.rData.column_id == 8 || this.rData.column_id == 2 || this.rData.column_id == 3) {
+            console.log(123)
             this.values = []
             this.value9 = []
             for (let i in this.options) {
@@ -522,6 +528,29 @@
             })
             this.oneDialogVisible = false
             this.threeDialogVisible = false
+            this.initData()
+          } else {
+            this.$message.error(res.error_response.msg)
+          }
+        })
+      },
+      radioSave() {
+        const obj = {
+          token: localStorage.getItem('TOKEN'),
+          aids: this.values.join(","),
+          column_id: this.rData.column_id,
+          ml2_name: this.fourform.ml2_name,
+          sort_ml2: this.fourform.sort_ml2
+        }
+        console.log(obj)
+        columnPublish(obj).then(res => {
+          // console.log(res)
+          if (res.hasOwnProperty('response')) {
+            this.$message({
+              type: 'success',
+              message: '发布成功!'
+            })
+            this.fourDialogVisible = false
             this.initData()
           } else {
             this.$message.error(res.error_response.msg)
