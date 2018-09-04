@@ -100,8 +100,6 @@ export default {
       img.src = URL
       console.log(img)
       const that = this
-      that.imgUrl = result.data.access_url
-      that.noup = false
       // that.$message.success('上传成功')
       that.fullscreenLoading = false
       // console.log('img.width', img.width, 'img.height', img.height)
@@ -110,9 +108,10 @@ export default {
       // 打印
         // alert('from:complete : width:'+img.width+',height:'+img.height)
         console.log('errors2')
-        if (img.width !== 111 || img.height !== 111) {
-          that.$message.error('请上传111*111px的图片')
+        if (img.width !== 750 || img.height !== 360) {
+          that.$message.error('请上传750*360px的图片')
           that.fullscreenLoading = false
+          return false
         } else {
           that.imgUrl = result.data.access_url
           that.cover = true
@@ -126,16 +125,17 @@ export default {
         // 打印
           // alert('from:onload : width:'+img.width+',height:'+img.height)
           console.log('errors3')
-          // if (img.width !== 111 || img.height !== 111) {
-          //   that.$message.error('请上传111*111px的图片')
-          //   that.fullscreenLoading = false
-          // } else {
+          if (img.width !== 750 || img.height !== 360) {
+            that.$message.error('请上传750*360px的图片')
+            that.fullscreenLoading = false
+            return false
+          } else {
           that.imgUrl = result.data.access_url
           that.cover = true
           that.noup = false
           that.$message.success('上传成功')
           that.fullscreenLoading = false
-          // }
+          }
         }
       }
     },

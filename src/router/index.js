@@ -58,6 +58,18 @@ export const constantRouterMap = [
     ]
   },
   {
+    path: '/webJump',
+    component: Layout,
+    children: [
+      {
+        path: 'webJump',
+        name: 'webJump',
+        component: _import('growUp/webJump/webJump'),
+        meta: { title: '链接跳转', icon: 'table' }
+      }
+    ]
+  },
+  {
     path: '/column',
     component: Layout,
     redirect: '/column/columnList',
